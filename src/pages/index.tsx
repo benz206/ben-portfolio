@@ -8,6 +8,7 @@ import Head from "next/head";
 // import Link from "next/link";
 import Experience from "@/components/Experience";
 import TechIcon from "@/components/TechIcon";
+import CurrentlyPlaying from "@/components/CurrentlyPlaying";
 // import Golden from "@/components/Golden";
 
 export default function Home() {
@@ -45,12 +46,12 @@ export default function Home() {
                 >
                     <div className="flex flex-wrap justify-center w-full h-full lg:w-1/2">
                         <Image
-                            className="object-contain w-11/12 max-w-md mt-10 -mb-5 lg:mt-0 animate-fade-in"
+                            className="object-contain mt-10 -mb-5 w-11/12 max-w-md lg:mt-0 animate-fade-in"
                             src={Mocha}
                             alt="Mocha"
                         />
                     </div>
-                    <div className="flex flex-col justify-center w-full h-full p-12 -mt-10 lg:w-1/2 lg:mt-0">
+                    <div className="flex flex-col justify-center p-12 -mt-10 w-full h-full lg:w-1/2 lg:mt-0">
                         <h1 className="p-2 text-6xl font-black">BEN ZHOU</h1>
                         <h2 className="p-2 font-bold text-md">
                             UNIVERSITY OF WATERLOO COMPUTER ENGINEERING
@@ -79,7 +80,7 @@ export default function Home() {
                             </a>
                             !
                         </p>
-                        <div className="flex mt-8 place-content-evenly">
+                        <div className="flex place-content-evenly mt-8">
                             <TechIcon
                                 name="UofW"
                                 image="https://i.imgur.com/qtXlwL6.png"
@@ -108,6 +109,18 @@ export default function Home() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Currently Playing Section */}
+            {/* <motion.div
+                className="flex justify-center w-full py-8 dark:text-[#ececec]"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1 }}
+                viewport={{ once: true, amount: 0.8 }}
+            >
+                
+            </motion.div> */}
+
             <motion.div
                 className="flex justify-center w-full py-2 md:mt-0 mt-[520px] overflow-hidden dark:text-[#ececec]"
                 initial={{ x: 0, opacity: 0 }}
@@ -116,7 +129,7 @@ export default function Home() {
                 viewport={{ once: true, amount: 0.8 }}
             >
                 <div className="flex w-11/12 lg:w-[1170px] md:flex-row flex-col">
-                    <div className="flex flex-col items-start justify-center w-full h-full px-12 md:p-12 md:w-1/2">
+                    <div className="flex flex-col justify-center items-start px-12 w-full h-full md:p-12 md:w-1/2">
                         <h4 className="p-2 font-medium uppercase text-md">
                             1B Computer Engineering Student
                         </h4>
@@ -124,20 +137,21 @@ export default function Home() {
                             ABOUT ME
                         </h2>
                         <p className="p-2 pt-4 pb-4 font-light">
-                            Hey&nbsp;—&nbsp;I&apos;m Ben, a first‑year Computer
-                            Engineering student at the University of Waterloo. I
-                            love turning ideas into practical software and
-                            hardware that make everyday life a little easier.
+                            Hey&nbsp;—&nbsp;I&apos;m Ben, a Computer Engineering
+                            student at the University of Waterloo. I love
+                            turning ideas into practical software and hardware
+                            that make our everyday lives a little easier.
                         </p>
                         <p className="p-2 pb-4 font-light">
-                            I work mostly in TypeScript, JavaScript, C++, and
-                            Python, and I&apos;ve shipped full‑stack projects
-                            with frameworks like Next.js and Flask. Hackathons
-                            have taught me to build, break, and ship fast&nbsp;—
-                            skills I bring to every project.
+                            I work with TypeScript, C++, and Python, and
+                            I&apos;ve shipped projects with frameworks like
+                            Next.js and Flask. Hackathons have taught me to
+                            build, break, and ship fast&nbsp;— skills I bring to
+                            every project.
                         </p>
+                        <CurrentlyPlaying />
                     </div>
-                    <div className="flex flex-col justify-center w-full h-full p-12 lg:p-12 md:w-1/2 lg:mb-0">
+                    <div className="flex flex-col justify-center p-12 w-full h-full lg:p-12 md:w-1/2 lg:mb-0">
                         <Image
                             className="object-contain rounded-md shadow-md animate-fade-in"
                             width={489}
@@ -185,7 +199,7 @@ export default function Home() {
                             My U16 Team at a tournament in Niagara, Ontario
                         </p>
                     </div>
-                    <div className="flex flex-col justify-center w-full h-full p-12 md:w-1/2">
+                    <div className="flex flex-col justify-center p-12 w-full h-full md:w-1/2">
                         <h3 className="p-2 text-lg">ABOUT ME</h3>
                         <h2 className="p-2 text-3xl font-black md:text-5xl">
                             I ENJOY HOCKEY
