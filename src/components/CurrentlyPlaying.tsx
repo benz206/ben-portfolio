@@ -64,13 +64,41 @@ export default function CurrentlyPlaying() {
     if (isLoading) {
         return (
             <motion.div
-                className="relative flex h-[200px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                className="relative flex mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             >
-                <div className="flex justify-center items-center w-full">
-                    <div className="w-8 h-8 rounded-full border-b-2 border-blue-500 animate-spin"></div>
+                <div className="flex items-center p-0.5 m-4 space-x-6 w-full">
+                    <div className="overflow-hidden w-24 h-24 rounded-2xl shadow-xl">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse dark:from-gray-700 dark:to-gray-600">
+                            <div className="flex justify-center items-center w-full h-full">
+                                <FaSpotify className="w-10 h-10 text-gray-400 animate-pulse dark:text-gray-500" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col flex-1 justify-center min-w-0">
+                        <div className="flex items-center mb-2 space-x-2">
+                            <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                            <div className="w-32 h-3 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
+                        </div>
+
+                        <div className="mb-3 w-48 h-5 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
+
+                        <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                            <motion.div
+                                className="h-1.5 bg-green-500 rounded-full"
+                                initial={{ width: "0%" }}
+                                animate={{ width: "60%" }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </motion.div>
         );
