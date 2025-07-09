@@ -132,13 +132,16 @@ export default function CurrentlyPlaying() {
 
     return (
         <motion.div
-            className="relative flex h-32 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+            className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
+            style={{
+                boxShadow: `0 10px 20px 2px ${dominantColor}`,
+            }}
         >
             <div className="flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="overflow-hidden w-auto h-full rounded-2xl shadow-xl">
+                <div className="overflow-hidden w-auto h-full rounded-xl shadow-xl">
                     {track.albumArt ? (
                         <Image
                             src={track.albumArt}
