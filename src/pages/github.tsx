@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { GitHubRepo } from "@/types";
 import { ImGithub } from "react-icons/im";
 import { FaStar, FaCodeFork } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { IoMdGrid } from "react-icons/io";
+import { IoChevronDown } from "react-icons/io5";
 // import { IoMdGrid } from "react-icons/io";
 import Tags from "@/components/GitHub/Tags";
 import LanguageBar from "@/components/GitHub/LanguageBar";
@@ -38,6 +39,13 @@ const boxItem = {
 enum Dropdown {
     Grid,
     List,
+}
+
+enum SortOption {
+    Name = "name",
+    Stars = "stars",
+    Forks = "forks",
+    Language = "language",
 }
 
 type TagGlow = {
@@ -81,16 +89,17 @@ function getGlowClass(language: string): string {
 
 export default function Projects() {
     const [repoData, setRepoData] = useState<GitHubRepo[]>([]);
+    const [filteredRepoData, setFilteredRepoData] = useState<GitHubRepo[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState(Dropdown.Grid);
-    const { scrollYProgress } = useScroll();
+    const [sortBy, setSortBy] = useState<SortOption>(SortOption.Name);
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+    const [showSortDropdown, setShowSortDropdown] = useState(false);
     const contentRef = useRef(null);
     const heroRef = useRef(null);
+    const sortDropdownRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(contentRef, { once: true });
     const isHeroInView = useInView(heroRef, { once: true });
-
-    const headerOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-    const headerY = useTransform(scrollYProgress, [0, 0.1], [50, 0]);
 
     const fetchWithCache = async (url: string, cacheKey: string) => {
         const cachedData = localStorage.getItem(cacheKey);
@@ -140,6 +149,87 @@ export default function Projects() {
         fetchData();
     }, []);
 
+    const sortRepositories = (
+        repos: GitHubRepo[],
+        sortBy: SortOption,
+        order: "asc" | "desc"
+    ) => {
+        return [...repos].sort((a, b) => {
+            let aValue: any;
+            let bValue: any;
+
+            switch (sortBy) {
+                case SortOption.Name:
+                    aValue = a.name.toLowerCase();
+                    bValue = b.name.toLowerCase();
+                    break;
+                case SortOption.Stars:
+                    aValue = a.stargazers_count || 0;
+                    bValue = b.stargazers_count || 0;
+                    break;
+                case SortOption.Forks:
+                    aValue = a.forks_count || 0;
+                    bValue = b.forks_count || 0;
+                    break;
+                case SortOption.Language:
+                    aValue = (a.language || "").toLowerCase();
+                    bValue = (b.language || "").toLowerCase();
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (aValue < bValue) return order === "asc" ? -1 : 1;
+            if (aValue > bValue) return order === "asc" ? 1 : -1;
+            return 0;
+        });
+    };
+
+    useEffect(() => {
+        setFilteredRepoData(sortRepositories(repoData, sortBy, sortOrder));
+    }, [repoData, sortBy, sortOrder]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                sortDropdownRef.current &&
+                !sortDropdownRef.current.contains(event.target as Node)
+            ) {
+                setShowSortDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleSortChange = (newSortBy: SortOption) => {
+        if (sortBy === newSortBy) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortBy(newSortBy);
+            setSortOrder("desc");
+        }
+        setShowSortDropdown(false);
+    };
+
+    const getSortLabel = (option: SortOption) => {
+        switch (option) {
+            case SortOption.Name:
+                return "Name";
+            case SortOption.Stars:
+                return "Stars";
+            case SortOption.Forks:
+                return "Forks";
+            case SortOption.Language:
+                return "Language";
+            default:
+                return "Name";
+        }
+    };
+
     return (
         <>
             <Head>
@@ -174,7 +264,7 @@ export default function Projects() {
                     }
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="flex flex-col justify-center w-full h-full p-12">
+                    <div className="flex flex-col justify-center p-12 w-full h-full">
                         <h2 className="p-2 text-lg text-center">
                             TAKE A PEEK AT MY REPOSITORIES
                         </h2>
@@ -193,7 +283,7 @@ export default function Projects() {
             </div>
             <motion.div
                 ref={contentRef}
-                className="flex flex-col flex-wrap content-center justify-center w-full min-h-screen pt-12 pb-16 lg:pb-20 lg:pt-24 3xl:pt-12"
+                className="flex flex-col flex-wrap justify-center content-center pt-12 pb-16 w-full min-h-screen lg:pb-20 lg:pt-24 3xl:pt-12"
                 initial={{ opacity: 0, y: 50 }}
                 animate={
                     isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
@@ -201,11 +291,49 @@ export default function Projects() {
                 transition={{ duration: 0.5 }}
             >
                 {isLoading && (
-                    <div className="flex flex-col items-center justify-center w-full h-full ">
+                    <div className="flex flex-col justify-center items-center w-full h-full">
                         <AiOutlineLoading className="w-24 h-24 text-black animate-spin" />
                     </div>
                 )}
-                <div className="flex justify-center p-6 ml-auto">
+                <div className="flex gap-4 justify-center items-center p-6 ml-auto">
+                    <div className="relative" ref={sortDropdownRef}>
+                        <button
+                            onClick={() =>
+                                setShowSortDropdown(!showSortDropdown)
+                            }
+                            className="flex gap-2 items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-[#ececec] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md rounded-lg transition-all duration-200 ease-in-out hover:bg-white/90 dark:hover:bg-[#121212]/50"
+                        >
+                            Sort by: {getSortLabel(sortBy)}
+                            <IoChevronDown
+                                className={`w-4 h-4 transition-transform ${
+                                    showSortDropdown ? "rotate-180" : ""}`}
+                            />
+                        </button>
+                        {showSortDropdown && (
+                            <div className="absolute left-0 top-full z-10 mt-1 w-48 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md rounded-lg drop-shadow-xl">
+                                {Object.values(SortOption).map((option) => (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleSortChange(option)}
+                                        className={`w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-[#ececec] hover:bg-white/50 dark:hover:bg-[#121212]/70 transition-all duration-200 ease-in-out ${
+                                            sortBy === option
+                                                ? "bg-white/70 dark:bg-[#121212]/60 font-medium"
+                                                : ""
+                                        }`}
+                                    >
+                                        {getSortLabel(option)}
+                                        {sortBy === option && (
+                                            <span className="ml-2 text-xs">
+                                                {sortOrder === "asc"
+                                                    ? "↑"
+                                                    : "↓"}
+                                            </span>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     <button
                         onClick={() => setViewMode(Dropdown.Grid)}
                         className={`p-2 rounded-lg transition-colors ${
@@ -219,7 +347,7 @@ export default function Projects() {
                     </button>
                     <button
                         onClick={() => setViewMode(Dropdown.List)}
-                        className={`p-2 ml-4 rounded-lg transition-colors ${
+                        className={`rounded-lg transition-colors ${
                             viewMode === Dropdown.List
                                 ? "text-gray-600 dark:text-gray-200"
                                 : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
@@ -240,7 +368,7 @@ export default function Projects() {
                     animate="visible"
                 >
                     {!isLoading &&
-                        repoData.map((repo, index) => (
+                        filteredRepoData.map((repo, index) => (
                             <motion.div
                                 className={`${
                                     viewMode === Dropdown.Grid
@@ -272,16 +400,16 @@ export default function Projects() {
                                         {repo.name}
                                     </h1>
                                     {viewMode === Dropdown.List && (
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex gap-4 items-center">
                                             {repo.stargazers_count > 0 && (
                                                 <p className="flex items-center text-sm font-base">
-                                                    <FaStar className="w-4 h-4 mx-1 my-auto text-yellow-300" />
+                                                    <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
                                                     {repo.stargazers_count}
                                                 </p>
                                             )}
                                             {repo.forks > 0 && (
-                                                <p className="flex items-center justify-center text-sm font-base">
-                                                    <FaCodeFork className="w-4 h-4 mx-1 my-auto" />
+                                                <p className="flex justify-center items-center text-sm font-base">
+                                                    <FaCodeFork className="mx-1 my-auto w-4 h-4" />
                                                     {repo.forks_count}
                                                 </p>
                                             )}
@@ -322,13 +450,13 @@ export default function Projects() {
                                         <>
                                             {repo.stargazers_count > 0 && (
                                                 <p className="flex items-center mx-1.5 text-sm font-base">
-                                                    <FaStar className="w-4 h-4 mx-1 my-auto text-yellow-300" />
+                                                    <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
                                                     {repo.stargazers_count}
                                                 </p>
                                             )}
                                             {repo.forks > 0 && (
                                                 <p className="flex items-center justify-center mx-1.5 mr-auto text-sm font-base">
-                                                    <FaCodeFork className="w-4 h-4 mx-1 my-auto" />
+                                                    <FaCodeFork className="mx-1 my-auto w-4 h-4" />
                                                     {repo.forks_count}
                                                 </p>
                                             )}
