@@ -127,7 +127,7 @@ export default function CurrentlyPlaying() {
     const progressPercentage =
         (currentProgress / parseInt(track.duration)) * 100;
     const dominantColor = track.color
-        ? `rgb(${track.color[0]}, ${track.color[1]}, ${track.color[2]})`
+        ? `rgb(${track.color[0]}, ${track.color[1]}, ${track.color[2]}, 50%)`
         : "#1DB954";
 
     return (
