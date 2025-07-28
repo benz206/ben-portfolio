@@ -137,7 +137,8 @@ export default function CurrentlyPlaying() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
             style={{
-                boxShadow: `0 10px 20px 2px ${dominantColor}`,
+                borderColor: `${dominantColor}`,
+                borderWidth: "3px",
             }}
         >
             <div className="flex items-center p-0.5 m-4 space-x-6 w-full">
