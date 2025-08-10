@@ -64,12 +64,22 @@ export default function CurrentlyPlaying() {
     if (isLoading) {
         return (
             <motion.div
-                className="relative flex mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                className="relative flex mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             >
-                <div className="flex items-center p-0.5 m-4 space-x-6 w-full">
+                <div
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                        backgroundImage:
+                            "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                />
+                <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
+                <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
                     <div className="overflow-hidden w-24 h-24 rounded-2xl shadow-xl">
                         <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse dark:from-gray-700 dark:to-gray-600">
                             <div className="flex justify-center items-center w-full h-full">
@@ -107,15 +117,26 @@ export default function CurrentlyPlaying() {
     if (error || !track) {
         return (
             <motion.div
-                className="relative flex h-[200px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                className="relative flex h-[200px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             >
-                <div className="flex justify-center items-center p-8 w-full">
+                <div
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                        backgroundImage:
+                            "linear-gradient(135deg, #1DB954 0%, #1ed760 100%)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                />
+                <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
+
+                <div className="flex relative z-10 justify-center items-center p-8 w-full">
                     <div className="flex flex-col items-center space-y-4">
-                        <FaSpotify className="w-12 h-12 text-green-500" />
-                        <p className="font-light text-center">
+                        <FaSpotify className="w-12 h-12 text-white dark:text-black" />
+                        <p className="font-light text-center text-white dark:text-black">
                             {error || "Not currently playing"}
                         </p>
                     </div>
@@ -132,7 +153,7 @@ export default function CurrentlyPlaying() {
 
     return (
         <motion.div
-            className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+            className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
@@ -141,7 +162,21 @@ export default function CurrentlyPlaying() {
                 borderWidth: "3px",
             }}
         >
-            <div className="flex items-center p-0.5 m-4 space-x-6 w-full">
+            {track.albumArt && (
+                <>
+                    <div
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                            backgroundImage: `url(${track.albumArt})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
+                </>
+            )}
+            <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
                 <div className="overflow-hidden w-auto h-full rounded-xl shadow-xl">
                     {track.albumArt ? (
                         <Image
@@ -161,7 +196,7 @@ export default function CurrentlyPlaying() {
                 <div className="flex flex-col flex-1 justify-center min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
-                        <span className="text-xs font-medium text-gray-500 truncate dark:text-gray-400">
+                        <span className="text-xs font-medium text-black truncate dark:text-slate-400">
                             {track.paused === "true"
                                 ? "Last Listened To"
                                 : "Now Playing"}{" "}
