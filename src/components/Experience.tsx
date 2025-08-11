@@ -100,7 +100,7 @@ function Job({ job, index }: JobProps) {
 const jobs: Job[] = [
     {
         title: "Incoming Software Engineering Intern",
-        company: "Grand Charter - New York, United States",
+        company: "Grand Charter - New York, New York",
         description: "• Incoming for Fall 2025",
         date: "Sep 2025",
         image: {
