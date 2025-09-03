@@ -65,10 +65,12 @@ export default async function handler(
             };
 
             res.status(200).json(trackInfo);
-        } else {
-            const errorMessage = await response.text();
-            res.status(response.status).json({ error: errorMessage });
+            return;
         }
+
+        const errorMessage = await response.text();
+        res.status(response.status).json({ error: errorMessage });
+        return;
     } catch (error) {
         console.error("Error fetching Spotify data:", error);
         res.status(500).json({ error: "Internal Server Error" });
