@@ -72,6 +72,10 @@ export default async function handler(
         res.status(response.status).json({ error: errorMessage });
         return;
     } catch (error) {
+        if (error instanceof SyntaxError) {
+            res.status(500).json({ error: "Not currently playing" }); // could refactor this later
+            return;
+        }
         console.error("Error fetching Spotify data:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
