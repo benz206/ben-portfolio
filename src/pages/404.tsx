@@ -20,7 +20,7 @@ export default function The404() {
                             404 NOT FOUND
                         </h1>
                         <p className="p-2 py-5 font-light text-center">
-                            Sorry... I probably broke something :(
+                            Sorry... This wasn&apos;t supposed to happen, try going back to home.
                         </p>
                     </div>
                 </motion.div>
