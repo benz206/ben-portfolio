@@ -64,7 +64,7 @@ export default function CurrentlyPlaying() {
     if (isLoading) {
         return (
             <motion.div
-                className="relative flex mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
+                className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
@@ -80,21 +80,21 @@ export default function CurrentlyPlaying() {
                 />
                 <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
                 <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                    <div className="w-24 h-24 overflow-hidden shadow-xl rounded-2xl">
+                    <div className="overflow-hidden w-auto h-full rounded-xl shadow-xl">
                         <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse dark:from-gray-700 dark:to-gray-600">
-                            <div className="flex items-center justify-center w-full h-full">
+                            <div className="flex justify-center items-center w-full h-full">
                                 <FaSpotify className="w-10 h-10 text-gray-400 animate-pulse dark:text-gray-500" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 justify-center min-w-0">
                         <div className="flex items-center mb-2 space-x-2">
-                            <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                            <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500 animate-pulse" />
                             <div className="w-32 h-3 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
                         </div>
 
-                        <div className="w-48 h-5 mb-3 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
+                        <div className="mb-3 w-48 h-5 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
 
                         <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full">
                             <motion.div
@@ -116,37 +116,6 @@ export default function CurrentlyPlaying() {
     if (error || !track) {
         return;
     }
-
-    // if (error || !track) {
-    //     return (
-    //         <motion.div
-    //             className="relative flex h-[200px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 max-w-[700px] drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
-    //             initial={{ opacity: 0 }}
-    //             animate={{ opacity: 1 }}
-    //             transition={{ duration: 1 }}
-    //         >
-    //             <div
-    //                 className="absolute inset-0 w-full h-full"
-    //                 style={{
-    //                     backgroundImage:
-    //                         "linear-gradient(135deg, #1DB954 0%, #1ed760 100%)",
-    //                     backgroundSize: "cover",
-    //                     backgroundPosition: "center",
-    //                 }}
-    //             />
-    //             <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
-
-    //             <div className="relative z-10 flex items-center justify-center w-full p-8">
-    //                 <div className="flex flex-col items-center space-y-4">
-    //                     <FaSpotify className="w-12 h-12 text-white dark:text-black" />
-    //                     <p className="font-light text-center text-white dark:text-black">
-    //                         {error || "Not currently playing"}
-    //                     </p>
-    //                 </div>
-    //             </div>
-    //         </motion.div>
-    //     );
-    // }
 
     const progressPercentage =
         (currentProgress / parseInt(track.duration)) * 100;
@@ -180,7 +149,7 @@ export default function CurrentlyPlaying() {
                 </>
             )}
             <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="w-auto h-full overflow-hidden shadow-xl rounded-xl">
+                <div className="overflow-hidden w-auto h-full rounded-xl shadow-xl">
                     {track.albumArt ? (
                         <Image
                             src={track.albumArt}
@@ -190,13 +159,13 @@ export default function CurrentlyPlaying() {
                             className="object-cover w-full h-full"
                         />
                     ) : (
-                        <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-green-400 to-green-600">
+                        <div className="flex justify-center items-center w-full h-full bg-gradient-to-br from-green-400 to-green-600">
                             <FaSpotify className="w-10 h-10 text-white" />
                         </div>
                     )}
                 </div>
 
-                <div className="flex flex-col justify-center flex-1 min-w-0">
+                <div className="flex flex-col flex-1 justify-center min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
                         <span className="text-xs font-medium text-black truncate dark:text-slate-400">
