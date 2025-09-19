@@ -9,8 +9,8 @@ If you want to run it locally, you can clone the repo and run it with npm.
 ```bash
 git clone https://github.com/benz206/ben-portfolio.git
 cd ben-portfolio
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ---
@@ -24,7 +24,7 @@ I started with the Pages Router when learning Next.js, and by the time the App R
 Thanks for the interest! But this project is mainly open-source so others can explore the code. Check out the [🚫 Contributions](#-contributions) section below for more info.
 
 **3. Can I reference your design?**  
-Totally! Feel free to use it for inspo 💅 Just drop a little attribution when you can — much appreciated!
+Totally! Feel free to use it for inspiration. Just drop a little attribution when you can — much appreciated!
 
 **4. How do I contact you?**  
 I’ve got my [LinkedIn](https://www.linkedin.com/in/ben-zhou06) linked in the footer of the site
