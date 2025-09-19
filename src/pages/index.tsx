@@ -215,7 +215,7 @@ export default function Home() {
                     </div>
                 </div>
             </motion.div> */}
-            {/* <Golden people={goldenPeople} /> */}
+            <Golden people={goldenPeople} />
         </>
     );
 }

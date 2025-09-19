@@ -70,8 +70,8 @@ function Job({ job, index }: JobProps) {
             className="relative grid grid-cols-[4rem_auto] md:grid-cols-[10rem_auto] py-8 list-none group"
             key={index}
         >
-            <div className="absolute left-0 -ml-6 w-2 h-full rounded-full opacity-0 transition-opacity duration-300 bg-rainbow-gradient animate-breathing-gradient group-hover:opacity-100" />
-            <div className="flex overflow-hidden justify-center items-center m-1 mt-4 w-12 h-12 rounded-xl transition-transform duration-300 lg:my-auto md:m-2 lg:m-5 md:h-24 md:w-24 group-hover:scale-110">
+            <div className="absolute left-0 w-2 h-full -ml-6 transition-opacity duration-300 rounded-full opacity-0 bg-rainbow-gradient animate-breathing-gradient group-hover:opacity-100" />
+            <div className="flex items-center justify-center w-12 h-12 m-1 mt-4 overflow-hidden transition-transform duration-300 rounded-xl lg:my-auto md:m-2 lg:m-5 md:h-24 md:w-24 group-hover:scale-110">
                 <Image
                     src={job.image.src}
                     alt={job.image.alt}
@@ -83,7 +83,7 @@ function Job({ job, index }: JobProps) {
             </div>
             <div className="flex flex-col justify-center">
                 <span className="text-sm dark:text-[#ececec]">{job.date}</span>
-                <h3 className="pt-2 text-xl font-black bg-clip-text transition-colors duration-300 lg:text-3xl group-hover:text-transparent bg-rainbow-gradient animate-breathing-gradient">
+                <h3 className="pt-2 text-xl font-black transition-colors duration-300 bg-clip-text lg:text-3xl group-hover:text-transparent bg-rainbow-gradient animate-breathing-gradient">
                     {job.title}
                 </h3>
                 <h4 className="py-2 text-lg font-medium transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-300">
@@ -99,9 +99,9 @@ function Job({ job, index }: JobProps) {
 
 const jobs: Job[] = [
     {
-        title: "Incoming Software Engineering Intern",
+        title: "Software Engineering Intern #7",
         company: "Grand Charter - New York, New York",
-        description: "• Incoming for Fall 2025",
+        description: "• Building cutting-edge tools and solutions for legal teams.",
         date: "Sep 2025",
         image: {
             src: GrandCharter,
@@ -194,7 +194,7 @@ export default function Experience() {
     return (
         <div className="flex justify-center w-full">
             <div className="w-11/12 max-w-[1170px] relative">
-                <ol className="flex relative flex-col justify-center">
+                <ol className="relative flex flex-col justify-center">
                     {jobs.map((job, index) => (
                         <Job key={index} job={job} index={index} />
                     ))}

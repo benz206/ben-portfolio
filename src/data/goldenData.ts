@@ -5,51 +5,87 @@ export interface GoldenPerson {
 
 export const goldenPeople: GoldenPerson[] = [
     {
-        name: "Sarah Chen",
-        description: "My first coding mentor who taught me that debugging is an art form, not a frustration."
+        name: "Donna Carson",
+        description: "Culture and tradition."
     },
     {
-        name: "Professor Martinez",
-        description: "Showed me that computer science isn't just about code—it's about solving real human problems."
+        name: "Karl Svab",
+        description: "Self preservation and personal identity."
     },
     {
-        name: "Alex Kim",
-        description: "The friend who convinced me to apply to Waterloo and believed in me when I didn't."
+        name: "Kaitlyn Harshaw",
+        description: "What kindness looks like."
     },
     {
-        name: "Grandma Zhou",
-        description: "Always reminded me that education is a gift, not a burden. Her wisdom guides me daily."
+        name: "Sarah DeCloet",
+        description: "Critical thinking."
     },
     {
-        name: "Coach Thompson",
-        description: "Taught me that leadership isn't about being the loudest voice, but the most thoughtful one."
+        name: "Sharon Edmond",
+        description: "The beauty of music."
     },
     {
-        name: "Dr. Williams",
-        description: "My high school physics teacher who made me fall in love with how things work under the hood."
+        name: "TheRagingPotato",
+        description: "The worser one."
     },
     {
-        name: "Emma Rodriguez",
-        description: "The study buddy who turned all-nighters into adventures and failures into learning opportunities."
+        name: "Lily Akemi",
+        description: "A true friend!"
     },
     {
-        name: "Uncle David",
-        description: "Gave me my first computer and sparked a curiosity that changed the trajectory of my life."
+        name: "CookieMonster",
+        description: "The most inspirational."
     },
     {
-        name: "Ms. Patterson",
-        description: "My English teacher who taught me that clear communication is as important as clean code."
+        name: "YiFanEr",
+        description: "For being with me for all these years."
     },
     {
-        name: "Jake Morrison",
-        description: "The teammate who showed me that the best solutions come from diverse perspectives and collaboration."
+        name: "Tofuu",
+        description: "#1 Ahri Main"
     },
     {
-        name: "Dr. Kumar",
-        description: "My calculus professor who made me realize that mathematics is the language of the universe."
+        name: "Foodie+SouffleSoleil",
+        description: "To be happy and understanding."
     },
     {
-        name: "Lisa Wang",
-        description: "The friend who reminded me to take breaks, celebrate small wins, and maintain work-life balance."
+        name: "Kratz",
+        description: "To put others first."
+    },
+    {
+        name: "YamFries",
+        description: "To always work hard."
+    },
+    {
+        name: "#1DariusMain",
+        description: "To always work hard"
+    },
+    {
+        name: "BobbyPhillip",
+        description: "To understand the big picture."
+    },
+    {
+        name: "CherryDucky",
+        description: "To try new things."
+    },
+    {
+        name: "Rafi & Rubab",
+        description: "Taking a chance on me."
+    },
+    {
+        name: "Gigg",
+        description: "To be ambitious."
+    },
+    {
+        name: "HariCo",
+        description: "To be happy."
+    },
+    {
+        name: "Mr Gray",
+        description: "To be happy."
+    },
+    {
+        name: "StealthHeart+Ambee",
+        description: "To be happy and kind."
     }
 ];
