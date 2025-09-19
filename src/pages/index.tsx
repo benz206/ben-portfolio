@@ -9,7 +9,8 @@ import Head from "next/head";
 import Experience from "@/components/Experience";
 import TechIcon from "@/components/TechIcon";
 import CurrentlyPlaying from "@/components/CurrentlyPlaying";
-// import Golden from "@/components/Golden";
+import Golden from "@/components/Golden";
+import { goldenPeople } from "@/data/goldenData";
 
 export default function Home() {
     return (
@@ -175,9 +176,6 @@ export default function Home() {
                     <Experience />
                 </div>
             </motion.div>
-            <div className="flex justify-center w-full">
-                <div className="w-10/12 lg:w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#121212]" />
-            </div>
             {/* <motion.div
                 className="flex justify-center w-full py-2 pb-8 dark:text-[#ececec]"
                 initial={{ x: -20, opacity: 0 }}
@@ -217,7 +215,9 @@ export default function Home() {
                     </div>
                 </div>
             </motion.div> */}
-            {/* <Golden /> */}
+            
+            {/* Golden Section */}
+            <Golden people={goldenPeople} />
         </>
     );
 }
