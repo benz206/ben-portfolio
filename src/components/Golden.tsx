@@ -19,28 +19,42 @@ function getShortDescription(text: string, maxLength: number = 120): string {
     );
 }
 
-function shuffleArray<T>(array: T[]): T[] {
-    const a = [...array];
-    for (let i = a.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+function hashString(input: string): number {
+    let hash = 2166136261;
+    for (let i = 0; i < input.length; i += 1) {
+        hash ^= input.charCodeAt(i);
+        hash +=
+            (hash << 1) +
+            (hash << 4) +
+            (hash << 7) +
+            (hash << 8) +
+            (hash << 24);
     }
-    return a;
+    return hash >>> 0;
 }
 
 export default function Golden({ people }: GoldenProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isPaused, setIsPaused] = useState(false);
 
-    const shuffledPeople = useMemo(() => shuffleArray(people), [people]);
-    const ROW_SIZE = 9;
+    const shuffledPeople = useMemo(
+        () =>
+            [...people].sort((a, b) => hashString(a.name) - hashString(b.name)),
+        [people]
+    );
+    const ROWS_COUNT = 3;
     const rows = useMemo(() => {
-        const limited = shuffledPeople.slice(0, ROW_SIZE * 3);
         const chunks: GoldenPerson[][] = [];
-        for (let i = 0; i < limited.length; i += ROW_SIZE) {
-            chunks.push(limited.slice(i, i + ROW_SIZE));
+        const total = shuffledPeople.length;
+        const base = Math.floor(total / ROWS_COUNT);
+        const remainder = total % ROWS_COUNT;
+        let start = 0;
+        for (let r = 0; r < ROWS_COUNT; r += 1) {
+            const size = base + (r < remainder ? 1 : 0);
+            chunks.push(shuffledPeople.slice(start, start + size));
+            start += size;
         }
-        return chunks;
+        return chunks.filter((row) => row.length > 0);
     }, [shuffledPeople]);
     const rowOffsets = useMemo(
         () =>
@@ -55,19 +69,19 @@ export default function Golden({ people }: GoldenProps) {
         style.textContent = `
             @keyframes scrollLeft {
                 from {
-                    transform: translateX(0);
+                    transform: translate3d(0, 0, 0);
                 }
                 to {
-                    transform: translateX(-33.333%);
+                    transform: translate3d(-50%, 0, 0);
                 }
             }
             
             @keyframes scrollRight {
                 from {
-                    transform: translateX(-33.333%);
+                    transform: translate3d(-50%, 0, 0);
                 }
                 to {
-                    transform: translateX(0);
+                    transform: translate3d(0, 0, 0);
                 }
             }
             
@@ -78,11 +92,13 @@ export default function Golden({ people }: GoldenProps) {
             }
             
             .scroll-left {
-                animation: scrollLeft 30s linear infinite;
+                animation: scrollLeft 10s linear infinite;
+                will-change: transform;
             }
             
             .scroll-right {
-                animation: scrollRight 30s linear infinite;
+                animation: scrollRight 10s linear infinite;
+                will-change: transform;
             }
             
             .scroll-paused {
@@ -96,6 +112,30 @@ export default function Golden({ people }: GoldenProps) {
                 mask-repeat: no-repeat;
                 -webkit-mask-size: 100% 100%;
                 mask-size: 100% 100%;
+            }
+
+            .marquee-container {
+                overflow: hidden;
+                width: 100%;
+                white-space: nowrap;
+            }
+            .marquee-text {
+                display: inline-flex;
+                animation-duration: 20s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+                will-change: transform;
+            }
+            .marquee-left { animation-name: marqueeLeft; }
+            .marquee-right { animation-name: marqueeRight; }
+
+            @keyframes marqueeLeft {
+                0% { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
+            }
+            @keyframes marqueeRight {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
             }
         `;
         document.head.appendChild(style);
@@ -209,7 +249,7 @@ export default function Golden({ people }: GoldenProps) {
                                     : "scroll-right"
                             } ${isPaused ? "scroll-paused" : ""}`}
                         >
-                            {[...Array(3)].map((_, loopIndex) => (
+                            {[...Array(2)].map((_, loopIndex) => (
                                 <div
                                     key={`row-${rowIndex}-loop-${loopIndex}`}
                                     className="flex items-center"
