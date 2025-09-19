@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { BlogMetadata, RawBlogMetadata } from "@/types";
 import Link from "next/link";
 import Hashtag from "@/components/Hashtag";
-import { Octokit } from "octokit";
 import matter from "gray-matter";
 
 export async function getStaticProps() {
+    const { Octokit } = await import("octokit");
     const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
@@ -40,13 +40,11 @@ export async function getStaticProps() {
                 const oldestCommit =
                     commitsResponse.data[commitsResponse.data.length - 1];
 
-                const createdDate = oldestCommit
-                    ? oldestCommit.commit.committer.date
-                    : null;
+                const createdDate =
+                    oldestCommit?.commit.committer?.date || null;
 
-                const updatedDate = latestCommit
-                    ? latestCommit.commit.committer.date
-                    : null;
+                const updatedDate =
+                    latestCommit?.commit.committer?.date || null;
 
                 const fileResponse = await octokit.rest.repos.getContent({
                     owner,
@@ -71,9 +69,11 @@ export async function getStaticProps() {
                 }
 
                 return {
-                    ...data,
-                    created: createdDate,
-                    updated: updatedDate,
+                    title: data.title || "Untitled",
+                    description: data.description || "",
+                    tags: data.tags || [],
+                    created: createdDate || new Date().toISOString(),
+                    updated: updatedDate || new Date().toISOString(),
                     slug: file.name.replace(".mdx", ""),
                 };
             })

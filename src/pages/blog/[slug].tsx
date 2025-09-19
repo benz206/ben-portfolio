@@ -1,14 +1,12 @@
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Octokit } from "octokit";
 import matter from "gray-matter";
 import MdxLayout from "@/components/MdxLayout";
 import { RawBlogMetadata } from "@/types";
 import { useMDXComponents } from "@/mdx-components";
 import type { MDXComponents } from "mdx/types";
+import { useState, useEffect } from "react";
 
 interface Props {
-    mdxSource: MDXRemoteSerializeResult;
+    mdxSource: any;
     metadata: RawBlogMetadata;
     createdDate: string;
     updatedDate: string;
@@ -20,7 +18,35 @@ export default function RemoteMdxPage({
     createdDate,
     updatedDate,
 }: Props) {
+    const [MDXRemote, setMDXRemote] = useState<any>(null);
     const customMDXComponents: MDXComponents = useMDXComponents({});
+
+    useEffect(() => {
+        const loadMDXRemote = async () => {
+            try {
+                const { MDXRemote: MDXRemoteComponent } = await import(
+                    "next-mdx-remote"
+                );
+                setMDXRemote(() => MDXRemoteComponent);
+            } catch (error) {
+                console.error("Failed to load MDXRemote component:", error);
+            }
+        };
+
+        loadMDXRemote();
+    }, []);
+
+    if (!MDXRemote) {
+        return (
+            <MdxLayout
+                metadata={metadata}
+                createdDate={createdDate}
+                updatedDate={updatedDate}
+            >
+                <div>Loading...</div>
+            </MdxLayout>
+        );
+    }
 
     return (
         <MdxLayout
@@ -33,6 +59,7 @@ export default function RemoteMdxPage({
     );
 }
 export async function getStaticPaths() {
+    const { Octokit } = await import("octokit");
     const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
@@ -63,6 +90,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
     const { slug } = params;
+    const { Octokit } = await import("octokit");
     const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
@@ -96,14 +124,11 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     const latestCommit = commitsResponse.data[0];
     const oldestCommit = commitsResponse.data[commitsResponse.data.length - 1];
 
-    const createdDate = oldestCommit
-        ? oldestCommit.commit.committer.date
-        : null;
+    const createdDate = oldestCommit?.commit.committer?.date || null;
 
-    const updatedDate = latestCommit
-        ? latestCommit.commit.committer.date
-        : null;
+    const updatedDate = latestCommit?.commit.committer?.date || null;
 
+    const { serialize } = await import("next-mdx-remote/serialize");
     const mdxSource = await serialize(content);
 
     if (data.tags && typeof data.tags === "string") {
@@ -117,8 +142,8 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
         description: data.description,
         tags: data.tags || [],
         slug,
-        created: createdDate,
-        updated: updatedDate,
+        created: createdDate || new Date().toISOString(),
+        updated: updatedDate || new Date().toISOString(),
     };
 
     return {

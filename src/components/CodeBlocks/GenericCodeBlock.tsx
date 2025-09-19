@@ -1,7 +1,6 @@
-import { CodeBlock } from "react-code-block";
 import { useCopyToClipboard } from "react-use";
 import { themes } from "prism-react-renderer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 type CodeBlockProps = {
@@ -12,6 +11,22 @@ type CodeBlockProps = {
 export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
     const [state, copyToClipboard] = useCopyToClipboard();
     const [isCopied, setIsCopied] = useState("Copy");
+    const [CodeBlock, setCodeBlock] = useState<any>(null);
+
+    useEffect(() => {
+        const loadCodeBlock = async () => {
+            try {
+                const { CodeBlock: CodeBlockComponent } = await import(
+                    "react-code-block"
+                );
+                setCodeBlock(() => CodeBlockComponent);
+            } catch (error) {
+                console.error("Failed to load CodeBlock component:", error);
+            }
+        };
+
+        loadCodeBlock();
+    }, []);
 
     const copyCode = () => {
         copyToClipboard(code);
@@ -21,6 +36,16 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
             setIsCopied("Copy");
         }, 1500);
     };
+
+    if (!CodeBlock) {
+        return (
+            <div className="bg-[#242424] lg:p-6 px-5 py-4 rounded-xl shadow-lg overflow-auto my-2">
+                <pre className="text-white">
+                    <code>{code}</code>
+                </pre>
+            </div>
+        );
+    }
 
     return (
         <CodeBlock code={code} language={language} theme={themes.vsDark}>

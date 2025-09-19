@@ -17,7 +17,7 @@ export default function Golden({ people }: GoldenProps) {
     const firstRowPeople = people.slice(0, Math.ceil(people.length / 2));
     const secondRowPeople = people.slice(Math.ceil(people.length / 2));
 
-    useEffect(() => {s
+    useEffect(() => {
         const style = document.createElement('style');
         style.textContent = `
             @keyframes scrollLeft {
@@ -101,7 +101,7 @@ export default function Golden({ people }: GoldenProps) {
                     {person.name}
                 </motion.span>
                 <motion.div
-                    className="absolute bottom-full left-1/2 z-50 px-6 py-4 mb-3 rounded-2xl border shadow-2xl backdrop-blur-md transform -translate-x-1/2"
+                    className="absolute z-50 px-6 py-4 mb-3 transform -translate-x-1/2 border shadow-2xl bottom-full left-1/2 rounded-2xl backdrop-blur-md"
                     initial={{ opacity: 0, y: 10, scale: 0.9 }}
                     animate={{
                         opacity: isHovered ? 1 : 0,
@@ -124,7 +124,7 @@ export default function Golden({ people }: GoldenProps) {
                         {person.description}
                     </p>
                     <div 
-                        className="absolute top-full left-1/2 w-0 h-0 transform -translate-x-1/2"
+                        className="absolute w-0 h-0 transform -translate-x-1/2 top-full left-1/2"
                         style={{
                             borderLeft: "6px solid transparent",
                             borderRight: "6px solid transparent",
@@ -138,14 +138,14 @@ export default function Golden({ people }: GoldenProps) {
 
     return (
         <motion.div
-            className="overflow-hidden relative py-8 w-full bg-white dark:bg-gray-900"
+            className="relative w-full py-8 overflow-hidden bg-white dark:bg-gray-900"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
             viewport={{ once: true, amount: 0.8 }}
         >
-            <div className="flex flex-col justify-center items-center space-y-6 w-full">
-                <div className="overflow-hidden relative w-full">
+            <div className="flex flex-col items-center justify-center w-full space-y-6">
+                <div className="relative w-full overflow-hidden">
                     <div 
                         className={`scroll-container scroll-left ${isPaused ? 'scroll-paused' : ''}`}
                     >
@@ -158,7 +158,7 @@ export default function Golden({ people }: GoldenProps) {
                         ))}
                     </div>
                 </div>
-                <div className="overflow-hidden relative w-full">
+                <div className="relative w-full overflow-hidden">
                     <div 
                         className={`scroll-container scroll-right ${isPaused ? 'scroll-paused' : ''}`}
                     >
@@ -172,8 +172,8 @@ export default function Golden({ people }: GoldenProps) {
                     </div>
                 </div>
             </div>
-            <div className="absolute top-0 left-0 z-20 w-24 h-full bg-gradient-to-r from-white to-transparent pointer-events-none dark:from-gray-900" />
-            <div className="absolute top-0 right-0 z-20 w-24 h-full bg-gradient-to-l from-white to-transparent pointer-events-none dark:from-gray-900" />
+            <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none bg-gradient-to-r from-white to-transparent dark:from-gray-900" />
+            <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none bg-gradient-to-l from-white to-transparent dark:from-gray-900" />
         </motion.div>
     );
 }

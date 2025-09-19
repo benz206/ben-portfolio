@@ -114,7 +114,7 @@ export default function CurrentlyPlaying() {
         );
     }
     if (error || !track) {
-        return;
+        return null;
     }
 
     const progressPercentage =
