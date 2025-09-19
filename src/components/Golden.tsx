@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
 interface GoldenPerson {
@@ -309,7 +310,13 @@ export default function Golden({ people }: GoldenProps) {
     }, [displayText]);
 
     return (
-        <div className="relative w-full py-32 pb-40 overflow-hidden">
+        <motion.div
+            className="relative w-full py-32 pb-40 overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.4 }}
+        >
             <div className="flex flex-col items-center justify-center w-full space-y-6">
                 <div className="relative flex items-center justify-center w-full h-12 pb-2 overflow-hidden md:h-16">
                     <span
@@ -355,6 +362,6 @@ export default function Golden({ people }: GoldenProps) {
             </div>
             <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none" />
             <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none" />
-        </div>
+        </motion.div>
     );
 }
