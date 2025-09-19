@@ -91,7 +91,7 @@ export default function Projects({ images }: ProjectsProps) {
                 }`}
             >
                 <motion.div
-                    className="relative flex h-[370px] lg:h-[300px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 lg:w-[1000px] drop-shadow-xl mt-32 lg:mt-40 rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                    className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 1 }}

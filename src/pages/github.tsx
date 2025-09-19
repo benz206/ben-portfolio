@@ -255,7 +255,7 @@ export default function Projects() {
             <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
                 <motion.div
                     ref={heroRef}
-                    className="relative flex h-[370px] lg:h-[300px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 lg:w-[1000px] drop-shadow-xl mt-32 lg:mt-40 rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                    className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
                     initial={{ opacity: 0, y: 50 }}
                     animate={
                         isHeroInView
@@ -306,7 +306,8 @@ export default function Projects() {
                             Sort by: {getSortLabel(sortBy)}
                             <IoChevronDown
                                 className={`w-4 h-4 transition-transform ${
-                                    showSortDropdown ? "rotate-180" : ""}`}
+                                    showSortDropdown ? "rotate-180" : ""
+                                }`}
                             />
                         </button>
                         {showSortDropdown && (
@@ -372,7 +373,7 @@ export default function Projects() {
                             <motion.div
                                 className={`${
                                     viewMode === Dropdown.Grid
-                                        ? "flex flex-col justify-center w-full h-full px-5 py-4 bg-white dark:bg-[#121212] dark:text-[#ececec] border-black rounded-xl drop-shadow-xl"
+                                        ? "flex flex-col justify-center w-full h-full px-5 py-4 card-repo"
                                         : "flex flex-col w-full py-6 first:pt-0 last:pb-0"
                                 } ${
                                     viewMode === Dropdown.Grid

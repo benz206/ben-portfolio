@@ -101,7 +101,7 @@ export default function Golden({ people }: GoldenProps) {
                     {person.name}
                 </motion.span>
                 <motion.div
-                    className="absolute z-50 px-6 py-4 mb-3 transform -translate-x-1/2 border shadow-2xl bottom-full left-1/2 rounded-2xl backdrop-blur-md"
+                    className="absolute z-50 px-6 py-4 mb-3 transform -translate-x-1/2 card-tooltip bottom-full left-1/2"
                     initial={{ opacity: 0, y: 10, scale: 0.9 }}
                     animate={{
                         opacity: isHovered ? 1 : 0,
@@ -138,7 +138,7 @@ export default function Golden({ people }: GoldenProps) {
 
     return (
         <motion.div
-            className="relative w-full py-8 overflow-hidden bg-white dark:bg-gray-900"
+            className="relative w-full py-32 pb-40 overflow-hidden"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 1 }}
@@ -172,8 +172,8 @@ export default function Golden({ people }: GoldenProps) {
                     </div>
                 </div>
             </div>
-            <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none bg-gradient-to-r from-white to-transparent dark:from-gray-900" />
-            <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none bg-gradient-to-l from-white to-transparent dark:from-gray-900" />
+            <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none" />
+            <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none" />
         </motion.div>
     );
 }

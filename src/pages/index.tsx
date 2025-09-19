@@ -40,7 +40,7 @@ export default function Home() {
             </Head>
             <div className="relative top-0 flex justify-center w-full h-[650px] md:h-[800px] lg:h-[650px] bg-rainbow-gradient animate-breathing-gradient mb-40 md:mb-80 lg:mb-32">
                 <motion.div
-                    className="relative flex h-[950px] lg:h-[550px] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 w-11/12 md:w-[690px] lg:w-11/12 lg:max-w-[1100px] drop-shadow-xl mt-44 rounded-3xl flex-col lg:flex-row hover:drop-shadow-2xl transition-all duration-1000 ease-in-out"
+                    className="relative flex h-[950px] lg:h-[550px] card-hero w-11/12 md:w-[690px] lg:w-11/12 lg:max-w-[1100px] mt-44 flex-col lg:flex-row"
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 1 }}

@@ -9,7 +9,7 @@ export default function The404() {
             </Head>
             <div className="relative top-0 flex items-center justify-center w-full h-screen bg-rainbow-gradient animate-breathing-gradient">
                 <motion.div
-                    className="relative flex h-[370px] lg:h-[300px] bg-white dark:bg-[#121212] border-black w-11/12 lg:w-[1000px] drop-shadow-2xl rounded-3xl duration-1000 ease-in-out transition-all"
+                    className="relative flex h-[370px] lg:h-[300px] card w-11/12 lg:w-[1000px] drop-shadow-2xl duration-1000 ease-in-out transition-all"
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 1 }}
@@ -20,7 +20,8 @@ export default function The404() {
                             404 NOT FOUND
                         </h1>
                         <p className="p-2 py-5 font-light text-center">
-                            Sorry... This wasn&apos;t supposed to happen, try going back to home.
+                            Sorry... This wasn&apos;t supposed to happen, try
+                            going back to home.
                         </p>
                     </div>
                 </motion.div>

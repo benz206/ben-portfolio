@@ -22,6 +22,48 @@
     }
 }
 
+@layer components {
+    .card {
+        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300;
+    }
+
+    .card-hero {
+        @apply bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 drop-shadow-xl rounded-3xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out;
+    }
+
+    .card-project {
+        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-2xl rounded-3xl hover:shadow-2xl transition duration-1000;
+    }
+
+    .card-repo {
+        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] border-black rounded-xl drop-shadow-xl hover:shadow-lg transition-all duration-300;
+    }
+
+    .card-tooltip {
+        @apply border shadow-2xl rounded-2xl backdrop-blur-md;
+    }
+
+    .card-playing {
+        @apply bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out;
+    }
+
+    .card-sm {
+        @apply p-4;
+    }
+
+    .card-md {
+        @apply p-6;
+    }
+
+    .card-lg {
+        @apply p-8;
+    }
+
+    .card-xl {
+        @apply p-10;
+    }
+}
+
 html,
 body,
 #__next {

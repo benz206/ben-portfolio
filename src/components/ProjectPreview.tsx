@@ -155,7 +155,7 @@ export default function ProjectPreview({
             variants={boxItem}
         >
             <div
-                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] p-10 bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-2xl rounded-3xl hover:shadow-2xl transition ${colorVariant[0]} duration-1000`}
+                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] card-project card-xl ${colorVariant[0]}`}
             >
                 <Image
                     className="object-contain h-auto mx-auto rounded-md shadow-lg"

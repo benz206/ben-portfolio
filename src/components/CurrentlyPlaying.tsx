@@ -64,7 +64,7 @@ export default function CurrentlyPlaying() {
     if (isLoading) {
         return (
             <motion.div
-                className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
+                className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
@@ -125,7 +125,7 @@ export default function CurrentlyPlaying() {
 
     return (
         <motion.div
-            className="relative flex h-32 mt-3 mx-auto w-full bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 max-w-[700px] drop-shadow-xl rounded-2xl hover:drop-shadow-2xl transition-all duration-1000 ease-in-out overflow-hidden"
+            className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
