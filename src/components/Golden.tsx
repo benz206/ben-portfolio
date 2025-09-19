@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 interface GoldenPerson {
     name: string;
@@ -10,15 +9,49 @@ interface GoldenProps {
     people: GoldenPerson[];
 }
 
+function getShortDescription(text: string, maxLength: number = 120): string {
+    if (!text) return "";
+    if (text.length <= maxLength) return text;
+    const truncated = text.slice(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(" ");
+    return (
+        (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated).trim() + "…"
+    );
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+    const a = [...array];
+    for (let i = a.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 export default function Golden({ people }: GoldenProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isPaused, setIsPaused] = useState(false);
 
-    const firstRowPeople = people.slice(0, Math.ceil(people.length / 2));
-    const secondRowPeople = people.slice(Math.ceil(people.length / 2));
+    const shuffledPeople = useMemo(() => shuffleArray(people), [people]);
+    const ROW_SIZE = 9;
+    const rows = useMemo(() => {
+        const limited = shuffledPeople.slice(0, ROW_SIZE * 3);
+        const chunks: GoldenPerson[][] = [];
+        for (let i = 0; i < limited.length; i += ROW_SIZE) {
+            chunks.push(limited.slice(i, i + ROW_SIZE));
+        }
+        return chunks;
+    }, [shuffledPeople]);
+    const rowOffsets = useMemo(
+        () =>
+            rows.map((_, idx) =>
+                rows.slice(0, idx).reduce((acc, r) => acc + r.length, 0)
+            ),
+        [rows]
+    );
 
     useEffect(() => {
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.textContent = `
             @keyframes scrollLeft {
                 from {
@@ -55,9 +88,18 @@ export default function Golden({ people }: GoldenProps) {
             .scroll-paused {
                 animation-play-state: paused !important;
             }
+
+            .fade-mask {
+                -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
+                mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
+                -webkit-mask-repeat: no-repeat;
+                mask-repeat: no-repeat;
+                -webkit-mask-size: 100% 100%;
+                mask-size: 100% 100%;
+            }
         `;
         document.head.appendChild(style);
-        
+
         return () => {
             document.head.removeChild(style);
         };
@@ -73,107 +115,120 @@ export default function Golden({ people }: GoldenProps) {
         setIsPaused(false);
     };
 
-    const renderPerson = (person: GoldenPerson, index: number, rowOffset: number = 0) => {
+    const renderPerson = (
+        person: GoldenPerson,
+        index: number,
+        rowOffset: number = 0
+    ) => {
         const actualIndex = index + rowOffset;
         const isHovered = hoveredIndex === actualIndex;
-        
+
         return (
-            <motion.div
+            <div
                 key={`${person.name}-${actualIndex}`}
                 className="relative flex-shrink-0 cursor-pointer group"
                 onMouseEnter={() => handleMouseEnter(actualIndex)}
                 onMouseLeave={handleMouseLeave}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
             >
-                <motion.span
-                    className="inline-block px-4 text-lg transition-all duration-300 select-none md:text-xl"
+                <span
+                    className="inline-block px-4 text-xl transition-all duration-300 transform select-none md:text-2xl hover:scale-105"
                     style={{
-                        fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
+                        fontFamily:
+                            "'Dancing Script', 'Brush Script MT', cursive",
                         color: "#B8860B",
                         filter: isHovered ? "none" : "blur(0.5px)",
                         opacity: isHovered ? 1 : 0.8,
-                        textShadow: isHovered 
-                            ? "0 0 8px rgba(184, 134, 11, 0.6), 0 0 16px rgba(184, 134, 11, 0.4)" 
+                        textShadow: isHovered
+                            ? "0 0 8px rgba(184, 134, 11, 0.6), 0 0 16px rgba(184, 134, 11, 0.4)"
                             : "0 0 4px rgba(184, 134, 11, 0.3)",
                     }}
                 >
                     {person.name}
-                </motion.span>
-                <motion.div
-                    className="absolute z-50 px-6 py-4 mb-3 transform -translate-x-1/2 card-tooltip bottom-full left-1/2"
-                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                    animate={{
-                        opacity: isHovered ? 1 : 0,
-                        y: isHovered ? 0 : 10,
-                        scale: isHovered ? 1 : 0.9,
-                    }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                        pointerEvents: isHovered ? "auto" : "none",
-                        width: "max-content",
-                        minWidth: "200px",
-                        maxWidth: "350px",
-                        whiteSpace: "normal",
-                        wordWrap: "break-word",
-                        background: "rgba(255, 255, 255, 0.9)",
-                        borderColor: "rgba(184, 134, 11, 0.2)",
-                    }}
-                >
-                    <p className="text-sm font-light leading-relaxed text-center text-gray-700 break-words">
-                        {person.description}
-                    </p>
-                    <div 
-                        className="absolute w-0 h-0 transform -translate-x-1/2 top-full left-1/2"
-                        style={{
-                            borderLeft: "6px solid transparent",
-                            borderRight: "6px solid transparent",
-                            borderTop: "6px solid rgba(255, 255, 255, 0.9)",
-                        }}
-                    />
-                </motion.div>
-            </motion.div>
+                </span>
+            </div>
         );
     };
 
+    const hoveredDescription = useMemo(() => {
+        if (hoveredIndex === null) return "";
+        for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+            const start = rowOffsets[rowIndex] ?? 0;
+            const end = start + (rows[rowIndex]?.length ?? 0);
+            if (hoveredIndex >= start && hoveredIndex < end) {
+                const indexInRow = hoveredIndex - start;
+                return rows[rowIndex]?.[indexInRow]?.description ?? "";
+            }
+        }
+        return "";
+    }, [hoveredIndex, rowOffsets, rows]);
+
+    const displayText =
+        hoveredDescription.trim().length > 0
+            ? getShortDescription(hoveredDescription, 140)
+            : "To all of those I have met before";
+    const [typedText, setTypedText] = useState("");
+    useEffect(() => {
+        let i = 0;
+        setTypedText("");
+        const interval = setInterval(() => {
+            i += 1;
+            setTypedText(displayText.slice(0, i));
+            if (i >= displayText.length) {
+                clearInterval(interval);
+            }
+        }, 18);
+        return () => clearInterval(interval);
+    }, [displayText]);
+
     return (
-        <motion.div
-            className="relative w-full py-32 pb-40 overflow-hidden"
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true, amount: 0.8 }}
-        >
+        <div className="relative w-full py-32 pb-40 overflow-hidden">
             <div className="flex flex-col items-center justify-center w-full space-y-6">
-                <div className="relative w-full overflow-hidden">
-                    <div 
-                        className={`scroll-container scroll-left ${isPaused ? 'scroll-paused' : ''}`}
+                <div className="relative flex items-center justify-center w-full h-12 pb-2 overflow-hidden md:h-16">
+                    <span
+                        className="inline-block px-4 text-2xl text-center select-none whitespace-nowrap md:text-4xl"
+                        style={{
+                            fontFamily:
+                                "'Dancing Script', 'Brush Script MT', cursive",
+                            color: "#B8860B",
+                            textShadow:
+                                "0 0 8px rgba(184, 134, 11, 0.35), 0 0 16px rgba(184, 134, 11, 0.25)",
+                        }}
                     >
-                        {[...Array(3)].map((_, loopIndex) => (
-                            <div key={`row1-loop-${loopIndex}`} className="flex items-center">
-                                {firstRowPeople.map((person, index) => 
-                                    renderPerson(person, index)
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                        {typedText}
+                    </span>
                 </div>
-                <div className="relative w-full overflow-hidden">
-                    <div 
-                        className={`scroll-container scroll-right ${isPaused ? 'scroll-paused' : ''}`}
+                {rows.map((row, rowIndex) => (
+                    <div
+                        key={`row-${rowIndex}`}
+                        className="relative w-full max-w-5xl mx-auto overflow-hidden fade-mask"
                     >
-                        {[...Array(3)].map((_, loopIndex) => (
-                            <div key={`row2-loop-${loopIndex}`} className="flex items-center">
-                                {secondRowPeople.map((person, index) => 
-                                    renderPerson(person, index, Math.ceil(people.length / 2))
-                                )}
-                            </div>
-                        ))}
+                        <div
+                            className={`scroll-container ${
+                                rowIndex % 2 === 0
+                                    ? "scroll-left"
+                                    : "scroll-right"
+                            } ${isPaused ? "scroll-paused" : ""}`}
+                        >
+                            {[...Array(3)].map((_, loopIndex) => (
+                                <div
+                                    key={`row-${rowIndex}-loop-${loopIndex}`}
+                                    className="flex items-center"
+                                >
+                                    {row.map((person, index) =>
+                                        renderPerson(
+                                            person,
+                                            index,
+                                            rowOffsets[rowIndex] || 0
+                                        )
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                ))}
             </div>
             <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none" />
             <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none" />
-        </motion.div>
+        </div>
     );
 }
