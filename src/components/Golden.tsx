@@ -260,11 +260,10 @@ export default function Golden({ people }: GoldenProps) {
                 onMouseLeave={handleMouseLeave}
             >
                 <span
-                    className="inline-block px-4 text-xl whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105"
+                    className="inline-block px-4 text-xl text-black whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105 dark:text-white"
                     style={{
                         fontFamily:
                             "'Dancing Script', 'Brush Script MT', cursive",
-                        color: "#B8860B",
                         filter: isHovered ? "none" : "blur(0.5px)",
                         opacity: isHovered ? 1 : 0.8,
                         textShadow: isHovered
@@ -320,11 +319,10 @@ export default function Golden({ people }: GoldenProps) {
             <div className="flex flex-col justify-center items-center space-y-6 w-full">
                 <div className="flex overflow-hidden relative justify-center items-center pb-2 w-full h-12 md:h-16">
                     <span
-                        className="inline-block px-4 text-2xl text-center whitespace-nowrap select-none md:text-4xl"
+                        className="inline-block px-4 text-2xl text-center text-black whitespace-nowrap select-none md:text-4xl dark:text-white"
                         style={{
                             fontFamily:
                                 "'Dancing Script', 'Brush Script MT', cursive",
-                            color: "#B8860B",
                             textShadow:
                                 "0 0 8px rgba(184, 134, 11, 0.35), 0 0 16px rgba(184, 134, 11, 0.25)",
                         }}
