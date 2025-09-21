@@ -14,8 +14,63 @@ import GooseOnTheLoose from "@/../public/projects/gooseontheloose.jpg";
 import LinkCom from "@/../public/projects/LinkCom.jpeg";
 import StyleIt from "@/../public/projects/styleit.jpg";
 import Event from "@/../public/projects/event.png";
+import Hermes from "@/../public/projects/hermes.png";
 
 const projectPreviews: ProjectPreviewProps[] = [
+    {
+        image: {
+            src: Hermes,
+            alt: "Hermes",
+            width: 900,
+            height: 100,
+        },
+        title: "HERMES",
+        sub: "AI VOICE AGENT PLATFORM",
+        description: (
+            <>
+                Hermes is a modern platform for creating, managing, and calling
+                AI voice agents. Built during HopHacks 2025, it leverages Next.js,
+                Supabase for auth/data, and integrates telephony/runtime services
+                alongside Google models. View the source on {" "}
+                <a
+                    href="https://github.com/benz206/hophacks2025"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-teal-500"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        icons: [
+            {
+                link: "https://nextjs.org",
+                image:
+                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+                alt: "NextJS",
+            },
+            {
+                link: "https://typescriptlang.org",
+                image:
+                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+                alt: "TypeScript",
+            },
+            {
+                link: "https://supabase.com",
+                image:
+                    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
+                alt: "Supabase",
+            },
+            {
+                link: "https://tailwindcss.com",
+                image:
+                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+                alt: "TailwindCSS",
+            },
+        ],
+        projectLink: "https://github.com/benz206/hophacks2025",
+        color: "teal-500",
+    },
     {
         image: {
             src: Event,
