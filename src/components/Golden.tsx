@@ -255,12 +255,12 @@ export default function Golden({ people }: GoldenProps) {
             <div
                 key={`${person.name}-${actualIndex}`}
                 data-person-item="true"
-                className="relative flex-shrink-0 cursor-pointer whitespace-nowrap group"
+                className="relative flex-shrink-0 whitespace-nowrap cursor-pointer group"
                 onMouseEnter={() => handleMouseEnter(actualIndex)}
                 onMouseLeave={handleMouseLeave}
             >
                 <span
-                    className="inline-block px-4 text-xl transition-all duration-300 transform select-none md:text-2xl hover:scale-105 whitespace-nowrap"
+                    className="inline-block px-4 text-xl whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105"
                     style={{
                         fontFamily:
                             "'Dancing Script', 'Brush Script MT', cursive",
@@ -311,16 +311,16 @@ export default function Golden({ people }: GoldenProps) {
 
     return (
         <motion.div
-            className="relative w-full py-32 pb-40 overflow-hidden"
+            className="overflow-hidden relative py-32 pb-40 w-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.4 }}
         >
-            <div className="flex flex-col items-center justify-center w-full space-y-6">
-                <div className="relative flex items-center justify-center w-full h-12 pb-2 overflow-hidden md:h-16">
+            <div className="flex flex-col justify-center items-center space-y-6 w-full">
+                <div className="flex overflow-hidden relative justify-center items-center pb-2 w-full h-12 md:h-16">
                     <span
-                        className="inline-block px-4 text-2xl text-center select-none whitespace-nowrap md:text-4xl"
+                        className="inline-block px-4 text-2xl text-center whitespace-nowrap select-none md:text-4xl"
                         style={{
                             fontFamily:
                                 "'Dancing Script', 'Brush Script MT', cursive",
@@ -335,17 +335,19 @@ export default function Golden({ people }: GoldenProps) {
                 {rows.map((row, rowIndex) => (
                     <div
                         key={`row-${rowIndex}`}
-                        className="relative w-full max-w-5xl mx-auto overflow-hidden fade-mask"
+                        className="overflow-hidden relative mx-auto w-full max-w-5xl fade-mask"
                     >
                         <div
-                            ref={(el) => (rowRefs.current[rowIndex] = el)}
-                            className="flex items-center flex-nowrap"
+                            ref={(el: HTMLDivElement | null) => {
+                                rowRefs.current[rowIndex] = el;
+                            }}
+                            className="flex flex-nowrap items-center"
                             style={{ gap: "0px" }}
                         >
                             {[...Array(2)].map((_, loopIndex) => (
                                 <div
                                     key={`row-${rowIndex}-loop-${loopIndex}`}
-                                    className="flex items-center flex-nowrap"
+                                    className="flex flex-nowrap items-center"
                                 >
                                     {row.map((person, index) =>
                                         renderPerson(

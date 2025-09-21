@@ -34,7 +34,7 @@ export default function Navigation() {
     }, []);
 
     return (
-        <nav className="fixed top-0 z-10 flex flex-col w-full h-auto transition-all duration-1000 ease-in-out">
+        <nav className="flex fixed top-0 z-10 flex-col w-full h-auto transition-all duration-1000 ease-in-out">
             <div
                 className={`flex justify-center w-full transition-all h-20 bg-black duration-1000 ease-in-out ${
                     scrollY > 0
@@ -44,19 +44,19 @@ export default function Navigation() {
             >
                 <div className="flex flex-row flex-wrap w-11/12 max-w-[1170px] h-full">
                     <motion.div
-                        className="flex items-center justify-center"
+                        className="flex justify-center items-center"
                         {...motionAnim}
                     >
                         <Link href="/">
                             <Image
-                                className="w-16 ml-8 lg:ml-0 lg:auto lg:w-12"
+                                className="ml-8 w-16 lg:ml-0 lg:auto lg:w-12"
                                 src={Logo}
                                 alt="Logo"
                                 loading="lazy"
                             />
                         </Link>
                     </motion.div>
-                    <div className="items-center justify-end hidden gap-10 ml-auto lg:flex lg:w-11/12">
+                    <div className="hidden gap-10 justify-end items-center ml-auto lg:flex lg:w-11/12">
                         <motion.div
                             className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
                             {...motionAnim}
@@ -139,10 +139,10 @@ export default function Navigation() {
                         <ToggleDLMode />
                     </div>
 
-                    <div className="flex items-center justify-end gap-10 ml-auto lg:hidden">
+                    <div className="flex gap-10 justify-end items-center ml-auto lg:hidden">
                         <ToggleDLMode />
                         <button
-                            className="flex flex-col items-center justify-center w-12 h-12 mr-4 duration-500 rounded"
+                            className="flex flex-col justify-center items-center mr-4 w-12 h-12 rounded duration-500"
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <div
@@ -167,7 +167,7 @@ export default function Navigation() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="relative flex flex-col w-full h-auto p-4 transition-all duration-500 ease-in-out bg-black lg:hidden"
+                        className="flex relative flex-col p-4 w-full h-auto bg-black transition-all duration-500 ease-in-out lg:hidden"
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 100 }}
                         exit={{ y: -20, opacity: 0 }}

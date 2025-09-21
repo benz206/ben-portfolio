@@ -101,7 +101,8 @@ const jobs: Job[] = [
     {
         title: "Software Engineering Intern #7",
         company: "Grand Charter - New York, New York",
-        description: "• Building cutting-edge tools and solutions for legal teams.",
+        description:
+            "• Building cutting-edge tools and solutions for legal teams.",
         date: "Sep 2025",
         image: {
             src: GrandCharter,
