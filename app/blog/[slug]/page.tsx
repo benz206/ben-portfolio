@@ -114,13 +114,14 @@ export default async function BlogPostPage({
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
     const { MDXRemote } = await import("next-mdx-remote/rsc");
+    const MDX = MDXRemote as any;
     return (
         <MdxLayout
             metadata={metadata}
             createdDate={createdDate}
             updatedDate={updatedDate}
         >
-            <MDXRemote source={content} components={components as any} />
+            <MDX source={content} components={components as any} />
         </MdxLayout>
     );
 }
