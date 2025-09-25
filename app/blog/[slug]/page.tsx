@@ -12,7 +12,7 @@ type RawBlogMetadata = {
 };
 
 async function fetchSlugs(): Promise<string[]> {
-    const { Octokit } = await import("octokit");
+    const { Octokit } = await import("@octokit/rest");
     const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
@@ -40,7 +40,7 @@ export async function generateStaticParams() {
 }
 
 async function fetchPost(slug: string) {
-    const { Octokit } = await import("octokit");
+    const { Octokit } = await import("@octokit/rest");
     const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
@@ -106,10 +106,11 @@ export const revalidate = 3600;
 export default async function BlogPostPage({
     params,
 }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }) {
+    const { slug } = await params;
     const { metadata, content, createdDate, updatedDate } = await fetchPost(
-        params.slug
+        slug
     );
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
