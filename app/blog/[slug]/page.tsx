@@ -1,7 +1,6 @@
 import matter from "gray-matter";
 import MdxLayout from "@/components/MdxLayout";
-import { useMDXComponents } from "@/mdx-components";
-import { MDXRemote } from "next-mdx-remote/rsc";
+import { getMDXComponents } from "@/mdx-components";
 
 type RawBlogMetadata = {
     title: string;
@@ -112,7 +111,9 @@ export default async function BlogPostPage({
     const { metadata, content, createdDate, updatedDate } = await fetchPost(
         params.slug
     );
-    const components = useMDXComponents({});
+    // Not a React hook, just a mapper, safe to call here
+    const components = getMDXComponents({});
+    const { MDXRemote } = await import("next-mdx-remote/rsc");
     return (
         <MdxLayout
             metadata={metadata}

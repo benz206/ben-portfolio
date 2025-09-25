@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import type { ReactNode } from "react";
 
 export type ProjectPreviewProps = {
     image: {
@@ -10,7 +11,7 @@ export type ProjectPreviewProps = {
     };
     title: string;
     sub: string;
-    description: JSX.Element;
+    description: ReactNode;
     icons: {
         link: string;
         image: string;
@@ -34,7 +35,7 @@ export type AwardPreviewProps = {
     };
     competition: string;
     award: string;
-    description: JSX.Element;
+    description: ReactNode;
     date: string;
     icons: {
         link: string;

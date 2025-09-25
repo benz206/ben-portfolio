@@ -9,12 +9,12 @@ import ToggleDLMode from "./toggleMode";
 const motionAnim = {
     whileHover: { scale: 1.1 },
     transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 10,
     },
     whileTap: { scale: 0.9 },
-};
+} as const;
 
 export default function Navigation() {
     const [scrollY, setScrollY] = useState(0);

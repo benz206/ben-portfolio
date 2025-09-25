@@ -1,3 +1,4 @@
+"use client";
 import ProjectPreview from "@/components/ProjectPreview";
 import projectPreviews from "@/data/projectPreviews";
 import { motion } from "framer-motion";

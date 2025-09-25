@@ -1,6 +1,6 @@
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, easeInOut } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa6";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
@@ -133,7 +133,7 @@ const boxItem = {
         opacity: 1,
         transition: {
             duration: 1,
-            ease: "easeInOut",
+            ease: easeInOut,
         },
     },
 };

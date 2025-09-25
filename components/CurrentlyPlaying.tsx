@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa";
 
@@ -105,7 +105,7 @@ export default function CurrentlyPlaying() {
                                 transition={{
                                     duration: 2,
                                     repeat: Infinity,
-                                    ease: "easeInOut",
+                                    ease: easeInOut,
                                 }}
                             />
                         </div>

@@ -1,3 +1,4 @@
+"use client";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
 import { SiMonkeytype } from "react-icons/si";
@@ -7,12 +8,12 @@ const motionProps = {
     initial: { scale: 1 },
     whileHover: { scale: 1.2 },
     transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 20,
     },
     whileTap: { scale: 0.9 },
-};
+} as const;
 
 export default function Footer() {
     return (

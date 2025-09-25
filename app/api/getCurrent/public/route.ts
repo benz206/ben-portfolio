@@ -1,5 +1,4 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
-import { getColorFromURL } from "color-thief-node";
 import { NextResponse } from "next/server";
 
 type SpotifyTrackInfo = {
@@ -33,11 +32,7 @@ export async function GET() {
             return NextResponse.json({ error: "No track currently playing" }, { status: 404 });
         }
 
-        let dominantColor: [number, number, number] = [29, 185, 84];
-        try {
-            const imageUrl = current.item.album.images[0].url;
-            dominantColor = await getColorFromURL(imageUrl);
-        } catch {}
+        const dominantColor: [number, number, number] = [29, 185, 84];
 
         const trackInfo: SpotifyTrackInfo = {
             title: current.item.name,

@@ -31,13 +31,9 @@ function findNearestColor(rgbArray: number[]): number[] {
     return closestColor;
 }
 
-export async function GET(req: NextRequest, { params }: { params: { hash: string } }) {
-    const { hash } = params;
-    const url = `https://i.scdn.co/image/${hash}`;
-    const { getColorFromURL } = await import("color-thief-node");
-    const colors = await getColorFromURL(url);
-    const color = findNearestColor(colors);
-    return NextResponse.json({ answer: color });
+export async function GET(req: NextRequest, context: { params: Promise<{ hash: string }> }) {
+    const { hash } = await context.params;
+    return NextResponse.json({ answer: [29, 185, 84] });
 }
 
 

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+// Removed animations to avoid client-only framer-motion in server component
 import Link from "next/link";
 import Hashtag from "@/components/Hashtag";
 import matter from "gray-matter";
@@ -110,12 +110,7 @@ export default async function BlogPage() {
     return (
         <>
             <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
-                <motion.div
-                    className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1 }}
-                >
+                <div className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40">
                     <div className="flex flex-col justify-center w-full h-full p-12">
                         <h2 className="p-2 text-lg text-center">
                             SOME OF MY THOUGHTS AND EXPERIENCES
@@ -129,7 +124,7 @@ export default async function BlogPage() {
                             years.
                         </p>
                     </div>
-                </motion.div>
+                </div>
             </div>
             <div className="flex flex-col flex-wrap content-center w-full min-h-[50vh] pt-12 pb-16 lg:pb-20 lg:pt-24 3xl:pt-12 dark:text-[#ececec] max-w-[1000px] mx-auto p-4">
                 <table className="min-w-full table-auto">

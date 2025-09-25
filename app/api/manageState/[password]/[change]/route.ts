@@ -13,9 +13,9 @@ async function getPlayerData(accessToken: string) {
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { password: string; change: string } }
+    context: { params: Promise<{ password: string; change: string }> }
 ) {
-    const { password, change } = params;
+    const { password, change } = await context.params;
 
     if (password !== process.env.PASSWORD) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

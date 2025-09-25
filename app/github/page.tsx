@@ -1,5 +1,6 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+"use client";
+import { motion, useInView, easeInOut } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { GitHubRepo } from "@/types";
@@ -17,7 +18,7 @@ const boxAnim = {
 };
 const boxItem = {
     hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 1, ease: "easeInOut" } },
+    visible: { y: 0, opacity: 1, transition: { duration: 1, ease: easeInOut } },
 };
 
 enum Dropdown {

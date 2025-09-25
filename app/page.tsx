@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Mocha from "@/public/home/mocha.png";
 import CompEng from "@/public/home/compeng.jpg";

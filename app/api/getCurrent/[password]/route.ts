@@ -14,8 +14,8 @@ type ESPInfo = {
     loop: string;
 };
 
-export async function GET(req: NextRequest, { params }: { params: { password: string } }) {
-    const { password } = params;
+export async function GET(req: NextRequest, context: { params: Promise<{ password: string }> }) {
+    const { password } = await context.params;
     if (password !== process.env.PASSWORD) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

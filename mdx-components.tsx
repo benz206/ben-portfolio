@@ -4,7 +4,7 @@ import GenericCodeBlock from "./components/CodeBlocks/GenericCodeBlock";
 import styles from "@/styles/mdx.module.css";
 import MDXImage from "@/components/mdx/MDXImage";
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function getMDXComponents(components: MDXComponents): MDXComponents {
     return {
         h1: ({ children }) => (
             <h1 className="py-2 text-3xl font-black lg:text-5xl">{children}</h1>

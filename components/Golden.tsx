@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { gsap } from "gsap";
 
 interface GoldenPerson {
@@ -314,7 +314,7 @@ export default function Golden({ people }: GoldenProps) {
             className="overflow-hidden relative py-32 pb-40 w-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: easeOut }}
             viewport={{ once: true, amount: 0.4 }}
         >
             <div className="flex flex-col justify-center items-center space-y-6 w-full">

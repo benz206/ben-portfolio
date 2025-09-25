@@ -1,5 +1,5 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, easeOut } from "framer-motion";
 import { StaticImageData } from "next/image";
 import fuego from "@/public/experience/fuego.webp";
 import SAP from "@/public/experience/SAP.png";
@@ -67,7 +67,7 @@ function Job({ job, index }: JobProps) {
             ref={ref}
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.2 }}
+            transition={{ duration: 0.8, ease: easeOut, delay: index * 0.2 }}
             className="relative grid grid-cols-[4rem_auto] md:grid-cols-[10rem_auto] py-8 list-none group"
             key={index}
         >
