@@ -1,7 +1,9 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
+import jpeg from "jpeg-js";
 import { NextRequest } from "next/server";
+
+export const runtime = "nodejs";
 
 type SpotifyTrackInfo = {
     title: string;
@@ -42,10 +44,27 @@ export async function GET(_req: NextRequest) {
             try {
                 const imgRes = await fetch(imageUrl);
                 const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-                const stats = await sharp(imgBuffer).stats();
-                const dom = (stats as any).dominant as { r: number; g: number; b: number } | undefined;
-                if (dom && [dom.r, dom.g, dom.b].every((n) => typeof n === "number")) {
-                    dominantColor = [dom.r, dom.g, dom.b];
+                const decoded = jpeg.decode(imgBuffer, { useTArray: true });
+                const { data, width, height } = decoded as unknown as { data: Uint8Array; width: number; height: number };
+                if (data && width && height) {
+                    let rTotal = 0;
+                    let gTotal = 0;
+                    let bTotal = 0;
+                    let count = 0;
+                    const sampleStride = 20;
+                    for (let i = 0; i < data.length; i += 4 * sampleStride) {
+                        rTotal += data[i];
+                        gTotal += data[i + 1];
+                        bTotal += data[i + 2];
+                        count++;
+                    }
+                    if (count > 0) {
+                        dominantColor = [
+                            Math.round(rTotal / count),
+                            Math.round(gTotal / count),
+                            Math.round(bTotal / count),
+                        ];
+                    }
                 }
             } catch {
                 // fallback to default color

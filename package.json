@@ -23,6 +23,7 @@
         "framer-motion": "^12.23.21",
         "gray-matter": "^4.0.3",
         "gsap": "^3.13.0",
+        "jpeg-js": "^0.4.4",
         "next": "^15.5.4",
         "next-cloudinary": "^6.10.1",
         "next-mdx-remote": "^5.0.0",
