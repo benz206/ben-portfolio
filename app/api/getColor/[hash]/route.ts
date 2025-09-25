@@ -31,9 +31,31 @@ function findNearestColor(rgbArray: number[]): number[] {
     return closestColor;
 }
 
+function parseHashToRgb(hash: string): number[] | null {
+    if (!hash) return null;
+    const trimmed = hash.trim();
+    if (trimmed.includes(",")) {
+        const parts = trimmed.split(",").map((p) => parseInt(p.trim(), 10));
+        if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) return null;
+        return parts.map((n) => Math.max(0, Math.min(255, n)));
+    }
+    const clean = trimmed.replace(/^#/, "");
+    if (!(clean.length === 6)) return null;
+    const r = parseInt(clean.slice(0, 2), 16);
+    const g = parseInt(clean.slice(2, 4), 16);
+    const b = parseInt(clean.slice(4, 6), 16);
+    if ([r, g, b].some((n) => Number.isNaN(n))) return null;
+    return [r, g, b];
+}
+
 export async function GET(req: NextRequest, context: { params: Promise<{ hash: string }> }) {
     const { hash } = await context.params;
-    return NextResponse.json({ answer: [29, 185, 84] });
+    const rgb = parseHashToRgb(hash);
+    if (!rgb) {
+        return NextResponse.json({ error: "Invalid color hash. Use R,G,B or hex (rrggbb)." }, { status: 400 });
+    }
+    const nearest = findNearestColor(rgb);
+    return NextResponse.json({ color: rgb, nearest });
 }
 
 
