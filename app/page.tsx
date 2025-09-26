@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Card from "@/components/Card";
 import Mocha from "@/public/home/mocha.png";
 import CompEng from "@/public/home/compeng.jpg";
 import { motion } from "framer-motion";
@@ -13,11 +14,14 @@ export default function Home() {
     return (
         <>
             <div className="relative top-0 flex justify-center w-full h-[650px] md:h-[800px] lg:h-[650px] bg-rainbow-gradient animate-breathing-gradient mb-40 md:mb-80 lg:mb-32">
-                <motion.div
-                    className="relative flex h-[950px] lg:h-[550px] card-hero w-11/12 md:w-[690px] lg:w-11/12 lg:max-w-[1100px] mt-44 flex-col lg:flex-row"
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1 }}
+                <Card
+                    variant="glass"
+                    className="relative flex h-[950px] lg:h-[550px] w-11/12 md:w-[690px] lg:w-11/12 lg:max-w-[1100px] mt-44 flex-col lg:flex-row rounded-3xl"
+                    motionProps={{
+                        initial: { y: -20, opacity: 0 },
+                        animate: { y: 0, opacity: 1 },
+                        transition: { duration: 1 },
+                    }}
                 >
                     <div className="flex flex-wrap justify-center w-full h-full lg:w-1/2">
                         <Image
@@ -82,7 +86,7 @@ export default function Home() {
                             />
                         </div>
                     </div>
-                </motion.div>
+                </Card>
             </div>
 
             <motion.div

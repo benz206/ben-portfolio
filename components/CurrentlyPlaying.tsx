@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa";
+import Card from "@/components/Card";
 
 type SpotifyTrack = {
     title: string;
@@ -64,11 +65,14 @@ export default function CurrentlyPlaying() {
 
     if (isLoading) {
         return (
-            <motion.div
-                className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+            <Card
+                variant="glass"
+                className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
+                motionProps={{
+                    initial: { opacity: 0 },
+                    animate: { opacity: 1 },
+                    transition: { duration: 1 },
+                }}
             >
                 <div
                     className="absolute inset-0 w-full h-full"
@@ -111,7 +115,7 @@ export default function CurrentlyPlaying() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </Card>
         );
     }
     if (error || !track) {
@@ -125,14 +129,13 @@ export default function CurrentlyPlaying() {
         : "#1DB954";
 
     return (
-        <motion.div
-            className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            style={{
-                borderColor: `${dominantColor}`,
-                borderWidth: "3px",
+        <Card
+            variant="glass"
+            className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
+            motionProps={{
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                transition: { duration: 1 },
             }}
         >
             {track.albumArt && (
@@ -195,6 +198,6 @@ export default function CurrentlyPlaying() {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </Card>
     );
 }

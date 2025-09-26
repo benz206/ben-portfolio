@@ -5,6 +5,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
 import TechIcon from "./TechIcon";
+import Card from "@/components/Card";
 
 const colorVariants: { [key: string]: string[] } = {
     "amber-500": [
@@ -154,8 +155,11 @@ export default function ProjectPreview({
             className="self-center list-none justify-self-center"
             variants={boxItem}
         >
-            <div
-                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] card-project card-xl ${colorVariant[0]}`}
+            <Card
+                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] ${colorVariant[0]} hover:shadow-2xl`}
+                variant="default"
+                size="xl"
+                radius="3xl"
             >
                 <Image
                     className="object-contain h-auto mx-auto rounded-md shadow-lg"
@@ -246,7 +250,7 @@ export default function ProjectPreview({
                         </motion.div>
                     )}
                 </div>
-            </div>
+            </Card>
         </motion.li>
     );
 }

@@ -11,10 +11,15 @@ import { IoMdGrid } from "react-icons/io";
 import { IoChevronDown } from "react-icons/io5";
 import Tags from "@/components/GitHub/Tags";
 import LanguageBar from "@/components/GitHub/LanguageBar";
+import Card from "@/components/Card";
 
 const boxAnim = {
     hidden: { opacity: 1, scale: 0 },
-    visible: { opacity: 1, scale: 1, transition: { delayChildren: 0.3, staggerChildren: 0.2 } },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: { delayChildren: 0.3, staggerChildren: 0.2 },
+    },
 };
 const boxItem = {
     hidden: { y: 20, opacity: 0 },
@@ -59,7 +64,10 @@ export const boxGlows: TagGlow[] = [
 ];
 function getGlowClass(language: string): string {
     const glow = boxGlows.find((g) => g[language]);
-    return ((glow ? glow[language] : "hover:shadow-white") + " hover:shadow-xl duration-500 ease-in-out");
+    return (
+        (glow ? glow[language] : "hover:shadow-white") +
+        " hover:shadow-xl duration-500 ease-in-out"
+    );
 }
 
 export default function GithubPage() {
@@ -85,7 +93,10 @@ export default function GithubPage() {
         }
         const resp = await fetch(url);
         const data = await resp.json();
-        localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
+        localStorage.setItem(
+            cacheKey,
+            JSON.stringify({ data, timestamp: Date.now() })
+        );
         return data;
     };
 
@@ -96,10 +107,11 @@ export default function GithubPage() {
                     "https://api.github.com/users/benz206/repos",
                     "github_repos"
                 );
-                const filtered = data.filter((repo: GitHubRepo) =>
-                    repo.name != "benz206" &&
-                    repo.name.indexOf("experiments") == -1 &&
-                    repo.name.indexOf("learning") == -1
+                const filtered = data.filter(
+                    (repo: GitHubRepo) =>
+                        repo.name != "benz206" &&
+                        repo.name.indexOf("experiments") == -1 &&
+                        repo.name.indexOf("learning") == -1
                 );
                 setRepoData(filtered);
                 setLoading(false);
@@ -110,7 +122,11 @@ export default function GithubPage() {
         })();
     }, []);
 
-    const sortRepositories = (repos: GitHubRepo[], s: SortOption, order: "asc" | "desc") => {
+    const sortRepositories = (
+        repos: GitHubRepo[],
+        s: SortOption,
+        order: "asc" | "desc"
+    ) => {
         return [...repos].sort((a, b) => {
             let aValue: any;
             let bValue: any;
@@ -146,16 +162,21 @@ export default function GithubPage() {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
+            if (
+                sortDropdownRef.current &&
+                !sortDropdownRef.current.contains(event.target as Node)
+            ) {
                 setShowSortDropdown(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleSortChange = (newSortBy: SortOption) => {
-        if (sortBy === newSortBy) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        if (sortBy === newSortBy)
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
         else {
             setSortBy(newSortBy);
             setSortOrder("desc");
@@ -181,27 +202,39 @@ export default function GithubPage() {
     return (
         <>
             <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
-                <motion.div
-                    ref={heroRef}
-                    className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                    transition={{ duration: 0.5 }}
+                <Card
+                    variant="glass"
+                    className="relative flex h-[370px] lg:h-[300px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40 rounded-3xl"
+                    motionProps={{
+                        ref: heroRef,
+                        initial: { opacity: 0, y: 50 },
+                        animate: isHeroInView
+                            ? { opacity: 1, y: 0 }
+                            : { opacity: 0, y: 50 },
+                        transition: { duration: 0.5 },
+                    }}
                 >
                     <div className="flex flex-col justify-center p-12 w-full h-full">
-                        <h2 className="p-2 text-lg text-center">TAKE A PEEK AT MY REPOSITORIES</h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">GITHUB</h1>
+                        <h2 className="p-2 text-lg text-center">
+                            TAKE A PEEK AT MY REPOSITORIES
+                        </h2>
+                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">
+                            GITHUB
+                        </h1>
                         <p className="p-2 py-5 font-light">
-                            View some of my current projects in progress, and some of my past projects that I have worked on.
+                            View some of my current projects in progress, and
+                            some of my past projects that I have worked on.
                         </p>
                     </div>
-                </motion.div>
+                </Card>
             </div>
             <motion.div
                 ref={contentRef}
                 className="flex flex-col flex-wrap justify-center content-center pt-12 pb-16 w-full min-h-screen lg:pb-20 lg:pt-24 3xl:pt-12"
                 initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
+                }
                 transition={{ duration: 0.5 }}
             >
                 {isLoading && (
@@ -212,11 +245,17 @@ export default function GithubPage() {
                 <div className="flex gap-4 justify-center items-center p-6 ml-auto">
                     <div className="relative" ref={sortDropdownRef}>
                         <button
-                            onClick={() => setShowSortDropdown(!showSortDropdown)}
+                            onClick={() =>
+                                setShowSortDropdown(!showSortDropdown)
+                            }
                             className="flex gap-2 items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-[#ececec] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md rounded-lg transition-all duration-200 ease-in-out hover:bg-white/90 dark:hover:bg-[#121212]/50"
                         >
                             Sort by: {getSortLabel(sortBy)}
-                            <IoChevronDown className={`w-4 h-4 transition-transform ${showSortDropdown ? "rotate-180" : ""}`} />
+                            <IoChevronDown
+                                className={`w-4 h-4 transition-transform ${
+                                    showSortDropdown ? "rotate-180" : ""
+                                }`}
+                            />
                         </button>
                         {showSortDropdown && (
                             <div className="absolute left-0 top-full z-10 mt-1 w-48 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md rounded-lg drop-shadow-xl">
@@ -224,11 +263,19 @@ export default function GithubPage() {
                                     <button
                                         key={option}
                                         onClick={() => handleSortChange(option)}
-                                        className={`w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-[#ececec] hover:bg-white/50 dark:hover:bg-[#121212]/70 transition-all duration-200 ease-in-out ${sortBy === option ? "bg-white/70 dark:bg-[#121212]/60 font-medium" : ""}`}
+                                        className={`w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-[#ececec] hover:bg-white/50 dark:hover:bg-[#121212]/70 transition-all duration-200 ease-in-out ${
+                                            sortBy === option
+                                                ? "bg-white/70 dark:bg-[#121212]/60 font-medium"
+                                                : ""
+                                        }`}
                                     >
                                         {getSortLabel(option)}
                                         {sortBy === option && (
-                                            <span className="ml-2 text-xs">{sortOrder === "asc" ? "↑" : "↓"}</span>
+                                            <span className="ml-2 text-xs">
+                                                {sortOrder === "asc"
+                                                    ? "↑"
+                                                    : "↓"}
+                                            </span>
                                         )}
                                     </button>
                                 ))}
@@ -237,100 +284,149 @@ export default function GithubPage() {
                     </div>
                     <button
                         onClick={() => setViewMode(Dropdown.Grid)}
-                        className={`p-2 rounded-lg transition-colors ${viewMode === Dropdown.Grid ? "text-gray-600 dark:text-gray-200" : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"}`}
+                        className={`p-2 rounded-lg transition-colors ${
+                            viewMode === Dropdown.Grid
+                                ? "text-gray-600 dark:text-gray-200"
+                                : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        }`}
                         title="Grid View"
                     >
                         <IoMdGrid className="w-6 h-6" />
                     </button>
                     <button
                         onClick={() => setViewMode(Dropdown.List)}
-                        className={`rounded-lg transition-colors ${viewMode === Dropdown.List ? "text-gray-600 dark:text-gray-200" : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"}`}
+                        className={`rounded-lg transition-colors ${
+                            viewMode === Dropdown.List
+                                ? "text-gray-600 dark:text-gray-200"
+                                : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        }`}
                         title="List View"
                     >
                         <IoMenu className="w-6 h-6" />
                     </button>
                 </div>
                 <motion.div
-                    className={`${viewMode === Dropdown.Grid ? "grid gap-y-12 lg:gap-y-10 w-11/12 md:w-[600px] xl:w-[1300px] 3xl:w-[1850px] py-5 pt-0 grid-flow-row grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-x-5 md:gap-x-7 lg:gap-x-16" : "flex flex-col w-11/12 md:w-[600px] xl:w-[1000px] divide-y divide-gray-200 dark:divide-gray-800"}`}
+                    className={`${
+                        viewMode === Dropdown.Grid
+                            ? "grid gap-y-12 lg:gap-y-10 w-11/12 md:w-[600px] xl:w-[1300px] 3xl:w-[1850px] py-5 pt-0 grid-flow-row grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-x-5 md:gap-x-7 lg:gap-x-16"
+                            : "flex flex-col w-11/12 md:w-[600px] xl:w-[1000px] divide-y divide-gray-200 dark:divide-gray-800"
+                    }`}
                     variants={boxAnim}
                     initial="hidden"
                     animate="visible"
                 >
-                    {!isLoading && filteredRepoData.map((repo, index) => (
-                        <motion.div
-                            className={`${viewMode === Dropdown.Grid ? "flex flex-col justify-center w-full h-full px-5 py-4 card-repo" : "flex flex-col w-full py-6 first:pt-0 last:pb-0"} ${viewMode === Dropdown.Grid ? getGlowClass(repo.language) : ""}`}
-                            key={repo.id}
-                            variants={boxItem}
-                            custom={index}
-                        >
-                            <div className={`${viewMode === Dropdown.List ? "flex items-center gap-4" : ""}`}>
-                                <h1 className={`text-2xl font-bold ${viewMode === Dropdown.List ? "flex-1" : ""}`}>
-                                    {repo.name}
-                                </h1>
-                                {viewMode === Dropdown.List && (
-                                    <div className="flex gap-4 items-center">
-                                        {repo.stargazers_count > 0 && (
-                                            <p className="flex items-center text-sm font-base">
-                                                <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
-                                                {repo.stargazers_count}
-                                            </p>
-                                        )}
-                                        {repo.forks > 0 && (
-                                            <p className="flex justify-center items-center text-sm font-base">
-                                                <FaCodeFork className="mx-1 my-auto w-4 h-4" />
-                                                {repo.forks_count}
-                                            </p>
-                                        )}
-                                        <div>
-                                            <Tags rawTags={[repo.language]} />
+                    {!isLoading &&
+                        filteredRepoData.map((repo, index) => (
+                            <Card
+                                className={`${
+                                    viewMode === Dropdown.Grid
+                                        ? "flex flex-col justify-center w-full h-full px-5 py-4"
+                                        : "flex flex-col w-full py-6 first:pt-0 last:pb-0"
+                                } ${
+                                    viewMode === Dropdown.Grid
+                                        ? getGlowClass(repo.language)
+                                        : ""
+                                }`}
+                                key={repo.id}
+                                motionProps={{
+                                    variants: boxItem,
+                                    custom: index,
+                                }}
+                            >
+                                <div
+                                    className={`${
+                                        viewMode === Dropdown.List
+                                            ? "flex items-center gap-4"
+                                            : ""
+                                    }`}
+                                >
+                                    <h1
+                                        className={`text-2xl font-bold ${
+                                            viewMode === Dropdown.List
+                                                ? "flex-1"
+                                                : ""
+                                        }`}
+                                    >
+                                        {repo.name}
+                                    </h1>
+                                    {viewMode === Dropdown.List && (
+                                        <div className="flex gap-4 items-center">
+                                            {repo.stargazers_count > 0 && (
+                                                <p className="flex items-center text-sm font-base">
+                                                    <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
+                                                    {repo.stargazers_count}
+                                                </p>
+                                            )}
+                                            {repo.forks > 0 && (
+                                                <p className="flex justify-center items-center text-sm font-base">
+                                                    <FaCodeFork className="mx-1 my-auto w-4 h-4" />
+                                                    {repo.forks_count}
+                                                </p>
+                                            )}
+                                            <div>
+                                                <Tags
+                                                    rawTags={[repo.language]}
+                                                />
+                                            </div>
                                         </div>
+                                    )}
+                                </div>
+                                <p
+                                    className={`py-3 text-sm font-light ${
+                                        viewMode === Dropdown.List
+                                            ? "flex-1"
+                                            : ""
+                                    }`}
+                                >
+                                    {repo.description}
+                                </p>
+                                <div
+                                    className={`flex items-center py-1 ${
+                                        viewMode === Dropdown.Grid
+                                            ? "mt-auto"
+                                            : ""
+                                    }`}
+                                >
+                                    <a
+                                        className="flex justify-center items-center px-2.5 py-1.5 text-sm font-normal text-white transition-all duration-200 ease-in-out bg-black rounded-lg hover:bg-[#6e5494] hover:text-white"
+                                        href={repo.html_url}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                    >
+                                        <ImGithub className="w-5 h-5 my-auto mr-1.5" />
+                                        GitHub
+                                    </a>
+                                    {viewMode === Dropdown.Grid && (
+                                        <>
+                                            {repo.stargazers_count > 0 && (
+                                                <p className="flex items-center mx-1.5 text-sm font-base">
+                                                    <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
+                                                    {repo.stargazers_count}
+                                                </p>
+                                            )}
+                                            {repo.forks > 0 && (
+                                                <p className="flex items-center justify-center mx-1.5 mr-auto text-sm font-base">
+                                                    <FaCodeFork className="mx-1 my-auto w-4 h-4" />
+                                                    {repo.forks_count}
+                                                </p>
+                                            )}
+                                            <div className="ml-auto">
+                                                <Tags
+                                                    rawTags={[repo.language]}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                {viewMode === Dropdown.Grid && (
+                                    <div className="mt-2">
+                                        <LanguageBar repo={repo.name} />
                                     </div>
                                 )}
-                            </div>
-                            <p className={`py-3 text-sm font-light ${viewMode === Dropdown.List ? "flex-1" : ""}`}>
-                                {repo.description}
-                            </p>
-                            <div className={`flex items-center py-1 ${viewMode === Dropdown.Grid ? "mt-auto" : ""}`}>
-                                <a
-                                    className="flex justify-center items-center px-2.5 py-1.5 text-sm font-normal text-white transition-all duration-200 ease-in-out bg-black rounded-lg hover:bg-[#6e5494] hover:text-white"
-                                    href={repo.html_url}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                >
-                                    <ImGithub className="w-5 h-5 my-auto mr-1.5" />
-                                    GitHub
-                                </a>
-                                {viewMode === Dropdown.Grid && (
-                                    <>
-                                        {repo.stargazers_count > 0 && (
-                                            <p className="flex items-center mx-1.5 text-sm font-base">
-                                                <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
-                                                {repo.stargazers_count}
-                                            </p>
-                                        )}
-                                        {repo.forks > 0 && (
-                                            <p className="flex items-center justify-center mx-1.5 mr-auto text-sm font-base">
-                                                <FaCodeFork className="mx-1 my-auto w-4 h-4" />
-                                                {repo.forks_count}
-                                            </p>
-                                        )}
-                                        <div className="ml-auto">
-                                            <Tags rawTags={[repo.language]} />
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                            {viewMode === Dropdown.Grid && (
-                                <div className="mt-2">
-                                    <LanguageBar repo={repo.name} />
-                                </div>
-                            )}
-                        </motion.div>
-                    ))}
+                            </Card>
+                        ))}
                 </motion.div>
             </motion.div>
         </>
     );
 }
-
-

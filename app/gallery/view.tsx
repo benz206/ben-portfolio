@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Card from "@/components/Card";
 import { CldImage } from "next-cloudinary";
 import { useState } from "react";
 
@@ -50,7 +51,10 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     selectedImage ? "blur-md" : ""
                 }`}
             >
-                <div className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40">
+                <Card
+                    variant="glass"
+                    className="relative flex h-[370px] lg:h-[300px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40 rounded-3xl"
+                >
                     <div className="flex flex-col justify-center w-full h-full p-12">
                         <h2 className="p-2 text-lg text-center">
                             PHOTOS I&apos;VE TAKEN
@@ -63,7 +67,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                             years.
                         </p>
                     </div>
-                </div>
+                </Card>
             </div>
             <motion.div
                 className={`grid gap-3 w-full min-h-screen grid-flow-row px-12 pt-12 pb-16 mx-auto place-items-center max-w-7xl md:grid-cols-2 lg:grid-cols-3 lg:pb-20 lg:pt-24 3xl:pt-12 ${
