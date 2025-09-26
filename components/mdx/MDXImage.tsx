@@ -16,23 +16,23 @@ export default function MDXImage({
     useEffect(() => {
         getImageDimensions(src)
             .then((dims) => {
-                const scaleFactor = 600 / dims.height;
                 setDimensions({
-                    width: Math.round(dims.width * scaleFactor),
-                    height: 600,
+                    width: dims.width,
+                    height: dims.height,
                 });
             })
             .catch(() => {});
     }, [src]);
 
     return (
-        <div className="relative w-full h-[400px]">
+        <div className="flex justify-center w-full my-4">
             <Image
-                className="object-cover mx-auto my-4 rounded-lg shadow-lg"
                 src={src}
                 alt={alt || "Image"}
-                width={dimensions?.width || 400}
-                height={400}
+                width={dimensions?.width || 1200}
+                height={dimensions?.height || 800}
+                sizes="(min-width: 1280px) 1000px, (min-width: 768px) 700px, 400px"
+                className="max-h-[600px] h-auto w-auto max-w-full rounded-lg shadow-lg"
                 {...props}
             />
         </div>
