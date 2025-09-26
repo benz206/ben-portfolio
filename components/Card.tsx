@@ -12,6 +12,8 @@ interface CardProps {
     size?: CardSize;
     className?: string;
     radius?: CardRadius;
+    ambient?: boolean;
+    ambientClassName?: string;
     motionProps?: any;
 }
 
@@ -44,12 +46,19 @@ export default function Card({
     size = "md",
     className = "",
     radius = "xl",
+    ambient = false,
+    ambientClassName = "",
     motionProps,
 }: CardProps) {
     const baseClasses = cn(
-        cardVariantClasses[variant],
+        // make default background translucent when ambient is on so gradient shows through
+        variant === "default" && ambient
+            ? "bg-white/40 dark:bg-[#121212]/30 border border-white/10"
+            : cardVariantClasses[variant],
         cardSizeClasses[size],
         cardRadiusClasses[radius],
+        ambient && "ambient",
+        ambient && ambientClassName,
         className
     );
 

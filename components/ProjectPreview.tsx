@@ -156,10 +156,12 @@ export default function ProjectPreview({
             variants={boxItem}
         >
             <Card
-                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] ${colorVariant[0]} hover:shadow-2xl`}
+                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] ${colorVariant[0]}`}
                 variant="default"
                 size="xl"
                 radius="3xl"
+                ambient
+                ambientClassName="rounded-3xl"
             >
                 <Image
                     className="object-contain h-auto mx-auto rounded-md shadow-lg"
