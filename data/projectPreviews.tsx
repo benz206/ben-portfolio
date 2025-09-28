@@ -35,7 +35,7 @@ const projectPreviews: ProjectPreviewProps[] = [
                 <a
                     href="https://github.com/benz206/hophacks2025"
                     target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-teal-500"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-orange-500"
                 >
                     GitHub
                 </a>
@@ -69,7 +69,7 @@ const projectPreviews: ProjectPreviewProps[] = [
             },
         ],
         projectLink: "https://github.com/benz206/hophacks2025",
-        color: "teal-500",
+        color: "orange-500",
     },
     {
         image: {
