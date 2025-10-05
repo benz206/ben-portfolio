@@ -1,6 +1,7 @@
 "use client";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
 
@@ -46,6 +47,16 @@ export default function Footer() {
                                 Check out my socials below!
                             </p>
                             <div className="flex gap-4">
+                                <motion.div {...motionProps}>
+                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
+                                        <a
+                                            href="https://x.com/bennyz206"
+                                            target="_blank"
+                                        >
+                                            <FaXTwitter className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#1DA1F2]" />
+                                        </a>
+                                    </div>
+                                </motion.div>
                                 <motion.div {...motionProps}>
                                     <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
                                         <a
