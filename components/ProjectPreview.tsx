@@ -161,10 +161,11 @@ export default function ProjectPreview({
                 size="xl"
                 radius="3xl"
                 ambient
+                ambientSeed={title}
                 ambientClassName="rounded-3xl"
             >
                 <Image
-                    className="object-contain h-auto mx-auto rounded-md shadow-lg"
+                    className="z-10 object-contain h-auto mx-auto rounded-md shadow-lg"
                     src={image.src}
                     width={image.width ? image.width : 100}
                     alt={image.alt}

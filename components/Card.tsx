@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
 type CardVariant = "default" | "glass" | "transparent";
 type CardSize = "sm" | "md" | "lg" | "xl";
@@ -14,6 +15,7 @@ interface CardProps {
     radius?: CardRadius;
     ambient?: boolean;
     ambientClassName?: string;
+    ambientSeed?: number | string;
     motionProps?: any;
 }
 
@@ -48,6 +50,7 @@ export default function Card({
     radius = "xl",
     ambient = false,
     ambientClassName = "",
+    ambientSeed,
     motionProps,
 }: CardProps) {
     const baseClasses = cn(
@@ -57,8 +60,7 @@ export default function Card({
             : cardVariantClasses[variant],
         cardSizeClasses[size],
         cardRadiusClasses[radius],
-        ambient && "ambient",
-        ambient && ambientClassName,
+        ambient && "relative overflow-hidden isolate",
         className
     );
 
@@ -66,11 +68,27 @@ export default function Card({
         return (
             <motion.div className={baseClasses} {...motionProps}>
                 {children}
+                {ambient && (
+                    <AmbientGradient
+                        className={ambientClassName}
+                        seed={ambientSeed}
+                    />
+                )}
             </motion.div>
         );
     }
 
-    return <div className={baseClasses}>{children}</div>;
+    return (
+        <div className={baseClasses}>
+            {children}
+            {ambient && (
+                <AmbientGradient
+                    className={ambientClassName}
+                    seed={ambientSeed}
+                />
+            )}
+        </div>
+    );
 }
 
 export type { CardVariant, CardSize, CardProps };
