@@ -11,6 +11,7 @@ export type AmbientOptions = {
 
 export function attachAmbient(element: HTMLElement | null, options: AmbientOptions = {}) {
     if (!element) return { destroy() {}, update() {} } as const;
+    const el = element;
 
     const {
         colors = ["#6d5efc", "#ff6ec7"],
@@ -23,18 +24,18 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
         damping = 0.12,
     } = options;
 
-    element.style.setProperty("--ambient-color-1", colors[0] || "#6d5efc");
-    element.style.setProperty("--ambient-color-2", colors[1] || "#ff6ec7");
-    element.style.setProperty("--ambient-blur", `${blur}px`);
-    element.style.setProperty("--ambient-noise-opacity", String(noise));
-    element.style.setProperty("--ambient-spot-color", spotColor);
-    element.style.setProperty(
+    el.style.setProperty("--ambient-color-1", colors[0] || "#6d5efc");
+    el.style.setProperty("--ambient-color-2", colors[1] || "#ff6ec7");
+    el.style.setProperty("--ambient-blur", `${blur}px`);
+    el.style.setProperty("--ambient-noise-opacity", String(noise));
+    el.style.setProperty("--ambient-spot-color", spotColor);
+    el.style.setProperty(
         "--ambient-spot-size",
         typeof spotSize === "number" ? `${spotSize}%` : spotSize
     );
-    element.style.setProperty("--ambient-opacity", String(opacity));
+    el.style.setProperty("--ambient-opacity", String(opacity));
 
-    let rect = element.getBoundingClientRect();
+    let rect = el.getBoundingClientRect();
     let targetTx = 0;
     let targetTy = 0;
     let currentTx = 0;
@@ -43,7 +44,7 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
     let isInside = false;
 
     function updateRect() {
-        rect = element.getBoundingClientRect();
+        rect = el.getBoundingClientRect();
     }
 
     function onPointerMove(e: PointerEvent) {
@@ -52,8 +53,8 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
         const y = e.clientY - rect.top;
         const px = Math.max(0, Math.min(1, x / rect.width));
         const py = Math.max(0, Math.min(1, y / rect.height));
-        element.style.setProperty("--mx", `${px * 100}%`);
-        element.style.setProperty("--my", `${py * 100}%`);
+        el.style.setProperty("--mx", `${px * 100}%`);
+        el.style.setProperty("--my", `${py * 100}%`);
 
         const cx = px - 0.5;
         const cy = py - 0.5;
@@ -81,8 +82,8 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
     function tick() {
         currentTx = lerp(currentTx, targetTx, damping);
         currentTy = lerp(currentTy, targetTy, damping);
-        element.style.setProperty("--tx", `${currentTx}px`);
-        element.style.setProperty("--ty", `${currentTy}px`);
+        el.style.setProperty("--tx", `${currentTx}px`);
+        el.style.setProperty("--ty", `${currentTy}px`);
 
         const moving =
             Math.abs(currentTx - targetTx) > 0.1 ||
@@ -95,10 +96,10 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
     }
 
     const ro = new ResizeObserver(updateRect);
-    ro.observe(element);
+    ro.observe(el);
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
-    element.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    el.addEventListener("pointerleave", onPointerLeave, { passive: true });
 
     updateRect();
 
@@ -107,40 +108,40 @@ export function attachAmbient(element: HTMLElement | null, options: AmbientOptio
             if (rafId) cancelAnimationFrame(rafId);
             ro.disconnect();
             window.removeEventListener("pointermove", onPointerMove);
-            element.removeEventListener("pointerleave", onPointerLeave);
+            el.removeEventListener("pointerleave", onPointerLeave);
         },
         update(next: AmbientOptions = {}) {
             if (next.colors) {
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-color-1",
                     next.colors[0] || colors[0]
                 );
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-color-2",
                     next.colors[1] || colors[1]
                 );
             }
             if (next.blur != null)
-                element.style.setProperty("--ambient-blur", `${next.blur}px`);
+                el.style.setProperty("--ambient-blur", `${next.blur}px`);
             if (next.noise != null)
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-noise-opacity",
                     String(next.noise)
                 );
             if (next.spotColor)
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-spot-color",
                     next.spotColor
                 );
             if (next.spotSize)
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-spot-size",
                     typeof next.spotSize === "number"
                         ? `${next.spotSize}%`
                         : next.spotSize
                 );
             if (next.opacity != null)
-                element.style.setProperty(
+                el.style.setProperty(
                     "--ambient-opacity",
                     String(next.opacity)
                 );

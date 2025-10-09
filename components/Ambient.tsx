@@ -22,11 +22,12 @@ export default function Ambient({
     children,
 }: AmbientProps) {
     const ref = useRef<HTMLDivElement>(null);
+    const [color0, color1] = colors;
 
     useEffect(() => {
         if (!ref.current) return;
         const api = attachAmbient(ref.current, {
-            colors,
+            colors: [color0, color1],
             blur,
             noise,
             spotColor,
@@ -36,10 +37,9 @@ export default function Ambient({
             damping,
         });
         return () => api.destroy();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        colors?.[0],
-        colors?.[1],
+        color0,
+        color1,
         blur,
         noise,
         spotColor,
