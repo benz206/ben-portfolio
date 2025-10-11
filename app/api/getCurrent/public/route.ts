@@ -2,6 +2,7 @@ import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextResponse } from "next/server";
 import jpeg from "jpeg-js";
 import { NextRequest } from "next/server";
+import { getRedisClient } from "@/utils/redis";
 
 export const runtime = "nodejs";
 
@@ -19,10 +20,16 @@ type SpotifyTrackInfo = {
     albumArt?: string;
 };
 
-// No palette snapping. We will return the image's dominant RGB directly.
-
 export async function GET(_req: NextRequest) {
     try {
+        const redis = await getRedisClient();
+        const cacheKey = "spotify:currently-playing";
+        const cachedTrack = await redis.get(cacheKey);
+
+        if (cachedTrack) {
+            return NextResponse.json(JSON.parse(cachedTrack));
+        }
+
         const accessToken = await getSpotifyAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/me/player`, {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -83,6 +90,8 @@ export async function GET(_req: NextRequest) {
             loop: current.repeat_state,
             albumArt: current.item.album.images[0]?.url,
         };
+
+        await redis.set(cacheKey, JSON.stringify(trackInfo), { EX: 6 });
 
         return NextResponse.json(trackInfo);
     } catch (error) {
