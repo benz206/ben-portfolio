@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 import Card from "@/components/Card";
 import CompEng from "@/public/home/compeng.jpg";
 import { motion } from "framer-motion";
@@ -11,8 +12,23 @@ import Link from "next/link";
 import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
 import FuegoLogo from "@/public/experience/fuego.webp";
 import SAPLogo from "@/public/experience/SAP.png";
+import type { AmbientVariant } from "@/components/AmbientGradient";
 
-const recentRoles = [
+type RoleCard = {
+    title: string;
+    company: string;
+    location: string;
+    period: string;
+    image: {
+        src: StaticImageData;
+        alt: string;
+    };
+    locationClass?: string;
+    periodClass?: string;
+    ambientVariant: AmbientVariant;
+};
+
+const recentRoles: RoleCard[] = [
     {
         title: "Software Engineering Intern",
         company: "Grand Charter",
@@ -24,6 +40,7 @@ const recentRoles = [
         },
         locationClass: "text-white/60",
         periodClass: "text-white/45",
+        ambientVariant: "violet",
     },
     {
         title: "Software Engineering Intern",
@@ -36,6 +53,7 @@ const recentRoles = [
         },
         locationClass: "text-[rgba(255,196,158,0.9)]",
         periodClass: "text-[rgba(255,220,200,0.85)]",
+        ambientVariant: "tangerine",
     },
     {
         title: "Software Developer",
@@ -48,10 +66,16 @@ const recentRoles = [
         },
         locationClass: "text-[rgba(170,210,255,0.9)]",
         periodClass: "text-[rgba(195,230,255,0.85)]",
+        ambientVariant: "blue",
     },
 ];
 
 export default function Home() {
+    const rolesHeadingDelay = 0.35;
+    const roleCardBaseDelay = 0.5;
+    const roleCardStep = 0.14;
+    const currentlyPlayingDelay =
+        roleCardBaseDelay + recentRoles.length * roleCardStep + 0.35;
     return (
         <>
             <section className="relative flex justify-center items-center h-[100vh]">
@@ -60,9 +84,15 @@ export default function Home() {
                 <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 text-white">
                     <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                         <div className="flex flex-col gap-8">
-                            <div className="space-y-6">
+                            <motion.div
+                                className="space-y-6"
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.4 }}
+                                transition={{ duration: 0.6, delay: 0.1 }}
+                            >
                                 <span className="text-xs uppercase tracking-[0.2em] text-white/50">
-                                    Building software
+                                    HI :)
                                 </span>
                                 <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
                                     Ben Zhou
@@ -72,13 +102,16 @@ export default function Home() {
                                     Waterloo with a passion for building
                                     elegant, efficient, and scalable software.
                                 </p>
-                            </div>
+                            </motion.div>
                             <motion.div
                                 className="text-white"
                                 initial={{ opacity: 0, y: 24 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.4 }}
-                                transition={{ duration: 0.6 }}
+                                transition={{
+                                    duration: 0.6,
+                                    delay: currentlyPlayingDelay,
+                                }}
                             >
                                 <span className="text-xs uppercase tracking-[0.2em] text-white/40">
                                     Currently Listening
@@ -93,7 +126,10 @@ export default function Home() {
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.4 }}
-                            transition={{ duration: 0.6 }}
+                            transition={{
+                                duration: 0.6,
+                                delay: rolesHeadingDelay,
+                            }}
                         >
                             <span className="text-xs uppercase tracking-[0.2em] text-white/40">
                                 Roles
@@ -103,16 +139,27 @@ export default function Home() {
                                     key={role.company}
                                     variant="glass"
                                     ambient
-                                    ambientSeed={`role-${index}`}
-                                    ambientClassName="opacity-35"
+                                    ambientVariant={role.ambientVariant}
+                                    ambientClassName="opacity-40"
                                     className="flex items-start gap-5 p-6"
+                                    motionProps={{
+                                        initial: { opacity: 0, y: 24 },
+                                        whileInView: { opacity: 1, y: 0 },
+                                        viewport: { once: true, amount: 0.4 },
+                                        transition: {
+                                            duration: 0.6,
+                                            delay:
+                                                roleCardBaseDelay +
+                                                index * roleCardStep,
+                                        },
+                                    }}
                                 >
                                     <Image
                                         src={role.image.src}
                                         alt={role.image.alt}
                                         width={56}
                                         height={56}
-                                        className="object-contain rounded-lg h-14 w-14"
+                                        className="z-10 object-contain rounded-lg h-14 w-14"
                                     />
 
                                     <div className="flex flex-col flex-1 gap-1 my-auto">

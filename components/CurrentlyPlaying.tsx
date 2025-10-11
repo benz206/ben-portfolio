@@ -137,7 +137,7 @@ export default function CurrentlyPlaying() {
             ambient
             ambientSeed="currently-playing"
             ambientClassName="opacity-50"
-            className="relative flex h-32 mt-3 mx-auto p-2 w-full max-w-[700px] overflow-hidden rounded-2xl"
+            className="relative flex h-32 mt-3 mx-auto p-2 w-full max-w-[700px] overflow-hidden rounded-xl"
             motionProps={{
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },

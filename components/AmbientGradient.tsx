@@ -1,7 +1,12 @@
 import * as React from "react";
 import { cn } from "@/utils/cn";
 
-type AmbientVariant = "violet" | "blue" | "sunset" | "emerald";
+export type AmbientVariant =
+    | "violet"
+    | "blue"
+    | "sunset"
+    | "emerald"
+    | "tangerine";
 
 type AmbientGradientProps = {
     className?: string;
@@ -37,6 +42,12 @@ const variantToStops: Record<
         a: "bg-[radial-gradient(ellipse_at_center,oklch(0.9_0.22_160/_0.85),transparent_60%)]",
         b: "bg-[radial-gradient(ellipse_at_center,oklch(0.86_0.2_140/_0.78),transparent_60%)]",
         c: "bg-[radial-gradient(ellipse_at_center,oklch(0.92_0.18_180/_0.7),transparent_60%)]",
+    },
+    tangerine: {
+        line: "via-[oklch(0.82_0.26_40_/_0.76)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.9_0.3_45/_0.82),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.86_0.28_20/_0.78),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.94_0.22_70/_0.7),transparent_60%)]",
     },
 };
 

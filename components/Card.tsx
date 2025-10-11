@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
-import { AmbientGradient } from "@/components/AmbientGradient";
+import { AmbientGradient, AmbientVariant } from "@/components/AmbientGradient";
 
 type CardVariant = "slate" | "minimal" | "glass";
 type CardSize = "sm" | "md" | "lg" | "xl";
@@ -16,6 +16,7 @@ interface CardProps {
     ambient?: boolean;
     ambientClassName?: string;
     ambientSeed?: number | string;
+    ambientVariant?: AmbientVariant;
     motionProps?: any;
 }
 
@@ -51,6 +52,7 @@ export default function Card({
     ambient = false,
     ambientClassName = "",
     ambientSeed,
+    ambientVariant,
     motionProps,
 }: CardProps) {
     const baseClasses = cn(
@@ -71,6 +73,7 @@ export default function Card({
                 {ambient && (
                     <AmbientGradient
                         className={ambientClassName}
+                        variant={ambientVariant}
                         seed={ambientSeed}
                     />
                 )}
@@ -84,6 +87,7 @@ export default function Card({
             {ambient && (
                 <AmbientGradient
                     className={ambientClassName}
+                    variant={ambientVariant}
                     seed={ambientSeed}
                 />
             )}
