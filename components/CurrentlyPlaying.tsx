@@ -58,7 +58,7 @@ export default function CurrentlyPlaying() {
                 const duration = parseInt(track.duration);
                 return newProgress > duration ? duration : newProgress;
             });
-        }, 1000);
+        }, 5000);
 
         return () => clearInterval(progressInterval);
     }, [track]);
