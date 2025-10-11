@@ -68,10 +68,10 @@ function Job({ job, index }: JobProps) {
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.8, ease: easeOut, delay: index * 0.2 }}
-            className="relative grid grid-cols-[4rem_auto] md:grid-cols-[10rem_auto] py-8 list-none group"
+            className="relative grid grid-cols-[3.5rem_auto] md:grid-cols-[8rem_auto] py-8 list-none group"
             key={index}
         >
-            <div className="absolute left-0 w-2 h-full -ml-6 transition-opacity duration-300 rounded-full opacity-0 bg-rainbow-gradient animate-breathing-gradient group-hover:opacity-100" />
+            <div className="absolute left-0 w-[2px] h-full -ml-4 transition-opacity duration-300 opacity-0 bg-white/0 group-hover:opacity-100 group-hover:bg-white/40" />
             <div className="flex items-center justify-center w-12 h-12 m-1 mt-4 overflow-hidden transition-transform duration-300 rounded-xl lg:my-auto md:m-2 lg:m-5 md:h-24 md:w-24 group-hover:scale-110">
                 <Image
                     src={job.image.src}
@@ -83,14 +83,16 @@ function Job({ job, index }: JobProps) {
                 />
             </div>
             <div className="flex flex-col justify-center">
-                <span className="text-sm dark:text-[#ececec]">{job.date}</span>
-                <h3 className="pt-2 text-xl font-black transition-colors duration-300 bg-clip-text lg:text-3xl group-hover:text-transparent bg-rainbow-gradient animate-breathing-gradient">
+                <span className="text-xs uppercase tracking-[0.3em] text-white/40">
+                    {job.date}
+                </span>
+                <h3 className="pt-2 text-lg font-semibold text-white lg:text-2xl">
                     {job.title}
                 </h3>
-                <h4 className="py-2 text-lg font-medium transition-colors duration-300 group-hover:text-gray-700 dark:group-hover:text-gray-300">
+                <h4 className="py-1 text-sm font-medium text-white/50">
                     {job.company}
                 </h4>
-                <p className="dark:text-[#ececec] font-light">
+                <p className="text-sm text-white/55">
                     {job.description}
                 </p>
             </div>

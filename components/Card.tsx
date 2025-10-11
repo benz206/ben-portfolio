@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { AmbientGradient } from "@/components/AmbientGradient";
 
-type CardVariant = "default" | "glass" | "transparent";
+type CardVariant = "slate" | "minimal" | "glass";
 type CardSize = "sm" | "md" | "lg" | "xl";
 type CardRadius = "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
 
@@ -20,9 +20,9 @@ interface CardProps {
 }
 
 const cardVariantClasses: Record<CardVariant, string> = {
-    default: "card-default",
+    slate: "card-base",
+    minimal: "border border-white/10 bg-[#090c14]/60 backdrop-blur rounded-lg",
     glass: "card-glass",
-    transparent: "card-transparent",
 };
 
 const cardSizeClasses: Record<CardSize, string> = {
@@ -44,7 +44,7 @@ const cardRadiusClasses: Record<CardRadius, string> = {
 
 export default function Card({
     children,
-    variant = "default",
+    variant = "slate",
     size = "md",
     className = "",
     radius = "xl",
@@ -55,7 +55,7 @@ export default function Card({
 }: CardProps) {
     const baseClasses = cn(
         // make default background translucent when ambient is on so gradient shows through
-        variant === "default" && ambient
+        variant === "slate" && ambient
             ? "bg-white/40 dark:bg-[#121212]/30 border border-white/10"
             : cardVariantClasses[variant],
         cardSizeClasses[size],

@@ -67,6 +67,9 @@ export default function CurrentlyPlaying() {
         return (
             <Card
                 variant="glass"
+                ambient
+                ambientSeed="currently-playing"
+                ambientClassName="opacity-50"
                 className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
                 motionProps={{
                     initial: { opacity: 0 },
@@ -131,6 +134,9 @@ export default function CurrentlyPlaying() {
     return (
         <Card
             variant="glass"
+            ambient
+            ambientSeed="currently-playing"
+            ambientClassName="opacity-50"
             className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
             motionProps={{
                 initial: { opacity: 0 },

@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { CldImage, getCldImageUrl } from "next-cloudinary";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Card from "@/components/Card";
 
 type ImageT = {
     public_id: string;
@@ -37,7 +38,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                 height: 40,
                 crop: "fill",
                 quality: "auto:low",
-                format: "auto"
+                format: "auto",
             });
         });
         return map;
@@ -111,7 +112,13 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     selectedImage ? "blur-md" : ""
                 }`}
             >
-                <div className="relative flex flex-col items-center justify-center h-[370px] lg:h-[360px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40">
+                <Card
+                    variant="glass"
+                    ambient
+                    ambientSeed="gallery"
+                    ambientClassName="opacity-80"
+                    className="relative flex flex-col items-center justify-center h-[370px] lg:h-[360px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
+                >
                     <motion.p
                         className="text-sm tracking-[0.6em] text-white/70 uppercase"
                         initial={{ opacity: 0, y: 12 }}
@@ -137,7 +144,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                         Quiet light, far horizons, everyday magic. Explore a
                         curated collection captured across the years.
                     </motion.p>
-                </div>
+                </Card>
             </div>
             <motion.div
                 className={`grid w-full min-h-screen gap-4 px-6 pt-12 pb-20 mx-auto place-items-center max-w-7xl md:grid-cols-2 lg:grid-cols-3 lg:pb-24 lg:pt-24 3xl:pt-12 3xl:grid-cols-4 3xl:max-w-[1700px] ${

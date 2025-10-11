@@ -201,33 +201,35 @@ export default function GithubPage() {
 
     return (
         <>
-            <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
+            <section className="relative flex justify-center overflow-hidden bg-[#050506] py-32 text-white">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 bg-noir-radial opacity-70" />
                 <Card
                     variant="glass"
-                    className="relative flex h-[370px] lg:h-[300px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40 rounded-3xl"
+                    ambient
+                    ambientSeed="github"
+                    ambientClassName="opacity-60"
+                    className="relative flex h-[320px] w-11/12 max-w-[1000px] flex-col justify-center p-12"
                     motionProps={{
                         ref: heroRef,
-                        initial: { opacity: 0, y: 50 },
+                        initial: { opacity: 0, y: 40 },
                         animate: isHeroInView
                             ? { opacity: 1, y: 0 }
-                            : { opacity: 0, y: 50 },
-                        transition: { duration: 0.5 },
+                            : { opacity: 0, y: 40 },
+                        transition: { duration: 0.6 },
                     }}
                 >
-                    <div className="flex flex-col justify-center p-12 w-full h-full">
-                        <h2 className="p-2 text-lg text-center">
-                            TAKE A PEEK AT MY REPOSITORIES
-                        </h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">
-                            GITHUB
-                        </h1>
-                        <p className="p-2 py-5 font-light">
-                            View some of my current projects in progress, and
-                            some of my past projects that I have worked on.
-                        </p>
-                    </div>
+                    <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                        Repo radar
+                    </span>
+                    <h1 className="mt-4 text-4xl font-semibold lg:text-5xl">
+                        GitHub workstreams and experiments.
+                    </h1>
+                    <p className="mt-4 max-w-2xl text-sm text-white/60">
+                        Dig into the shipped experiments, infrastructure, and tools I maintain. Sorted with intent, filterable, always live.
+                    </p>
                 </Card>
-            </div>
+            </section>
             <motion.div
                 ref={contentRef}
                 className="flex flex-col flex-wrap justify-center content-center pt-12 pb-16 w-full min-h-screen lg:pb-20 lg:pt-24 3xl:pt-12"

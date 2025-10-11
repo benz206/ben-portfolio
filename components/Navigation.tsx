@@ -1,6 +1,4 @@
 "use client";
-import Logo from "@/public/home/logo.png";
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,11 +14,19 @@ const motionAnim = {
     whileTap: { scale: 0.9 },
 } as const;
 
+const links = [
+    { href: "/", label: "Home" },
+    { href: "/projects", label: "Projects" },
+    { href: "/blog", label: "Blog" },
+    { href: "/gallery", label: "Gallery" },
+    { href: "/github", label: "GitHub" },
+];
+
 export default function Navigation() {
     const [scrollY, setScrollY] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const hamburger =
-        "h-1 w-8 my-1 rounded-full bg-white transition ease transform duration-300";
+        "h-[2px] w-6 my-1 rounded-full bg-white transition ease transform duration-300";
 
     useEffect(() => {
         function handleScroll() {
@@ -33,104 +39,36 @@ export default function Navigation() {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+    const offset = scrollY > 12;
 
     return (
-        <nav className="fixed top-0 z-10 flex flex-col w-full h-auto transition-all duration-1000 ease-in-out">
+        <nav className="fixed top-0 z-40 flex justify-center w-full">
             <div
-                className={`flex justify-center w-full transition-all h-20 bg-black duration-1000 ease-in-out ${
-                    scrollY > 0
-                        ? "lg:h-16 lg:bg-black"
-                        : "lg:bg-transparent lg:h-32"
+                className={`flex w-full justify-center transition-all duration-300 ${
+                    offset ? "backdrop-blur bg-[#050506]/80" : "bg-transparent"
                 }`}
             >
-                <div className="flex flex-row flex-wrap w-11/12 max-w-[1170px] h-full">
-                    <motion.div
-                        className="flex items-center justify-center"
-                        {...motionAnim}
+                <div className="flex h-16 w-11/12 max-w-[1080px] items-center">
+                    <Link
+                        href="/"
+                        className="font-semibold tracking-[0.3em] uppercase text-xs text-white"
                     >
-                        <Link href="/">
-                            <Image
-                                className="w-16 ml-8 lg:ml-0 lg:auto lg:w-12"
-                                src={Logo}
-                                alt="Logo"
-                                loading="lazy"
-                            />
-                        </Link>
-                    </motion.div>
-                    <div className="items-center justify-end hidden gap-10 ml-auto lg:flex lg:w-11/12">
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
+                        Ben Zhou
+                    </Link>
+                    <div className="items-center hidden gap-8 ml-auto lg:flex">
+                        {links.map((link) => (
+                            <motion.div key={link.href} {...motionAnim}>
+                                <Link
+                                    className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
+                                    href={link.href}
+                                >
+                                    {link.label}
+                                </Link>
+                            </motion.div>
+                        ))}
+                        <motion.div {...motionAnim}>
                             <Link
-                                className={`text-base font-bold text-center text-white transition-all ease-in-out duration-500 ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
-                                href="/"
-                            >
-                                HOME
-                            </Link>
-                        </motion.div>
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
-                            <Link
-                                className={`text-base font-bold text-center text-white transition-all ease-in-out duration-500 ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
-                                href="/projects"
-                            >
-                                PROJECTS
-                            </Link>
-                        </motion.div>
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
-                            <Link
-                                className={`text-base font-bold text-center text-white transition-all ease-in-out duration-500 ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
-                                href="/blog"
-                            >
-                                BLOG
-                            </Link>
-                        </motion.div>
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
-                            <Link
-                                className={`text-base font-bold text-center text-white transition-all ease-in-out duration-500 ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
-                                href="/gallery"
-                            >
-                                GALLERY
-                            </Link>
-                        </motion.div>
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
-                            <Link
-                                className={`text-base font-bold text-center text-white transition-all ease-in-out duration-500 ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
-                                href="/github"
-                            >
-                                GITHUB
-                            </Link>
-                        </motion.div>
-                        <motion.div
-                            className="bg-clip-text bg-rainbow-gradient animate-breathing-gradient"
-                            {...motionAnim}
-                        >
-                            <Link
-                                className={`text-base font-bold text-center text-white transition-all duration-500 ease-in-out uppercase ${
-                                    scrollY > 0 ? "hover:text-transparent" : ""
-                                }`}
+                                className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"
                                 target="_blank"
                             >
@@ -139,16 +77,15 @@ export default function Navigation() {
                         </motion.div>
                         <ToggleDLMode />
                     </div>
-
-                    <div className="flex items-center justify-end gap-10 ml-auto lg:hidden">
+                    <div className="flex items-center gap-4 lg:hidden">
                         <ToggleDLMode />
                         <button
-                            className="flex flex-col items-center justify-center w-12 h-12 mr-4 duration-500 rounded"
+                            className="flex flex-col items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <div
                                 className={`${hamburger} ${
-                                    isOpen ? "rotate-45 translate-y-3" : ""
+                                    isOpen ? "translate-y-[7px] rotate-45" : ""
                                 }`}
                             />
                             <div
@@ -158,7 +95,9 @@ export default function Navigation() {
                             />
                             <div
                                 className={`${hamburger} ${
-                                    isOpen ? "-rotate-45 -translate-y-3" : ""
+                                    isOpen
+                                        ? "-translate-y-[7px] -rotate-45"
+                                        : ""
                                 }`}
                             />
                         </button>
@@ -168,50 +107,26 @@ export default function Navigation() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="relative flex flex-col w-full h-auto p-4 transition-all duration-500 ease-in-out bg-black lg:hidden"
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 100 }}
-                        exit={{ y: -20, opacity: 0 }}
+                        className="absolute top-16 flex w-full flex-col bg-[#050506]/95 px-6 py-8 lg:hidden"
+                        initial={{ opacity: 0, y: -12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -12 }}
                     >
+                        {links.map((link) => (
+                            <Link
+                                key={link.href}
+                                className="py-3 text-base font-medium text-white/80"
+                                href={link.href}
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                         <Link
-                            className="p-2 text-xl font-bold text-center text-white"
-                            href="/"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            HOME
-                        </Link>
-                        <Link
-                            className="p-2 text-xl font-bold text-center text-white"
-                            href="/projects"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            PROJECTS
-                        </Link>
-                        <Link
-                            className="p-2 text-xl font-bold text-center text-white"
-                            href="/blog"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            BLOG
-                        </Link>
-                        <Link
-                            className="p-2 text-xl font-bold text-center text-white"
-                            href="/gallery"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            GALLERY
-                        </Link>
-                        <Link
-                            className="p-2 text-xl font-bold text-center text-white"
-                            href="/github"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            GITHUB
-                        </Link>
-                        <Link
-                            className="p-2 text-xl font-bold text-center text-white uppercase"
+                            className="py-3 text-base font-medium text-white/80"
                             href="/resume.pdf"
                             target="_blank"
+                            onClick={() => setIsOpen(false)}
                         >
                             Résumé
                         </Link>

@@ -7,112 +7,32 @@ import Link from "next/link";
 import TechIcon from "./TechIcon";
 import Card from "@/components/Card";
 
-const colorVariants: { [key: string]: string[] } = {
-    "amber-500": [
-        "hover:shadow-amber-500",
-        "group-hover:text-amber-500",
-        "hover:text-amber-500",
-        "group-hover:bg-amber-500",
-        "bg-amber-500",
-    ],
-    "indigo-500": [
-        "hover:shadow-indigo-500",
-        "group-hover:text-indigo-500",
-        "hover:text-indigo-500",
-        "group-hover:bg-indigo-500",
-        "bg-indigo-500",
-    ],
-    "teal-500": [
-        "hover:shadow-teal-500",
-        "group-hover:text-teal-500",
-        "hover:text-teal-500",
-        "group-hover:bg-teal-500",
-        "bg-teal-500",
-    ],
-    "purple-400": [
-        "hover:shadow-purple-400",
-        "group-hover:text-purple-400",
-        "hover:text-purple-400",
-        "group-hover:bg-purple-400",
-        "bg-purple-400",
-    ],
-    "red-500": [
-        "hover:shadow-red-500",
-        "group-hover:text-red-500",
-        "hover:text-red-500",
-        "group-hover:bg-red-500",
-        "bg-red-500",
-    ],
-    "green-400": [
-        "hover:shadow-green-400",
-        "group-hover:text-green-400",
-        "hover:text-green-400",
-        "group-hover:bg-green-400",
-        "bg-green-400",
-    ],
-    "cyan-300": [
-        "hover:shadow-cyan-300",
-        "group-hover:text-cyan-300",
-        "hover:text-cyan-300",
-        "group-hover:bg-cyan-300",
-        "bg-cyan-300",
-    ],
-    "orange-500": [
-        "hover:shadow-orange-500",
-        "group-hover:text-orange-500",
-        "hover:text-orange-500",
-        "group-hover:bg-orange-500",
-        "bg-orange-500",
-    ],
-    "fuchsia-400": [
-        "hover:shadow-fuchsia-400",
-        "group-hover:text-fuchsia-400",
-        "hover:text-fuchsia-400",
-        "group-hover:bg-fuchsia-400",
-        "bg-fuchsia-400",
-    ],
-    "amber-400": [
-        "hover:shadow-amber-400",
-        "group-hover:text-amber-400",
-        "hover:text-amber-400",
-        "group-hover:bg-amber-400",
-        "bg-amber-400",
-    ],
-    "sky-600": [
-        "hover:shadow-sky-600",
-        "group-hover:text-sky-600",
-        "hover:text-sky-600",
-        "group-hover:bg-sky-600",
-        "bg-sky-600",
-    ],
-    "yellow-400": [
-        "hover:shadow-yellow-400",
-        "group-hover:text-yellow-400",
-        "hover:text-yellow-400",
-        "group-hover:bg-yellow-400",
-        "bg-yellow-400",
-    ],
-    "emerald-600": [
-        "hover:shadow-emerald-600",
-        "group-hover:text-emerald-600",
-        "hover:text-emerald-600",
-        "group-hover:bg-emerald-600",
-        "bg-emerald-600",
-    ],
-    "rose-500": [
-        "hover:shadow-rose-500",
-        "group-hover:text-rose-500",
-        "hover:text-rose-500",
-        "group-hover:bg-rose-500",
-        "bg-rose-500",
-    ],
-    default: [
-        "hover:shadow-blue-400",
-        "group-hover:text-blue-400",
-        "hover:text-blue-400",
-        "group-hover:bg-blue-400",
-        "bg-blue-400",
-    ],
+const colorVariants: Record<string, { accent: string; border: string; text: string }> = {
+    ember: {
+        accent: "ring-1 ring-[#ffb199]/30",
+        border: "border-[#ffb199]/40",
+        text: "text-[#ffb199]",
+    },
+    lilac: {
+        accent: "ring-1 ring-[#b8a4ff]/30",
+        border: "border-[#b8a4ff]/40",
+        text: "text-[#b8a4ff]",
+    },
+    teal: {
+        accent: "ring-1 ring-[#7ce8c5]/30",
+        border: "border-[#7ce8c5]/40",
+        text: "text-[#7ce8c5]",
+    },
+    slate: {
+        accent: "ring-1 ring-[#8ea6ff]/30",
+        border: "border-[#8ea6ff]/40",
+        text: "text-[#8ea6ff]",
+    },
+    default: {
+        accent: "ring-1 ring-white/10",
+        border: "border-white/15",
+        text: "text-white/70",
+    },
 };
 
 const container = {
@@ -156,36 +76,35 @@ export default function ProjectPreview({
             variants={boxItem}
         >
             <Card
-                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] ${colorVariant[0]}`}
-                variant="default"
-                size="xl"
-                radius="3xl"
+                className={`group flex flex-col justify-center w-[320px] lg:w-[520px] border ${colorVariant.border} ${colorVariant.accent}`}
+                variant="glass"
+                size="lg"
                 ambient
                 ambientSeed={title}
-                ambientClassName="rounded-3xl"
+                ambientClassName="opacity-80"
             >
                 <Image
-                    className="z-10 object-contain h-auto mx-auto rounded-md shadow-lg"
+                    className="z-10 h-auto w-full rounded-md object-cover"
                     src={image.src}
                     width={image.width ? image.width : 100}
                     alt={image.alt}
                     loading={image.priority ? "eager" : "lazy"}
                     priority={image.priority}
                 />
-                <h2 className="p-2 mt-4 text-xl font-black uppercase lg:text-3xl">
+                <h2 className="mt-6 px-2 text-lg font-semibold text-white lg:text-xl">
                     {title}
                 </h2>
                 <h3
-                    className={`p-2 font-medium transition-colors duration-500 text-sm lg:text-base uppercase ${colorVariant[1]}`}
+                    className={`px-2 text-xs uppercase tracking-[0.3em] ${colorVariant.text}`}
                 >
                     {sub}
                 </h3>
-                <p className="p-2 mb-2 text-sm font-light lg:text-base">
+                <p className="px-2 pt-3 text-sm text-white/60">
                     {description}
                 </p>
                 <div className="flex justify-center w-full mt-auto">
                     <div
-                        className={`w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#383838] ${colorVariant[3]} transition-colors duration-1000`}
+                        className="h-[1px] w-full bg-white/5"
                     />
                 </div>
                 <motion.div
@@ -204,15 +123,10 @@ export default function ProjectPreview({
                         />
                     ))}
                 </motion.div>
-                <div className="flex justify-center w-full my-6">
-                    <div
-                        className={`w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#383838] ${colorVariant[3]} transition-colors duration-1000`}
-                    />
-                </div>
-                <div className="flex items-center mx-2 mt-1">
+                <div className="flex items-center px-2 pb-4 pt-6">
                     {projectLink && (
                         <motion.div
-                            className={`flex items-center gap-2 p-2 px-4 pl-3 text-xl text-white rounded-lg cursor-pointer ${colorVariant[4]}`}
+                            className="flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition-colors hover:text-white"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.9 }}
                             transition={{
@@ -221,9 +135,9 @@ export default function ProjectPreview({
                                 damping: 8,
                             }}
                         >
-                            <MdOpenInNew className="text-2xl" />
+                            <MdOpenInNew className="text-base" />
                             <a
-                                className="text-sm font-medium lg:text-lg"
+                                className="text-xs"
                                 target="_blank"
                                 href={projectLink}
                             >
@@ -233,7 +147,7 @@ export default function ProjectPreview({
                     )}
                     {slug && (
                         <motion.div
-                            className={`flex items-center ml-auto gap-2 p-2 px-4 text-sm lg:text-xl text-black rounded-lg cursor-pointer`}
+                            className="ml-auto flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/60 transition-colors hover:text-white"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.9 }}
                             transition={{
@@ -243,13 +157,13 @@ export default function ProjectPreview({
                             }}
                         >
                             <Link
-                                className="text-sm font-medium lg:text-lg dark:text-[#ececec]"
+                                className="text-xs"
                                 href={`/blog/${slug}`}
                                 prefetch={false}
                             >
                                 Read More
                             </Link>
-                            <FaArrowRight className="text-2xl dark:text-[#ececec]" />
+                            <FaArrowRight className="text-sm" />
                         </motion.div>
                     )}
                 </div>

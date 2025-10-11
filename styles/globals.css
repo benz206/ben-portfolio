@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply transition-all duration-100 ease-in-out bg-[#ececec] dark:bg-[#181818];
+        @apply transition-all duration-150 ease-linear bg-[#f5f6f8] text-[#0f1115] dark:bg-[#050506] dark:text-[#f5f6f7];
     }
 
     ol,
@@ -18,45 +18,21 @@
     }
 
     strong {
-        color: transparent;
+        color: inherit;
     }
 }
 
 @layer components {
     .card {
-        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-lg rounded-xl transition-all duration-300;
+        @apply transition-all duration-300 rounded-lg;
     }
 
-    .card-default {
-        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-lg rounded-xl transition-all duration-300;
+    .card-base {
+        @apply bg-[#f7f8fb] text-[#0f1115] border border-[#e1e7ef] shadow-[0_18px_70px_-50px_rgba(8,10,14,0.55)] dark:bg-[#060708] dark:text-[#f5f6f7] dark:border-[#101215] backdrop-blur;
     }
 
     .card-glass {
-        @apply bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 shadow-xl rounded-xl hover:shadow-2xl transition-all duration-1000 ease-in-out;
-    }
-
-    .card-transparent {
-        @apply bg-transparent dark:bg-transparent dark:text-[#ececec] rounded-xl shadow-none;
-    }
-
-    .card-hero {
-        @apply bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 shadow-xl rounded-3xl hover:shadow-2xl transition-all duration-1000 ease-in-out;
-    }
-
-    .card-project {
-        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] shadow-2xl rounded-3xl hover:shadow-2xl transition duration-1000;
-    }
-
-    .card-repo {
-        @apply bg-white dark:bg-[#121212] dark:text-[#ececec] border-black rounded-xl drop-shadow-xl hover:shadow-lg transition-all duration-300;
-    }
-
-    .card-tooltip {
-        @apply border shadow-2xl rounded-2xl backdrop-blur-md;
-    }
-
-    .card-playing {
-        @apply bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md dark:text-[#ececec] border border-white/10 shadow-xl rounded-2xl hover:shadow-2xl transition-all duration-1000 ease-in-out;
+        @apply bg-white/10 text-[#f5f6f7] border border-white/10 shadow-[0_25px_70px_-50px_rgba(0,0,0,0.65)] backdrop-blur-2xl dark:bg-black/20 dark:border-white/10;
     }
 
     .card-sm {
@@ -84,7 +60,5 @@ body,
 }
 
 hr {
-    border-color: #c1c1c1;
+    border-color: #d9dde6;
 }
-
-/* Ambient effect removed in favor of AmbientGradient component */

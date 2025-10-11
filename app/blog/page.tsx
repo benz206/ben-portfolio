@@ -110,27 +110,28 @@ export default async function BlogPage() {
 
     return (
         <>
-            <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
+            <section className="relative flex justify-center overflow-hidden bg-[#050506] py-32 text-white">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 bg-noir-radial opacity-70" />
                 <Card
                     variant="glass"
-                    className="relative flex h-[370px] lg:h-[300px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40 rounded-3xl"
+                    ambient
+                    ambientSeed="blog"
+                    ambientClassName="opacity-60"
+                    className="relative flex h-[300px] w-11/12 max-w-[960px] flex-col justify-center p-12"
                 >
-                    <div className="flex flex-col justify-center w-full h-full p-12">
-                        <h2 className="p-2 text-lg text-center">
-                            SOME OF MY THOUGHTS AND EXPERIENCES
-                        </h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">
-                            BLOG
-                        </h1>
-                        <p className="p-2 py-5 font-light">
-                            Welcome to my blog! Here you&apos;ll find some of my
-                            thoughts and experiences that I&apos;ve had over the
-                            years.
-                        </p>
-                    </div>
+                    <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                        Field notes
+                    </span>
+                    <h1 className="mt-4 text-4xl font-semibold lg:text-5xl">
+                        Essays from the build trenches.
+                    </h1>
+                    <p className="mt-4 max-w-2xl text-sm text-white/60">
+                        Product breakdowns, hardware learnings, and playbooks on shipping. New posts land when the work demands a write-up.
+                    </p>
                 </Card>
-            </div>
-            <div className="flex flex-col flex-wrap content-center w-full min-h-[50vh] pt-12 pb-16 lg:pb-20 lg:pt-24 3xl:pt-12 dark:text-[#ececec] max-w-[1000px] mx-auto p-4">
+            </section>
+            <div className="flex flex-col flex-wrap content-center w-full min-h-[50vh] pt-12 pb-16 lg:pb-20 lg:pt-24 3xl:pt-12 text-white max-w-[1000px] mx-auto p-4">
                 <table className="min-w-full table-auto">
                     <tbody>
                         {formatted.map((post) => (

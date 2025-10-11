@@ -16,34 +16,31 @@ const boxAnim = {
 export default function Projects() {
     return (
         <>
-            <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
-                <Card
-                    variant="glass"
-                    className="relative flex h-[370px] lg:h-[300px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40 rounded-3xl"
-                    motionProps={{
-                        initial: { y: -20, opacity: 0 },
-                        animate: { y: 0, opacity: 1 },
-                        transition: { duration: 1 },
-                    }}
-                >
-                    <div className="flex flex-col justify-center w-full h-full p-12">
-                        <h2 className="p-2 text-lg text-center">
-                            HERE ARE SOME OF MY FINISHED PROJECTS!
-                        </h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">
-                            PROJECTS
+            <section className="relative flex justify-center overflow-hidden bg-[#050506] py-32 text-white">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 bg-noir-radial opacity-70" />
+                <div className="relative w-11/12 max-w-[1080px] space-y-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="flex flex-col gap-4"
+                    >
+                        <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                            Selected builds
+                        </span>
+                        <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
+                            A portfolio of problem-first engineering.
                         </h1>
-                        <p className="p-2 py-5 font-light">
-                            I work with many languages and technologies, you can
-                            see some of them below! I&apos;m always learning new
-                            things, and looking for new projects to work on.
+                        <p className="max-w-2xl text-sm text-white/60">
+                            These are the systems, tools, and experiences I ship. Every project is built end-to-end — product thinking, architecture, implementation, polish.
                         </p>
-                    </div>
-                </Card>
-            </div>
-            <div className="flex flex-col flex-wrap content-center justify-center w-full pt-12 pb-16 lg:pb-20 lg:pt-24">
+                    </motion.div>
+                </div>
+            </section>
+            <section className="flex justify-center bg-[#050506] py-24">
                 <motion.div
-                    className="grid gap-y-12 lg:gap-y-10 w-11/12 md:w-[600px] xl:w-[1300px] 3xl:w-[1850px] py-5 grid-flow-row grid-cols-1 xl:grid-cols-2 3xl:grid-cols-3"
+                    className="grid w-11/12 max-w-[1080px] grid-flow-row grid-cols-1 gap-12 md:grid-cols-2"
                     variants={boxAnim}
                     initial="hidden"
                     animate="visible"
@@ -63,7 +60,7 @@ export default function Projects() {
                         />
                     ))}
                 </motion.div>
-            </div>
+            </section>
         </>
     );
 }
