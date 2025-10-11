@@ -72,14 +72,14 @@ function Job({ job, index }: JobProps) {
             key={index}
         >
             <div className="flex items-start gap-4">
-                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5">
+                <div className="flex items-center justify-center overflow-hidden border h-14 w-14 rounded-xl border-white/10 bg-white/5">
                     <Image
                         src={job.image.src}
                         alt={job.image.alt}
                         width={80}
                         height={80}
                         priority={job.image.priority}
-                        className="h-10 w-10 object-contain"
+                        className="object-contain w-10 h-10"
                     />
                 </div>
                 <div className="flex flex-col gap-3">
@@ -199,7 +199,7 @@ const jobs: Job[] = [
 
 export default function Experience() {
     return (
-        <ol className="grid gap-10 md:grid-cols-2 list-none">
+        <ol className="grid gap-10 list-none md:grid-cols-2">
             {jobs.map((job, index) => (
                 <Job key={index} job={job} index={index} />
             ))}

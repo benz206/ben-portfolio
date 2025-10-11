@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { TechIconProps } from "@/components/TechIcon";
 
 export interface ProjectPreviewProps {
@@ -9,9 +10,11 @@ export interface ProjectPreviewProps {
     };
     title: string;
     sub: string;
-    description: React.ReactNode;
+    description: ReactNode;
     icons: TechIconProps[];
     color: string;
     projectLink: string;
     slug?: string;
+    categories: string[];
+    phase?: "Discover" | "Architect" | "Ship";
 }

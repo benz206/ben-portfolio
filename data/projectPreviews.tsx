@@ -70,6 +70,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/hophacks2025",
         color: "orange-500",
+        categories: ["AI", "SaaS", "Fullstack"],
+        phase: "Discover",
     },
     {
         image: {
@@ -124,6 +126,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://ben-htn.netlify.app",
         color: "amber-500",
+        categories: ["Frontend", "UX", "Hackathon"],
+        phase: "Discover",
     },
     {
         image: {
@@ -178,6 +182,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/StyleIt",
         color: "indigo-500",
+        categories: ["AI", "Vision", "Product"],
+        phase: "Architect",
     },
     {
         image: {
@@ -229,6 +235,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/LinkCom",
         color: "teal-500",
+        categories: ["Hardware", "Firmware", "Accessibility"],
+        phase: "Architect",
     },
     {
         image: {
@@ -280,6 +288,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://devpost.com/software/goosehunt",
         color: "rose-500",
+        categories: ["AI", "Mobile", "Hackathon"],
+        phase: "Discover",
     },
     {
         image: {
@@ -341,6 +351,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/RapidRx",
         color: "emerald-600",
+        categories: ["Healthcare", "AI", "Fullstack"],
+        phase: "Ship",
     },
     {
         image: {
@@ -399,6 +411,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://github.com/benz206/SpotifyMacroboard",
         slug: "SpotifyMacroboard",
         color: "amber-400",
+        categories: ["Hardware", "Embedded", "Product"],
+        phase: "Architect",
     },
     {
         image: {
@@ -456,6 +470,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://eurekahacks.ca",
         color: "fuchsia-400",
+        categories: ["Frontend", "Brand", "Hackathon"],
+        phase: "Discover",
     },
     {
         image: {
@@ -518,6 +534,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/flashnotes",
         color: "orange-500",
+        categories: ["AI", "Education", "Hackathon"],
+        phase: "Discover",
     },
     {
         image: {
@@ -572,6 +590,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://apmc.vercel.app/",
         color: "purple-400",
+        categories: ["Frontend", "Community", "Product"],
+        phase: "Architect",
     },
     {
         image: {
@@ -640,6 +660,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://benz206.github.io/bTagScriptPlayground/",
         color: "red-500",
+        categories: ["Language", "Tooling", "Backend"],
+        phase: "Discover",
     },
     {
         image: {
@@ -701,6 +723,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://btagscript.readthedocs.io/en/latest/index.html",
         color: "yellow-400",
+        categories: ["Documentation", "Language", "Tooling"],
+        phase: "Ship",
     },
     {
         image: {
@@ -748,6 +772,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/Benny",
         color: "sky-600",
+        categories: ["Bots", "Automation", "Product"],
+        phase: "Ship",
     },
     {
         image: {
@@ -803,6 +829,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
         color: "green-400",
+        categories: ["Automation", "Backend", "Bots"],
+        phase: "Architect",
     },
     {
         image: {
@@ -846,6 +874,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         ],
         projectLink: "https://github.com/benz206/ben-portfolio",
         color: "cyan-300",
+        categories: ["Frontend", "Personal", "Brand"],
+        phase: "Ship",
     },
 ];
 
