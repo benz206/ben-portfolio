@@ -32,7 +32,7 @@ async function fetchImages(): Promise<ImageT[]> {
     try {
         const result = await cloudinary.search
             .sort_by("uploaded_at", "desc")
-            .max_results(30)
+            .max_results(50)
             .execute();
         return result.resources.map((r: any) => ({
             public_id: r.public_id,
