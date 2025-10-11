@@ -37,8 +37,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                 height: 40,
                 crop: "fill",
                 quality: "auto:low",
-                format: "auto",
-                effect: "blur:1200",
+                format: "auto"
             });
         });
         return map;
@@ -48,10 +47,6 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
         ? `${String(currentIndex + 1).padStart(2, "0")} / ${String(
               totalImages
           ).padStart(2, "0")}`
-        : undefined;
-    const totalImages = images.length;
-    const modalPlaceholder = selectedImage
-        ? placeholderDataUrls[selectedImage.public_id]
         : undefined;
 
     const handleSelect = useCallback((image: ImageT, index: number) => {
