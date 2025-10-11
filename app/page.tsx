@@ -13,6 +13,7 @@ import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
 import FuegoLogo from "@/public/experience/fuego.webp";
 import SAPLogo from "@/public/experience/SAP.png";
 import type { AmbientVariant } from "@/components/AmbientGradient";
+import { FiChevronDown } from "react-icons/fi";
 
 type RoleCard = {
     title: string;
@@ -78,7 +79,7 @@ export default function Home() {
         roleCardBaseDelay + recentRoles.length * roleCardStep + 0.35;
     return (
         <>
-            <section className="relative flex justify-center items-center h-[100vh]">
+            <section className="relative flex items-center justify-center h-screen home-section">
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 bg-noir-radial opacity-80" />
                 <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 text-white">
@@ -195,10 +196,37 @@ export default function Home() {
                         </motion.div>
                     </div>
                 </div>
+                <div className="absolute flex flex-col items-center gap-1 -translate-x-1/2 bottom-12 left-1/2 text-white/70">
+                    <motion.div
+                        className="flex items-center gap-2 text-xs uppercase tracking-[0.4em]"
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 1.2 }}
+                    >
+                        Scroll
+                    </motion.div>
+                    <motion.div
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 1.4 }}
+                    >
+                        {[0, 1, 2].map((index) => (
+                            <FiChevronDown
+                                key={index}
+                                className={`h-6 w-6 animate-arrow-flicker text-white/70`}
+                                style={{
+                                    animationDelay: `${index * 0.35}s`,
+                                }}
+                            />
+                        ))}
+                    </motion.div>
+                </div>
             </section>
 
-            <section className="flex justify-center bg-[#050506] py-24 text-white">
-                <div className="flex w-11/12 max-w-[1080px] flex-col gap-16 lg:flex-row lg:items-center">
+            <section className="relative flex items-center justify-center min-h-screen py-20 text-white home-section bg-noir-gradient-cool">
+                <div className="absolute inset-0 bg-noir-radial-cool opacity-80" />
+                <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 lg:flex-row lg:items-center">
                     <div className="flex-1 space-y-6">
                         <span className="text-xs uppercase tracking-[0.4em] text-white/40">
                             Operating cadence
@@ -277,9 +305,10 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="flex justify-center bg-[#050506] py-24">
-                <div className="flex w-11/12 max-w-[1080px] flex-col gap-10 text-white">
-                    <div className="flex items-center justify-between">
+            <section className="relative flex items-center justify-center min-h-screen py-20 text-white home-section bg-noir-gradient-warm">
+                <div className="absolute inset-0 opacity-75 bg-noir-radial-warm" />
+                <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-10">
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                         <span className="text-xs uppercase tracking-[0.3em] text-white/40">
                             Proof of work
                         </span>
@@ -294,8 +323,9 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="flex justify-center bg-[#050506] py-24">
-                <div className="w-11/12 max-w-[1080px]">
+            <section className="home-section relative flex min-h-screen py-20 items-center justify-center bg-[#050506] text-white">
+                <div className="absolute inset-0 opacity-75 bg-noir-radial" />
+                <div className="relative w-11/12 max-w-[1080px]">
                     <Golden people={goldenPeople} />
                 </div>
             </section>

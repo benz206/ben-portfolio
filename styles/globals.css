@@ -59,6 +59,23 @@ body,
     width: 100%;
 }
 
+.home-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-snap-type: y proximity;
+}
+
+.home-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.home-section {
+    min-height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
 hr {
     border-color: #d9dde6;
 }

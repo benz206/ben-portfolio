@@ -67,34 +67,37 @@ function Job({ job, index }: JobProps) {
             ref={ref}
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.8, ease: easeOut, delay: index * 0.2 }}
-            className="relative grid grid-cols-[3.5rem_auto] md:grid-cols-[8rem_auto] py-8 list-none group"
+            transition={{ duration: 0.8, ease: easeOut, delay: index * 0.15 }}
+            className="flex flex-col gap-4"
             key={index}
         >
-            <div className="absolute left-0 w-[2px] h-full -ml-4 transition-opacity duration-300 opacity-0 bg-white/0 group-hover:opacity-100 group-hover:bg-white/40" />
-            <div className="flex items-center justify-center w-12 h-12 m-1 mt-4 overflow-hidden transition-transform duration-300 rounded-xl lg:my-auto md:m-2 lg:m-5 md:h-24 md:w-24 group-hover:scale-110">
-                <Image
-                    src={job.image.src}
-                    alt={job.image.alt}
-                    width={150}
-                    height={150}
-                    priority={job.image.priority}
-                    className="object-contain w-auto h-full"
-                />
-            </div>
-            <div className="flex flex-col justify-center">
-                <span className="text-xs uppercase tracking-[0.3em] text-white/40">
-                    {job.date}
-                </span>
-                <h3 className="pt-2 text-lg font-semibold text-white lg:text-2xl">
-                    {job.title}
-                </h3>
-                <h4 className="py-1 text-sm font-medium text-white/50">
-                    {job.company}
-                </h4>
-                <p className="text-sm text-white/55">
-                    {job.description}
-                </p>
+            <div className="flex items-start gap-4">
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5">
+                    <Image
+                        src={job.image.src}
+                        alt={job.image.alt}
+                        width={80}
+                        height={80}
+                        priority={job.image.priority}
+                        className="h-10 w-10 object-contain"
+                    />
+                </div>
+                <div className="flex flex-col gap-3">
+                    <span className="text-[0.65rem] uppercase tracking-[0.35em] text-white/40">
+                        {job.date}
+                    </span>
+                    <div className="flex flex-col gap-1 text-white">
+                        <h3 className="text-lg font-semibold leading-tight">
+                            {job.title}
+                        </h3>
+                        <h4 className="text-xs uppercase tracking-[0.2em] text-white/55">
+                            {job.company}
+                        </h4>
+                    </div>
+                    <p className="text-sm leading-relaxed text-white/60">
+                        {job.description}
+                    </p>
+                </div>
             </div>
         </motion.li>
     );
@@ -196,14 +199,10 @@ const jobs: Job[] = [
 
 export default function Experience() {
     return (
-        <div className="flex justify-center w-full">
-            <div className="w-11/12 max-w-[1170px] relative">
-                <ol className="relative flex flex-col justify-center">
-                    {jobs.map((job, index) => (
-                        <Job key={index} job={job} index={index} />
-                    ))}
-                </ol>
-            </div>
-        </div>
+        <ol className="grid gap-10 md:grid-cols-2 list-none">
+            {jobs.map((job, index) => (
+                <Job key={index} job={job} index={index} />
+            ))}
+        </ol>
     );
 }
