@@ -137,7 +137,7 @@ export default function CurrentlyPlaying() {
             ambient
             ambientSeed="currently-playing"
             ambientClassName="opacity-50"
-            className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
+            className="relative flex h-32 mt-3 mx-auto p-2 w-full max-w-[700px] overflow-hidden rounded-2xl"
             motionProps={{
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },
@@ -159,8 +159,8 @@ export default function CurrentlyPlaying() {
                 </>
             )}
             <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="w-auto h-full overflow-hidden shadow-xl rounded-xl">
-                    {track.albumArt ? (
+                <div className="w-20 h-20 overflow-hidden shadow-xl rounded-xl">
+                    {track.albumArt && (
                         <Image
                             src={track.albumArt}
                             alt={`${track.album} album art`}
@@ -169,13 +169,8 @@ export default function CurrentlyPlaying() {
                             unoptimized
                             className="object-cover w-full h-full"
                         />
-                    ) : (
-                        <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-green-400 to-green-600">
-                            <FaSpotify className="w-10 h-10 text-white" />
-                        </div>
                     )}
                 </div>
-
                 <div className="flex flex-col justify-center flex-1 min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />

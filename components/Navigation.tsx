@@ -15,7 +15,6 @@ const motionAnim = {
 } as const;
 
 const links = [
-    { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Blog" },
     { href: "/gallery", label: "Gallery" },
@@ -51,9 +50,9 @@ export default function Navigation() {
                 <div className="flex h-16 w-11/12 max-w-[1080px] items-center">
                     <Link
                         href="/"
-                        className="font-semibold tracking-[0.3em] uppercase text-xs text-white"
+                        className="py-3 text-base font-medium text-white/80"
                     >
-                        Ben Zhou
+                        Home
                     </Link>
                     <div className="items-center hidden gap-8 ml-auto lg:flex">
                         {links.map((link) => (

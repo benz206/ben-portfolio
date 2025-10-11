@@ -1,15 +1,55 @@
 "use client";
 import Image from "next/image";
 import Card from "@/components/Card";
-import Mocha from "@/public/home/mocha.png";
 import CompEng from "@/public/home/compeng.jpg";
 import { motion } from "framer-motion";
 import Experience from "@/components/Experience";
-import TechIcon from "@/components/TechIcon";
 import CurrentlyPlaying from "@/components/CurrentlyPlaying";
 import Golden from "@/components/Golden";
 import { goldenPeople } from "@/data/goldenData";
 import Link from "next/link";
+import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
+import FuegoLogo from "@/public/experience/fuego.webp";
+import SAPLogo from "@/public/experience/SAP.png";
+
+const recentRoles = [
+    {
+        title: "Software Engineering Intern",
+        company: "Grand Charter",
+        location: "New York",
+        period: "Sep 2025 - Present",
+        image: {
+            src: GrandCharterLogo,
+            alt: "Grand Charter logo",
+        },
+        locationClass: "text-white/60",
+        periodClass: "text-white/45",
+    },
+    {
+        title: "Software Engineering Intern",
+        company: "Fuego.io",
+        location: "San Francisco",
+        period: "Jan 2025 — Apr 2025",
+        image: {
+            src: FuegoLogo,
+            alt: "Fuego logo",
+        },
+        locationClass: "text-[rgba(255,196,158,0.9)]",
+        periodClass: "text-[rgba(255,220,200,0.85)]",
+    },
+    {
+        title: "Software Developer",
+        company: "SAP",
+        location: "Toronto",
+        period: "Feb 2024 - Jul 2024",
+        image: {
+            src: SAPLogo,
+            alt: "SAP Logo",
+        },
+        locationClass: "text-[rgba(170,210,255,0.9)]",
+        periodClass: "text-[rgba(195,230,255,0.85)]",
+    },
+];
 
 export default function Home() {
     return (
@@ -18,142 +58,95 @@ export default function Home() {
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 bg-noir-radial opacity-80" />
                 <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 text-white">
-                    <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
-                        <div className="flex-1 space-y-6">
-                            <span className="text-xs uppercase tracking-[0.5em] text-white/50">
-                                Building products faster than the deadline
-                            </span>
-                            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                                Ben Zhou — engineer, founder, relentless
-                                builder.
-                            </h1>
-                            <p className="max-w-xl text-sm text-white/65">
-                                I architect and ship software and hardware for
-                                teams moving at venture speed. Focused on
-                                zero-to-one execution, thoughtful design, and
-                                systems that scale.
-                            </p>
-                            <div className="flex flex-wrap gap-4 text-xs text-white/60">
-                                <span className="rounded-full border border-white/10 px-4 py-2 uppercase tracking-[0.3em]">
-                                    Product Engineering
+                    <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
+                        <div className="flex flex-col gap-8">
+                            <div className="space-y-6">
+                                <span className="text-xs uppercase tracking-[0.2em] text-white/50">
+                                    Building software
                                 </span>
-                                <span className="rounded-full border border-white/10 px-4 py-2 uppercase tracking-[0.3em]">
-                                    Firmware
-                                </span>
-                                <span className="rounded-full border border-white/10 px-4 py-2 uppercase tracking-[0.3em]">
-                                    Design Systems
-                                </span>
-                            </div>
-                        </div>
-                        <div className="flex-1">
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed="currently-shipping"
-                                ambientClassName="opacity-50"
-                                className="relative p-8 overflow-hidden"
-                            >
-                                <div className="flex justify-end">
-                                    <span className="text-xs uppercase tracking-[0.4em] text-white/40">
-                                        Currently shipping
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-6 mt-6">
-                                    <Image
-                                        className="object-cover w-32 h-32 rounded-md"
-                                        src={Mocha}
-                                        alt="Mocha robot"
-                                    />
-                                    <div className="space-y-3 text-white">
-                                        <h2 className="text-xl font-semibold">
-                                            Autonomous robotics labs
-                                        </h2>
-                                        <p className="text-sm text-white/60">
-                                            Prototyping modular robotics tools
-                                            that bridge firmware, ML vision, and
-                                            real-world reliability.
-                                        </p>
-                                        <div className="flex gap-2 text-xs text-white/40">
-                                            <span>Next.js</span>
-                                            <span>TypeScript</span>
-                                            <span>ESP32</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        </div>
-                    </div>
-                    <motion.div
-                        className="grid gap-6 text-white"
-                        initial={{ opacity: 0, y: 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.4 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <div className="flex flex-wrap gap-6">
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed="waterloo"
-                                ambientClassName="opacity-40"
-                                className="flex-1 min-w-[260px] p-6"
-                            >
-                                <span className="text-xs uppercase tracking-[0.3em] text-white/40">
-                                    Waterloo Computer Engineering
-                                </span>
-                                <h3 className="mt-3 text-lg font-semibold text-white">
-                                    Speedrunning hardware and software
-                                    fundamentals.
-                                </h3>
-                                <p className="mt-4 text-sm text-white/60">
-                                    From low-level systems to cloud infra, I
-                                    build across the stack and bring product
-                                    taste to every layer.
+                                <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+                                    Ben Zhou
+                                </h1>
+                                <p className="max-w-xl font-thin text-md text-white/65">
+                                    Engineering student at the University of
+                                    Waterloo with a passion for building
+                                    elegant, efficient, and scalable software.
                                 </p>
-                            </Card>
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed="currently-listening"
-                                ambientClassName="opacity-40"
-                                className="flex-1 min-w-[260px] p-6"
+                            </div>
+                            <motion.div
+                                className="text-white"
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.4 }}
+                                transition={{ duration: 0.6 }}
                             >
-                                <span className="text-xs uppercase tracking-[0.3em] text-white/40">
+                                <span className="text-xs uppercase tracking-[0.2em] text-white/40">
                                     Currently Listening
                                 </span>
-                                <CurrentlyPlaying />
-                            </Card>
+                                <div className="mt-4">
+                                    <CurrentlyPlaying />
+                                </div>
+                            </motion.div>
                         </div>
-                        <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-white/40">
-                            <span>Stacks I trust</span>
-                            <div className="flex flex-wrap gap-4 text-white/60">
-                                <TechIcon
-                                    name="UofW"
-                                    image="https://i.imgur.com/qtXlwL6.png"
-                                    link="https://www.uwaterloo.ca/"
-                                    size="lg"
-                                />
-                                <TechIcon
-                                    name="NextJS"
-                                    image="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
-                                    link="https://nextjs.org/"
-                                    size="lg"
-                                />
-                                <TechIcon
-                                    name="TypeScript"
-                                    image="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
-                                    link="https://www.typescriptlang.org/"
-                                    size="lg"
-                                />
-                                <TechIcon
-                                    name="TailwindCSS"
-                                    image="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
-                                    link="https://tailwindcss.com/"
-                                    size="lg"
-                                />
-                            </div>
-                        </div>
-                    </motion.div>
+                        <motion.div
+                            className="flex flex-col gap-4"
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.4 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <span className="text-xs uppercase tracking-[0.2em] text-white/40">
+                                Roles
+                            </span>
+                            {recentRoles.map((role, index) => (
+                                <Card
+                                    key={role.company}
+                                    variant="glass"
+                                    ambient
+                                    ambientSeed={`role-${index}`}
+                                    ambientClassName="opacity-35"
+                                    className="flex items-start gap-5 p-6"
+                                >
+                                    <Image
+                                        src={role.image.src}
+                                        alt={role.image.alt}
+                                        width={56}
+                                        height={56}
+                                        className="object-contain rounded-lg h-14 w-14"
+                                    />
+
+                                    <div className="flex flex-col flex-1 gap-1 my-auto">
+                                        <div className="flex flex-wrap items-center justify-between gap-2">
+                                            <h2 className="text-base font-medium text-white">
+                                                {role.company}
+                                            </h2>
+                                            <span
+                                                className={`text-xs uppercase tracking-[0.2em] ${
+                                                    role.locationClass ??
+                                                    "text-white/55"
+                                                }`}
+                                            >
+                                                {role.location}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                                            <p className="font-extralight text-white/65">
+                                                {role.title}
+                                            </p>
+                                            <span
+                                                className={`text-xs uppercase tracking-[0.1em] ${
+                                                    role.periodClass ??
+                                                    "text-white/45"
+                                                }`}
+                                            >
+                                                {role.period}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -220,7 +213,7 @@ export default function Home() {
                             className="p-8 overflow-hidden"
                         >
                             <Image
-                                className="object-cover w-full h-64 rounded-md"
+                                className="object-contain w-full h-64 rounded-md"
                                 width={489}
                                 height={367}
                                 src={CompEng}
