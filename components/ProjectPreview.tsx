@@ -8,7 +8,10 @@ import Link from "next/link";
 import TechIcon from "./TechIcon";
 import Card from "@/components/Card";
 
-const colorVariants: Record<string, { accent: string; border: string; text: string }> = {
+const colorVariants: Record<
+    string,
+    { accent: string; border: string; text: string }
+> = {
     ember: {
         accent: "ring-1 ring-[#ffb199]/30",
         border: "border-[#ffb199]/40",
@@ -151,8 +154,7 @@ export default function ProjectPreview({
             <motion.div
                 onHoverStart={() => hoverY.set(-10)}
                 onHoverEnd={() => hoverY.set(0)}
-                animate={{ y: hoverY }}
-                style={{ rotate: hoverRotate }}
+                style={{ rotate: hoverRotate, y: hoverY }}
                 transition={{ type: "spring", stiffness: 200, damping: 18 }}
             >
                 <Card
@@ -165,7 +167,7 @@ export default function ProjectPreview({
                 >
                     <div className="relative overflow-hidden rounded-md">
                         <motion.div
-                            className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-80"
+                            className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/40 via-transparent to-transparent group-hover:opacity-80"
                             style={{ rotate: hoverRotate }}
                         />
                         <Image
@@ -182,7 +184,7 @@ export default function ProjectPreview({
                             </span>
                         )}
                     </div>
-                    <h2 className="mt-6 px-2 text-lg font-semibold text-white lg:text-xl">
+                    <h2 className="px-2 mt-6 text-lg font-semibold text-white lg:text-xl">
                         {title}
                     </h2>
                     <h3
@@ -222,7 +224,7 @@ export default function ProjectPreview({
                             />
                         ))}
                     </motion.div>
-                    <div className="flex items-center px-2 pb-4 pt-6">
+                    <div className="flex items-center px-2 pt-6 pb-4">
                         {projectLink && (
                             <motion.div
                                 className="flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition-colors hover:text-white"

@@ -23,6 +23,8 @@ export type ProjectPreviewProps = {
     index?: number;
     projectLink?: string;
     slug?: string;
+    categories: string[];
+    phase?: "Discover" | "Architect" | "Ship";
 };
 
 export type AwardPreviewProps = {

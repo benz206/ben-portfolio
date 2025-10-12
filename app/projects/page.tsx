@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import ProjectPreview from "@/components/ProjectPreview";
 import projectPreviews from "@/data/projectPreviews";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import Card from "@/components/Card";
 
 const phasesMeta = [
@@ -30,16 +30,14 @@ const phasesMeta = [
     },
 ];
 
-const marqueeVariants = {
+const marqueeVariants: Variants = {
     animate: {
         x: [0, -4000],
         transition: {
-            x: {
-                repeat: Infinity,
-                repeatType: "loop",
-                ease: "linear",
-                duration: 40,
-            },
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear",
+            duration: 40,
         },
     },
 };
@@ -74,8 +72,9 @@ export default function Projects() {
     );
     const deepDive = useMemo(
         () =>
-            filteredProjects.find((project) => project.slug === "SpotifyMacroboard") ||
-            filteredProjects.find((project) => project.phase === "Ship"),
+            filteredProjects.find(
+                (project) => project.slug === "SpotifyMacroboard"
+            ) || filteredProjects.find((project) => project.phase === "Ship"),
         [filteredProjects]
     );
     const marqueeTitles = useMemo(
@@ -97,14 +96,17 @@ export default function Projects() {
                     >
                         <div className="flex flex-col gap-8">
                             <div className="space-y-4">
-                        <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                                <span className="text-xs uppercase tracking-[0.4em] text-white/40">
                                     Proof of craft
-                        </span>
-                        <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
+                                </span>
+                                <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
                                     Projects built to feel inevitable.
-                        </h1>
+                                </h1>
                                 <p className="max-w-2xl text-sm text-white/65">
-                                    I design, prototype, and ship full experiences. The work spans hardware, AI, and product surfaces, unified by a focus on thoughtful systems and expressive polish.
+                                    I design, prototype, and ship full
+                                    experiences. The work spans hardware, AI,
+                                    and product surfaces, unified by a focus on
+                                    thoughtful systems and expressive polish.
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-3">
@@ -120,7 +122,8 @@ export default function Projects() {
                                     All work
                                 </button>
                                 {categoryOptions.map((category) => {
-                                    const isActive = activeCategory === category;
+                                    const isActive =
+                                        activeCategory === category;
                                     return (
                                         <button
                                             key={category}
@@ -158,7 +161,9 @@ export default function Projects() {
                                         width={featuredProject.image.width}
                                         height={featuredProject.image.height}
                                         className="h-56 w-full object-cover"
-                                        priority={featuredProject.image.priority}
+                                        priority={
+                                            featuredProject.image.priority
+                                        }
                                     />
                                     <span className="absolute left-4 top-4 text-[10px] uppercase tracking-[0.6em] text-white/70">
                                         Spotlight
@@ -173,14 +178,16 @@ export default function Projects() {
                                     </p>
                                 </div>
                                 <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.4em] text-white/45">
-                                    {featuredProject.categories.map((category) => (
-                                        <span
-                                            key={category}
-                                            className="rounded border border-white/10 px-3 py-1"
-                                        >
-                                            {category}
-                                        </span>
-                                    ))}
+                                    {featuredProject.categories.map(
+                                        (category) => (
+                                            <span
+                                                key={category}
+                                                className="rounded border border-white/10 px-3 py-1"
+                                            >
+                                                {category}
+                                            </span>
+                                        )
+                                    )}
                                 </div>
                                 <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
                                     <a
@@ -210,7 +217,9 @@ export default function Projects() {
                     key={phase.value}
                     className={`relative flex justify-center overflow-hidden py-24 text-white ${phase.gradient}`}
                 >
-                    <div className={`absolute inset-0 opacity-75 ${phase.radial}`} />
+                    <div
+                        className={`absolute inset-0 opacity-75 ${phase.radial}`}
+                    />
                     <div className="relative flex w-11/12 max-w-[1180px] flex-col gap-12">
                         <motion.div
                             initial={{ opacity: 0, y: 24 }}
@@ -234,7 +243,10 @@ export default function Projects() {
                             transition={{ duration: 0.6 }}
                         >
                             {phase.projects.map((project) => (
-                                <ProjectPreview key={project.title} {...project} />
+                                <ProjectPreview
+                                    key={project.title}
+                                    {...project}
+                                />
                             ))}
                         </motion.ul>
                     </div>
@@ -294,7 +306,12 @@ export default function Projects() {
                                     Systems thinking from PCB to product.
                                 </h4>
                                 <p className="text-sm text-white/65">
-                                    Hardware, firmware, and web surfaces converge into one expressive device. I iterate on enclosure design, embedded software, and interface layers simultaneously so the final experience feels cohesive.
+                                    Hardware, firmware, and web surfaces
+                                    converge into one expressive device. I
+                                    iterate on enclosure design, embedded
+                                    software, and interface layers
+                                    simultaneously so the final experience feels
+                                    cohesive.
                                 </p>
                             </motion.div>
                             <div className="grid gap-4 rounded-lg border border-white/10 bg-white/5 p-6 text-sm text-white/65">
@@ -311,7 +328,9 @@ export default function Projects() {
                                 <div className="flex items-center justify-between">
                                     <span>Stack</span>
                                     <span className="text-white/80">
-                                        {deepDive.icons.map((icon) => icon.alt).join(" • ")}
+                                        {deepDive.icons
+                                            .map((icon) => icon.alt)
+                                            .join(" • ")}
                                     </span>
                                 </div>
                             </div>
@@ -346,12 +365,12 @@ export default function Projects() {
                         variants={marqueeVariants}
                         animate="animate"
                     >
-                        {[...marqueeTitles, ...marqueeTitles].map((title, index) => (
-                            <span key={`${title}-${index}`}>
-                                {title}
-                            </span>
-                    ))}
-                </motion.div>
+                        {[...marqueeTitles, ...marqueeTitles].map(
+                            (title, index) => (
+                                <span key={`${title}-${index}`}>{title}</span>
+                            )
+                        )}
+                    </motion.div>
                 </div>
             </section>
         </>
