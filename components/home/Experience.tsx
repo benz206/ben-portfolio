@@ -4,9 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Experience from "@/components/Experience";
 
-export default function ProofOfWorkSection() {
+export default function ExperienceSection() {
     return (
-        <section className="relative flex items-center justify-center min-h-screen py-20 text-white home-section bg-noir-gradient-warm">
+        <section className="flex relative justify-center items-center py-20 min-h-screen text-white home-section bg-noir-gradient-warm">
             <div className="absolute inset-0 opacity-75 bg-noir-radial-warm" />
             <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-10">
                 <motion.div
@@ -17,7 +17,7 @@ export default function ProofOfWorkSection() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
                     <span className="text-xs uppercase tracking-[0.3em] text-white/40">
-                        Proof of work
+                        Experience
                     </span>
                     <Link
                         href="/projects"

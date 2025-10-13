@@ -6,7 +6,14 @@ export type AmbientVariant =
     | "blue"
     | "sunset"
     | "emerald"
-    | "tangerine";
+    | "tangerine"
+    | "crimson"
+    | "amber"
+    | "aqua"
+    | "magenta"
+    | "slate"
+    | "indigo"
+    | "rose";
 
 type AmbientGradientProps = {
     className?: string;
@@ -48,6 +55,48 @@ const variantToStops: Record<
         a: "bg-[radial-gradient(ellipse_at_center,oklch(0.9_0.3_45/_0.82),transparent_60%)]",
         b: "bg-[radial-gradient(ellipse_at_center,oklch(0.86_0.28_20/_0.78),transparent_60%)]",
         c: "bg-[radial-gradient(ellipse_at_center,oklch(0.94_0.22_70/_0.7),transparent_60%)]",
+    },
+    crimson: {
+        line: "via-[oklch(0.62_0.27_20_/_0.78)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.7_0.3_18/_0.82),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.66_0.26_32/_0.74),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.22_12/_0.68),transparent_60%)]",
+    },
+    amber: {
+        line: "via-[oklch(0.86_0.28_85_/_0.78)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.92_0.32_78/_0.84),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.9_0.26_95/_0.76),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.96_0.22_70/_0.68),transparent_60%)]",
+    },
+    aqua: {
+        line: "via-[oklch(0.78_0.2_200_/_0.78)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.86_0.24_195/_0.84),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.82_0.2_205/_0.74),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.9_0.18_185/_0.7),transparent_60%)]",
+    },
+    magenta: {
+        line: "via-[oklch(0.72_0.28_325_/_0.8)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.82_0.32_330/_0.84),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.28_340/_0.76),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.86_0.24_315/_0.7),transparent_60%)]",
+    },
+    slate: {
+        line: "via-[oklch(0.76_0.08_250_/_0.7)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.84_0.1_240/_0.82),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.8_0.08_260/_0.74),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.88_0.06_225/_0.66),transparent_60%)]",
+    },
+    indigo: {
+        line: "via-[oklch(0.7_0.2_270_/_0.78)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.24_260/_0.84),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.2_280/_0.76),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.82_0.18_250/_0.7),transparent_60%)]",
+    },
+    rose: {
+        line: "via-[oklch(0.74_0.3_12_/_0.8)]",
+        a: "bg-[radial-gradient(ellipse_at_center,oklch(0.82_0.34_8/_0.85),transparent_60%)]",
+        b: "bg-[radial-gradient(ellipse_at_center,oklch(0.78_0.28_20/_0.78),transparent_60%)]",
+        c: "bg-[radial-gradient(ellipse_at_center,oklch(0.84_0.26_0/_0.72),transparent_60%)]",
     },
 };
 
@@ -125,7 +174,7 @@ export function AmbientGradient({
         return (
             <div
                 className={cn(
-                    "pointer-events-none absolute inset-0 overflow-hidden",
+                    "overflow-hidden absolute inset-0 pointer-events-none",
                     className
                 )}
                 aria-hidden
@@ -145,7 +194,7 @@ export function AmbientGradient({
         return (
             <div
                 className={cn(
-                    "pointer-events-none absolute inset-0 overflow-hidden",
+                    "overflow-hidden absolute inset-0 pointer-events-none",
                     className
                 )}
                 aria-hidden
@@ -259,7 +308,7 @@ export function AmbientGradient({
     return (
         <div
             className={cn(
-                "pointer-events-none absolute inset-0 overflow-hidden",
+                "overflow-hidden absolute inset-0 pointer-events-none",
                 className
             )}
             aria-hidden
@@ -293,7 +342,7 @@ export function AmbientGradient({
                     }}
                 />
                 <div
-                    className="absolute -translate-x-1/2 rounded-full blur-3xl"
+                    className="absolute rounded-full blur-3xl -translate-x-1/2"
                     style={{
                         left: `${left3Pct}%`,
                         top: `${top3Pct}%`,
@@ -303,7 +352,7 @@ export function AmbientGradient({
                     }}
                 />
                 <div
-                    className="absolute -translate-x-1/2 rounded-full blur-3xl"
+                    className="absolute rounded-full blur-3xl -translate-x-1/2"
                     style={{
                         left: `${left4Pct}%`,
                         top: `${top4Pct}%`,

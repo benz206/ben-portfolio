@@ -76,7 +76,7 @@ export default function Navigation() {
                         </motion.div>
                         <ToggleDLMode />
                     </div>
-                    <div className="flex items-center gap-4 lg:hidden">
+                    <div className="flex items-center gap-4 ml-auto lg:hidden">
                         <ToggleDLMode />
                         <button
                             className="flex flex-col items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
@@ -106,7 +106,7 @@ export default function Navigation() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="absolute top-16 flex w-full flex-col bg-[#050506]/95 px-6 py-8 lg:hidden"
+                        className="absolute top-16 right-[max(1.5rem,calc((100vw-100%)/2+1.5rem))] flex w-[min(18rem,90vw-2rem)] flex-col rounded-2xl border border-white/10 bg-[#050506]/95 px-6 py-6 shadow-lg lg:hidden"
                         initial={{ opacity: 0, y: -12 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -12 }}

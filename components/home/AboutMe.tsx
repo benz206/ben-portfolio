@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { IconType } from "react-icons";
-import { FiActivity, FiBookOpen, FiCpu, FiHeadphones } from "react-icons/fi";
+import { FiActivity, FiCpu, FiHeadphones } from "react-icons/fi";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import Card from "@/components/Card";
 import CompEng from "@/public/home/compeng.jpg";
@@ -20,42 +20,32 @@ type Highlight = {
 
 const personalHighlights: Highlight[] = [
     {
-        title: "Analog Craft",
-        tag: "Hardware",
+        title: "Projects",
+        tag: "Projects",
         description:
-            "Custom keyboards, sensor-packed macroboards, and weekend enclosures keep my hands in the hardware loop.",
+            "I design and build hardware-software hybrids that bridge embedded systems with thoughtful interfaces.",
         icon: FiCpu,
-        ambientVariant: "emerald",
-        ambientSeed: "analog-craft",
+        ambientVariant: "indigo",
+        ambientSeed: "projects",
     },
     {
-        title: "Rhythm & Motion",
-        tag: "Movement",
-        description:
-            "Tempo runs with local crews and weekly bouldering sessions reset my brain and feed product momentum.",
-        icon: FiActivity,
-        ambientVariant: "sunset",
-        ambientSeed: "rhythm-motion",
-        tagClass: "text-[rgba(255,205,180,0.85)]",
-    },
-    {
-        title: "Learning Loops",
-        tag: "Writing",
-        description:
-            "I distill experiments into essays, share engineering notes with peers, and keep a living design playbook.",
-        icon: FiBookOpen,
-        ambientVariant: "violet",
-        ambientSeed: "learning-loops",
-    },
-    {
-        title: "Soundtrack",
+        title: "Music",
         tag: "Music",
         description:
-            "Curating ambient and house sets for deep work, recording mixes on weekends, and trading tracks with friends.",
+            "I trade playlists, learn new pieces, and keep a steady rotation of instruments nearby.",
         icon: FiHeadphones,
         ambientVariant: "blue",
         ambientSeed: "soundtrack",
         tagClass: "text-[rgba(180,210,255,0.85)]",
+    },
+    {
+        title: "Sports",
+        tag: "Sports",
+        description:
+            "Pickup games, trail runs, and a weekly training routine keep me energized outside the lab.",
+        icon: FiActivity,
+        ambientVariant: "crimson",
+        ambientSeed: "sports",
     },
 ];
 
@@ -77,8 +67,8 @@ export default function OperatingCadenceSection() {
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.6, delay: 0.25 }}
                 >
-                    <span className="text-xs uppercase tracking-[0.3em] text-white/40">
-                        Passions in play
+                    <span className="text-xs uppercase tracking-[0.2em] text-white/40">
+                        My interests include
                     </span>
                     {personalHighlights.map((highlight, index) => {
                         const Icon = highlight.icon;
@@ -90,7 +80,7 @@ export default function OperatingCadenceSection() {
                                 ambient
                                 ambientVariant={highlight.ambientVariant}
                                 ambientSeed={highlight.ambientSeed}
-                                ambientClassName="opacity-40"
+                                ambientClassName="opacity-80"
                                 className="flex gap-5 items-start p-6"
                                 motionProps={{
                                     initial: { opacity: 0, y: 24 },
@@ -133,9 +123,6 @@ export default function OperatingCadenceSection() {
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                    <span className="text-xs uppercase tracking-[0.4em] text-white/40">
-                        About me
-                    </span>
                     <Card
                         variant="glass"
                         ambient
@@ -148,11 +135,8 @@ export default function OperatingCadenceSection() {
                             <h2 className="text-3xl font-semibold">
                                 About Me
                             </h2>
-                            <p className="text-sm text-white/60">
-                                Shipping quickly without sanding off the craft is table stakes; so I pair deep focus sprints with restorative breaks that keep my taste sharp and my energy steady.
-                            </p>
-                            <p className="text-sm text-white/60">
-                                When I step away from the editor, I am running tempo loops with friends, sketching hardware ideas, spinning playlists, and writing to capture the lessons.
+                            <p className="text-sm font-light text-white/60">
+                                I&apos;m a computer engineering student at the University of Waterloo, interested in the world of hardware and software.
                             </p>
                         </div>
                         <Image
@@ -163,9 +147,6 @@ export default function OperatingCadenceSection() {
                             height={367}
                             loading="lazy"
                         />
-                        <p className="text-sm text-white/55">
-                            Weekends often start with solder fumes, playlists on loop, and notes that turn into the next project roadmap.
-                        </p>
                     </Card>
                 </motion.div>
             </div>

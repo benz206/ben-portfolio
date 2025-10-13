@@ -1,7 +1,7 @@
 "use client";
 import HeroSection from "@/components/home/HeroSection";
-import OperatingCadenceSection from "@/components/home/OperatingCadenceSection";
-import ProofOfWorkSection from "@/components/home/ProofOfWorkSection";
+import OperatingCadenceSection from "@/components/home/AboutMe";
+import ExperienceSection from "@/components/home/Experience";
 import GoldenSection from "@/components/home/GoldenSection";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
         <>
             <HeroSection />
             <OperatingCadenceSection />
-            <ProofOfWorkSection />
+            <ExperienceSection />
             <GoldenSection />
         </>
     );

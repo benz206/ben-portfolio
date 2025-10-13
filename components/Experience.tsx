@@ -11,6 +11,8 @@ import Image from "next/image";
 import MidnightSun from "@/public/experience/midnightsun.png";
 import { useRef } from "react";
 import GrandCharter from "@/public/experience/grandcharter.jpeg";
+import Card from "@/components/Card";
+import type { AmbientVariant } from "@/components/AmbientGradient";
 
 type Job = {
     title: string;
@@ -55,8 +57,16 @@ type JobProps = {
 //     },
 // };
 
+const variants: AmbientVariant[] = [
+    "violet",
+    "blue",
+    "sunset",
+    "emerald",
+    "tangerine",
+];
+
 function Job({ job, index }: JobProps) {
-    const ref = useRef(null);
+    const ref = useRef<HTMLLIElement | null>(null);
     const isInView = useInView(ref, {
         once: true,
         margin: "-100px",
@@ -68,37 +78,45 @@ function Job({ job, index }: JobProps) {
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.8, ease: easeOut, delay: index * 0.15 }}
-            className="flex flex-col gap-4"
-            key={index}
+            className="list-none"
         >
-            <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center overflow-hidden border h-14 w-14 rounded-xl border-white/10 bg-white/5">
-                    <Image
-                        src={job.image.src}
-                        alt={job.image.alt}
-                        width={80}
-                        height={80}
-                        priority={job.image.priority}
-                        className="object-contain w-10 h-10"
-                    />
-                </div>
-                <div className="flex flex-col gap-3">
-                    <span className="text-[0.65rem] uppercase tracking-[0.35em] text-white/40">
-                        {job.date}
-                    </span>
-                    <div className="flex flex-col gap-1 text-white">
-                        <h3 className="text-lg font-semibold leading-tight">
-                            {job.title}
-                        </h3>
-                        <h4 className="text-xs uppercase tracking-[0.2em] text-white/55">
-                            {job.company}
-                        </h4>
+            <Card
+                variant="glass"
+                ambient
+                ambientVariant={variants[index % variants.length]}
+                ambientSeed={job.title}
+                ambientClassName="opacity-35"
+                className="flex flex-col gap-5 p-6"
+            >
+                <div className="flex items-start gap-5">
+                    <div className="flex items-center justify-center overflow-hidden border h-14 w-14 rounded-xl border-white/10 bg-white/10">
+                        <Image
+                            src={job.image.src}
+                            alt={job.image.alt}
+                            width={80}
+                            height={80}
+                            priority={job.image.priority}
+                            className="object-contain w-10 h-10"
+                        />
                     </div>
-                    <p className="text-sm leading-relaxed text-white/60">
-                        {job.description}
-                    </p>
+                    <div className="flex flex-col gap-3">
+                        <span className="text-[0.65rem] uppercase tracking-[0.35em] text-white/50">
+                            {job.date}
+                        </span>
+                        <div className="flex flex-col gap-1 text-white">
+                            <h3 className="text-lg font-semibold leading-tight">
+                                {job.title}
+                            </h3>
+                            <h4 className="text-xs uppercase tracking-[0.2em] text-white/60">
+                                {job.company}
+                            </h4>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <p className="text-sm leading-relaxed text-white/65">
+                    {job.description}
+                </p>
+            </Card>
         </motion.li>
     );
 }
