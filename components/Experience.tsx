@@ -1,5 +1,7 @@
 "use client";
-import { motion, useInView, easeOut } from "framer-motion";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { StaticImageData } from "next/image";
 import fuego from "@/public/experience/fuego.webp";
 import SAP from "@/public/experience/SAP.png";
@@ -9,16 +11,17 @@ import Averroes from "@/public/experience/averroes.png";
 import WAT from "@/public/experience/wat_ai_logo.jpeg";
 import Image from "next/image";
 import MidnightSun from "@/public/experience/midnightsun.png";
-import { useRef } from "react";
 import GrandCharter from "@/public/experience/grandcharter.jpeg";
 import Card from "@/components/Card";
 import type { AmbientVariant } from "@/components/AmbientGradient";
+import { FiX } from "react-icons/fi";
 
 type Job = {
     title: string;
     company: string;
+    location: string;
+    period: string;
     description: string;
-    date: string;
     image: {
         src: StaticImageData;
         alt: string;
@@ -26,201 +29,369 @@ type Job = {
         height?: number;
         priority?: boolean;
     };
+    ambientVariant?: AmbientVariant;
+    locationClass?: string;
+    periodClass?: string;
 };
 
 type JobProps = {
     job: Job;
-    index: number;
+    onSelect: () => void;
+    delay: number;
 };
 
-// const container = {
-//     hidden: { opacity: 1, scale: 0 },
-//     visible: {
-//         opacity: 1,
-//         scale: 1,
-//         transition: {
-//             delayChildren: 0.3,
-//             staggerChildren: 0.2,
-//         },
-//     },
-// };
-
-// const item = {
-//     hidden: { y: 20, opacity: 0 },
-//     visible: {
-//         y: 0,
-//         opacity: 1,
-//         transition: {
-//             duration: 0.8,
-//             ease: "easeOut",
-//         },
-//     },
-// };
-
-const variants: AmbientVariant[] = [
-    "violet",
-    "blue",
-    "sunset",
-    "emerald",
-    "tangerine",
-];
-
-function Job({ job, index }: JobProps) {
-    const ref = useRef<HTMLLIElement | null>(null);
-    const isInView = useInView(ref, {
-        once: true,
-        margin: "-100px",
-    });
+function Job({ job, onSelect, delay }: JobProps) {
+    const layoutId = `${job.company}-${job.period}`;
 
     return (
-        <motion.li
-            ref={ref}
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.8, ease: easeOut, delay: index * 0.15 }}
-            className="list-none"
-        >
+        <li className="list-none">
             <Card
                 variant="glass"
                 ambient
-                ambientVariant={variants[index % variants.length]}
+                ambientVariant={job.ambientVariant ?? "violet"}
                 ambientSeed={job.title}
-                ambientClassName="opacity-35"
-                className="flex flex-col gap-5 p-6"
+                ambientClassName="opacity-40"
+                className="flex items-start gap-5 p-6 transition-transform duration-200 cursor-pointer hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                motionProps={{
+                    layoutId,
+                    initial: { opacity: 0, y: 24 },
+                    whileInView: { opacity: 1, y: 0 },
+                    viewport: { once: true, amount: 0.35 },
+                    transition: { duration: 0.6, delay },
+                    whileHover: { y: -6 },
+                    whileTap: { y: -2 },
+                    role: "button",
+                    tabIndex: 0,
+                    onClick: onSelect,
+                    onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            onSelect();
+                        }
+                    },
+                }}
             >
-                <div className="flex items-start gap-5">
-                    <div className="flex items-center justify-center overflow-hidden border h-14 w-14 rounded-xl border-white/10 bg-white/10">
-                        <Image
-                            src={job.image.src}
-                            alt={job.image.alt}
-                            width={80}
-                            height={80}
-                            priority={job.image.priority}
-                            className="object-contain w-10 h-10"
-                        />
+                <motion.div
+                    layoutId={`${layoutId}-image`}
+                    className="flex items-center justify-center h-14 w-14"
+                    transition={{ type: "spring", stiffness: 260, damping: 30 }}
+                >
+                    <Image
+                        src={job.image.src}
+                        alt={job.image.alt}
+                        width={56}
+                        height={56}
+                        priority={job.image.priority}
+                        className="z-10 object-contain rounded-lg h-14 w-14"
+                    />
+                </motion.div>
+                <div className="flex flex-col flex-1 gap-3 my-auto">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <motion.h3
+                            layoutId={`${layoutId}-company`}
+                            className="text-base font-medium text-white"
+                            transition={{
+                                type: "spring",
+                                stiffness: 260,
+                                damping: 30,
+                            }}
+                        >
+                            {job.company}
+                        </motion.h3>
+                        <motion.span
+                            layoutId={`${layoutId}-location`}
+                            className={`text-xs uppercase tracking-[0.2em] ${
+                                job.locationClass ?? "text-white/55"
+                            }`}
+                            transition={{
+                                type: "spring",
+                                stiffness: 260,
+                                damping: 30,
+                            }}
+                        >
+                            {job.location}
+                        </motion.span>
                     </div>
-                    <div className="flex flex-col gap-3">
-                        <span className="text-[0.65rem] uppercase tracking-[0.35em] text-white/50">
-                            {job.date}
-                        </span>
-                        <div className="flex flex-col gap-1 text-white">
-                            <h3 className="text-lg font-semibold leading-tight">
-                                {job.title}
-                            </h3>
-                            <h4 className="text-xs uppercase tracking-[0.2em] text-white/60">
-                                {job.company}
-                            </h4>
-                        </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                        <motion.p
+                            layoutId={`${layoutId}-title`}
+                            className="font-extralight text-white/65"
+                            transition={{
+                                type: "spring",
+                                stiffness: 260,
+                                damping: 30,
+                            }}
+                        >
+                            {job.title}
+                        </motion.p>
+                        <motion.span
+                            layoutId={`${layoutId}-period`}
+                            className={`text-xs uppercase tracking-[0.1em] ${
+                                job.periodClass ?? "text-white/45"
+                            }`}
+                            transition={{
+                                type: "spring",
+                                stiffness: 260,
+                                damping: 30,
+                            }}
+                        >
+                            {job.period}
+                        </motion.span>
                     </div>
                 </div>
-                <p className="text-sm leading-relaxed text-white/65">
-                    {job.description}
-                </p>
             </Card>
-        </motion.li>
+        </li>
     );
 }
 
 const jobs: Job[] = [
     {
         title: "Software Engineering Intern #7",
-        company: "Grand Charter - New York, New York",
+        company: "Grand Charter",
+        location: "New York",
+        period: "Sep 2025 — Present",
         description:
             "• Building cutting-edge tools and solutions for legal teams.",
-        date: "Sep 2025",
         image: {
             src: GrandCharter,
             alt: "Grand Charter Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "violet",
     },
     {
         title: "Software Engineering Intern",
-        company: "Fuego.io - San Francisco, California",
+        company: "Fuego.io",
+        location: "San Francisco",
+        period: "Jan 2025 — Apr 2025",
         description:
             "• Optimized core AI generation features by developing custom architecture, accelerating response times to be 17.7x faster (15.4s → 0.87s avg), reducing token usage and slashing costs by similar margins",
-        date: "Jan 2025 - Apr 2025",
         image: {
             src: fuego,
             alt: "Fuego.io Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "tangerine",
+        locationClass: "text-[rgba(255,196,158,0.9)]",
+        periodClass: "text-[rgba(255,220,200,0.85)]",
     },
     {
         title: "Software Developer",
-        company: "WAT.ai - AI Sentiment Pulse - Waterloo, Ontario",
+        company: "WAT.ai - AI Sentiment Pulse",
+        location: "Waterloo",
+        period: "May 2025 — Present",
         description:
             "• Created a webscraper using Python to extract and score 100+ articles on Yahoo News for overall sentiments",
-        date: "May 2025 - Present",
         image: {
             src: WAT,
             alt: "WAT.ai Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "emerald",
     },
     {
         title: "Firmware Team Member",
-        company: "Midnight Sun - Waterloo, Ontario",
+        company: "Midnight Sun",
+        location: "Waterloo",
+        period: "Sep 2024 — Present",
         description:
             "• Developing ping testing functions in Python and C to verify connectivity across CAN networks",
-        date: "Sep 2024 - Present",
         image: {
             src: MidnightSun,
             alt: "Midnight Sun Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "sunset",
     },
     {
         title: "Prototype Engineering Intern",
-        company: "Averroes Technologies - Toronto, Ontario",
+        company: "Averroes Technologies",
+        location: "Toronto",
+        period: "Jul 2024 — Aug 2024",
         description:
             "• Developed 12 firmware prototypes in C++ for iterative product validation",
-        date: "Jul 2024 - Aug 2024",
         image: {
             src: Averroes,
             alt: "Averroes Technologies Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "violet",
     },
     {
         title: "Software Developer Co-op Student",
-        company: "SAP - Toronto, Ontario",
+        company: "SAP",
+        location: "Toronto",
+        period: "Feb 2024 — Jul 2024",
         description:
             "• Created a worker to handle and sanitize GPT-4o requests using TypeScript reducing request errors by 23%",
-        date: "Feb 2024 - Jul 2024",
         image: {
             src: SAP,
             alt: "SAP Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "blue",
+        locationClass: "text-[rgba(170,210,255,0.9)]",
+        periodClass: "text-[rgba(195,230,255,0.85)]",
     },
     {
         title: "FullStack Developer Lead",
-        company: "EurekaHacks 2024 - Oakville, Ontario",
+        company: "EurekaHacks 2024",
+        location: "Oakville",
+        period: "Nov 2023 — May 2024",
         description:
             "• Improved page load times by 160%, and reduced LCP, leading to 3,800+ impressions and 1,100+ clicks",
-        date: "Nov 2023 - May 2024",
         image: {
             src: Eureka,
             alt: "Eureka Hacks Logo",
-            width: 150,
-            height: 150,
         },
+        ambientVariant: "sunset",
     },
 ];
 
 export default function Experience() {
+    const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+
+    const closeModal = useCallback(() => {
+        setSelectedJob(null);
+    }, []);
+
+    useEffect(() => {
+        if (!selectedJob) {
+            return;
+        }
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [closeModal, selectedJob]);
+
+    const cardBaseDelay = 0.5;
+    const cardStep = 0.14;
+
     return (
-        <ol className="grid gap-10 list-none md:grid-cols-2">
-            {jobs.map((job, index) => (
-                <Job key={index} job={job} index={index} />
-            ))}
-        </ol>
+        <LayoutGroup>
+            <ol className="grid gap-4 list-none md:grid-cols-2 md:gap-4">
+                {jobs.map((job, index) => (
+                    <Job
+                        key={job.company + job.period}
+                        job={job}
+                        delay={cardBaseDelay + index * cardStep}
+                        onSelect={() => setSelectedJob(job)}
+                    />
+                ))}
+            </ol>
+            <AnimatePresence>
+                {selectedJob && (
+                    <motion.div
+                        className="fixed inset-0 z-40 flex items-center justify-center px-4 py-10 bg-black/60 backdrop-blur"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={closeModal}
+                    >
+                        <motion.div
+                            className="relative w-full max-w-xl"
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 40 }}
+                            transition={{ duration: 0.35, ease: "easeOut" }}
+                            onClick={(event) => event.stopPropagation()}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="experience-modal-heading"
+                        >
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientVariant={
+                                    selectedJob.ambientVariant ?? "violet"
+                                }
+                                ambientSeed={selectedJob.title}
+                                ambientClassName="opacity-60"
+                                className="flex flex-col gap-6 p-8 md:p-10 rounded-3xl"
+                                motionProps={{
+                                    layoutId: `${selectedJob.company}-${selectedJob.period}`,
+                                    transition: {
+                                        type: "spring",
+                                        stiffness: 260,
+                                        damping: 28,
+                                    },
+                                }}
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-start gap-4">
+                                        <motion.div
+                                            layoutId={`${selectedJob.company}-${selectedJob.period}-image`}
+                                            className="flex items-center justify-center w-16 h-16"
+                                        >
+                                            <Image
+                                                src={selectedJob.image.src}
+                                                alt={selectedJob.image.alt}
+                                                width={64}
+                                                height={64}
+                                                className="z-10 object-contain w-16 h-16 rounded-xl"
+                                            />
+                                        </motion.div>
+                                        <div className="flex flex-col gap-3 text-white">
+                                            <motion.h3
+                                                id="experience-modal-heading"
+                                                layoutId={`${selectedJob.company}-${selectedJob.period}-company`}
+                                                className="text-xl font-semibold"
+                                            >
+                                                {selectedJob.company}
+                                            </motion.h3>
+                                            <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-white/50">
+                                                <motion.span
+                                                    layoutId={`${selectedJob.company}-${selectedJob.period}-location`}
+                                                    className={
+                                                        selectedJob.locationClass ??
+                                                        "text-white/55"
+                                                    }
+                                                >
+                                                    {selectedJob.location}
+                                                </motion.span>
+                                                <span className="hidden sm:inline text-white/40">
+                                                    •
+                                                </span>
+                                                <motion.span
+                                                    layoutId={`${selectedJob.company}-${selectedJob.period}-period`}
+                                                    className={
+                                                        selectedJob.periodClass ??
+                                                        "text-white/45"
+                                                    }
+                                                >
+                                                    {selectedJob.period}
+                                                </motion.span>
+                                            </div>
+                                            <motion.p
+                                                layoutId={`${selectedJob.company}-${selectedJob.period}-title`}
+                                                className="text-sm font-extralight text-white/65"
+                                            >
+                                                {selectedJob.title}
+                                            </motion.p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        aria-label="Close experience details"
+                                        className="flex items-center justify-center transition border rounded-full w-9 h-9 border-white/20 text-white/60 hover:text-white hover:border-white/40"
+                                    >
+                                        <FiX className="w-4 h-4" />
+                                    </button>
+                                </div>
+                                <motion.p
+                                    initial={{ opacity: 0, y: 12 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: 0.1 }}
+                                    className="text-sm leading-relaxed text-white/70"
+                                >
+                                    {selectedJob.description}
+                                </motion.p>
+                            </Card>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </LayoutGroup>
     );
 }

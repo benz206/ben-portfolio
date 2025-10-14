@@ -3,85 +3,113 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { IconType } from "react-icons";
-import { FiActivity, FiCpu, FiHeadphones } from "react-icons/fi";
+import { FiAward, FiCpu, FiTrendingUp } from "react-icons/fi";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import Card from "@/components/Card";
 import CompEng from "@/public/home/compeng.jpg";
 
-type Highlight = {
+type Achievement = {
     title: string;
     tag: string;
     description: string;
     icon: IconType;
     ambientVariant: AmbientVariant;
-    ambientSeed: string;
     tagClass?: string;
 };
 
-const personalHighlights: Highlight[] = [
+const achievements: Achievement[] = [
     {
-        title: "Projects",
-        tag: "Projects",
-        description:
-            "I design and build hardware-software hybrids that bridge embedded systems with thoughtful interfaces.",
-        icon: FiCpu,
-        ambientVariant: "indigo",
-        ambientSeed: "projects",
-    },
-    {
-        title: "Music",
-        tag: "Music",
-        description:
-            "I trade playlists, learn new pieces, and keep a steady rotation of instruments nearby.",
-        icon: FiHeadphones,
+        title: "Building Tooling",
+        tag: "Grand Charter",
+        description: "Building complex tooling for the legal world.",
+        icon: FiAward,
         ambientVariant: "blue",
-        ambientSeed: "soundtrack",
-        tagClass: "text-[rgba(180,210,255,0.85)]",
+        tagClass: "text-[rgba(170,210,255,0.9)]",
     },
     {
-        title: "Sports",
-        tag: "Sports",
+        title: "17× faster AI pipelines",
+        tag: "Fuego.io",
         description:
-            "Pickup games, trail runs, and a weekly training routine keep me energized outside the lab.",
-        icon: FiActivity,
-        ambientVariant: "crimson",
-        ambientSeed: "sports",
+            "Optimized architecture to cut response times from 15.4s to 0.87s.",
+        icon: FiCpu,
+        ambientVariant: "tangerine",
+        tagClass: "text-[rgba(255,220,200,0.85)]",
+    },
+    {
+        title: "Built EurekaHacks 2024",
+        tag: "EurekaHacks",
+        description:
+            "Built a cool hackathon website gaining nearly 3,000 impressions.",
+        icon: FiTrendingUp,
+        ambientVariant: "sunset",
+        tagClass: "text-[rgba(255,210,180,0.85)]",
     },
 ];
 
-export default function OperatingCadenceSection() {
+export default function AboutMe() {
     const cardBaseDelay = 0.4;
     const cardStep = 0.12;
 
     return (
         <section
             id="home-next-section"
-            className="flex relative justify-center items-center py-20 min-h-screen text-white home-section bg-noir-gradient-cool"
+            className="relative flex items-center justify-center min-h-screen py-20 text-white home-section bg-noir-gradient-cool"
         >
             <div className="absolute inset-0 opacity-80 bg-noir-radial-cool" />
-            <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 lg:flex-row lg:items-center">
+            <div className="relative grid w-11/12 max-w-[1080px] gap-16 text-white lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.05fr)] lg:items-start">
                 <motion.div
-                    className="flex flex-col flex-1 gap-4"
+                    className="space-y-6"
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ duration: 0.6, delay: 0.15 }}
+                >
+                    <Card
+                        variant="glass"
+                        ambient
+                        ambientVariant="magenta"
+                        ambientClassName="opacity-40"
+                        className="flex flex-col gap-6 p-8"
+                    >
+                        <div className="space-y-4">
+                            <h2 className="text-3xl font-semibold">About Me</h2>
+                            <p className="text-sm font-light text-white/60">
+                                I&apos;m a computer engineering student at the
+                                University of Waterloo, who builds anything and
+                                everything I find interesting.
+                            </p>
+                        </div>
+                        <Image
+                            className="z-10 object-cover w-full h-64 rounded-2xl"
+                            src={CompEng}
+                            alt="Workbench setup with a custom macroboard"
+                            width={489}
+                            height={367}
+                            loading="lazy"
+                        />
+                    </Card>
+                </motion.div>
+                <motion.div
+                    className="flex flex-col gap-4"
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.6, delay: 0.25 }}
                 >
                     <span className="text-xs uppercase tracking-[0.2em] text-white/40">
-                        My interests include
+                        Achievements
                     </span>
-                    {personalHighlights.map((highlight, index) => {
-                        const Icon = highlight.icon;
+                    {achievements.map((achievement, index) => {
+                        const Icon = achievement.icon;
 
                         return (
                             <Card
-                                key={highlight.title}
+                                key={achievement.title}
                                 variant="glass"
                                 ambient
-                                ambientVariant={highlight.ambientVariant}
-                                ambientSeed={highlight.ambientSeed}
-                                ambientClassName="opacity-80"
-                                className="flex gap-5 items-start p-6"
+                                ambientVariant={achievement.ambientVariant}
+                                ambientClassName="opacity-40"
+                                className="flex items-start gap-5 p-6"
                                 motionProps={{
                                     initial: { opacity: 0, y: 24 },
                                     whileInView: { opacity: 1, y: 0 },
@@ -92,62 +120,30 @@ export default function OperatingCadenceSection() {
                                     },
                                 }}
                             >
-                                <div className="flex justify-center items-center w-12 h-12 rounded-xl bg-white/10 text-white/70">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 text-white/70">
                                     <Icon className="w-6 h-6" />
                                 </div>
                                 <div className="flex flex-col flex-1 gap-2">
-                                    <div className="flex flex-wrap gap-2 justify-between items-center">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
                                         <h3 className="text-base font-medium text-white">
-                                            {highlight.title}
+                                            {achievement.title}
                                         </h3>
                                         <span
                                             className={`text-xs uppercase tracking-[0.2em] ${
-                                                highlight.tagClass ?? "text-white/45"
+                                                achievement.tagClass ??
+                                                "text-white/45"
                                             }`}
                                         >
-                                            {highlight.tag}
+                                            {achievement.tag}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-white/65">
-                                        {highlight.description}
+                                    <p className="text-sm text-white/65 font-extralight">
+                                        {achievement.description}
                                     </p>
                                 </div>
                             </Card>
                         );
                     })}
-                </motion.div>
-                <motion.div
-                    className="flex-1 space-y-6"
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ duration: 0.6, delay: 0.15 }}
-                >
-                    <Card
-                        variant="glass"
-                        ambient
-                        ambientVariant="sunset"
-                        ambientSeed="about-me"
-                        ambientClassName="opacity-40"
-                        className="flex flex-col gap-6 p-8"
-                    >
-                        <div className="space-y-4">
-                            <h2 className="text-3xl font-semibold">
-                                About Me
-                            </h2>
-                            <p className="text-sm font-light text-white/60">
-                                I&apos;m a computer engineering student at the University of Waterloo, interested in the world of hardware and software.
-                            </p>
-                        </div>
-                        <Image
-                            className="object-cover w-full h-64 rounded-2xl"
-                            src={CompEng}
-                            alt="Workbench setup with a custom macroboard"
-                            width={489}
-                            height={367}
-                            loading="lazy"
-                        />
-                    </Card>
                 </motion.div>
             </div>
         </section>
