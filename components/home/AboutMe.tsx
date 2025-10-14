@@ -97,7 +97,7 @@ export default function AboutMe() {
                     transition={{ duration: 0.6, delay: 0.25 }}
                 >
                     <span className="text-xs uppercase tracking-[0.2em] text-white/40">
-                        Achievements
+                        Some things I&apos;ve done
                     </span>
                     {achievements.map((achievement, index) => {
                         const Icon = achievement.icon;

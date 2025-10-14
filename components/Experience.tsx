@@ -38,13 +38,22 @@ type JobProps = {
     job: Job;
     onSelect: () => void;
     delay: number;
+    isActive: boolean;
 };
 
-function Job({ job, onSelect, delay }: JobProps) {
+function Job({ job, onSelect, delay, isActive }: JobProps) {
     const layoutId = `${job.company}-${job.period}`;
 
     return (
-        <li className="list-none">
+        <motion.li
+            className="list-none"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ duration: 0.6, delay }}
+            layout
+            layoutId={`${layoutId}-container`}
+        >
             <Card
                 variant="glass"
                 ambient
@@ -54,14 +63,13 @@ function Job({ job, onSelect, delay }: JobProps) {
                 className="flex items-start gap-5 p-6 transition-transform duration-200 cursor-pointer hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                 motionProps={{
                     layoutId,
-                    initial: { opacity: 0, y: 24 },
-                    whileInView: { opacity: 1, y: 0 },
-                    viewport: { once: true, amount: 0.35 },
-                    transition: { duration: 0.6, delay },
+                    layout: true,
+                    transition: { duration: 0.45 },
                     whileHover: { y: -6 },
                     whileTap: { y: -2 },
                     role: "button",
-                    tabIndex: 0,
+                    tabIndex: isActive ? -1 : 0,
+                    "aria-hidden": isActive,
                     onClick: onSelect,
                     onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => {
                         if (event.key === "Enter" || event.key === " ") {
@@ -140,7 +148,7 @@ function Job({ job, onSelect, delay }: JobProps) {
                     </div>
                 </div>
             </Card>
-        </li>
+        </motion.li>
     );
 }
 
@@ -275,6 +283,7 @@ export default function Experience() {
                         key={job.company + job.period}
                         job={job}
                         delay={cardBaseDelay + index * cardStep}
+                        isActive={selectedJob?.company === job.company && selectedJob?.period === job.period}
                         onSelect={() => setSelectedJob(job)}
                     />
                 ))}
@@ -319,10 +328,10 @@ export default function Experience() {
                             >
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start gap-4">
-                                        <motion.div
-                                            layoutId={`${selectedJob.company}-${selectedJob.period}-image`}
-                                            className="flex items-center justify-center w-16 h-16"
-                                        >
+                        <motion.div
+                            layoutId={`${selectedJob.company}-${selectedJob.period}-container`}
+                            className="flex items-center justify-center w-16 h-16"
+                        >
                                             <Image
                                                 src={selectedJob.image.src}
                                                 alt={selectedJob.image.alt}
