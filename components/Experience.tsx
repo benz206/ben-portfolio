@@ -1,7 +1,7 @@
 "use client";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { StaticImageData } from "next/image";
 import fuego from "@/public/experience/fuego.webp";
 import SAP from "@/public/experience/SAP.png";
@@ -15,6 +15,7 @@ import GrandCharter from "@/public/experience/grandcharter.jpeg";
 import Card from "@/components/Card";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import { FiX } from "react-icons/fi";
+import { cn } from "@/utils/cn";
 
 type Job = {
     title: string;
@@ -42,17 +43,12 @@ type JobProps = {
 };
 
 function Job({ job, onSelect, delay, isActive }: JobProps) {
-    const layoutId = `${job.company}-${job.period}`;
-
     return (
         <motion.li
             className="list-none"
             initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 0.6, delay }}
-            layout
-            layoutId={`${layoutId}-container`}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay, ease: "easeOut" }}
         >
             <Card
                 variant="glass"
@@ -60,93 +56,55 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                 ambientVariant={job.ambientVariant ?? "violet"}
                 ambientSeed={job.title}
                 ambientClassName="opacity-40"
-                className="flex items-start gap-5 p-6 transition-transform duration-200 cursor-pointer hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                motionProps={{
-                    layoutId,
-                    layout: true,
-                    transition: { duration: 0.45 },
-                    whileHover: { y: -6 },
-                    whileTap: { y: -2 },
-                    role: "button",
-                    tabIndex: isActive ? -1 : 0,
-                    "aria-hidden": isActive,
-                    onClick: onSelect,
-                    onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                            event.preventDefault();
-                            onSelect();
-                        }
-                    },
-                }}
+                className={cn(
+                    "transition-transform duration-300 border border-white/10 backdrop-blur focus-within:ring-2 focus-within:ring-white/60",
+                    !isActive && "hover:-translate-y-1",
+                    isActive ? "ring-1 ring-white/20" : "cursor-pointer"
+                )}
             >
-                <motion.div
-                    layoutId={`${layoutId}-image`}
-                    className="flex items-center justify-center h-14 w-14"
-                    transition={{ type: "spring", stiffness: 260, damping: 30 }}
+                <button
+                    type="button"
+                    onClick={onSelect}
+                    disabled={isActive}
+                    className="flex items-start w-full gap-5 p-6 text-left focus-visible:outline-none disabled:cursor-default"
                 >
-                    <Image
-                        src={job.image.src}
-                        alt={job.image.alt}
-                        width={56}
-                        height={56}
-                        priority={job.image.priority}
-                        className="z-10 object-contain rounded-lg h-14 w-14"
-                    />
-                </motion.div>
-                <div className="flex flex-col flex-1 gap-3 my-auto">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                        <motion.h3
-                            layoutId={`${layoutId}-company`}
-                            className="text-base font-medium text-white"
-                            transition={{
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 30,
-                            }}
-                        >
-                            {job.company}
-                        </motion.h3>
-                        <motion.span
-                            layoutId={`${layoutId}-location`}
-                            className={`text-xs uppercase tracking-[0.2em] ${
-                                job.locationClass ?? "text-white/55"
-                            }`}
-                            transition={{
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 30,
-                            }}
-                        >
-                            {job.location}
-                        </motion.span>
+                    <div className="flex items-center justify-center h-14 w-14">
+                        <Image
+                            src={job.image.src}
+                            alt={job.image.alt}
+                            width={56}
+                            height={56}
+                            priority={job.image.priority}
+                            className="z-10 object-contain rounded-lg h-14 w-14"
+                        />
                     </div>
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-                        <motion.p
-                            layoutId={`${layoutId}-title`}
-                            className="font-extralight text-white/65"
-                            transition={{
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 30,
-                            }}
-                        >
-                            {job.title}
-                        </motion.p>
-                        <motion.span
-                            layoutId={`${layoutId}-period`}
-                            className={`text-xs uppercase tracking-[0.1em] ${
-                                job.periodClass ?? "text-white/45"
-                            }`}
-                            transition={{
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 30,
-                            }}
-                        >
-                            {job.period}
-                        </motion.span>
+                    <div className="flex flex-col flex-1 gap-3 my-auto">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            <h3 className="text-base font-medium text-white">
+                                {job.company}
+                            </h3>
+                            <span
+                                className={`text-xs uppercase tracking-[0.2em] ${
+                                    job.locationClass ?? "text-white/55"
+                                }`}
+                            >
+                                {job.location}
+                            </span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                            <p className="font-extralight text-white/65">
+                                {job.title}
+                            </p>
+                            <span
+                                className={`text-xs uppercase tracking-[0.1em] ${
+                                    job.periodClass ?? "text-white/45"
+                                }`}
+                            >
+                                {job.period}
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </button>
             </Card>
         </motion.li>
     );
@@ -276,14 +234,17 @@ export default function Experience() {
     const cardStep = 0.14;
 
     return (
-        <LayoutGroup>
+        <>
             <ol className="grid gap-4 list-none md:grid-cols-2 md:gap-4">
                 {jobs.map((job, index) => (
                     <Job
                         key={job.company + job.period}
                         job={job}
                         delay={cardBaseDelay + index * cardStep}
-                        isActive={selectedJob?.company === job.company && selectedJob?.period === job.period}
+                        isActive={
+                            selectedJob?.company === job.company &&
+                            selectedJob?.period === job.period
+                        }
                         onSelect={() => setSelectedJob(job)}
                     />
                 ))}
@@ -328,10 +289,10 @@ export default function Experience() {
                             >
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start gap-4">
-                        <motion.div
-                            layoutId={`${selectedJob.company}-${selectedJob.period}-container`}
-                            className="flex items-center justify-center w-16 h-16"
-                        >
+                                        <motion.div
+                                            layoutId={`${selectedJob.company}-${selectedJob.period}-container`}
+                                            className="flex items-center justify-center w-16 h-16"
+                                        >
                                             <Image
                                                 src={selectedJob.image.src}
                                                 alt={selectedJob.image.alt}
@@ -401,6 +362,6 @@ export default function Experience() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </LayoutGroup>
+        </>
     );
 }
