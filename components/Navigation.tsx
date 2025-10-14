@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import ToggleDLMode from "./toggleMode";
 
 const motionAnim = {
     whileHover: { scale: 1.1 },
@@ -74,10 +73,8 @@ export default function Navigation() {
                                 Résumé
                             </Link>
                         </motion.div>
-                        <ToggleDLMode />
                     </div>
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
-                        <ToggleDLMode />
                         <button
                             className="flex flex-col items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
                             onClick={() => setIsOpen(!isOpen)}

@@ -191,19 +191,19 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     }}
                 >
                     <motion.div
-                        className="relative flex flex-col items-center gap-6 px-6"
+                        className="relative flex flex-col items-center w-full max-w-5xl gap-6 px-4 sm:px-8"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.7 }}
                     >
-                        <motion.div className="absolute top-0 right-0 z-20 flex items-center gap-3">
+                        <div className="flex items-center justify-between w-full gap-3">
                             {progressLabel && (
-                                <span className="px-4 py-2 text-[10px] font-medium tracking-[0.6em] text-white/70 uppercase bg-white/5 rounded-full">
+                                <span className="rounded-full bg-white/5 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.6em] text-white/70">
                                     {progressLabel}
                                 </span>
                             )}
                             <motion.button
-                                className="flex items-center gap-2 px-4 py-2 text-sm text-white uppercase transition bg-white/10 rounded-full tracking-[0.3em] hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     handleClose();
@@ -213,104 +213,109 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                             >
                                 Close
                             </motion.button>
-                        </motion.div>
-                        <motion.button
-                            className="absolute left-0 z-10 flex items-center gap-2 px-4 py-2 text-white transition-transform transform -translate-x-full rounded-full bg-white/10 backdrop-blur-sm hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handlePrevious();
-                            }}
-                            aria-label="View previous image"
-                            whileTap={{ scale: 0.92 }}
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <span className="text-xs uppercase tracking-[0.2em] hidden lg:block">
-                                Previous
-                            </span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="w-6 h-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                        </div>
+                        <div className="flex items-center justify-center w-full gap-3">
+                            <motion.button
+                                className="flex items-center gap-2 px-3 py-2 text-white transition rounded-full shrink-0 bg-white/10 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePrevious();
+                                }}
+                                aria-label="View previous image"
+                                whileTap={{ scale: 0.92 }}
+                                whileHover={{ scale: 1.05 }}
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M15 19l-7-7 7-7"
-                                />
-                            </svg>
-                        </motion.button>
-                        <motion.div
-                            key={selectedImage.public_id}
-                            className="relative flex items-center justify-center"
-                            initial={{
-                                x: direction > 0 ? 100 : -100,
-                                opacity: 0,
-                            }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: direction > 0 ? -100 : 100, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <CldImage
-                                className="rounded-lg max-w-[75vw] max-h-[75vh] object-contain"
-                                width={selectedImage.width}
-                                height={selectedImage.height}
-                                src={selectedImage.public_id}
-                                alt={selectedImage.public_id}
-                                placeholder="blur"
-                                blurDataURL={
-                                    selectedImage
-                                        ? placeholderDataUrls[
-                                              selectedImage.public_id
-                                          ]
-                                        : undefined
-                                }
-                                crop="fill"
-                                quality="auto"
-                                dpr="auto"
-                                format="webp"
-                                onLoad={() => setIsImageLoaded(true)}
-                                onError={() => setIsImageLoaded(true)}
-                            />
-                            {!isImageLoaded && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                                    <div className="w-16 h-16 border-2 rounded-full border-white/30 border-t-white animate-spin" />
-                                    <p className="text-xs tracking-[0.4em] uppercase text-white/60">
-                                        Rendering image
-                                    </p>
-                                </div>
-                            )}
-                        </motion.div>
-                        <motion.button
-                            className="absolute right-0 z-10 flex items-center gap-2 px-4 py-2 text-white transition-transform transform translate-x-full rounded-full bg-white/10 backdrop-blur-sm hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleNext();
-                            }}
-                            aria-label="View next image"
-                            whileTap={{ scale: 0.92 }}
-                            whileHover={{ scale: 1.05 }}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="w-6 h-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M15 19l-7-7 7-7"
+                                    />
+                                </svg>
+                                <span className="hidden text-xs uppercase tracking-[0.2em] sm:inline">
+                                    Previous
+                                </span>
+                            </motion.button>
+                            <motion.div
+                                key={selectedImage.public_id}
+                                className="relative flex max-h-[75vh] w-full justify-center"
+                                initial={{
+                                    x: direction > 0 ? 100 : -100,
+                                    opacity: 0,
+                                }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{
+                                    x: direction > 0 ? -100 : 100,
+                                    opacity: 0,
+                                }}
+                                transition={{ duration: 0.3 }}
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 5l7 7-7 7"
+                                <CldImage
+                                    className="max-h-[75vh] w-auto max-w-full rounded-lg object-contain"
+                                    width={selectedImage.width}
+                                    height={selectedImage.height}
+                                    src={selectedImage.public_id}
+                                    alt={selectedImage.public_id}
+                                    placeholder="blur"
+                                    blurDataURL={
+                                        selectedImage
+                                            ? placeholderDataUrls[
+                                                  selectedImage.public_id
+                                              ]
+                                            : undefined
+                                    }
+                                    crop="fill"
+                                    quality="auto"
+                                    dpr="auto"
+                                    format="webp"
+                                    onLoad={() => setIsImageLoaded(true)}
+                                    onError={() => setIsImageLoaded(true)}
                                 />
-                            </svg>
-                            <span className="text-xs uppercase tracking-[0.2em] hidden lg:block">
-                                Next
-                            </span>
-                        </motion.button>
+                                {!isImageLoaded && (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                                        <div className="w-16 h-16 border-2 rounded-full animate-spin border-white/30 border-t-white" />
+                                        <p className="text-xs uppercase tracking-[0.4em] text-white/60">
+                                            Rendering image
+                                        </p>
+                                    </div>
+                                )}
+                            </motion.div>
+                            <motion.button
+                                className="flex items-center gap-2 px-3 py-2 text-white transition rounded-full shrink-0 bg-white/10 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNext();
+                                }}
+                                aria-label="View next image"
+                                whileTap={{ scale: 0.92 }}
+                                whileHover={{ scale: 1.05 }}
+                            >
+                                <span className="hidden text-xs uppercase tracking-[0.2em] sm:inline">
+                                    Next
+                                </span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 5l7 7-7 7"
+                                    />
+                                </svg>
+                            </motion.button>
+                        </div>
                     </motion.div>
                 </motion.div>
             )}

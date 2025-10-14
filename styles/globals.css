@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply transition-all duration-150 ease-linear bg-[#f5f6f8] text-[#0f1115] dark:bg-[#050506] dark:text-[#f5f6f7];
+        @apply transition-all duration-150 ease-linear bg-[#050506] text-[#f5f6f7];
     }
 
     ol,
@@ -28,11 +28,11 @@
     }
 
     .card-base {
-        @apply bg-[#f7f8fb] text-[#0f1115] border border-[#e1e7ef] shadow-[0_18px_70px_-50px_rgba(8,10,14,0.55)] dark:bg-[#060708] dark:text-[#f5f6f7] dark:border-[#101215] backdrop-blur;
+        @apply bg-[#060708] text-[#f5f6f7] border border-[#101215] shadow-[0_18px_70px_-50px_rgba(8,10,14,0.55)] backdrop-blur;
     }
 
     .card-glass {
-        @apply bg-white/10 text-[#f5f6f7] border border-white/10 shadow-[0_25px_70px_-50px_rgba(0,0,0,0.65)] backdrop-blur-2xl dark:bg-black/20 dark:border-white/10;
+        @apply bg-black/20 text-[#f5f6f7] border border-white/10 shadow-[0_25px_70px_-50px_rgba(0,0,0,0.65)] backdrop-blur-2xl;
     }
 
     .card-sm {

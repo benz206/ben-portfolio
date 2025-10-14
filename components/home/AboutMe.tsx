@@ -4,8 +4,10 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { IconType } from "react-icons";
 import { FiAward, FiCpu, FiTrendingUp } from "react-icons/fi";
-import type { AmbientVariant } from "@/components/AmbientGradient";
-import Card from "@/components/Card";
+import {
+    AmbientGradient,
+    type AmbientVariant,
+} from "@/components/AmbientGradient";
 import CompEng from "@/public/home/compeng.jpg";
 
 type Achievement = {
@@ -64,14 +66,8 @@ export default function AboutMe() {
                     viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                    <Card
-                        variant="glass"
-                        ambient
-                        ambientVariant="magenta"
-                        ambientClassName="opacity-40"
-                        className="flex flex-col gap-6 p-8"
-                    >
-                        <div className="space-y-4">
+                    <div className="relative isolate flex flex-col gap-6 p-8 rounded-3xl card-glass">
+                        <div className="relative z-10 space-y-4">
                             <h2 className="text-3xl font-semibold">About Me</h2>
                             <p className="text-sm font-light text-white/60">
                                 I&apos;m a computer engineering student at the
@@ -80,14 +76,19 @@ export default function AboutMe() {
                             </p>
                         </div>
                         <Image
-                            className="z-10 object-cover w-full h-64 rounded-2xl"
+                            className="relative z-10 object-cover w-full h-64 rounded-2xl"
                             src={CompEng}
                             alt="Workbench setup with a custom macroboard"
                             width={489}
                             height={367}
                             loading="lazy"
                         />
-                    </Card>
+                        <AmbientGradient
+                            variant="magenta"
+                            seed="about-me"
+                            className="opacity-40"
+                        />
+                    </div>
                 </motion.div>
                 <motion.div
                     className="flex flex-col gap-4"
@@ -103,27 +104,21 @@ export default function AboutMe() {
                         const Icon = achievement.icon;
 
                         return (
-                            <Card
+                            <motion.div
                                 key={achievement.title}
-                                variant="glass"
-                                ambient
-                                ambientVariant={achievement.ambientVariant}
-                                ambientClassName="opacity-40"
-                                className="flex items-start gap-5 p-6"
-                                motionProps={{
-                                    initial: { opacity: 0, y: 24 },
-                                    whileInView: { opacity: 1, y: 0 },
-                                    viewport: { once: true, amount: 0.4 },
-                                    transition: {
-                                        duration: 0.6,
-                                        delay: cardBaseDelay + index * cardStep,
-                                    },
+                                className="relative isolate flex items-start gap-5 p-6 rounded-3xl card-glass"
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.4 }}
+                                transition={{
+                                    duration: 0.6,
+                                    delay: cardBaseDelay + index * cardStep,
                                 }}
                             >
-                                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 text-white/70">
+                                <div className="relative z-10 flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 text-white/70">
                                     <Icon className="w-6 h-6" />
                                 </div>
-                                <div className="flex flex-col flex-1 gap-2">
+                                <div className="relative z-10 flex flex-col flex-1 gap-2">
                                     <div className="flex flex-wrap items-center justify-between gap-2">
                                         <h3 className="text-base font-medium text-white">
                                             {achievement.title}
@@ -137,11 +132,16 @@ export default function AboutMe() {
                                             {achievement.tag}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-white/65 font-extralight">
+                                    <p className="text-sm font-extralight text-white/65">
                                         {achievement.description}
                                     </p>
                                 </div>
-                            </Card>
+                                <AmbientGradient
+                                    variant={achievement.ambientVariant}
+                                    seed={achievement.title}
+                                    className="opacity-40"
+                                />
+                            </motion.div>
                         );
                     })}
                 </motion.div>

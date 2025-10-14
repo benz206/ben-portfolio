@@ -15,7 +15,7 @@ export default function MdxLayout({
     return (
         <>
             <div className="relative top-0 flex justify-center w-full h-24 lg:h-32 bg-rainbow-gradient animate-breathing-gradient" />
-            <div className="flex mx-auto w-[400px] md:w-[700px] lg:w-[1000px] xl:[1200px] mt-12 mb-16 lg:mb-10 lg:mt-8 p-2 lg:p-4 scroll-m-6 dark:text-[#ececec]">
+            <div className="flex mx-auto w-[400px] md:w-[700px] lg:w-[1000px] xl:[1200px] mt-12 mb-16 lg:mb-10 lg:mt-8 p-2 lg:p-4 scroll-m-6 text-[#ececec]">
                 <div className="flex flex-col w-full min-h-screen px-6">
                     <h1 className="py-2 text-3xl font-black lg:text-5xl">
                         {metadata.title}
