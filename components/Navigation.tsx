@@ -44,6 +44,7 @@ export default function Navigation() {
 
         if (container instanceof HTMLElement) {
             container.addEventListener("scroll", updateScroll, {
+                
                 passive: true,
             });
         }
