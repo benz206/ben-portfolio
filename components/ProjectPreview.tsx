@@ -1,11 +1,10 @@
-import { useMemo } from "react";
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
 import { motion, easeInOut, useMotionValue, useTransform } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa6";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
-import TechIcon from "./TechIcon";
+import LanguageBadge from "@/components/LanguageBadge";
 import Card from "@/components/Card";
 
 const colorVariants: Record<
@@ -109,18 +108,6 @@ const colorVariants: Record<
     },
 };
 
-const container = {
-    hidden: { opacity: 1, scale: 0 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            delayChildren: 0.3,
-            staggerChildren: 0.2,
-        },
-    },
-};
-
 const boxItem = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -138,17 +125,14 @@ export default function ProjectPreview({
     title,
     sub,
     description,
-    icons,
+    languages,
     color,
     projectLink,
     slug,
-    categories,
-    phase,
 }: ProjectPreviewProps) {
     const colorVariant = colorVariants[color] || colorVariants.default;
     const hoverY = useMotionValue(0);
     const hoverRotate = useTransform(hoverY, [-10, 10], [-2, 2]);
-    const phaseLabel = useMemo(() => phase?.toUpperCase(), [phase]);
     return (
         <motion.li className="list-none" variants={boxItem}>
             <motion.div
@@ -178,11 +162,6 @@ export default function ProjectPreview({
                             loading={image.priority ? "eager" : "lazy"}
                             priority={image.priority}
                         />
-                        {phaseLabel && (
-                            <span className="absolute left-4 top-4 text-[10px] uppercase tracking-[0.7em] text-white/70">
-                                {phaseLabel}
-                            </span>
-                        )}
                     </div>
                     <h2 className="px-2 mt-6 text-lg font-semibold text-white lg:text-xl">
                         {title}
@@ -195,35 +174,14 @@ export default function ProjectPreview({
                     <p className="px-2 pt-3 text-sm text-white/60">
                         {description}
                     </p>
-                    <div className="flex flex-wrap items-center gap-2 px-2 pt-4 text-[10px] uppercase tracking-[0.4em] text-white/40">
-                        {categories.map((tag) => (
-                            <span
-                                key={tag}
-                                className="rounded border border-white/10 bg-white/5 px-3 py-1 text-[10px] tracking-[0.4em]"
-                            >
-                                {tag}
-                            </span>
+                    <div className="flex flex-wrap items-center gap-2 px-2 pt-4">
+                        {languages.map((language) => (
+                            <LanguageBadge key={language} language={language} />
                         ))}
                     </div>
                     <div className="flex justify-center w-full mt-6">
                         <div className="h-[1px] w-full bg-white/10" />
                     </div>
-                    <motion.div
-                        className="flex justify-center gap-4 py-6 pb-0"
-                        variants={container}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {icons.map((icon, index) => (
-                            <TechIcon
-                                key={index}
-                                name={icon.alt}
-                                image={icon.image}
-                                link={icon.link}
-                                size="lg"
-                            />
-                        ))}
-                    </motion.div>
                     <div className="flex items-center px-2 pt-6 pb-4">
                         {projectLink && (
                             <motion.div

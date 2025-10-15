@@ -12,19 +12,11 @@ export type ProjectPreviewProps = {
     title: string;
     sub: string;
     description: ReactNode;
-    icons: {
-        link: string;
-        image: string;
-        alt: string;
-        width?: number;
-        height?: number;
-    }[];
+    languages: string[];
     color: string;
     index?: number;
     projectLink?: string;
     slug?: string;
-    categories: string[];
-    phase?: "Discover" | "Architect" | "Ship";
 };
 
 export type AwardPreviewProps = {

@@ -29,9 +29,10 @@ const projectPreviews: ProjectPreviewProps[] = [
         description: (
             <>
                 Hermes is a modern platform for creating, managing, and calling
-                AI voice agents. Built during HopHacks 2025, it leverages Next.js,
-                Supabase for auth/data, and integrates telephony/runtime services
-                alongside Google models. View the source on {" "}
+                AI voice agents. Built during HopHacks 2025, it leverages
+                Next.js, Supabase for auth/data, and integrates
+                telephony/runtime services alongside Google models. View the
+                source on{" "}
                 <a
                     href="https://github.com/benz206/hophacks2025"
                     target="_blank"
@@ -42,36 +43,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://supabase.com",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
-                alt: "Supabase",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
         projectLink: "https://github.com/benz206/hophacks2025",
         color: "orange-500",
-        categories: ["AI", "SaaS", "Fullstack"],
-        phase: "Discover",
     },
     {
         image: {
@@ -102,32 +76,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://graphql.org/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
-                alt: "GraphQL",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "GraphQL"],
         projectLink: "https://ben-htn.netlify.app",
         color: "amber-500",
-        categories: ["Frontend", "UX", "Hackathon"],
-        phase: "Discover",
     },
     {
         image: {
@@ -158,32 +109,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://www.mongodb.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg",
-                alt: "MongoDB",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "MongoDB"],
         projectLink: "https://github.com/benz206/StyleIt",
         color: "indigo-500",
-        categories: ["AI", "Vision", "Product"],
-        phase: "Architect",
     },
     {
         image: {
@@ -216,27 +144,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://en.cppreference.com/w/c/language",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
-                alt: "C",
-            },
-            {
-                link: "https://git-scm.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
-                alt: "Git",
-            },
-            {
-                link: "https://gitlab.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gitlab/gitlab-original.svg",
-                alt: "GitLab",
-            },
-        ],
+        languages: ["C", "Git", "Embedded"],
         projectLink: "https://github.com/benz206/LinkCom",
         color: "teal-500",
-        categories: ["Hardware", "Firmware", "Accessibility"],
-        phase: "Architect",
     },
     {
         image: {
@@ -264,32 +174,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 now all be friends!
             </>
         ),
-        icons: [
-            {
-                link: "https://www.mongodb.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg",
-                alt: "MongoDB",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://cloud.google.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
-                alt: "Google Cloud",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "MongoDB", "Google Cloud"],
         projectLink: "https://devpost.com/software/goosehunt",
         color: "rose-500",
-        categories: ["AI", "Mobile", "Hackathon"],
-        phase: "Discover",
     },
     {
         image: {
@@ -323,36 +210,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://firebase.google.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg",
-                alt: "Firebase",
-            },
-            {
-                link: "https://sap.com",
-                image: "https://i.imgur.com/qz7kIud.png",
-                alt: "SAP",
-                width: 60,
-                height: 60,
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cloudflare/cloudflare-original.svg",
-                alt: "Cloudflare",
-                width: 50,
-                height: 50,
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Firebase", "Cloudflare Workers"],
         projectLink: "https://github.com/benz206/RapidRx",
         color: "emerald-600",
-        categories: ["Healthcare", "AI", "Fullstack"],
-        phase: "Ship",
     },
     {
         image: {
@@ -386,33 +246,10 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://arduino.cc",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original-wordmark.svg",
-                alt: "Arduino",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://cplusplus.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
-                alt: "C++",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-        ],
+        languages: ["C++", "TypeScript", "Next.js", "Arduino"],
         projectLink: "https://github.com/benz206/SpotifyMacroboard",
         slug: "SpotifyMacroboard",
         color: "amber-400",
-        categories: ["Hardware", "Embedded", "Product"],
-        phase: "Architect",
     },
     {
         image: {
@@ -446,32 +283,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://javascript.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-                alt: "JavaScript",
-            },
-            {
-                link: "https://netlify.com",
-                image: "https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg",
-                alt: "Netlify",
-            },
-            {
-                link: "https://figma.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-                alt: "Figma",
-            },
-        ],
+        languages: ["Next.js", "JavaScript", "Figma"],
         projectLink: "https://eurekahacks.ca",
         color: "fuchsia-400",
-        categories: ["Frontend", "Brand", "Hackathon"],
-        phase: "Discover",
     },
     {
         image: {
@@ -510,32 +324,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://openai.com",
-                image: "https://cdn.worldvectorlogo.com/logos/openai-2.svg",
-                alt: "OpenAI",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "OpenAI"],
         projectLink: "https://github.com/benz206/flashnotes",
         color: "orange-500",
-        categories: ["AI", "Education", "Hackathon"],
-        phase: "Discover",
     },
     {
         image: {
@@ -566,32 +357,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://react.dev",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-                alt: "React",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "React"],
         projectLink: "https://apmc.vercel.app/",
         color: "purple-400",
-        categories: ["Frontend", "Community", "Product"],
-        phase: "Architect",
     },
     {
         image: {
@@ -636,32 +404,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 functions that may be tedious to program but simple in practice.
             </>
         ),
-        icons: [
-            {
-                link: "https://python.org",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://javascript.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-                alt: "JavaScript",
-            },
-            {
-                link: "https://html.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-                alt: "HTML5",
-            },
-            {
-                link: "https://www.w3schools.com/css/",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-                alt: "CSS",
-            },
-        ],
+        languages: ["Python", "JavaScript", "HTML", "CSS"],
         projectLink: "https://benz206.github.io/bTagScriptPlayground/",
         color: "red-500",
-        categories: ["Language", "Tooling", "Backend"],
-        phase: "Discover",
     },
     {
         image: {
@@ -699,32 +444,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://html.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-                alt: "HTML5",
-            },
-            {
-                link: "https://www.w3schools.com/css/",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-                alt: "CSS",
-            },
-            {
-                link: "https://about.readthedocs.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/readthedocs/readthedocs-original.svg",
-                alt: "Read The Docs",
-            },
-        ],
+        languages: ["Python", "HTML", "CSS", "Sphinx"],
         projectLink: "https://btagscript.readthedocs.io/en/latest/index.html",
         color: "yellow-400",
-        categories: ["Documentation", "Language", "Tooling"],
-        phase: "Ship",
     },
     {
         image: {
@@ -748,32 +470,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 Virtual Private Servers and Linux.
             </>
         ),
-        icons: [
-            {
-                link: "https://www.linux.org/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
-                alt: "Linux",
-            },
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://discord.com",
-                image: "https://cdnlogo.com/logos/d/43/discord.svg",
-                alt: "Discord",
-            },
-            {
-                link: "https://www.oracle.com/ca-en/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/oracle/oracle-original.svg",
-                alt: "Oracle",
-            },
-        ],
+        languages: ["Python", "Discord API", "Linux"],
         projectLink: "https://github.com/benz206/Benny",
         color: "sky-600",
-        categories: ["Bots", "Automation", "Product"],
-        phase: "Ship",
     },
     {
         image: {
@@ -805,32 +504,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 announcement is posted.
             </>
         ),
-        icons: [
-            {
-                link: "https://cloud.google.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg",
-                alt: "Google",
-            },
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://discord.com",
-                image: "https://cdnlogo.com/logos/d/43/discord.svg",
-                alt: "Discord",
-            },
-            {
-                link: "https://sheets.google.com",
-                image: "https://www.cdnlogo.com/logos/g/71/google-sheets.svg",
-                alt: "Sheets",
-            },
-        ],
+        languages: ["Python", "Google Cloud", "Discord API"],
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
         color: "green-400",
-        categories: ["Automation", "Backend", "Bots"],
-        phase: "Architect",
     },
     {
         image: {
@@ -850,32 +526,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 post some blogs or something later!
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://react.dev",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-                alt: "React",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "React"],
         projectLink: "https://github.com/benz206/ben-portfolio",
         color: "cyan-300",
-        categories: ["Frontend", "Personal", "Brand"],
-        phase: "Ship",
     },
 ];
 

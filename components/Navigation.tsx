@@ -5,20 +5,19 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
 const motionAnim = {
-    whileHover: { scale: 1.1 },
-    transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 10,
-    },
-    whileTap: { scale: 0.9 },
+    // whileHover: { scale: 1.1 },
+    // transition: {
+    //     type: "spring" as const,
+    //     stiffness: 300,
+    //     damping: 10,
+    // },
+    // whileTap: { scale: 0.9 },
 } as const;
 
 const links = [
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Blog" },
-    { href: "/gallery", label: "Gallery" },
-    { href: "/github", label: "GitHub" },
+    { href: "/gallery", label: "Gallery" }
 ];
 
 export default function Navigation() {
@@ -44,7 +43,6 @@ export default function Navigation() {
 
         if (container instanceof HTMLElement) {
             container.addEventListener("scroll", updateScroll, {
-                
                 passive: true,
             });
         }
