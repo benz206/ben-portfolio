@@ -1,4 +1,6 @@
 "use client";
+
+import Link from "next/link";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -22,7 +24,20 @@ export default function Footer() {
             <div className="flex w-11/12 max-w-[1080px] flex-col gap-12 lg:flex-row lg:items-center">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
-                        If you&apos;re building something ambitious or just want to talk, message me anytime <a href="mailto:ben.zhou@uwaterloo.ca" className="underline underline-offset-auto">@ben.zhou@uwaterloo.ca</a>.
+                        If you want to talk, message me anytime{" "}
+                        <a
+                            href="mailto:ben.zhou@uwaterloo.ca"
+                            className="underline underline-offset-auto"
+                        >
+                            @ben.zhou@uwaterloo.ca
+                        </a>
+                        .{" "}
+                        <Link
+                            href="/;thanks"
+                            className="underline underline-offset-auto"
+                        >
+                            Thanks.
+                        </Link>
                     </p>
                     <div className="text-xs font-thin text-white/40">
                         © {new Date().getFullYear()} Ben Zhou

@@ -54,31 +54,28 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                 variant="glass"
                 ambient
                 ambientVariant={job.ambientVariant ?? "violet"}
-                ambientSeed={job.title}
                 ambientClassName="opacity-40"
                 className={cn(
-                    "transition-transform duration-300 border border-white/10 backdrop-blur focus-within:ring-2 focus-within:ring-white/60",
+                    "flex items-start gap-5 p-6 transition-transform duration-300 focus-within:ring-2 focus-within:ring-white/60",
                     !isActive && "hover:-translate-y-1",
-                    isActive ? "ring-1 ring-white/20" : "cursor-pointer"
+                    isActive ? "ring-1 ring-white/20" : "ring-0"
                 )}
             >
                 <button
                     type="button"
                     onClick={onSelect}
                     disabled={isActive}
-                    className="flex items-start w-full gap-5 p-6 text-left focus-visible:outline-none disabled:cursor-default"
+                    className="flex items-start w-full gap-5 text-left focus-visible:outline-none disabled:cursor-default"
                 >
-                    <div className="flex items-center justify-center h-14 w-14">
-                        <Image
-                            src={job.image.src}
-                            alt={job.image.alt}
-                            width={56}
-                            height={56}
-                            priority={job.image.priority}
-                            className="z-10 object-contain rounded-lg h-14 w-14"
-                        />
-                    </div>
-                    <div className="flex flex-col flex-1 gap-3 my-auto">
+                    <Image
+                        src={job.image.src}
+                        alt={job.image.alt}
+                        width={56}
+                        height={56}
+                        priority={job.image.priority}
+                        className="z-10 object-contain rounded-lg h-14 w-14"
+                    />
+                    <div className="flex flex-col flex-1 gap-1 my-auto">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                             <h3 className="text-base font-medium text-white">
                                 {job.company}
