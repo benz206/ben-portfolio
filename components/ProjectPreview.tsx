@@ -1,6 +1,6 @@
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
-import { motion, easeInOut, useMotionValue, useTransform } from "framer-motion";
+import { motion, easeInOut } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa6";
 import { MdOpenInNew } from "react-icons/md";
 import Link from "next/link";
@@ -131,103 +131,89 @@ export default function ProjectPreview({
     slug,
 }: ProjectPreviewProps) {
     const colorVariant = colorVariants[color] || colorVariants.default;
-    const hoverY = useMotionValue(0);
-    const hoverRotate = useTransform(hoverY, [-10, 10], [-2, 2]);
     return (
         <motion.li className="list-none" variants={boxItem}>
-            <motion.div
-                onHoverStart={() => hoverY.set(-10)}
-                onHoverEnd={() => hoverY.set(0)}
-                style={{ rotate: hoverRotate, y: hoverY }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+            <Card
+                className={`group flex flex-col justify-center border ${colorVariant.border} ${colorVariant.accent} w-full`}
+                variant="glass"
+                size="lg"
+                ambient
+                ambientSeed={title}
+                ambientClassName="opacity-80"
             >
-                <Card
-                    className={`group flex flex-col justify-center border ${colorVariant.border} ${colorVariant.accent} w-full`}
-                    variant="glass"
-                    size="lg"
-                    ambient
-                    ambientSeed={title}
-                    ambientClassName="opacity-80"
+                <div className="relative overflow-hidden rounded-md">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <Image
+                        className="z-10 h-auto w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        src={image.src}
+                        width={image.width ? image.width : 100}
+                        alt={image.alt}
+                        loading={image.priority ? "eager" : "lazy"}
+                        priority={image.priority}
+                    />
+                </div>
+                <h2 className="px-2 mt-6 text-lg font-semibold text-white lg:text-xl">
+                    {title}
+                </h2>
+                <h3
+                    className={`px-2 text-xs uppercase tracking-[0.3em] ${colorVariant.text}`}
                 >
-                    <div className="relative overflow-hidden rounded-md">
+                    {sub}
+                </h3>
+                <p className="px-2 pt-3 text-sm text-white/75">{description}</p>
+                <div className="flex flex-wrap items-center gap-2 px-2 pt-4">
+                    {languages.map((language) => (
+                        <LanguageBadge key={language} language={language} />
+                    ))}
+                </div>
+                <div className="flex justify-center w-full mt-6">
+                    <div className="h-[1px] w-full bg-white/10" />
+                </div>
+                <div className="flex items-center px-2 pt-6 pb-4">
+                    {projectLink && (
                         <motion.div
-                            className="absolute inset-0 transition-opacity duration-300 opacity-0 bg-gradient-to-t from-black/40 via-transparent to-transparent group-hover:opacity-80"
-                            style={{ rotate: hoverRotate }}
-                        />
-                        <Image
-                            className="z-10 h-auto w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                            src={image.src}
-                            width={image.width ? image.width : 100}
-                            alt={image.alt}
-                            loading={image.priority ? "eager" : "lazy"}
-                            priority={image.priority}
-                        />
-                    </div>
-                    <h2 className="px-2 mt-6 text-lg font-semibold text-white lg:text-xl">
-                        {title}
-                    </h2>
-                    <h3
-                        className={`px-2 text-xs uppercase tracking-[0.3em] ${colorVariant.text}`}
-                    >
-                        {sub}
-                    </h3>
-                    <p className="px-2 pt-3 text-sm text-white/60">
-                        {description}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-2 px-2 pt-4">
-                        {languages.map((language) => (
-                            <LanguageBadge key={language} language={language} />
-                        ))}
-                    </div>
-                    <div className="flex justify-center w-full mt-6">
-                        <div className="h-[1px] w-full bg-white/10" />
-                    </div>
-                    <div className="flex items-center px-2 pt-6 pb-4">
-                        {projectLink && (
-                            <motion.div
-                                className="flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition-colors hover:text-white"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.9 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 100,
-                                    damping: 8,
-                                }}
+                            className="flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition-colors hover:text-white"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.9 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 8,
+                            }}
+                        >
+                            <MdOpenInNew className="text-base" />
+                            <a
+                                className="text-xs"
+                                target="_blank"
+                                href={projectLink}
                             >
-                                <MdOpenInNew className="text-base" />
-                                <a
-                                    className="text-xs"
-                                    target="_blank"
-                                    href={projectLink}
-                                >
-                                    View Project
-                                </a>
-                            </motion.div>
-                        )}
-                        {slug && (
-                            <motion.div
-                                className="ml-auto flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/60 transition-colors hover:text-white"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.9 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 100,
-                                    damping: 8,
-                                }}
+                                View Project
+                            </a>
+                        </motion.div>
+                    )}
+                    {slug && (
+                        <motion.div
+                            className="ml-auto flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/60 transition-colors hover:text-white"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.9 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 8,
+                            }}
+                        >
+                            <Link
+                                className="text-xs"
+                                href={`/blog/${slug}`}
+                                prefetch={false}
                             >
-                                <Link
-                                    className="text-xs"
-                                    href={`/blog/${slug}`}
-                                    prefetch={false}
-                                >
-                                    Read More
-                                </Link>
-                                <FaArrowRight className="text-sm" />
-                            </motion.div>
-                        )}
-                    </div>
-                </Card>
-            </motion.div>
+                                Read More
+                            </Link>
+                            <FaArrowRight className="text-sm" />
+                        </motion.div>
+                    )}
+                </div>
+            </Card>
         </motion.li>
     );
 }

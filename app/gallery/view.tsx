@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { CldImage, getCldImageUrl } from "next-cloudinary";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Card from "@/components/Card";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
 type ImageT = {
     public_id: string;
@@ -63,24 +63,23 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
     }, [selectedImage, handleClose]);
     return (
         <div className="relative w-full min-h-screen overflow-hidden bg-[#05070f] text-white">
-            <div className="pointer-events-none absolute inset-0 z-0 bg-noir-gradient" />
-            <div className="pointer-events-none absolute inset-0 z-0 bg-noir-radial opacity-80" />
-            <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-black/45 via-transparent to-black/80" />
+            <div className="absolute inset-0 z-0 pointer-events-none bg-noir-gradient" />
+            <div className="absolute inset-0 z-0 pointer-events-none bg-noir-radial opacity-80" />
+            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/45 via-transparent to-black/80" />
             <div className="relative z-10 flex flex-col items-center">
                 <div
-                    className={`relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient ${
+                    className={`relative top-0 flex w-full h-[550px] items-center justify-center overflow-hidden rounded-[32px] border border-white/10 bg-white/5 px-8 backdrop-blur-md ${
                         selectedImage ? "blur-md" : ""
                     }`}
                 >
-                    <Card
-                        variant="glass"
-                        ambient
-                        ambientSeed="gallery"
-                        ambientClassName="opacity-80"
-                        className="relative flex flex-col items-center justify-center h-[370px] lg:h-[360px] w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
-                    >
+                    <AmbientGradient
+                        seed="gallery"
+                        variant="sunset"
+                        className="absolute inset-0 opacity-90"
+                    />
+                    <div className="relative z-10 flex w-full max-w-[860px] flex-col items-center text-center">
                         <motion.p
-                            className="text-sm tracking-[0.6em] text-white/70 uppercase"
+                            className="text-sm uppercase tracking-[0.6em] text-white/70"
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.6 }}
@@ -88,23 +87,24 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                             Photos I&apos;ve Taken
                         </motion.p>
                         <motion.h1
-                            className="mt-3 text-5xl font-black tracking-tight text-center uppercase lg:text-6xl"
+                            className="mt-6 text-5xl font-black tracking-tight lg:text-6xl"
                             initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.35, duration: 0.6 }}
                         >
-                            Gallery
+                            Some Photos I&apos;ve Taken Over The Years
                         </motion.h1>
                         <motion.p
-                            className="max-w-xl mt-8 text-base text-center text-white/80"
+                            className="max-w-2xl mt-8 text-base text-white/85"
                             initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.45, duration: 0.6 }}
                         >
-                            Quiet light, far horizons, everyday magic. Explore a
-                            curated collection captured across the years.
+                            Moments from late-night walks, crowded cities, and
+                            quiet coastlines. A small archive of the ways light
+                            has followed me.
                         </motion.p>
-                    </Card>
+                    </div>
                 </div>
                 <motion.div
                     className={`grid w-full min-h-[60vh] gap-4 px-6 pt-12 pb-24 mx-auto place-items-center max-w-7xl md:grid-cols-2 lg:grid-cols-3 3xl:pt-16 3xl:grid-cols-4 3xl:max-w-[1700px] ${
@@ -154,7 +154,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     }}
                 >
                     <motion.div
-                        className="relative flex w-full max-w-4xl flex-col items-center px-4 sm:px-8"
+                        className="relative flex flex-col items-center w-full max-w-4xl px-4 sm:px-8"
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.45 }}
@@ -162,7 +162,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     >
                         <motion.div
                             key={selectedImage.public_id}
-                            className="flex w-full justify-center"
+                            className="flex justify-center w-full"
                             initial={{ opacity: 0, scale: 0.96 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.35 }}

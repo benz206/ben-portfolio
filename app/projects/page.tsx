@@ -45,7 +45,7 @@ export default function Projects() {
 
     return (
         <>
-            <section className="relative flex flex-col items-center justify-center overflow-hidden bg-[#050506] py-28 text-white">
+            <section className="relative flex flex-col items-center justify-center overflow-hidden bg-[#050506] py-28 text-white h-[100vh]">
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 bg-noir-radial opacity-80" />
                 <div className="relative flex w-11/12 max-w-[1180px] flex-col gap-16">
@@ -125,7 +125,7 @@ export default function Projects() {
                                         alt={featuredProject.image.alt}
                                         width={featuredProject.image.width}
                                         height={featuredProject.image.height}
-                                        className="h-56 w-full object-cover"
+                                        className="object-cover w-full h-56"
                                         priority={
                                             featuredProject.image.priority
                                         }
@@ -156,14 +156,14 @@ export default function Projects() {
                                     <a
                                         href={featuredProject.projectLink}
                                         target="_blank"
-                                        className="rounded-md border border-white/15 bg-white/5 px-4 py-2 transition-colors hover:text-white"
+                                        className="px-4 py-2 transition-colors border rounded-md border-white/15 bg-white/5 hover:text-white"
                                     >
                                         View project
                                     </a>
                                     {featuredProject.slug && (
                                         <a
                                             href={`/blog/${featuredProject.slug}`}
-                                            className="text-white/50 transition-colors hover:text-white"
+                                            className="transition-colors text-white/50 hover:text-white"
                                         >
                                             Read case study
                                         </a>

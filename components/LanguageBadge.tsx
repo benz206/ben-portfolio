@@ -54,20 +54,23 @@ export default function LanguageBadge({
     const variant = languageVariants[key];
     const label = variant?.label ?? language;
     const palette = variant?.palette ?? "mint";
+    const paletteColors = palettes[palette];
+    const borderColor = paletteColors[1] ?? paletteColors[0];
 
     return (
         <span
             className={cn(
-                "relative flex items-center gap-2 overflow-hidden rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-white/80",
+                "relative inline-flex items-center overflow-hidden rounded-full border bg-transparent px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white",
                 className
             )}
+            style={{ borderColor }}
         >
             <AmbientGradient
-                className="opacity-70"
+                className="absolute inset-0 opacity-80"
                 seed={label}
                 palette={palette}
             />
-            <span className="relative z-10">{label}</span>
+            <span className="relative z-10 text-white/90">{label}</span>
         </span>
     );
 }
