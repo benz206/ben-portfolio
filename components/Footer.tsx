@@ -6,17 +6,55 @@ import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
 const motionProps = {
-    initial: { scale: 1 },
-    whileHover: { scale: 1.2 },
     transition: {
         type: "spring" as const,
         stiffness: 300,
         damping: 20,
     },
-    whileTap: { scale: 0.9 },
+    whileTap: { scale: 0.95 },
 } as const;
+
+const socials = [
+    {
+        href: "https://x.com/bennyz206",
+        icon: FaXTwitter,
+        label: "X",
+        seed: "x-twitter",
+    },
+    {
+        href: "https://www.linkedin.com/in/ben-zhou06/",
+        icon: FaLinkedin,
+        label: "LinkedIn",
+        seed: "linkedin",
+    },
+    {
+        href: "https://github.com/benz206",
+        icon: ImGithub,
+        label: "GitHub",
+        seed: "github",
+    },
+    {
+        href: "https://discord.com/users/360061101477724170",
+        icon: FaDiscord,
+        label: "Discord",
+        seed: "discord",
+    },
+    {
+        href: "https://www.instagram.com/bennyz_06/",
+        icon: FaInstagram,
+        label: "Instagram",
+        seed: "instagram",
+    },
+    {
+        href: "https://monkeytype.com/profile/_Leg3ndary",
+        icon: SiMonkeytype,
+        label: "Monkeytype",
+        seed: "monkeytype",
+    },
+] as const;
 
 export default function Footer() {
     return (
@@ -45,54 +83,24 @@ export default function Footer() {
                 </div>
                 <div className="flex flex-col flex-1 gap-6">
                     <div className="flex flex-wrap gap-4 text-white/70">
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://x.com/bennyz206"
-                            target="_blank"
-                        >
-                            <FaXTwitter />
-                        </motion.a>
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://www.linkedin.com/in/ben-zhou06/"
-                            target="_blank"
-                        >
-                            <FaLinkedin />
-                        </motion.a>
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://github.com/benz206"
-                            target="_blank"
-                        >
-                            <ImGithub />
-                        </motion.a>
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://discord.com/users/360061101477724170"
-                            target="_blank"
-                        >
-                            <FaDiscord />
-                        </motion.a>
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://www.instagram.com/bennyz_06/"
-                            target="_blank"
-                        >
-                            <FaInstagram />
-                        </motion.a>
-                        <motion.a
-                            {...motionProps}
-                            className="flex items-center justify-center text-lg transition-colors border rounded-md h-11 w-11 border-white/10 bg-white/5 text-white/70 hover:text-white"
-                            href="https://monkeytype.com/profile/_Leg3ndary"
-                            target="_blank"
-                        >
-                            <SiMonkeytype />
-                        </motion.a>
+                        {socials.map(({ href, icon: Icon, label, seed }) => (
+                            <motion.a
+                                key={href}
+                                {...motionProps}
+                                className="group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-md border border-white/30 bg-transparent text-lg text-white/70 transition-colors duration-300 hover:border-white/60 hover:text-white"
+                                href={href}
+                                target="_blank"
+                                aria-label={label}
+                            >
+                                <AmbientGradient
+                                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                    seed={seed}
+                                />
+                                <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-90">
+                                    <Icon />
+                                </span>
+                            </motion.a>
+                        ))}
                     </div>
                 </div>
             </div>
