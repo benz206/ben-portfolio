@@ -47,7 +47,7 @@ export default function Projects() {
         <>
             <section className="relative flex flex-col items-center justify-center overflow-hidden bg-[#050506] py-28 text-white h-[100vh]">
                 <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 bg-noir-radial opacity-80" />
+                <div className="absolute inset-0 opacity-80 bg-noir-radial" />
                 <div className="relative flex w-11/12 max-w-[1180px] flex-col gap-16">
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
@@ -70,7 +70,7 @@ export default function Projects() {
                                     thoughtful systems and expressive polish.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap items-center gap-3">
+                            <div className="flex flex-wrap gap-3 items-center">
                                 <button
                                     type="button"
                                     onClick={() => setLanguageFilter(null)}
@@ -118,8 +118,8 @@ export default function Projects() {
                             className="overflow-hidden"
                         >
                             <div className="flex flex-col gap-6">
-                                <div className="relative overflow-hidden rounded-md">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                <div className="overflow-hidden relative rounded-md">
+                                    <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent from-black/60" />
                                     <Image
                                         src={featuredProject.image.src}
                                         alt={featuredProject.image.alt}
@@ -156,7 +156,7 @@ export default function Projects() {
                                     <a
                                         href={featuredProject.projectLink}
                                         target="_blank"
-                                        className="px-4 py-2 transition-colors border rounded-md border-white/15 bg-white/5 hover:text-white"
+                                        className="px-4 py-2 rounded-md border transition-colors border-white/15 bg-white/5 hover:text-white"
                                     >
                                         View project
                                     </a>
@@ -177,7 +177,7 @@ export default function Projects() {
 
             <section className="relative flex justify-center overflow-hidden bg-[#050506] py-24 text-white">
                 <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 bg-noir-radial opacity-70" />
+                <div className="absolute inset-0 opacity-70 bg-noir-radial" />
                 <div className="relative flex w-11/12 max-w-[1180px] flex-col gap-12">
                     <motion.ul
                         className="grid gap-10 md:grid-cols-2"
@@ -190,24 +190,6 @@ export default function Projects() {
                             <ProjectPreview key={project.title} {...project} />
                         ))}
                     </motion.ul>
-                </div>
-            </section>
-
-            <section className="relative flex justify-center overflow-hidden bg-[#050506] py-16 text-white">
-                <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 bg-noir-radial opacity-60" />
-                <div className="relative w-full overflow-hidden">
-                    <motion.div
-                        className="flex gap-12 whitespace-nowrap text-xs uppercase tracking-[0.6em] text-white/35"
-                        variants={marqueeVariants}
-                        animate="animate"
-                    >
-                        {[...marqueeTitles, ...marqueeTitles].map(
-                            (title, index) => (
-                                <span key={`${title}-${index}`}>{title}</span>
-                            )
-                        )}
-                    </motion.div>
                 </div>
             </section>
         </>

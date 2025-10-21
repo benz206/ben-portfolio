@@ -1,4 +1,4 @@
-import { AmbientGradient, palettes } from "@/components/AmbientGradient";
+import { palettes } from "@/components/AmbientGradient";
 import { cn } from "@/utils/cn";
 
 type PaletteKey = keyof typeof palettes;
@@ -55,22 +55,28 @@ export default function LanguageBadge({
     const label = variant?.label ?? language;
     const palette = variant?.palette ?? "mint";
     const paletteColors = palettes[palette];
-    const borderColor = paletteColors[1] ?? paletteColors[0];
+    const gradientBackground = `linear-gradient(135deg, ${paletteColors[0]} 0%, ${paletteColors[1]} 45%, ${paletteColors[2]} 100%)`;
 
     return (
         <span
             className={cn(
-                "relative inline-flex items-center overflow-hidden rounded-full border bg-transparent px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white",
+                "relative inline-flex items-center justify-center",
                 className
             )}
-            style={{ borderColor }}
         >
-            <AmbientGradient
-                className="absolute inset-0 opacity-80"
-                seed={label}
-                palette={palette}
+            <span
+                className="pointer-events-none absolute -inset-[4px] rounded-full opacity-30 blur-lg"
+                style={{ backgroundImage: gradientBackground }}
+                aria-hidden
             />
-            <span className="relative z-10 text-white/90">{label}</span>
+            <span
+                className="relative inline-flex items-center justify-center rounded-full px-[1.5px] py-[1.5px]"
+                style={{ backgroundImage: gradientBackground }}
+            >
+                <span className="relative inline-flex items-center justify-center rounded-full bg-[#050a18]/90 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-white/95">
+                    {label}
+                </span>
+            </span>
         </span>
     );
 }

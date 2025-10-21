@@ -26,6 +26,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "HERMES",
         sub: "AI VOICE AGENT PLATFORM",
+        summary: "HopHacks 2025 platform for building and managing AI voice agents with Next.js and Supabase.",
         description: (
             <>
                 Hermes is a modern platform for creating, managing, and calling
@@ -56,6 +57,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "EVENT VIEWER",
         sub: "MULTI-FUNCTIONAL EVENT VIEWER",
+        summary:
+            "Hack the North 2025 challenge app for browsing, filtering, and sharing events.",
         description: (
             <>
                 For my Hack the North 2025 Frontend Application I was tasked
@@ -89,6 +92,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "STYLEIT",
         sub: "REALTIME DRESSING ROOM",
+        summary:
+            "Realtime virtual dressing room that overlays outfits on any photo using Mediapipe.",
         description: (
             <>
                 Shopping for clothes online shouldn’t be a gamble. With StyleIt,
@@ -122,6 +127,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "LINKCOM",
         sub: "BIDIRECTIONAL COMMUICATION DEVICE",
+        summary:
+            "Wireless IR communicator that keeps conversations accessible for hard-of-hearing users.",
         description: (
             <>
                 In a world where staying connected is more important than ever,
@@ -157,6 +164,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "GOOSE ON THE LOOSE",
         sub: "HACK THE NORTH 2024 WINNER",
+        summary:
+            "Hack the North 2024 app that turns Waterloo goose sightings into collectible study buddies.",
         description: (
             <>
                 Amid the fast-paced rhythm of university life at Waterloo, one
@@ -188,6 +197,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "RAPIDRX",
         sub: "RAPID DIAGNOSIS TOOL FOR SYMPTOMS",
+        summary:
+            "Rapid diagnosis assistant that triages symptoms and recommends next steps in seconds.",
         description: (
             <>
                 RapidRx is a tool for rapid diagnosis based on user-inputted
@@ -223,6 +234,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SPOTIFY MACROBOARD",
         sub: "FULLY CUSTOM MACROBOARD FOR SPOTIFY",
+        summary:
+            "Wireless RGB macroboard with a custom PCB, OLED status panel, and Next.js companion UI.",
         description: (
             <>
                 I designed and built and fully custom macroboard for Spotify, it
@@ -261,6 +274,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "EUREKAHACKS 2024",
         sub: "RESPONSIVE MODERN HACKATHON WEBSITE",
+        summary:
+            "Responsive hackathon marketing site I led with animated storytelling in Next.js.",
         description: (
             <>
                 As the lead director of web development for EurekaHACKS 2024, I
@@ -296,6 +311,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "FLASHNOTES",
         sub: "PROFESSIONAL AI VISION BASED NOTE SUMMARIZATION",
+        summary:
+            "AI vision tool that turns handwritten notes into organized flashcards with a polished Next.js UI.",
         description: (
             <>
                 For a hackathon I led my team to create FlashNotes, a

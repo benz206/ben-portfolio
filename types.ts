@@ -11,6 +11,7 @@ export type ProjectPreviewProps = {
     };
     title: string;
     sub: string;
+    summary?: string;
     description: ReactNode;
     languages: string[];
     color: string;
