@@ -31,14 +31,14 @@ export default function Projects() {
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                         <div className="space-y-3">
                             <span className="text-xs uppercase tracking-[0.4em] text-white/40">
-                                Proof of craft
+                                Some of my work
                             </span>
                             <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
-                                Projects built to feel inevitable.
+                                Projects
                             </h1>
                         </div>
                         <p className="max-w-md text-sm text-white/60 sm:text-right">
-                            Full-stack products, physical builds, and AI tools designed with the same obsession over detail as my home page.
+                            Stuff I&apos;ve been working on.
                         </p>
                     </div>
                 </motion.div>
