@@ -6,6 +6,7 @@ export interface ProjectPreviewProps {
         alt: string;
         width: number;
         height: number;
+        priority?: boolean;
     };
     title: string;
     sub: string;
@@ -13,6 +14,6 @@ export interface ProjectPreviewProps {
     description: ReactNode;
     languages: string[];
     color: string;
-    projectLink: string;
+    projectLink?: string;
     slug?: string;
 }

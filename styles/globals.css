@@ -20,13 +20,6 @@
     strong {
         color: inherit;
     }
-
-    .noir-strip {
-        background-color: #050506;
-        background-image: linear-gradient(140deg, rgba(9, 11, 16, 0.95) 0%, rgba(6, 7, 12, 0.95) 45%, rgba(2, 3, 5, 0.98) 100%), radial-gradient(circle at 20% 20%, rgba(98, 106, 255, 0.16), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255, 122, 225, 0.18), transparent 45%), radial-gradient(circle at 30% 80%, rgba(82, 217, 184, 0.12), transparent 55%);
-        background-repeat: repeat;
-        background-size: 1600px 1600px, 800px 800px, 800px 800px, 800px 800px;
-    }
 }
 
 @layer components {
@@ -81,6 +74,13 @@ body,
     width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 hr {

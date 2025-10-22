@@ -1,18 +1,19 @@
 import matter from "gray-matter";
-import { notFound } from "next/navigation";
-import { cache } from "react";
 import MdxLayout from "@/components/MdxLayout";
 import { getMDXComponents } from "@/mdx-components";
-import type { RawBlogMetadata } from "@/types";
 
-const dateFormatter = new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-});
+type RawBlogMetadata = {
+    title: string;
+    description: string;
+    tags: string[];
+    slug: string;
+    created: string;
+    updated: string;
+};
 
 async function fetchSlugs(): Promise<string[]> {
-    const octokit = await client();
+    const { Octokit } = await import("@octokit/rest");
+    const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
     const directoryPath = "posts";
@@ -38,43 +39,29 @@ export async function generateStaticParams() {
     return slugs.map((slug) => ({ slug }));
 }
 
-const client = cache(async () => {
-    const { Octokit } = await import("@octokit/rest");
-    return new Octokit({ auth: process.env.BLOG_PAT });
-});
-
 async function fetchPost(slug: string) {
-    const octokit = await client();
+    const { Octokit } = await import("@octokit/rest");
+    const octokit = new Octokit({ auth: process.env.BLOG_PAT });
     const owner = "benz206";
     const repo = "blog";
     const filePath = `posts/${slug}.mdx`;
 
-    let fileResponse: any;
-    try {
-        fileResponse = await octokit.rest.repos.getContent({
-            owner,
-            repo,
-            path: filePath,
-        });
-    } catch {
-        return null;
-    }
+    const fileResponse = await octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path: filePath,
+    });
     const fileContent = Buffer.from(
         (fileResponse.data as any).content,
         "base64"
     ).toString("utf8");
     const { data, content } = matter(fileContent);
 
-    let commitsResponse: any;
-    try {
-        commitsResponse = await octokit.rest.repos.listCommits({
-            owner,
-            repo,
-            path: filePath,
-        });
-    } catch {
-        commitsResponse = { data: [] };
-    }
+    const commitsResponse = await octokit.rest.repos.listCommits({
+        owner,
+        repo,
+        path: filePath,
+    });
     const latestCommit = commitsResponse.data[0];
     const oldestCommit = commitsResponse.data[commitsResponse.data.length - 1];
 
@@ -97,8 +84,20 @@ async function fetchPost(slug: string) {
     return {
         metadata,
         content,
-        createdDate: createdDate || new Date().toISOString(),
-        updatedDate: updatedDate || new Date().toISOString(),
+        createdDate: createdDate
+            ? new Date(createdDate).toLocaleDateString("en-CA", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+              })
+            : "",
+        updatedDate: updatedDate
+            ? new Date(updatedDate).toLocaleDateString("en-CA", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+              })
+            : "",
     };
 }
 
@@ -107,14 +106,12 @@ export const revalidate = 3600;
 export default async function BlogPostPage({
     params,
 }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }) {
-    const { slug } = params;
-    const post = await fetchPost(slug);
-    if (!post) {
-        notFound();
-    }
-    const { metadata, content, createdDate, updatedDate } = post;
+    const { slug } = await params;
+    const { metadata, content, createdDate, updatedDate } = await fetchPost(
+        slug
+    );
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
     const { MDXRemote } = await import("next-mdx-remote/rsc");
@@ -122,8 +119,8 @@ export default async function BlogPostPage({
     return (
         <MdxLayout
             metadata={metadata}
-            createdDate={dateFormatter.format(new Date(createdDate))}
-            updatedDate={dateFormatter.format(new Date(updatedDate))}
+            createdDate={createdDate}
+            updatedDate={updatedDate}
         >
             <MDX source={content} components={components as any} />
         </MdxLayout>

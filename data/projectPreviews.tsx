@@ -26,7 +26,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "HERMES",
         sub: "AI VOICE AGENT PLATFORM",
-        summary: "HopHacks 2025 platform for building and managing AI voice agents with Next.js and Supabase.",
+        summary:
+            "HopHacks platform for building, managing, and calling AI voice agents with Supabase + Next.js.",
         description: (
             <>
                 Hermes is a modern platform for creating, managing, and calling
@@ -46,6 +47,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
         projectLink: "https://github.com/benz206/hophacks2025",
+        slug: "hermes-ai-voice-platform",
         color: "orange-500",
     },
     {
@@ -58,7 +60,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         title: "EVENT VIEWER",
         sub: "MULTI-FUNCTIONAL EVENT VIEWER",
         summary:
-            "Hack the North 2025 challenge app for browsing, filtering, and sharing events.",
+            "Hack the North challenge app for browsing, filtering, and sharing events with friends.",
         description: (
             <>
                 For my Hack the North 2025 Frontend Application I was tasked
@@ -81,6 +83,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "GraphQL"],
         projectLink: "https://ben-htn.netlify.app",
+        slug: "event-viewer",
         color: "amber-500",
     },
     {
@@ -93,7 +96,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         title: "STYLEIT",
         sub: "REALTIME DRESSING ROOM",
         summary:
-            "Realtime virtual dressing room that overlays outfits on any photo using Mediapipe.",
+            "Realtime virtual dressing room that overlays outfits onto photos using Mediapipe.",
         description: (
             <>
                 Shopping for clothes online shouldn’t be a gamble. With StyleIt,
@@ -116,6 +119,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "MongoDB"],
         projectLink: "https://github.com/benz206/StyleIt",
+        slug: "styleit",
         color: "indigo-500",
     },
     {
@@ -153,6 +157,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["C", "Git", "Embedded"],
         projectLink: "https://github.com/benz206/LinkCom",
+        slug: "linkcom",
         color: "teal-500",
     },
     {
@@ -165,7 +170,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         title: "GOOSE ON THE LOOSE",
         sub: "HACK THE NORTH 2024 WINNER",
         summary:
-            "Hack the North 2024 app that turns Waterloo goose sightings into collectible study buddies.",
+            "Hack the North app turning Waterloo goose sightings into collectible study buddies.",
         description: (
             <>
                 Amid the fast-paced rhythm of university life at Waterloo, one
@@ -185,6 +190,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "MongoDB", "Google Cloud"],
         projectLink: "https://devpost.com/software/goosehunt",
+        slug: "goose-on-the-loose",
         color: "rose-500",
     },
     {
@@ -223,6 +229,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Firebase", "Cloudflare Workers"],
         projectLink: "https://github.com/benz206/RapidRx",
+        slug: "rapid-rx",
         color: "emerald-600",
     },
     {
@@ -275,7 +282,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         title: "EUREKAHACKS 2024",
         sub: "RESPONSIVE MODERN HACKATHON WEBSITE",
         summary:
-            "Responsive hackathon marketing site I led with animated storytelling in Next.js.",
+            "Responsive hackathon marketing site with animated storytelling built in Next.js.",
         description: (
             <>
                 As the lead director of web development for EurekaHACKS 2024, I
@@ -289,7 +296,7 @@ const projectPreviews: ProjectPreviewProps[] = [
                 while also managing the production site using Netlify. You can
                 view the site at{" "}
                 <a
-                    href="https://eurekahacks.ca"
+                    href="https://2024.eurekahacks.ca"
                     target="_blank"
                     className="font-bold text-blue-500 transition-colors duration-1000 hover:text-fuchsia-400"
                 >
@@ -299,7 +306,8 @@ const projectPreviews: ProjectPreviewProps[] = [
             </>
         ),
         languages: ["Next.js", "JavaScript", "Figma"],
-        projectLink: "https://eurekahacks.ca",
+        projectLink: "https://2024.eurekahacks.ca",
+        slug: "eurekahacks-2024",
         color: "fuchsia-400",
     },
     {
@@ -343,6 +351,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "OpenAI"],
         projectLink: "https://github.com/benz206/flashnotes",
+        slug: "flashnotes",
         color: "orange-500",
     },
     {
@@ -354,6 +363,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "APHS MAKERS COMPETITION",
         sub: "CLUB WEBSITE USING NEXT.JS & TAILWIND",
+        summary:
+            "Club site with schedules, FAQs, and sponsor info built in Next.js and Tailwind.",
         description: (
             <>
                 To continue practicing using Tailwind and Next.js, I made a
@@ -376,6 +387,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "React"],
         projectLink: "https://apmc.vercel.app/",
+        slug: "aphs-makers-competition",
         color: "purple-400",
     },
     {
@@ -387,6 +399,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "BTAGSCRIPT PLAYGROUND",
         sub: "DYNAMICALLY TYPED INTERPRETER AND DEBUGGER",
+        summary:
+            "Interpreter and web playground for the bTagScript templating language.",
         description: (
             <>
                 I made an{" "}
@@ -423,6 +437,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Python", "JavaScript", "HTML", "CSS"],
         projectLink: "https://benz206.github.io/bTagScriptPlayground/",
+        slug: "btagscript-playground",
         color: "red-500",
     },
     {
@@ -434,6 +449,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SPHINX EXTENSION",
         sub: "Custom extension for Sphinx",
+        summary:
+            "Custom Sphinx extension that adds syntax highlighting for bTagScript docs.",
         description: (
             <>
                 After creating my own modified version of an interpreter with
@@ -463,6 +480,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Python", "HTML", "CSS", "Sphinx"],
         projectLink: "https://btagscript.readthedocs.io/en/latest/index.html",
+        slug: "sphinx-extension",
         color: "yellow-400",
     },
     {
@@ -474,6 +492,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "BENNY BOT",
         sub: "Custom Discord Bot",
+        summary:
+            "Full-stack Discord bot with music playback, OCR, moderation, and custom commands.",
         description: (
             <>
                 After learning more about Python and technologies overall I
@@ -489,6 +509,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Python", "Discord API", "Linux"],
         projectLink: "https://github.com/benz206/Benny",
+        slug: "benny-bot",
         color: "sky-600",
     },
     {
@@ -500,6 +521,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SCHOOL ANNOUNCEMENTS",
         sub: "Automated School Announcement Forwarder",
+        summary:
+            "Discord bot that scrapes school announcements and pushes updates with subscriptions.",
         description: (
             <>
                 Since our School Announcements are crudely added to a 96 page
@@ -523,6 +546,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Python", "Google Cloud", "Discord API"],
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
+        slug: "school-announcements",
         color: "green-400",
     },
     {
@@ -534,6 +558,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "THIS WEBSITE!",
         sub: "MY OWN PERSONAL WEBSITE",
+        summary:
+            "My personal site built with Next.js, TypeScript, and Tailwind to share projects and writing.",
         description: (
             <>
                 This website is made using NextJS, TypeScript, and TailwindCSS.
@@ -545,6 +571,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "React"],
         projectLink: "https://github.com/benz206/ben-portfolio",
+        slug: "portfolio",
         color: "cyan-300",
     },
 ];

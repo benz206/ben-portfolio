@@ -1,226 +1,112 @@
+"use client";
+
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
-import { motion, easeInOut } from "framer-motion";
-import { FaArrowRight } from "react-icons/fa6";
-import { MdOpenInNew } from "react-icons/md";
-import Link from "next/link";
+import { motion } from "framer-motion";
 import LanguageBadge from "@/components/LanguageBadge";
-import Card from "@/components/Card";
+import { cn } from "@/utils/cn";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
-const colorVariants: Record<
-    string,
-    { accent: string; border: string; text: string }
-> = {
-    ember: {
-        accent: "ring-1 ring-[#ffb199]/30",
-        border: "border-[#ffb199]/40",
-        text: "text-[#ffb199]",
-    },
-    lilac: {
-        accent: "ring-1 ring-[#b8a4ff]/30",
-        border: "border-[#b8a4ff]/40",
-        text: "text-[#b8a4ff]",
-    },
-    teal: {
-        accent: "ring-1 ring-[#7ce8c5]/30",
-        border: "border-[#7ce8c5]/40",
-        text: "text-[#7ce8c5]",
-    },
-    slate: {
-        accent: "ring-1 ring-[#8ea6ff]/30",
-        border: "border-[#8ea6ff]/40",
-        text: "text-[#8ea6ff]",
-    },
-    "orange-500": {
-        accent: "ring-1 ring-[#ffb35c]/30",
-        border: "border-[#ffb35c]/40",
-        text: "text-[#ffb35c]",
-    },
-    "amber-500": {
-        accent: "ring-1 ring-[#ffcb5c]/30",
-        border: "border-[#ffcb5c]/40",
-        text: "text-[#ffcb5c]",
-    },
-    "amber-400": {
-        accent: "ring-1 ring-[#ffd47a]/30",
-        border: "border-[#ffd47a]/40",
-        text: "text-[#ffd47a]",
-    },
-    "indigo-500": {
-        accent: "ring-1 ring-[#9ba6ff]/30",
-        border: "border-[#9ba6ff]/40",
-        text: "text-[#9ba6ff]",
-    },
-    "teal-500": {
-        accent: "ring-1 ring-[#74e2c7]/30",
-        border: "border-[#74e2c7]/40",
-        text: "text-[#74e2c7]",
-    },
-    "rose-500": {
-        accent: "ring-1 ring-[#ff94b3]/30",
-        border: "border-[#ff94b3]/40",
-        text: "text-[#ff94b3]",
-    },
-    "emerald-600": {
-        accent: "ring-1 ring-[#73f5c6]/30",
-        border: "border-[#73f5c6]/40",
-        text: "text-[#73f5c6]",
-    },
-    "fuchsia-400": {
-        accent: "ring-1 ring-[#f4a3ff]/30",
-        border: "border-[#f4a3ff]/40",
-        text: "text-[#f4a3ff]",
-    },
-    "purple-400": {
-        accent: "ring-1 ring-[#c0a3ff]/30",
-        border: "border-[#c0a3ff]/40",
-        text: "text-[#c0a3ff]",
-    },
-    "red-500": {
-        accent: "ring-1 ring-[#ff8b8b]/30",
-        border: "border-[#ff8b8b]/40",
-        text: "text-[#ff8b8b]",
-    },
-    "yellow-400": {
-        accent: "ring-1 ring-[#ffe27a]/30",
-        border: "border-[#ffe27a]/40",
-        text: "text-[#ffe27a]",
-    },
-    "sky-600": {
-        accent: "ring-1 ring-[#7fc5ff]/30",
-        border: "border-[#7fc5ff]/40",
-        text: "text-[#7fc5ff]",
-    },
-    "green-400": {
-        accent: "ring-1 ring-[#81f29d]/30",
-        border: "border-[#81f29d]/40",
-        text: "text-[#81f29d]",
-    },
-    "cyan-300": {
-        accent: "ring-1 ring-[#84f2ff]/30",
-        border: "border-[#84f2ff]/40",
-        text: "text-[#84f2ff]",
-    },
-    default: {
-        accent: "ring-1 ring-white/10",
-        border: "border-white/15",
-        text: "text-white/70",
-    },
-};
-
-const boxItem = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-            duration: 1,
-            ease: easeInOut,
-        },
-    },
+type PreviewProps = ProjectPreviewProps & {
+    index?: number;
+    onSelect?: () => void;
 };
 
 export default function ProjectPreview({
     image,
     title,
     sub,
-    description,
+    summary,
     languages,
     color,
-    projectLink,
-    slug,
-}: ProjectPreviewProps) {
-    const colorVariant = colorVariants[color] || colorVariants.default;
-    const actionGradient = "linear-gradient(135deg, #ff4d8d 0%, #795eff 100%)";
+    index = 0,
+    onSelect,
+}: PreviewProps) {
+    const accent = colorVariants[color] || colorVariants.default;
+
     return (
-        <motion.li className="list-none" variants={boxItem}>
-            <Card
-                className={`group flex h-full flex-col justify-center border ${colorVariant.border} ${colorVariant.accent} w-full`}
-                variant="glass"
-                size="lg"
-                ambient
-                ambientSeed={title}
-                ambientClassName="-z-10 opacity-80"
+        <motion.li
+            className="list-none"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: "easeOut", delay: index * 0.06 }}
+        >
+            <motion.button
+                type="button"
+                onClick={onSelect}
+                disabled={!onSelect}
+                whileHover={onSelect ? { y: -8 } : undefined}
+                whileTap={onSelect ? { scale: 0.97 } : undefined}
+                className={cn(
+                    "group relative flex h-full w-full overflow-hidden rounded-3xl px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                    !onSelect && "cursor-default"
+                )}
             >
-                <div className="flex relative z-10 flex-col h-full">
-                    <div className="overflow-hidden relative rounded-md">
-                        <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent from-black/50" />
+                <div
+                    className={cn(
+                        "relative isolate flex h-full w-full flex-col overflow-hidden rounded-3xl bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
+                        accent.border
+                    )}
+                >
+                    <div className="overflow-hidden relative w-full h-48">
                         <Image
-                            className="z-10 h-auto w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
                             src={image.src}
-                            width={image.width ? image.width : 100}
+                            width={image.width || 1200}
+                            height={image.height || 800}
                             alt={image.alt}
                             loading={image.priority ? "eager" : "lazy"}
                             priority={image.priority}
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 pointer-events-none from-black/70 via-black/20 group-hover:from-black/55" />
+                        <div className="pointer-events-none absolute -inset-1 rounded-[1.5rem] bg-gradient-to-br from-white/20 via-transparent to-white/10 opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-60" />
                     </div>
-                    <h2 className="px-2 mt-6 text-lg font-semibold text-white lg:text-xl">
-                        {title}
-                    </h2>
-                    <h3
-                        className={`px-2 text-xs uppercase tracking-[0.3em] ${colorVariant.text}`}
-                    >
-                        {sub}
-                    </h3>
-                    <p className="px-2 pt-3 text-sm text-white/75">{description}</p>
-                    <div className="flex flex-wrap gap-2 items-center px-2 pt-4">
+                    <div className="flex relative z-10 flex-col gap-3 px-6 pt-6">
+                        <span className="text-[11px] uppercase tracking-[0.34em] text-white/45">
+                            {sub}
+                        </span>
+                        <h2 className="text-2xl font-semibold text-white">
+                            {title}
+                        </h2>
+                        {summary && (
+                            <p className="text-sm leading-relaxed text-white/70">
+                                {summary}
+                            </p>
+                        )}
+                    </div>
+                    <div className="flex relative z-10 flex-wrap gap-2 px-6 pt-5 pb-6">
                         {languages.map((language) => (
                             <LanguageBadge key={language} language={language} />
                         ))}
                     </div>
-                    <div className="flex justify-center mt-6 w-full">
-                        <div className="h-[1px] w-full bg-white/10" />
-                    </div>
-                    <div className="flex items-center px-2 pt-6 pb-4">
-                        {projectLink && (
-                            <motion.a
-                                className="inline-flex relative justify-center items-center text-sm font-medium text-white"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.9 }}
-                                href={projectLink}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <span
-                                    className="pointer-events-none absolute -inset-[12px] rounded-full opacity-40 blur-xl"
-                                    style={{ backgroundImage: actionGradient }}
-                                    aria-hidden
-                                />
-                                <span
-                                    className="relative inline-flex items-center justify-center rounded-full px-[2px] py-[2px]"
-                                    style={{ backgroundImage: actionGradient }}
-                                >
-                                    <span className="relative inline-flex items-center gap-2 rounded-full bg-[#040b16]/95 px-5 py-2">
-                                        <MdOpenInNew className="text-base text-white/90" />
-                                        <span>View project</span>
-                                    </span>
-                                </span>
-                            </motion.a>
-                        )}
-                        {slug && (
-                            <motion.div
-                                className="ml-auto flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/60 transition-colors hover:text-white"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.9 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 100,
-                                    damping: 8,
-                                }}
-                            >
-                                <Link
-                                    className="text-xs"
-                                    href={`/blog/${slug}`}
-                                    prefetch={false}
-                                >
-                                    Read More
-                                </Link>
-                                <FaArrowRight className="text-sm" />
-                            </motion.div>
-                        )}
-                    </div>
+                <AmbientGradient
+                    seed={title}
+                    className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
+                />
                 </div>
-            </Card>
+            </motion.button>
         </motion.li>
     );
 }
+
+const colorVariants: Record<string, { border: string }> = {
+    ember: { border: "border-[#ffb199]/25" },
+    lilac: { border: "border-[#b8a4ff]/25" },
+    teal: { border: "border-[#7ce8c5]/25" },
+    slate: { border: "border-[#8ea6ff]/25" },
+    "orange-500": { border: "border-[#ffb35c]/25" },
+    "amber-500": { border: "border-[#ffcb5c]/25" },
+    "amber-400": { border: "border-[#ffd47a]/25" },
+    "indigo-500": { border: "border-[#9ba6ff]/25" },
+    "teal-500": { border: "border-[#74e2c7]/25" },
+    "rose-500": { border: "border-[#ff94b3]/25" },
+    "emerald-600": { border: "border-[#73f5c6]/25" },
+    "fuchsia-400": { border: "border-[#f4a3ff]/25" },
+    "purple-400": { border: "border-[#c0a3ff]/25" },
+    "red-500": { border: "border-[#ff8b8b]/25" },
+    "yellow-400": { border: "border-[#ffe27a]/25" },
+    "sky-600": { border: "border-[#7fc5ff]/25" },
+    "green-400": { border: "border-[#81f29d]/25" },
+    "cyan-300": { border: "border-[#84f2ff]/25" },
+    default: { border: "border-white/20" },
+};

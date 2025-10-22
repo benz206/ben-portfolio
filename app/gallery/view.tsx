@@ -1,5 +1,5 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import { CldImage, getCldImageUrl } from "next-cloudinary";
 import {
     useCallback,
@@ -16,17 +16,20 @@ type ImageT = {
     height: number;
 };
 
-const boxAnim = {
-    hidden: { opacity: 1, scale: 0 },
+const boxAnim: Variants = {
+    hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        scale: 1,
-        transition: { delayChildren: 0.3, staggerChildren: 0.2 },
+        transition: { delayChildren: 0.2, staggerChildren: 0.15 },
     },
 };
-const itemAnim = {
+const itemAnim: Variants = {
     hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: { duration: 0.5, ease: "easeOut" as const },
+    },
 };
 
 function PhotoTile({
@@ -45,17 +48,13 @@ function PhotoTile({
         <motion.button
             ref={ref}
             type="button"
-            className="group block w-full overflow-hidden rounded-2xl transition duration-200 hover:brightness-110"
+            className="block overflow-hidden w-full rounded-2xl transition duration-200 group hover:brightness-110"
             onClick={() => onSelect(image)}
             variants={itemAnim}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
         >
-            <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
+            <div className="overflow-hidden relative w-full rounded-2xl aspect-square">
                 {shouldLoadImage && (
                     <CldImage
                         fill
@@ -137,8 +136,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
 
                 <motion.div
                     className={`grid w-full min-h-[60vh] gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 ${
-                        selectedImage ? "blur-sm" : ""
-                    }`}
+                        selectedImage ? "blur-sm" : ""}`}
                     variants={boxAnim}
                     initial="hidden"
                     whileInView="visible"
