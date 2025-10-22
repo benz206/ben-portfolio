@@ -548,32 +548,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
         slug: "school-announcements",
         color: "green-400",
-    },
-    {
-        image: {
-            src: PortfolioImage,
-            alt: "Portfolio",
-            width: 900,
-            height: 100,
-        },
-        title: "THIS WEBSITE!",
-        sub: "MY OWN PERSONAL WEBSITE",
-        summary:
-            "My personal site built with Next.js, TypeScript, and Tailwind to share projects and writing.",
-        description: (
-            <>
-                This website is made using NextJS, TypeScript, and TailwindCSS.
-                I wanted to make a website that was simple, yet elegant, and I
-                think I did pretty good. Here is where I&apos;ll showcase my
-                projects, and the technologies I used to create them. I may also
-                post some blogs or something later!
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Tailwind", "React"],
-        projectLink: "https://github.com/benz206/ben-portfolio",
-        slug: "portfolio",
-        color: "cyan-300",
-    },
+    }
 ];
 
 export default projectPreviews;
