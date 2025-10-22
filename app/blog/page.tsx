@@ -1,5 +1,6 @@
 // Removed animations to avoid client-only framer-motion in server component
 import Link from "next/link";
+import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
 import matter from "gray-matter";
 
@@ -93,65 +94,135 @@ export const revalidate = 3600;
 
 export default async function BlogPage() {
     const posts = await fetchPosts();
-    const formatted = posts.map((post) => ({
+    const enhancedPosts = posts.map((post) => ({
         ...post,
-        created: new Date(post.created).toLocaleDateString("en-CA", {
+        createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
             year: "numeric",
             month: "short",
             day: "numeric",
         }),
-        updated: new Date(post.updated).toLocaleDateString("en-CA", {
+        updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
             year: "numeric",
             month: "short",
             day: "numeric",
         }),
     }));
 
+    const [featuredPost, ...restPosts] = enhancedPosts;
+
     return (
-        <>
-            <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
-                <div className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40">
-                    <div className="flex flex-col justify-center w-full h-full p-12">
-                        <h2 className="p-2 text-lg text-center">
-                            SOME OF MY THOUGHTS AND EXPERIENCES
-                        </h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">
-                            BLOG
+        <section className="relative overflow-hidden bg-[#050506] text-white">
+            <div className="absolute inset-0 bg-noir-gradient" />
+            <div className="absolute inset-0 opacity-70 bg-noir-radial" />
+            <div className="relative mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
+                <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="space-y-3">
+                        <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                            My thoughts and opinions
+                        </span>
+                        <h1 className="text-4xl font-semibold lg:text-5xl">
+                            Blog
                         </h1>
-                        <p className="p-2 py-5 font-light">
-                            Welcome to my blog! Here you&apos;ll find some of my
-                            thoughts and experiences that I&apos;ve had over the
-                            years.
+                    </div>
+                    <p className="max-w-md text-sm text-white/60 sm:text-right">
+                        Blog posts about my projects and experiences.
+                    </p>
+                </div>
+                {!featuredPost ? (
+                    <div className="flex flex-col justify-center items-center h-48 text-center">
+                        <p className="text-lg font-semibold text-white/70">
+                            No posts yet, but the notebook is open.
+                        </p>
+                        <p className="mt-2 text-sm text-white/50">
+                            Check back soon for fresh build logs and deep dives.
                         </p>
                     </div>
-                </div>
-            </div>
-            <div className="flex flex-col flex-wrap content-center w-full min-h-[50vh] pt-12 pb-16 lg:pb-20 lg:pt-24 3xl:pt-12 dark:text-[#ececec] max-w-[1000px] mx-auto p-4">
-                <table className="min-w-full table-auto">
-                    <tbody>
-                        {formatted.map((post) => (
-                            <tr key={post.slug}>
-                                <td className="w-2/5 px-4 py-2 text-lg font-bold text-blue-500 underline lg:text-2xl">
-                                    <Link href={`/blog/${post.slug}`}>
-                                        {post.title}
-                                    </Link>
-                                </td>
-                                <td className="w-2/5 px-4 py-2 text-right text-md lg:text-lg">
-                                    {post.tags.map((element) => (
-                                        <Hashtag
-                                            key={element}
-                                            hashtag={element}
-                                        />
+                ) : (
+                    <>
+                        <Link
+                            href={`/blog/${featuredPost.slug}`}
+                            className="block group"
+                        >
+                            <Card
+                                variant="minimal"
+                                ambient
+                                ambientSeed={featuredPost.slug}
+                                ambientClassName="opacity-30 group-hover:opacity-45 transition-opacity"
+                                className="flex flex-col gap-8 p-10 transition-transform group-hover:-translate-y-1 md:flex-row md:items-start md:justify-between md:p-12"
+                            >
+                                <div className="space-y-5 md:max-w-2xl">
+                                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/50">
+                                        <span>Latest</span>
+                                        <span className="flex-1 h-px bg-white/10" />
+                                    </div>
+                                    <h2 className="text-3xl font-semibold leading-snug transition-colors group-hover:text-white md:text-[2.5rem]">
+                                        {featuredPost.title}
+                                    </h2>
+                                    <p className="text-base text-white/70">
+                                        {featuredPost.description || "Tap in for the full story."}
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-4 items-start md:items-end">
+                                    <time className="text-sm text-white/50" dateTime={featuredPost.updated}>
+                                        Updated {featuredPost.updatedFormatted}
+                                    </time>
+                                    <div className="flex flex-wrap gap-2">
+                                        {featuredPost.tags.map((tag) => (
+                                            <Hashtag key={tag} hashtag={tag} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </Card>
+                        </Link>
+                        {restPosts.length > 0 && (
+                            <div className="space-y-10">
+                                <div className="flex justify-between items-center text-white/60">
+                                    <h3 className="text-sm uppercase tracking-[0.35em]">
+                                        Archive
+                                    </h3>
+                                    <span className="w-24 h-px bg-white/10" />
+                                </div>
+                                <div className="grid gap-8 md:grid-cols-2">
+                                    {restPosts.map((post) => (
+                                        <Link
+                                            key={post.slug}
+                                            href={`/blog/${post.slug}`}
+                                            className="block group"
+                                        >
+                                            <Card
+                                                variant="minimal"
+                                                ambient
+                                                ambientSeed={post.slug}
+                                                ambientClassName="opacity-20 group-hover:opacity-40 transition-opacity"
+                                                className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
+                                            >
+                                                <div className="space-y-3">
+                                                    <time className="text-xs uppercase tracking-[0.2em] text-white/40" dateTime={post.updated}>
+                                                        {post.updatedFormatted}
+                                                    </time>
+                                                    <h4 className="text-2xl font-semibold text-white transition-colors group-hover:text-blue-100">
+                                                        {post.title}
+                                                    </h4>
+                                                    <p className="text-sm text-white/60">
+                                                        {post.description || "Read the full entry."}
+                                                    </p>
+                                                </div>
+                                                {post.tags.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2 text-sm text-white/60">
+                                                        {post.tags.map((tag) => (
+                                                            <Hashtag key={tag} hashtag={tag} />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </Card>
+                                        </Link>
                                     ))}
-                                </td>
-                                <td className="justify-end px-4 py-2 text-xs text-center right lg:text-lg">
-                                    {post.updated}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
-        </>
+        </section>
     );
 }

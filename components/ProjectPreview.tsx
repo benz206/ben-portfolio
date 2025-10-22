@@ -1,252 +1,112 @@
+"use client";
+
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
-import { motion, easeInOut } from "framer-motion";
-import { FaArrowRight } from "react-icons/fa6";
-import { MdOpenInNew } from "react-icons/md";
-import Link from "next/link";
-import TechIcon from "./TechIcon";
+import { motion } from "framer-motion";
+import LanguageBadge from "@/components/LanguageBadge";
+import { cn } from "@/utils/cn";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
-const colorVariants: { [key: string]: string[] } = {
-    "amber-500": [
-        "hover:shadow-amber-500",
-        "group-hover:text-amber-500",
-        "hover:text-amber-500",
-        "group-hover:bg-amber-500",
-        "bg-amber-500",
-    ],
-    "indigo-500": [
-        "hover:shadow-indigo-500",
-        "group-hover:text-indigo-500",
-        "hover:text-indigo-500",
-        "group-hover:bg-indigo-500",
-        "bg-indigo-500",
-    ],
-    "teal-500": [
-        "hover:shadow-teal-500",
-        "group-hover:text-teal-500",
-        "hover:text-teal-500",
-        "group-hover:bg-teal-500",
-        "bg-teal-500",
-    ],
-    "purple-400": [
-        "hover:shadow-purple-400",
-        "group-hover:text-purple-400",
-        "hover:text-purple-400",
-        "group-hover:bg-purple-400",
-        "bg-purple-400",
-    ],
-    "red-500": [
-        "hover:shadow-red-500",
-        "group-hover:text-red-500",
-        "hover:text-red-500",
-        "group-hover:bg-red-500",
-        "bg-red-500",
-    ],
-    "green-400": [
-        "hover:shadow-green-400",
-        "group-hover:text-green-400",
-        "hover:text-green-400",
-        "group-hover:bg-green-400",
-        "bg-green-400",
-    ],
-    "cyan-300": [
-        "hover:shadow-cyan-300",
-        "group-hover:text-cyan-300",
-        "hover:text-cyan-300",
-        "group-hover:bg-cyan-300",
-        "bg-cyan-300",
-    ],
-    "orange-500": [
-        "hover:shadow-orange-500",
-        "group-hover:text-orange-500",
-        "hover:text-orange-500",
-        "group-hover:bg-orange-500",
-        "bg-orange-500",
-    ],
-    "fuchsia-400": [
-        "hover:shadow-fuchsia-400",
-        "group-hover:text-fuchsia-400",
-        "hover:text-fuchsia-400",
-        "group-hover:bg-fuchsia-400",
-        "bg-fuchsia-400",
-    ],
-    "amber-400": [
-        "hover:shadow-amber-400",
-        "group-hover:text-amber-400",
-        "hover:text-amber-400",
-        "group-hover:bg-amber-400",
-        "bg-amber-400",
-    ],
-    "sky-600": [
-        "hover:shadow-sky-600",
-        "group-hover:text-sky-600",
-        "hover:text-sky-600",
-        "group-hover:bg-sky-600",
-        "bg-sky-600",
-    ],
-    "yellow-400": [
-        "hover:shadow-yellow-400",
-        "group-hover:text-yellow-400",
-        "hover:text-yellow-400",
-        "group-hover:bg-yellow-400",
-        "bg-yellow-400",
-    ],
-    "emerald-600": [
-        "hover:shadow-emerald-600",
-        "group-hover:text-emerald-600",
-        "hover:text-emerald-600",
-        "group-hover:bg-emerald-600",
-        "bg-emerald-600",
-    ],
-    "rose-500": [
-        "hover:shadow-rose-500",
-        "group-hover:text-rose-500",
-        "hover:text-rose-500",
-        "group-hover:bg-rose-500",
-        "bg-rose-500",
-    ],
-    default: [
-        "hover:shadow-blue-400",
-        "group-hover:text-blue-400",
-        "hover:text-blue-400",
-        "group-hover:bg-blue-400",
-        "bg-blue-400",
-    ],
-};
-
-const container = {
-    hidden: { opacity: 1, scale: 0 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            delayChildren: 0.3,
-            staggerChildren: 0.2,
-        },
-    },
-};
-
-const boxItem = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-            duration: 1,
-            ease: easeInOut,
-        },
-    },
+type PreviewProps = ProjectPreviewProps & {
+    index?: number;
+    onSelect?: () => void;
 };
 
 export default function ProjectPreview({
     image,
     title,
     sub,
-    description,
-    icons,
+    summary,
+    languages,
     color,
-    projectLink,
-    slug,
-}: ProjectPreviewProps) {
-    const colorVariant = colorVariants[color] || colorVariants.default;
+    index = 0,
+    onSelect,
+}: PreviewProps) {
+    const accent = colorVariants[color] || colorVariants.default;
+
     return (
         <motion.li
-            className="self-center list-none justify-self-center"
-            variants={boxItem}
+            className="list-none"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: "easeOut", delay: index * 0.06 }}
         >
-            <div
-                className={`group flex flex-col justify-center w-[380px] lg:w-[570px] card-project card-xl ${colorVariant[0]}`}
+            <motion.button
+                type="button"
+                onClick={onSelect}
+                disabled={!onSelect}
+                whileHover={onSelect ? { y: -8 } : undefined}
+                whileTap={onSelect ? { scale: 0.97 } : undefined}
+                className={cn(
+                    "group relative flex h-full w-full overflow-hidden rounded-lg px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                    !onSelect && "cursor-default"
+                )}
             >
-                <Image
-                    className="object-contain h-auto mx-auto rounded-md shadow-lg"
-                    src={image.src}
-                    width={image.width ? image.width : 100}
-                    alt={image.alt}
-                    loading={image.priority ? "eager" : "lazy"}
-                    priority={image.priority}
-                />
-                <h2 className="p-2 mt-4 text-xl font-black uppercase lg:text-3xl">
-                    {title}
-                </h2>
-                <h3
-                    className={`p-2 font-medium transition-colors duration-500 text-sm lg:text-base uppercase ${colorVariant[1]}`}
+                <div
+                    className={cn(
+                        "relative isolate flex h-full w-full flex-col overflow-hidden rounded-lg bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
+                        accent.border
+                    )}
                 >
-                    {sub}
-                </h3>
-                <p className="p-2 mb-2 text-sm font-light lg:text-base">
-                    {description}
-                </p>
-                <div className="flex justify-center w-full mt-auto">
-                    <div
-                        className={`w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#383838] ${colorVariant[3]} transition-colors duration-1000`}
-                    />
-                </div>
-                <motion.div
-                    className="flex py-6 pb-0 place-content-evenly"
-                    variants={container}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    {icons.map((icon, index) => (
-                        <TechIcon
-                            key={index}
-                            name={icon.alt}
-                            image={icon.image}
-                            link={icon.link}
-                            size="lg"
+                    <div className="overflow-hidden relative w-full h-64">
+                        <Image
+                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+                            src={image.src}
+                            width={image.width || 1200}
+                            height={image.height || 800}
+                            alt={image.alt}
+                            loading={image.priority ? "eager" : "lazy"}
+                            priority={image.priority}
                         />
-                    ))}
-                </motion.div>
-                <div className="flex justify-center w-full my-6">
-                    <div
-                        className={`w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#383838] ${colorVariant[3]} transition-colors duration-1000`}
-                    />
+                        <div className="absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 pointer-events-none from-black/70 via-black/20 group-hover:from-black/55" />
+                        <div className="absolute -inset-1 bg-gradient-to-br via-transparent rounded-lg opacity-0 blur-2xl transition-opacity duration-700 pointer-events-none from-white/20 to-white/10 group-hover:opacity-60" />
+                    </div>
+                    <div className="flex relative z-10 flex-col gap-3 px-6 pt-6">
+                        <span className="text-[11px] uppercase tracking-[0.34em] text-white/45">
+                            {sub}
+                        </span>
+                        <h2 className="text-2xl font-semibold text-white">
+                            {title}
+                        </h2>
+                        {summary && (
+                            <p className="text-sm font-light leading-relaxed text-white/70">
+                                {summary}
+                            </p>
+                        )}
+                    </div>
+                    <div className="flex relative z-10 flex-wrap gap-2 px-6 pt-5 pb-6">
+                        {languages.map((language) => (
+                            <LanguageBadge key={language} language={language} />
+                        ))}
+                    </div>
+                <AmbientGradient
+                    seed={title}
+                    className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
+                />
                 </div>
-                <div className="flex items-center mx-2 mt-1">
-                    {projectLink && (
-                        <motion.div
-                            className={`flex items-center gap-2 p-2 px-4 pl-3 text-xl text-white rounded-lg cursor-pointer ${colorVariant[4]}`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.9 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 8,
-                            }}
-                        >
-                            <MdOpenInNew className="text-2xl" />
-                            <a
-                                className="text-sm font-medium lg:text-lg"
-                                target="_blank"
-                                href={projectLink}
-                            >
-                                View Project
-                            </a>
-                        </motion.div>
-                    )}
-                    {slug && (
-                        <motion.div
-                            className={`flex items-center ml-auto gap-2 p-2 px-4 text-sm lg:text-xl text-black rounded-lg cursor-pointer`}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.9 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 8,
-                            }}
-                        >
-                            <Link
-                                className="text-sm font-medium lg:text-lg dark:text-[#ececec]"
-                                href={`/blog/${slug}`}
-                                prefetch={false}
-                            >
-                                Read More
-                            </Link>
-                            <FaArrowRight className="text-2xl dark:text-[#ececec]" />
-                        </motion.div>
-                    )}
-                </div>
-            </div>
+            </motion.button>
         </motion.li>
     );
 }
+
+const colorVariants: Record<string, { border: string }> = {
+    ember: { border: "border-[#ffb199]/25" },
+    lilac: { border: "border-[#b8a4ff]/25" },
+    teal: { border: "border-[#7ce8c5]/25" },
+    slate: { border: "border-[#8ea6ff]/25" },
+    "orange-500": { border: "border-[#ffb35c]/25" },
+    "amber-500": { border: "border-[#ffcb5c]/25" },
+    "amber-400": { border: "border-[#ffd47a]/25" },
+    "indigo-500": { border: "border-[#9ba6ff]/25" },
+    "teal-500": { border: "border-[#74e2c7]/25" },
+    "rose-500": { border: "border-[#ff94b3]/25" },
+    "emerald-600": { border: "border-[#73f5c6]/25" },
+    "fuchsia-400": { border: "border-[#f4a3ff]/25" },
+    "purple-400": { border: "border-[#c0a3ff]/25" },
+    "red-500": { border: "border-[#ff8b8b]/25" },
+    "yellow-400": { border: "border-[#ffe27a]/25" },
+    "sky-600": { border: "border-[#7fc5ff]/25" },
+    "green-400": { border: "border-[#81f29d]/25" },
+    "cyan-300": { border: "border-[#84f2ff]/25" },
+    default: { border: "border-white/20" },
+};

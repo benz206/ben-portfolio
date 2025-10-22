@@ -261,7 +261,7 @@ export default function Golden({ people }: GoldenProps) {
                 onMouseLeave={handleMouseLeave}
             >
                 <span
-                    className="inline-block px-4 text-xl text-black whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105 dark:text-white"
+                    className="inline-block px-4 text-xl text-white whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105"
                     style={{
                         fontFamily:
                             "'Dancing Script', 'Brush Script MT', cursive",
@@ -320,7 +320,7 @@ export default function Golden({ people }: GoldenProps) {
             <div className="flex flex-col justify-center items-center space-y-6 w-full">
                 <div className="flex overflow-hidden relative justify-center items-center pb-2 w-full h-12 md:h-16">
                     <span
-                        className="inline-block px-4 text-2xl text-center text-black whitespace-nowrap select-none md:text-4xl dark:text-white"
+                        className="inline-block px-4 text-2xl text-center text-white whitespace-nowrap select-none md:text-4xl"
                         style={{
                             fontFamily:
                                 "'Dancing Script', 'Brush Script MT', cursive",

@@ -26,12 +26,15 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "HERMES",
         sub: "AI VOICE AGENT PLATFORM",
+        summary:
+            "HopHacks platform for building, managing, and calling AI voice agents with Supabase + Next.js.",
         description: (
             <>
                 Hermes is a modern platform for creating, managing, and calling
-                AI voice agents. Built during HopHacks 2025, it leverages Next.js,
-                Supabase for auth/data, and integrates telephony/runtime services
-                alongside Google models. View the source on {" "}
+                AI voice agents. Built during HopHacks 2025, it leverages
+                Next.js, Supabase for auth/data, and integrates
+                telephony/runtime services alongside Google models. View the
+                source on{" "}
                 <a
                     href="https://github.com/benz206/hophacks2025"
                     target="_blank"
@@ -42,33 +45,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://supabase.com",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg",
-                alt: "Supabase",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image:
-                    "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
         projectLink: "https://github.com/benz206/hophacks2025",
+        slug: "hermes-ai-voice-platform",
         color: "orange-500",
     },
     {
@@ -80,6 +59,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "EVENT VIEWER",
         sub: "MULTI-FUNCTIONAL EVENT VIEWER",
+        summary:
+            "Hack the North challenge app for browsing, filtering, and sharing events with friends.",
         description: (
             <>
                 For my Hack the North 2025 Frontend Application I was tasked
@@ -100,29 +81,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://graphql.org/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg",
-                alt: "GraphQL",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "GraphQL"],
         projectLink: "https://ben-htn.netlify.app",
+        slug: "event-viewer",
         color: "amber-500",
     },
     {
@@ -134,6 +95,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "STYLEIT",
         sub: "REALTIME DRESSING ROOM",
+        summary:
+            "Realtime virtual dressing room that overlays outfits onto photos using Mediapipe.",
         description: (
             <>
                 Shopping for clothes online shouldn’t be a gamble. With StyleIt,
@@ -154,29 +117,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://www.mongodb.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg",
-                alt: "MongoDB",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "MongoDB"],
         projectLink: "https://github.com/benz206/StyleIt",
+        slug: "styleit",
         color: "indigo-500",
     },
     {
@@ -188,6 +131,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "LINKCOM",
         sub: "BIDIRECTIONAL COMMUICATION DEVICE",
+        summary:
+            "Wireless IR communicator that keeps conversations accessible for hard-of-hearing users.",
         description: (
             <>
                 In a world where staying connected is more important than ever,
@@ -210,24 +155,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://en.cppreference.com/w/c/language",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg",
-                alt: "C",
-            },
-            {
-                link: "https://git-scm.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg",
-                alt: "Git",
-            },
-            {
-                link: "https://gitlab.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gitlab/gitlab-original.svg",
-                alt: "GitLab",
-            },
-        ],
+        languages: ["C", "Git", "Embedded"],
         projectLink: "https://github.com/benz206/LinkCom",
+        slug: "linkcom",
         color: "teal-500",
     },
     {
@@ -239,6 +169,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "GOOSE ON THE LOOSE",
         sub: "HACK THE NORTH 2024 WINNER",
+        summary:
+            "Hack the North app turning Waterloo goose sightings into collectible study buddies.",
         description: (
             <>
                 Amid the fast-paced rhythm of university life at Waterloo, one
@@ -256,29 +188,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 now all be friends!
             </>
         ),
-        icons: [
-            {
-                link: "https://www.mongodb.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg",
-                alt: "MongoDB",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://cloud.google.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
-                alt: "Google Cloud",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "MongoDB", "Google Cloud"],
         projectLink: "https://devpost.com/software/goosehunt",
+        slug: "goose-on-the-loose",
         color: "rose-500",
     },
     {
@@ -291,6 +203,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "RAPIDRX",
         sub: "RAPID DIAGNOSIS TOOL FOR SYMPTOMS",
+        summary:
+            "Rapid diagnosis assistant that triages symptoms and recommends next steps in seconds.",
         description: (
             <>
                 RapidRx is a tool for rapid diagnosis based on user-inputted
@@ -313,33 +227,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://firebase.google.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg",
-                alt: "Firebase",
-            },
-            {
-                link: "https://sap.com",
-                image: "https://i.imgur.com/qz7kIud.png",
-                alt: "SAP",
-                width: 60,
-                height: 60,
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cloudflare/cloudflare-original.svg",
-                alt: "Cloudflare",
-                width: 50,
-                height: 50,
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Firebase", "Cloudflare Workers"],
         projectLink: "https://github.com/benz206/RapidRx",
+        slug: "rapid-rx",
         color: "emerald-600",
     },
     {
@@ -351,6 +241,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SPOTIFY MACROBOARD",
         sub: "FULLY CUSTOM MACROBOARD FOR SPOTIFY",
+        summary:
+            "Wireless RGB macroboard with a custom PCB, OLED status panel, and Next.js companion UI.",
         description: (
             <>
                 I designed and built and fully custom macroboard for Spotify, it
@@ -374,28 +266,7 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://arduino.cc",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original-wordmark.svg",
-                alt: "Arduino",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://cplusplus.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
-                alt: "C++",
-            },
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-                alt: "NextJS",
-            },
-        ],
+        languages: ["C++", "TypeScript", "Next.js", "Arduino"],
         projectLink: "https://github.com/benz206/SpotifyMacroboard",
         slug: "SpotifyMacroboard",
         color: "amber-400",
@@ -410,6 +281,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "EUREKAHACKS 2024",
         sub: "RESPONSIVE MODERN HACKATHON WEBSITE",
+        summary:
+            "Responsive hackathon marketing site with animated storytelling built in Next.js.",
         description: (
             <>
                 As the lead director of web development for EurekaHACKS 2024, I
@@ -423,7 +296,7 @@ const projectPreviews: ProjectPreviewProps[] = [
                 while also managing the production site using Netlify. You can
                 view the site at{" "}
                 <a
-                    href="https://eurekahacks.ca"
+                    href="https://2024.eurekahacks.ca"
                     target="_blank"
                     className="font-bold text-blue-500 transition-colors duration-1000 hover:text-fuchsia-400"
                 >
@@ -432,29 +305,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://javascript.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-                alt: "JavaScript",
-            },
-            {
-                link: "https://netlify.com",
-                image: "https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg",
-                alt: "Netlify",
-            },
-            {
-                link: "https://figma.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-                alt: "Figma",
-            },
-        ],
-        projectLink: "https://eurekahacks.ca",
+        languages: ["Next.js", "JavaScript", "Figma"],
+        projectLink: "https://2024.eurekahacks.ca",
+        slug: "eurekahacks-2024",
         color: "fuchsia-400",
     },
     {
@@ -466,6 +319,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "FLASHNOTES",
         sub: "PROFESSIONAL AI VISION BASED NOTE SUMMARIZATION",
+        summary:
+            "AI vision tool that turns handwritten notes into organized flashcards with a polished Next.js UI.",
         description: (
             <>
                 For a hackathon I led my team to create FlashNotes, a
@@ -494,29 +349,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://openai.com",
-                image: "https://cdn.worldvectorlogo.com/logos/openai-2.svg",
-                alt: "OpenAI",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "OpenAI"],
         projectLink: "https://github.com/benz206/flashnotes",
+        slug: "flashnotes",
         color: "orange-500",
     },
     {
@@ -528,6 +363,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "APHS MAKERS COMPETITION",
         sub: "CLUB WEBSITE USING NEXT.JS & TAILWIND",
+        summary:
+            "Club site with schedules, FAQs, and sponsor info built in Next.js and Tailwind.",
         description: (
             <>
                 To continue practicing using Tailwind and Next.js, I made a
@@ -548,29 +385,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://react.dev",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-                alt: "React",
-            },
-        ],
+        languages: ["Next.js", "TypeScript", "Tailwind", "React"],
         projectLink: "https://apmc.vercel.app/",
+        slug: "aphs-makers-competition",
         color: "purple-400",
     },
     {
@@ -582,6 +399,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "BTAGSCRIPT PLAYGROUND",
         sub: "DYNAMICALLY TYPED INTERPRETER AND DEBUGGER",
+        summary:
+            "Interpreter and web playground for the bTagScript templating language.",
         description: (
             <>
                 I made an{" "}
@@ -616,29 +435,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 functions that may be tedious to program but simple in practice.
             </>
         ),
-        icons: [
-            {
-                link: "https://python.org",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://javascript.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-                alt: "JavaScript",
-            },
-            {
-                link: "https://html.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-                alt: "HTML5",
-            },
-            {
-                link: "https://www.w3schools.com/css/",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-                alt: "CSS",
-            },
-        ],
+        languages: ["Python", "JavaScript", "HTML", "CSS"],
         projectLink: "https://benz206.github.io/bTagScriptPlayground/",
+        slug: "btagscript-playground",
         color: "red-500",
     },
     {
@@ -650,6 +449,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SPHINX EXTENSION",
         sub: "Custom extension for Sphinx",
+        summary:
+            "Custom Sphinx extension that adds syntax highlighting for bTagScript docs.",
         description: (
             <>
                 After creating my own modified version of an interpreter with
@@ -677,29 +478,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 .
             </>
         ),
-        icons: [
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://html.com",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-                alt: "HTML5",
-            },
-            {
-                link: "https://www.w3schools.com/css/",
-                image: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-                alt: "CSS",
-            },
-            {
-                link: "https://about.readthedocs.com/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/readthedocs/readthedocs-original.svg",
-                alt: "Read The Docs",
-            },
-        ],
+        languages: ["Python", "HTML", "CSS", "Sphinx"],
         projectLink: "https://btagscript.readthedocs.io/en/latest/index.html",
+        slug: "sphinx-extension",
         color: "yellow-400",
     },
     {
@@ -711,6 +492,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "BENNY BOT",
         sub: "Custom Discord Bot",
+        summary:
+            "Full-stack Discord bot with music playback, OCR, moderation, and custom commands.",
         description: (
             <>
                 After learning more about Python and technologies overall I
@@ -724,29 +507,9 @@ const projectPreviews: ProjectPreviewProps[] = [
                 Virtual Private Servers and Linux.
             </>
         ),
-        icons: [
-            {
-                link: "https://www.linux.org/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg",
-                alt: "Linux",
-            },
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://discord.com",
-                image: "https://cdnlogo.com/logos/d/43/discord.svg",
-                alt: "Discord",
-            },
-            {
-                link: "https://www.oracle.com/ca-en/",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/oracle/oracle-original.svg",
-                alt: "Oracle",
-            },
-        ],
+        languages: ["Python", "Discord API", "Linux"],
         projectLink: "https://github.com/benz206/Benny",
+        slug: "benny-bot",
         color: "sky-600",
     },
     {
@@ -758,6 +521,8 @@ const projectPreviews: ProjectPreviewProps[] = [
         },
         title: "SCHOOL ANNOUNCEMENTS",
         sub: "Automated School Announcement Forwarder",
+        summary:
+            "Discord bot that scrapes school announcements and pushes updates with subscriptions.",
         description: (
             <>
                 Since our School Announcements are crudely added to a 96 page
@@ -779,74 +544,11 @@ const projectPreviews: ProjectPreviewProps[] = [
                 announcement is posted.
             </>
         ),
-        icons: [
-            {
-                link: "https://cloud.google.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg",
-                alt: "Google",
-            },
-            {
-                link: "https://python.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-                alt: "Python",
-            },
-            {
-                link: "https://discord.com",
-                image: "https://cdnlogo.com/logos/d/43/discord.svg",
-                alt: "Discord",
-            },
-            {
-                link: "https://sheets.google.com",
-                image: "https://www.cdnlogo.com/logos/g/71/google-sheets.svg",
-                alt: "Sheets",
-            },
-        ],
+        languages: ["Python", "Google Cloud", "Discord API"],
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
+        slug: "school-announcements",
         color: "green-400",
-    },
-    {
-        image: {
-            src: PortfolioImage,
-            alt: "Portfolio",
-            width: 900,
-            height: 100,
-        },
-        title: "THIS WEBSITE!",
-        sub: "MY OWN PERSONAL WEBSITE",
-        description: (
-            <>
-                This website is made using NextJS, TypeScript, and TailwindCSS.
-                I wanted to make a website that was simple, yet elegant, and I
-                think I did pretty good. Here is where I&apos;ll showcase my
-                projects, and the technologies I used to create them. I may also
-                post some blogs or something later!
-            </>
-        ),
-        icons: [
-            {
-                link: "https://nextjs.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg",
-                alt: "NextJS",
-            },
-            {
-                link: "https://typescriptlang.org",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-                alt: "TypeScript",
-            },
-            {
-                link: "https://tailwindcss.com",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-                alt: "TailwindCSS",
-            },
-            {
-                link: "https://react.dev",
-                image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-                alt: "React",
-            },
-        ],
-        projectLink: "https://github.com/benz206/ben-portfolio",
-        color: "cyan-300",
-    },
+    }
 ];
 
 export default projectPreviews;

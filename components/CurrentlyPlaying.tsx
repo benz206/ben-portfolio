@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa";
+import Card from "@/components/Card";
 
 type SpotifyTrack = {
     title: string;
@@ -57,18 +58,24 @@ export default function CurrentlyPlaying() {
                 const duration = parseInt(track.duration);
                 return newProgress > duration ? duration : newProgress;
             });
-        }, 1000);
+        }, 5000);
 
         return () => clearInterval(progressInterval);
     }, [track]);
 
     if (isLoading) {
         return (
-            <motion.div
-                className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
+            <Card
+                variant="glass"
+                ambient
+                ambientSeed="currently-playing"
+                ambientClassName="opacity-50"
+                className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
+                motionProps={{
+                    initial: { opacity: 0 },
+                    animate: { opacity: 1 },
+                    transition: { duration: 1 },
+                }}
             >
                 <div
                     className="absolute inset-0 w-full h-full"
@@ -79,12 +86,12 @@ export default function CurrentlyPlaying() {
                         backgroundPosition: "center",
                     }}
                 />
-                <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
+                <div className="absolute inset-0 bg-black/50" />
                 <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
                     <div className="flex-shrink-0 h-full overflow-hidden shadow-xl w- max-w-36 aspect-square rounded-xl">
-                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse dark:from-gray-700 dark:to-gray-600">
+                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-600 animate-pulse">
                             <div className="flex items-center justify-center w-full h-full">
-                                <FaSpotify className="w-10 h-10 text-gray-400 animate-pulse dark:text-gray-500" />
+                                <FaSpotify className="w-10 h-10 text-gray-500 animate-pulse" />
                             </div>
                         </div>
                     </div>
@@ -92,12 +99,12 @@ export default function CurrentlyPlaying() {
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                         <div className="flex items-center mb-2 space-x-2">
                             <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500 animate-pulse" />
-                            <div className="w-32 h-3 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
+                            <div className="w-32 h-3 bg-gray-700 rounded animate-pulse"></div>
                         </div>
 
-                        <div className="w-48 h-5 mb-3 bg-gray-200 rounded animate-pulse dark:bg-gray-700"></div>
+                        <div className="w-48 h-5 mb-3 bg-gray-700 rounded animate-pulse"></div>
 
-                        <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full">
+                        <div className="w-full h-1.5 bg-gray-700 rounded-full">
                             <motion.div
                                 className="h-1.5 bg-green-500 rounded-full"
                                 initial={{ width: "0%" }}
@@ -111,7 +118,7 @@ export default function CurrentlyPlaying() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </Card>
         );
     }
     if (error || !track) {
@@ -125,14 +132,16 @@ export default function CurrentlyPlaying() {
         : "#1DB954";
 
     return (
-        <motion.div
-            className="relative flex h-32 mt-3 mx-auto w-full card-playing max-w-[700px] overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            style={{
-                borderColor: `${dominantColor}`,
-                borderWidth: "3px",
+        <Card
+            variant="glass"
+            ambient
+            ambientSeed="currently-playing"
+            ambientClassName="opacity-50"
+            className="relative flex h-32 mt-3 mx-auto p-2 w-full max-w-[700px] overflow-hidden rounded-xl"
+            motionProps={{
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                transition: { duration: 1 },
             }}
         >
             {track.albumArt && (
@@ -146,12 +155,12 @@ export default function CurrentlyPlaying() {
                             backgroundRepeat: "no-repeat",
                         }}
                     />
-                    <div className="absolute inset-0 bg-white/50 dark:bg-black/50" />
+                    <div className="absolute inset-0 bg-black/50" />
                 </>
             )}
             <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="w-auto h-full overflow-hidden shadow-xl rounded-xl">
-                    {track.albumArt ? (
+                <div className="w-20 h-20 overflow-hidden shadow-xl rounded-xl">
+                    {track.albumArt && (
                         <Image
                             src={track.albumArt}
                             alt={`${track.album} album art`}
@@ -160,17 +169,12 @@ export default function CurrentlyPlaying() {
                             unoptimized
                             className="object-cover w-full h-full"
                         />
-                    ) : (
-                        <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-green-400 to-green-600">
-                            <FaSpotify className="w-10 h-10 text-white" />
-                        </div>
                     )}
                 </div>
-
                 <div className="flex flex-col justify-center flex-1 min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
-                        <span className="text-xs font-medium text-black truncate dark:text-slate-400">
+                        <span className="text-xs font-medium text-slate-400 truncate">
                             {track.paused === "true"
                                 ? "Last Listened To"
                                 : "Now Playing"}{" "}
@@ -183,7 +187,7 @@ export default function CurrentlyPlaying() {
                     </h3>
 
                     <div className="w-full">
-                        <div className="w-full h-1.5 bg-gray-200 rounded-full dark:bg-gray-700">
+                        <div className="w-full h-1.5 bg-gray-700 rounded-full">
                             <div
                                 className="h-1.5 rounded-full transition-all duration-300 ease-out"
                                 style={{
@@ -195,6 +199,6 @@ export default function CurrentlyPlaying() {
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </Card>
     );
 }

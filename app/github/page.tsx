@@ -1,30 +1,13 @@
 "use client";
-"use client";
 import { motion, useInView, easeInOut } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { GitHubRepo } from "@/types";
 import { ImGithub } from "react-icons/im";
-import { FaStar, FaCodeFork } from "react-icons/fa6";
-import { IoMenu } from "react-icons/io5";
-import { IoMdGrid } from "react-icons/io";
-import { IoChevronDown } from "react-icons/io5";
-import Tags from "@/components/GitHub/Tags";
+import { FaCodeFork, FaStar } from "react-icons/fa6";
+import Card from "@/components/Card";
 import LanguageBar from "@/components/GitHub/LanguageBar";
+import { GitHubRepo } from "@/types";
 
-const boxAnim = {
-    hidden: { opacity: 1, scale: 0 },
-    visible: { opacity: 1, scale: 1, transition: { delayChildren: 0.3, staggerChildren: 0.2 } },
-};
-const boxItem = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 1, ease: easeInOut } },
-};
-
-enum Dropdown {
-    Grid,
-    List,
-}
 enum SortOption {
     Name = "name",
     Stars = "stars",
@@ -32,60 +15,84 @@ enum SortOption {
     Language = "language",
 }
 
-type TagGlow = { [key: string]: string };
-export const boxGlows: TagGlow[] = [
-    { Python: "hover:shadow-blue-500" },
-    { CSS: "hover:shadow-purple-500" },
-    { "C++": "hover:shadow-yellow-400" },
-    { GDScript: "hover:shadow-slate-800" },
-    { Svelte: "hover:shadow-[#ff3e00]" },
-    { C: "hover:shadow-gray-500" },
-    { Java: "hover:shadow-red-500" },
-    { Rust: "hover:shadow-[#CE412B]" },
-    { TypeScript: "hover:shadow-[#007acc]" },
-    { HTML: "hover:shadow-emerald-500" },
-    { JavaScript: "hover:shadow-[#f0db4f]" },
-    { React: "hover:shadow-[#61dafb]" },
-    { "Next.js": "hover:shadow-[#000000]" },
-    { MongoDB: "hover:shadow-[#00ed64]" },
-    { "Node.js": "hover:shadow-[#68a063]" },
-    { Redis: "hover:shadow-[#dc382d]" },
-    { TailwindCSS: "hover:shadow-[#0ea5e9]" },
-    { MySQL: "hover:shadow-[#00758f]" },
-    { SQLite: "hover:shadow-[#003b57]" },
-    { PostgreSQL: "hover:shadow-[#336791]" },
-    { Firebase: "hover:shadow-[#ffca28]" },
-    { Vercel: "hover:shadow-[#000000]" },
-];
-function getGlowClass(language: string): string {
-    const glow = boxGlows.find((g) => g[language]);
-    return ((glow ? glow[language] : "hover:shadow-white") + " hover:shadow-xl duration-500 ease-in-out");
-}
+const fadeIn = {
+    hidden: { opacity: 0, y: 32 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: easeInOut },
+    },
+};
+
+const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
+
+const sortRepositories = (
+    repos: GitHubRepo[],
+    sortBy: SortOption,
+    sortOrder: "asc" | "desc"
+) => {
+    return [...repos].sort((a, b) => {
+        let aValue: string | number = 0;
+        let bValue: string | number = 0;
+        switch (sortBy) {
+            case SortOption.Name:
+                aValue = a.name.toLowerCase();
+                bValue = b.name.toLowerCase();
+                break;
+            case SortOption.Stars:
+                aValue = a.stargazers_count || 0;
+                bValue = b.stargazers_count || 0;
+                break;
+            case SortOption.Forks:
+                aValue = a.forks_count || 0;
+                bValue = b.forks_count || 0;
+                break;
+            case SortOption.Language:
+                aValue = (a.language || "").toLowerCase();
+                bValue = (b.language || "").toLowerCase();
+                break;
+        }
+        if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+        if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+    });
+};
+
+const getSortLabel = (option: SortOption) => {
+    if (option === SortOption.Name) return "Name";
+    if (option === SortOption.Stars) return "Stars";
+    if (option === SortOption.Forks) return "Forks";
+    return "Language";
+};
 
 export default function GithubPage() {
     const [repoData, setRepoData] = useState<GitHubRepo[]>([]);
     const [filteredRepoData, setFilteredRepoData] = useState<GitHubRepo[]>([]);
     const [isLoading, setLoading] = useState(true);
-    const [viewMode, setViewMode] = useState(Dropdown.Grid);
-    const [sortBy, setSortBy] = useState<SortOption>(SortOption.Name);
+    const [sortBy, setSortBy] = useState<SortOption>(SortOption.Stars);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-    const [showSortDropdown, setShowSortDropdown] = useState(false);
-    const contentRef = useRef(null);
     const heroRef = useRef(null);
-    const sortDropdownRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(contentRef, { once: true });
-    const isHeroInView = useInView(heroRef, { once: true });
+    // const heroInView = useInView(heroRef, { once: true, amount: 'some' });
+    const heroInView = true;
+    const timelineRef = useRef(null);
+    // const timelineInView = useInView(timelineRef, {
+    //     once: true,
+    //     amount: 'some',
+    // });
+    const timelineInView = true;
 
     const fetchWithCache = async (url: string, cacheKey: string) => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
             const { data, timestamp } = JSON.parse(cached);
-            const now = Date.now();
-            if (now - timestamp < 24 * 60 * 60 * 1000) return data;
+            if (Date.now() - timestamp < 24 * 60 * 60 * 1000) return data;
         }
-        const resp = await fetch(url);
-        const data = await resp.json();
-        localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
+        const response = await fetch(url);
+        const data = await response.json();
+        localStorage.setItem(
+            cacheKey,
+            JSON.stringify({ data, timestamp: Date.now() })
+        );
         return data;
     };
 
@@ -96,241 +103,447 @@ export default function GithubPage() {
                     "https://api.github.com/users/benz206/repos",
                     "github_repos"
                 );
-                const filtered = data.filter((repo: GitHubRepo) =>
-                    repo.name != "benz206" &&
-                    repo.name.indexOf("experiments") == -1 &&
-                    repo.name.indexOf("learning") == -1
-                );
+                const filtered = data.filter((repo: GitHubRepo) => {
+                    const name = repo.name.toLowerCase();
+                    if (name === "benz206") return false;
+                    if (name.includes("experiments")) return false;
+                    if (name.includes("learning")) return false;
+                    return true;
+                });
                 setRepoData(filtered);
-                setLoading(false);
-            } catch (e) {
-                console.error("Error fetching repository data:", e);
+            } catch (error) {
+                console.error("Error fetching repository data:", error);
+            } finally {
                 setLoading(false);
             }
         })();
     }, []);
 
-    const sortRepositories = (repos: GitHubRepo[], s: SortOption, order: "asc" | "desc") => {
-        return [...repos].sort((a, b) => {
-            let aValue: any;
-            let bValue: any;
-            switch (s) {
-                case SortOption.Name:
-                    aValue = a.name.toLowerCase();
-                    bValue = b.name.toLowerCase();
-                    break;
-                case SortOption.Stars:
-                    aValue = a.stargazers_count || 0;
-                    bValue = b.stargazers_count || 0;
-                    break;
-                case SortOption.Forks:
-                    aValue = a.forks_count || 0;
-                    bValue = b.forks_count || 0;
-                    break;
-                case SortOption.Language:
-                    aValue = (a.language || "").toLowerCase();
-                    bValue = (b.language || "").toLowerCase();
-                    break;
-                default:
-                    return 0;
-            }
-            if (aValue < bValue) return order === "asc" ? -1 : 1;
-            if (aValue > bValue) return order === "asc" ? 1 : -1;
-            return 0;
-        });
-    };
-
     useEffect(() => {
         setFilteredRepoData(sortRepositories(repoData, sortBy, sortOrder));
     }, [repoData, sortBy, sortOrder]);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target as Node)) {
-                setShowSortDropdown(false);
-            }
+    const totals = useMemo(() => {
+        const stars = repoData.reduce(
+            (total, repo) => total + (repo.stargazers_count || 0),
+            0
+        );
+        const forks = repoData.reduce(
+            (total, repo) => total + (repo.forks_count || 0),
+            0
+        );
+        const languages = new Set(
+            repoData
+                .map((repo) => repo.language)
+                .filter((language): language is string => Boolean(language))
+        ).size;
+        return {
+            repos: repoData.length,
+            stars,
+            forks,
+            languages,
         };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    }, [repoData]);
 
-    const handleSortChange = (newSortBy: SortOption) => {
-        if (sortBy === newSortBy) setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-        else {
-            setSortBy(newSortBy);
-            setSortOrder("desc");
+    const lastUpdated = useMemo(() => {
+        if (!repoData.length) return null;
+        const latest = [...repoData].sort((a, b) => {
+            return (
+                new Date(b.updated_at).valueOf() -
+                new Date(a.updated_at).valueOf()
+            );
+        })[0];
+        return latest.updated_at;
+    }, [repoData]);
+
+    const languagePulse = useMemo(() => {
+        if (!repoData.length) return [];
+        const counts: Record<string, number> = {};
+        repoData.forEach((repo) => {
+            if (!repo.language) return;
+            counts[repo.language] = (counts[repo.language] || 0) + 1;
+        });
+        const total = Object.values(counts).reduce(
+            (sum, count) => sum + count,
+            0
+        );
+        return Object.entries(counts)
+            .sort((a, b) => b[1] - a[1])
+            .map(([language, count]) => ({
+                language,
+                count,
+                percentage: Math.round((count / Math.max(total, 1)) * 100),
+            }));
+    }, [repoData]);
+
+    const spotlightRepo = useMemo(() => {
+        if (!repoData.length) return null;
+        return [...repoData].sort(
+            (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0)
+        )[0];
+    }, [repoData]);
+
+    const statItems = useMemo(
+        () => [
+            { label: "Live repositories", value: totals.repos },
+            { label: "Total stars", value: totals.stars },
+            { label: "Forks captured", value: totals.forks },
+            { label: "Active languages", value: totals.languages },
+        ],
+        [totals]
+    );
+
+    const lastUpdatedLabel = lastUpdated
+        ? new Date(lastUpdated).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+          })
+        : null;
+
+    const handleSortChange = (option: SortOption) => {
+        if (option === sortBy) {
+            setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+            return;
         }
-        setShowSortDropdown(false);
+        setSortBy(option);
+        setSortOrder(option === SortOption.Name ? "asc" : "desc");
     };
 
-    const getSortLabel = (option: SortOption) => {
-        switch (option) {
-            case SortOption.Name:
-                return "Name";
-            case SortOption.Stars:
-                return "Stars";
-            case SortOption.Forks:
-                return "Forks";
-            case SortOption.Language:
-                return "Language";
-            default:
-                return "Name";
-        }
-    };
+    if (isLoading && !repoData.length) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-[#050506]">
+                <AiOutlineLoading className="w-16 h-16 animate-spin text-white/60" />
+            </main>
+        );
+    }
 
     return (
-        <>
-            <div className="relative top-0 flex justify-center w-full h-[550px] bg-rainbow-gradient animate-breathing-gradient">
+        <main className="relative overflow-hidden bg-[#050506] text-white">
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 bg-noir-radial opacity-70" />
+            </div>
+            <section className="relative flex items-center min-h-screen px-6 py-24 sm:px-12">
                 <motion.div
                     ref={heroRef}
-                    className="relative flex h-[370px] lg:h-[300px] card-hero w-11/12 lg:w-[1000px] mt-32 lg:mt-40"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex flex-col justify-center p-12 w-full h-full">
-                        <h2 className="p-2 text-lg text-center">TAKE A PEEK AT MY REPOSITORIES</h2>
-                        <h1 className="p-2 text-4xl font-black text-center lg:text-6xl">GITHUB</h1>
-                        <p className="p-2 py-5 font-light">
-                            View some of my current projects in progress, and some of my past projects that I have worked on.
-                        </p>
-                    </div>
-                </motion.div>
-            </div>
-            <motion.div
-                ref={contentRef}
-                className="flex flex-col flex-wrap justify-center content-center pt-12 pb-16 w-full min-h-screen lg:pb-20 lg:pt-24 3xl:pt-12"
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                transition={{ duration: 0.5 }}
-            >
-                {isLoading && (
-                    <div className="flex flex-col justify-center items-center w-full h-full">
-                        <AiOutlineLoading className="w-24 h-24 text-black animate-spin" />
-                    </div>
-                )}
-                <div className="flex gap-4 justify-center items-center p-6 ml-auto">
-                    <div className="relative" ref={sortDropdownRef}>
-                        <button
-                            onClick={() => setShowSortDropdown(!showSortDropdown)}
-                            className="flex gap-2 items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-[#ececec] bg-white/80 dark:bg-[#121212]/30 backdrop-blur-md rounded-lg transition-all duration-200 ease-in-out hover:bg-white/90 dark:hover:bg-[#121212]/50"
-                        >
-                            Sort by: {getSortLabel(sortBy)}
-                            <IoChevronDown className={`w-4 h-4 transition-transform ${showSortDropdown ? "rotate-180" : ""}`} />
-                        </button>
-                        {showSortDropdown && (
-                            <div className="absolute left-0 top-full z-10 mt-1 w-48 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md rounded-lg drop-shadow-xl">
-                                {Object.values(SortOption).map((option) => (
-                                    <button
-                                        key={option}
-                                        onClick={() => handleSortChange(option)}
-                                        className={`w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-[#ececec] hover:bg-white/50 dark:hover:bg-[#121212]/70 transition-all duration-200 ease-in-out ${sortBy === option ? "bg-white/70 dark:bg-[#121212]/60 font-medium" : ""}`}
-                                    >
-                                        {getSortLabel(option)}
-                                        {sortBy === option && (
-                                            <span className="ml-2 text-xs">{sortOrder === "asc" ? "↑" : "↓"}</span>
-                                        )}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    <button
-                        onClick={() => setViewMode(Dropdown.Grid)}
-                        className={`p-2 rounded-lg transition-colors ${viewMode === Dropdown.Grid ? "text-gray-600 dark:text-gray-200" : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"}`}
-                        title="Grid View"
-                    >
-                        <IoMdGrid className="w-6 h-6" />
-                    </button>
-                    <button
-                        onClick={() => setViewMode(Dropdown.List)}
-                        className={`rounded-lg transition-colors ${viewMode === Dropdown.List ? "text-gray-600 dark:text-gray-200" : "text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"}`}
-                        title="List View"
-                    >
-                        <IoMenu className="w-6 h-6" />
-                    </button>
-                </div>
-                <motion.div
-                    className={`${viewMode === Dropdown.Grid ? "grid gap-y-12 lg:gap-y-10 w-11/12 md:w-[600px] xl:w-[1300px] 3xl:w-[1850px] py-5 pt-0 grid-flow-row grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-x-5 md:gap-x-7 lg:gap-x-16" : "flex flex-col w-11/12 md:w-[600px] xl:w-[1000px] divide-y divide-gray-200 dark:divide-gray-800"}`}
-                    variants={boxAnim}
+                    className="z-10 mx-auto grid w-full max-w-6xl gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center"
                     initial="hidden"
-                    animate="visible"
+                    animate={heroInView ? "visible" : "hidden"}
+                    variants={{
+                        visible: { transition: { staggerChildren: 0.12 } },
+                        hidden: {},
+                    }}
                 >
-                    {!isLoading && filteredRepoData.map((repo, index) => (
+                    <motion.div variants={fadeIn} className="space-y-10">
+                        <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-white/60">
+                            Repo radar
+                            {lastUpdatedLabel && (
+                                <span className="rounded-full bg-white/10 px-2 py-1 text-[0.6rem] tracking-[0.2em] text-white/50">
+                                    Refreshed {lastUpdatedLabel}
+                                </span>
+                            )}
+                        </div>
+                        <h1 className="text-4xl font-semibold leading-tight text-balance sm:text-5xl lg:text-6xl">
+                            An immersive stream of my GitHub work in motion.
+                        </h1>
+                        <p className="max-w-2xl text-lg text-white/65">
+                            Explore infrastructure spikes, polished tools, and
+                            playful experiments. Curated live, sorted at will,
+                            framed inside a cinematic surface.
+                        </p>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            {statItems.map((item) => (
+                                <Card
+                                    key={item.label}
+                                    variant="glass"
+                                    ambient
+                                    ambientSeed={item.label}
+                                    ambientClassName="opacity-40"
+                                    className="relative flex flex-col gap-2 p-6 border border-white/10 bg-white/5 backdrop-blur"
+                                    motionProps={{ variants: fadeIn }}
+                                >
+                                    <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                                        {item.label}
+                                    </span>
+                                    <span className="text-3xl font-semibold">
+                                        {formatNumber(item.value)}
+                                    </span>
+                                </Card>
+                            ))}
+                        </div>
+                    </motion.div>
+                    <motion.div variants={fadeIn} className="relative">
+                        {spotlightRepo ? (
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientSeed={spotlightRepo.name}
+                                ambientClassName="opacity-60"
+                                className="relative flex flex-col h-full gap-6 p-8 overflow-hidden border border-white/10 bg-white/5 backdrop-blur"
+                            >
+                                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                                    Spotlight repository
+                                </span>
+                                <div className="space-y-4">
+                                    <h2 className="text-3xl font-semibold tracking-tight">
+                                        {spotlightRepo.name}
+                                    </h2>
+                                    <p className="text-sm text-white/70">
+                                        {spotlightRepo.description ||
+                                            "A live project anchored in this season's focus."}
+                                    </p>
+                                    <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+                                        <span className="flex items-center gap-2">
+                                            <FaStar className="w-4 h-4 text-yellow-400" />
+                                            {formatNumber(
+                                                spotlightRepo.stargazers_count ||
+                                                    0
+                                            )}
+                                        </span>
+                                        <span className="flex items-center gap-2">
+                                            <FaCodeFork className="w-4 h-4" />
+                                            {formatNumber(
+                                                spotlightRepo.forks_count || 0
+                                            )}
+                                        </span>
+                                        {spotlightRepo.language && (
+                                            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em]">
+                                                {spotlightRepo.language}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="mt-auto space-y-4">
+                                    <div className="flex items-center justify-between text-sm text-white/60">
+                                        <span>Language mix</span>
+                                        <a
+                                            href={spotlightRepo.html_url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white transition hover:border-white/40 hover:text-white"
+                                        >
+                                            <ImGithub className="w-4 h-4" />
+                                            Open repo
+                                        </a>
+                                    </div>
+                                    <LanguageBar repo={spotlightRepo.name} />
+                                </div>
+                            </Card>
+                        ) : (
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientSeed="empty"
+                                ambientClassName="opacity-40"
+                                className="flex flex-col items-center justify-center h-full gap-4 p-8 border border-white/10 bg-white/5 text-white/60"
+                            >
+                                No repositories found right now.
+                            </Card>
+                        )}
+                    </motion.div>
+                </motion.div>
+            </section>
+            <section className="relative min-h-screen px-6 py-24 border-t border-white/5 sm:px-12">
+                <div className="flex flex-col w-full max-w-6xl gap-16 mx-auto lg:flex-row">
+                    <motion.aside
+                        className="flex flex-col w-full gap-12 lg:max-w-sm"
+                        initial="hidden"
+                        animate={timelineInView ? "visible" : "hidden"}
+                        variants={{
+                            visible: { transition: { staggerChildren: 0.12 } },
+                            hidden: {},
+                        }}
+                    >
+                        <motion.div variants={fadeIn} className="space-y-4">
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                                Sort canvas
+                            </span>
+                            <div className="flex flex-wrap gap-3">
+                                {Object.values(SortOption).map((option) => {
+                                    const active = sortBy === option;
+                                    return (
+                                        <button
+                                            key={option}
+                                            onClick={() =>
+                                                handleSortChange(option)
+                                            }
+                                            className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.25em] transition ${
+                                                active
+                                                    ? "border-white bg-white text-black"
+                                                    : "border-white/15 bg-white/5 text-white/70 hover:border-white/40 hover:text-white"
+                                            }`}
+                                        >
+                                            {getSortLabel(option)}
+                                            {active && (
+                                                <span className="ml-2 text-[0.65rem] tracking-[0.2em]">
+                                                    {sortOrder === "asc"
+                                                        ? "asc"
+                                                        : "desc"}
+                                                </span>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
                         <motion.div
-                            className={`${viewMode === Dropdown.Grid ? "flex flex-col justify-center w-full h-full px-5 py-4 card-repo" : "flex flex-col w-full py-6 first:pt-0 last:pb-0"} ${viewMode === Dropdown.Grid ? getGlowClass(repo.language) : ""}`}
-                            key={repo.id}
-                            variants={boxItem}
-                            custom={index}
+                            variants={fadeIn}
+                            className="p-6 space-y-6 border rounded-3xl border-white/10 bg-white/5 backdrop-blur"
                         >
-                            <div className={`${viewMode === Dropdown.List ? "flex items-center gap-4" : ""}`}>
-                                <h1 className={`text-2xl font-bold ${viewMode === Dropdown.List ? "flex-1" : ""}`}>
-                                    {repo.name}
-                                </h1>
-                                {viewMode === Dropdown.List && (
-                                    <div className="flex gap-4 items-center">
-                                        {repo.stargazers_count > 0 && (
-                                            <p className="flex items-center text-sm font-base">
-                                                <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
-                                                {repo.stargazers_count}
-                                            </p>
-                                        )}
-                                        {repo.forks > 0 && (
-                                            <p className="flex justify-center items-center text-sm font-base">
-                                                <FaCodeFork className="mx-1 my-auto w-4 h-4" />
-                                                {repo.forks_count}
-                                            </p>
-                                        )}
-                                        <div>
-                                            <Tags rawTags={[repo.language]} />
+                            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+                                <span>Language pulse</span>
+                                <span>{languagePulse.length} tracked</span>
+                            </div>
+                            <div className="space-y-4">
+                                {languagePulse.length === 0 && (
+                                    <span className="text-sm text-white/50">
+                                        Language data is warming up.
+                                    </span>
+                                )}
+                                {languagePulse.slice(0, 6).map((entry) => (
+                                    <div
+                                        key={entry.language}
+                                        className="flex items-center gap-4"
+                                    >
+                                        <div className="w-10 h-10 text-sm font-semibold leading-10 text-center border rounded-2xl border-white/10 bg-white/5">
+                                            {entry.percentage}%
+                                        </div>
+                                        <div className="flex items-center justify-between flex-1">
+                                            <span className="text-sm font-medium text-white/80">
+                                                {entry.language}
+                                            </span>
+                                            <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                                                {entry.count} repos
+                                            </span>
                                         </div>
                                     </div>
-                                )}
+                                ))}
                             </div>
-                            <p className={`py-3 text-sm font-light ${viewMode === Dropdown.List ? "flex-1" : ""}`}>
-                                {repo.description}
-                            </p>
-                            <div className={`flex items-center py-1 ${viewMode === Dropdown.Grid ? "mt-auto" : ""}`}>
-                                <a
-                                    className="flex justify-center items-center px-2.5 py-1.5 text-sm font-normal text-white transition-all duration-200 ease-in-out bg-black rounded-lg hover:bg-[#6e5494] hover:text-white"
-                                    href={repo.html_url}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                >
-                                    <ImGithub className="w-5 h-5 my-auto mr-1.5" />
-                                    GitHub
-                                </a>
-                                {viewMode === Dropdown.Grid && (
-                                    <>
-                                        {repo.stargazers_count > 0 && (
-                                            <p className="flex items-center mx-1.5 text-sm font-base">
-                                                <FaStar className="mx-1 my-auto w-4 h-4 text-yellow-300" />
-                                                {repo.stargazers_count}
-                                            </p>
-                                        )}
-                                        {repo.forks > 0 && (
-                                            <p className="flex items-center justify-center mx-1.5 mr-auto text-sm font-base">
-                                                <FaCodeFork className="mx-1 my-auto w-4 h-4" />
-                                                {repo.forks_count}
-                                            </p>
-                                        )}
-                                        <div className="ml-auto">
-                                            <Tags rawTags={[repo.language]} />
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                            {viewMode === Dropdown.Grid && (
-                                <div className="mt-2">
-                                    <LanguageBar repo={repo.name} />
-                                </div>
-                            )}
                         </motion.div>
-                    ))}
-                </motion.div>
-            </motion.div>
-        </>
+                        <motion.div
+                            variants={fadeIn}
+                            className="space-y-4 text-sm text-white/60"
+                        >
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                                How to explore
+                            </span>
+                            <p>
+                                Tap a sort mode to reorder the stream. Each card
+                                glows from its commit energy, with metrics
+                                tucked alongside quick access.
+                            </p>
+                        </motion.div>
+                    </motion.aside>
+                    <motion.div
+                        ref={timelineRef}
+                        className="flex flex-col w-full gap-10"
+                        initial={{ opacity: 0, y: 48 }}
+                        animate={
+                            timelineInView
+                                ? { opacity: 1, y: 0 }
+                                : { opacity: 0, y: 48 }
+                        }
+                        transition={{ duration: 0.7, ease: easeInOut }}
+                    >
+                        {filteredRepoData.length === 0 && (
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientSeed="empty-state"
+                                ambientClassName="opacity-40"
+                                className="flex min-h-[240px] flex-col items-center justify-center border border-white/10 bg-white/5 p-10 text-center text-white/60"
+                            >
+                                No repositories match this sort right now.
+                            </Card>
+                        )}
+                        {filteredRepoData.map((repo, index) => {
+                            const updatedLabel = new Date(
+                                repo.updated_at
+                            ).toLocaleDateString(undefined, {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                            });
+                            return (
+                                <Card
+                                    key={repo.id}
+                                    variant="minimal"
+                                    ambient
+                                    ambientSeed={repo.name}
+                                    ambientClassName="opacity-30"
+                                    className="relative p-8 overflow-hidden transition border group border-white/10 bg-white/5 backdrop-blur hover:border-white/30"
+                                    motionProps={{
+                                        initial: { opacity: 0, y: 40 },
+                                        animate: timelineInView
+                                            ? { opacity: 1, y: 0 }
+                                            : { opacity: 0, y: 40 },
+                                        transition: {
+                                            delay: index * 0.08,
+                                            duration: 0.65,
+                                            ease: easeInOut,
+                                        },
+                                    }}
+                                >
+                                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                                        <div className="flex-1 space-y-4">
+                                            <div className="flex flex-wrap items-center gap-4">
+                                                <h3 className="text-2xl font-semibold tracking-tight">
+                                                    {repo.name}
+                                                </h3>
+                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
+                                                    Updated {updatedLabel}
+                                                </span>
+                                                {repo.language && (
+                                                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70">
+                                                        {repo.language}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="max-w-3xl text-sm leading-relaxed text-white/70">
+                                                {repo.description ||
+                                                    "This project is still catching its breath after the latest deploy."}
+                                            </p>
+                                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+                                                <span className="inline-flex items-center gap-2">
+                                                    <FaStar className="w-4 h-4 text-yellow-400" />
+                                                    {formatNumber(
+                                                        repo.stargazers_count ||
+                                                            0
+                                                    )}
+                                                </span>
+                                                <span className="inline-flex items-center gap-2">
+                                                    <FaCodeFork className="w-4 h-4" />
+                                                    {formatNumber(
+                                                        repo.forks_count || 0
+                                                    )}
+                                                </span>
+                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/50">
+                                                    {repo.visibility}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-4 lg:w-48">
+                                            <a
+                                                href={repo.html_url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
+                                            >
+                                                <ImGithub className="w-5 h-5" />
+                                                View
+                                            </a>
+                                            <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">
+                                                #{index + 1}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            );
+                        })}
+                    </motion.div>
+                </div>
+            </section>
+        </main>
     );
 }
-
-

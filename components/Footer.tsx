@@ -1,117 +1,109 @@
 "use client";
+
+import Link from "next/link";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
+import { AmbientGradient } from "@/components/AmbientGradient";
 
 const motionProps = {
-    initial: { scale: 1 },
-    whileHover: { scale: 1.2 },
     transition: {
         type: "spring" as const,
         stiffness: 300,
         damping: 20,
     },
-    whileTap: { scale: 0.9 },
+    whileTap: { scale: 0.95 },
 } as const;
+
+const socials = [
+    {
+        href: "https://x.com/bennyz206",
+        icon: FaXTwitter,
+        label: "X",
+        seed: "x-twitter",
+    },
+    {
+        href: "https://www.linkedin.com/in/ben-zhou06/",
+        icon: FaLinkedin,
+        label: "LinkedIn",
+        seed: "linkedin",
+    },
+    {
+        href: "https://github.com/benz206",
+        icon: ImGithub,
+        label: "GitHub",
+        seed: "github",
+    },
+    {
+        href: "https://discord.com/users/360061101477724170",
+        icon: FaDiscord,
+        label: "Discord",
+        seed: "discord",
+    },
+    {
+        href: "https://www.instagram.com/bennyz_06/",
+        icon: FaInstagram,
+        label: "Instagram",
+        seed: "instagram",
+    },
+    {
+        href: "https://monkeytype.com/profile/_Leg3ndary",
+        icon: SiMonkeytype,
+        label: "Monkeytype",
+        seed: "monkeytype",
+    },
+] as const;
 
 export default function Footer() {
     return (
-        <div className="flex justify-center w-full bg-black h-128 lg:h-96">
-            <div className="flex xl:w-[1170px] 2xl:w-[1400px]">
-                <div className="flex flex-col items-center justify-center w-full h-full">
-                    <div className="grid w-full h-full grid-flow-col grid-rows-2 p-12 py-4 lg:py-0 lg:grid-cols-2 lg:grid-flow-row lg:grid-rows-none">
-                        <div className="flex flex-col flex-1 mx-4 lg:my-24">
-                            <h2 className="py-4 text-3xl font-bold text-white text-start">
-                                Contacts
-                            </h2>
-                            <p className="text-[#777777] py-2">
-                                Thanks for visiting my website!
-                            </p>
-                            <p className="text-[#777777] py-2">
-                                If you have any further questions or just want
-                                to contact me, please reach out to me through
-                                LinkedIn or Email.
-                            </p>
-                            <p className="text-[#777777] py-2">
-                                Copyright © 2023-2024 Ben Zhou All rights
-                                reserved.
-                            </p>
-                        </div>
-                        <div className="flex flex-col flex-1 mx-4 lg:my-24">
-                            <h2 className="py-4 text-3xl font-bold text-white">
-                                Socials
-                            </h2>
-                            <p className="text-[#777777] py-2 pb-8">
-                                Check out my socials below!
-                            </p>
-                            <div className="flex gap-4">
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://x.com/bennyz206"
-                                            target="_blank"
-                                        >
-                                            <FaXTwitter className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#1DA1F2]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://www.linkedin.com/in/ben-zhou06/"
-                                            target="_blank"
-                                        >
-                                            <FaLinkedin className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#0077B5]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://github.com/benz206"
-                                            target="_blank"
-                                        >
-                                            <ImGithub className="w-6 h-6 lg:w-8 lg:h-8 transition hover:text-[#9f7be1] text-[#AAAAAA]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://discord.com/users/360061101477724170"
-                                            target="_blank"
-                                        >
-                                            <FaDiscord className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#7289DA]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://www.instagram.com/bennyz_06/"
-                                            target="_blank"
-                                        >
-                                            <FaInstagram className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#fd1d1d]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                                <motion.div {...motionProps}>
-                                    <div className="p-1 transition border border-transparent rounded-md group hover:border-transparent">
-                                        <a
-                                            href="https://monkeytype.com/profile/_Leg3ndary"
-                                            target="_blank"
-                                        >
-                                            <SiMonkeytype className="w-6 h-6 lg:w-8 lg:h-8 text-[#AAAAAA] transition hover:text-[#e2b714]" />
-                                        </a>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </div>
+        <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16">
+            <div className="flex w-11/12 max-w-[1080px] flex-col gap-12 lg:flex-row lg:items-center">
+                <div className="flex-1 space-y-4 text-white/70">
+                    <p className="text-sm font-thin leading-relaxed text-white/60">
+                        If you want to talk, message me anytime{" "}
+                        <a
+                            href="mailto:ben.zhou@uwaterloo.ca"
+                            className="underline underline-offset-auto"
+                        >
+                            @ben.zhou@uwaterloo.ca
+                        </a>
+                        .{" "}
+                        <Link
+                            href="/;thanks"
+                            className="underline underline-offset-auto"
+                        >
+                            Thanks.
+                        </Link>
+                    </p>
+                    <div className="text-xs font-thin text-white/40">
+                        © {new Date().getFullYear()} Ben Zhou
+                    </div>
+                </div>
+                <div className="flex flex-col flex-1 gap-6">
+                    <div className="flex flex-wrap gap-4 text-white/70">
+                        {socials.map(({ href, icon: Icon, label, seed }) => (
+                            <motion.a
+                                key={href}
+                                {...motionProps}
+                                className="group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-md border border-white/30 bg-transparent text-lg text-white/70 transition-colors duration-300 hover:border-white/60 hover:text-white"
+                                href={href}
+                                target="_blank"
+                                aria-label={label}
+                            >
+                                <AmbientGradient
+                                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                    seed={seed}
+                                />
+                                <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-90">
+                                    <Icon />
+                                </span>
+                            </motion.a>
+                        ))}
                     </div>
                 </div>
             </div>
-        </div>
+        </footer>
     );
 }

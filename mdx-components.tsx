@@ -63,7 +63,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             return <code className={className}>{children}</code>;
         },
         hr: () => (
-            <div className="my-6 max-w-[1170px] h-[1px] bg-[#dddddd] dark:bg-[#383838] transition-colors duration-1000" />
+            <div className="my-6 max-w-[1170px] h-[1px] bg-[#383838] transition-colors duration-1000" />
         ),
         Youtube: ({ src }: { src: string }) => <YouTubeEmbed src={src} />,
         ...components,

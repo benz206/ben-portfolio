@@ -3,7 +3,6 @@ import { PropsWithChildren } from "react";
 import { Roboto } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider } from "next-themes";
 
 const roboto = Roboto({
     subsets: ["latin"],
@@ -13,11 +12,9 @@ const roboto = Roboto({
 export default function Providers({ children }: PropsWithChildren) {
     return (
         <div className={roboto.className}>
-            <ThemeProvider attribute="class">
-                {children}
-                <SpeedInsights />
-                <Analytics />
-            </ThemeProvider>
+            {children}
+            <SpeedInsights />
+            <Analytics />
         </div>
     );
 }
