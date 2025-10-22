@@ -38,17 +38,17 @@ export default function ProjectPreview({
                 whileHover={onSelect ? { y: -8 } : undefined}
                 whileTap={onSelect ? { scale: 0.97 } : undefined}
                 className={cn(
-                    "group relative flex h-full w-full overflow-hidden rounded-3xl px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                    "group relative flex h-full w-full overflow-hidden rounded-lg px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                     !onSelect && "cursor-default"
                 )}
             >
                 <div
                     className={cn(
-                        "relative isolate flex h-full w-full flex-col overflow-hidden rounded-3xl bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
+                        "relative isolate flex h-full w-full flex-col overflow-hidden rounded-lg bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
                         accent.border
                     )}
                 >
-                    <div className="overflow-hidden relative w-full h-48">
+                    <div className="overflow-hidden relative w-full h-64">
                         <Image
                             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
                             src={image.src}
@@ -59,7 +59,7 @@ export default function ProjectPreview({
                             priority={image.priority}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 pointer-events-none from-black/70 via-black/20 group-hover:from-black/55" />
-                        <div className="pointer-events-none absolute -inset-1 rounded-[1.5rem] bg-gradient-to-br from-white/20 via-transparent to-white/10 opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-60" />
+                        <div className="absolute -inset-1 bg-gradient-to-br via-transparent rounded-lg opacity-0 blur-2xl transition-opacity duration-700 pointer-events-none from-white/20 to-white/10 group-hover:opacity-60" />
                     </div>
                     <div className="flex relative z-10 flex-col gap-3 px-6 pt-6">
                         <span className="text-[11px] uppercase tracking-[0.34em] text-white/45">
@@ -69,7 +69,7 @@ export default function ProjectPreview({
                             {title}
                         </h2>
                         {summary && (
-                            <p className="text-sm leading-relaxed text-white/70">
+                            <p className="text-sm font-light leading-relaxed text-white/70">
                                 {summary}
                             </p>
                         )}
