@@ -62,7 +62,7 @@ export default function ProjectPreview({
                         <div className="absolute -inset-1 bg-gradient-to-br via-transparent rounded-lg opacity-0 blur-2xl transition-opacity duration-700 pointer-events-none from-white/20 to-white/10 group-hover:opacity-60" />
                     </div>
                     <div className="flex relative z-10 flex-col gap-3 px-6 pt-6">
-                        <span className="text-[11px] uppercase tracking-[0.34em] text-white/45">
+                        <span className="text-[11px] uppercase tracking-[0.24em] text-white/45">
                             {sub}
                         </span>
                         <h2 className="text-2xl font-semibold text-white">

@@ -15,6 +15,8 @@ import LinkCom from "@/public/projects/LinkCom.jpeg";
 import StyleIt from "@/public/projects/styleit.jpg";
 import Event from "@/public/projects/event.png";
 import Hermes from "@/public/projects/hermes.png";
+import TraceMoeImage from "@/public/projects/tracemoe.png";
+import TagVaultImage from "@/public/projects/vault.png";
 
 const projectPreviews: ProjectPreviewProps[] = [
     {
@@ -49,6 +51,71 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://github.com/benz206/hophacks2025",
         slug: "hermes-ai-voice-platform",
         color: "orange-500",
+    },
+    {
+        image: {
+            src: TraceMoeImage,
+            alt: "trace-moe",
+            width: 900,
+            height: 100,
+        },
+        title: "TRACE-MOE",
+        sub: "ASYNC ANIME SCENE SEARCH CLIENT",
+        summary:
+            "Rust async wrapper around the trace.moe API with search, upload, and quota helpers.",
+        description: (
+            <>
+                trace-moe is a Rust client for the trace.moe anime scene search
+                API. It lets you search by image URL or upload bytes, optionally
+                fetch AniList data, and check account quotas, all powered by
+                Reqwest and Tokio. Explore the crate on{" "}
+                <a
+                    href="https://github.com/benz206/trace-moe"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-violet-500"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Rust", "Reqwest", "Tokio"],
+        projectLink: "https://github.com/benz206/trace-moe",
+        slug: "trace-moe",
+        color: "violet-500",
+    },
+    {
+        image: {
+            src: TagVaultImage,
+            alt: "Tag Vault",
+            width: 900,
+            height: 100,
+        },
+        title: "TAG VAULT",
+        sub: "35K+ CUSTOM SCRIPT EXPLORER",
+        summary:
+            "Realtime catalog for Carl-bot custom scripts with search, filters, and live usage stats.",
+        description: (
+            <>
+                Tag Vault lets users browse, search, and favorite more than
+                35,000 community-created Carl-bot scripts. Built with Next.js
+                and MongoDB, it streams live metadata, tracks featured tags, and
+                powers tagvault.netlify.app with fast filters and cached API
+                responses. See the code on{" "}
+                <a
+                    href="https://github.com/benz206/tag-vault"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-emerald-500"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Next.js", "TypeScript", "MongoDB", "Tailwind"],
+        projectLink: "https://github.com/benz206/tag-vault",
+        slug: "tag-vault",
+        color: "emerald-500",
     },
     {
         image: {
