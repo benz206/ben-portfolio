@@ -82,11 +82,11 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="relative flex items-center justify-center h-screen home-section">
+        <section className="flex relative justify-center items-start pt-24 pb-16 min-h-screen home-section sm:pb-20 sm:pt-28 lg:h-screen lg:items-center lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
-            <div className="absolute inset-0 bg-noir-radial opacity-80" />
-            <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-16 text-white">
-                <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
+            <div className="absolute inset-0 opacity-80 bg-noir-radial" />
+            <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
+                <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8">
                         <motion.div
                             className="space-y-2 lg:space-y-6"
@@ -109,7 +109,7 @@ export default function HeroSection() {
                             </p>
                         </motion.div>
                         <motion.div
-                            className="text-white"
+                            className="mt-6 text-white sm:mt-8 lg:mt-0"
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.4 }}
@@ -141,7 +141,7 @@ export default function HeroSection() {
                                 ambient
                                 ambientVariant={role.ambientVariant}
                                 ambientClassName="opacity-40"
-                                className="flex items-start gap-5 p-6"
+                                className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6"
                                 motionProps={{
                                     initial: { opacity: 0, y: 24 },
                                     whileInView: { opacity: 1, y: 0 },
@@ -159,11 +159,11 @@ export default function HeroSection() {
                                     alt={role.image.alt}
                                     width={56}
                                     height={56}
-                                    className="z-10 object-contain rounded-lg h-14 w-14"
+                                    className="object-contain z-10 flex-shrink-0 w-14 h-14 rounded-lg sm:h-16 sm:w-16"
                                 />
 
-                                <div className="flex flex-col flex-1 gap-1 my-auto">
-                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex flex-col flex-1 gap-1 sm:my-auto">
+                                    <div className="flex flex-wrap gap-2 justify-between items-center">
                                         <h2 className="text-base font-medium text-white">
                                             {role.company}
                                         </h2>
@@ -176,7 +176,7 @@ export default function HeroSection() {
                                             {role.location}
                                         </span>
                                     </div>
-                                    <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                                    <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
                                         <p className="font-extralight text-white/65">
                                             {role.title}
                                         </p>
@@ -195,12 +195,12 @@ export default function HeroSection() {
                     </motion.div>
                 </div>
             </div>
-            <div className="absolute flex flex-col items-center -translate-x-1/2 bottom-12 left-1/2 text-white/70">
+            <div className="flex absolute bottom-12 left-1/2 flex-col items-center -translate-x-1/2 text-white/70">
                 <motion.button
                     type="button"
                     aria-label="Scroll to next section"
                     onClick={handleScrollClick}
-                    className="flex flex-col items-center gap-1 p-2 transition-transform rounded-full cursor-pointer hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                    className="flex flex-col gap-1 items-center p-2 rounded-full transition-transform cursor-pointer hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 1.2 }}
@@ -208,7 +208,7 @@ export default function HeroSection() {
                     {[0, 1, 2].map((index) => (
                         <FiChevronDown
                             key={index}
-                            className="w-6 h-6 -mt-4 animate-arrow-flicker text-white/30"
+                            className="-mt-4 w-6 h-6 animate-arrow-flicker text-white/30"
                             style={{
                                 animationDelay: `${index * 0.3}s`,
                             }}
