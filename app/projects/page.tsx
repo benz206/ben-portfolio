@@ -19,7 +19,7 @@ export default function Projects() {
     };
 
     return (
-        <section className="overflow-hidden relative pt-28 pb-24 text-white bg-black">
+        <section className="relative pb-24 overflow-hidden text-white bg-black pt-28">
             <div className="absolute inset-0 bg-black" />
             <div className="relative mx-auto flex w-11/12 max-w-[1180px] flex-col gap-20">
                 <motion.div

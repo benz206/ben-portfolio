@@ -59,7 +59,7 @@ const socials = [
 export default function Footer() {
     return (
         <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16">
-            <div className="flex w-11/12 max-w-[1080px] flex-col gap-12 lg:flex-row lg:items-center">
+            <div className="flex w-11/12 max-w-[1080px] flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
                         If you want to talk, message me anytime{" "}
@@ -81,8 +81,8 @@ export default function Footer() {
                         © {new Date().getFullYear()} Ben Zhou
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 gap-6">
-                    <div className="flex flex-wrap gap-4 text-white/70">
+                <div className="flex flex-col flex-1 items-center gap-6 lg:items-end">
+                    <div className="flex flex-wrap justify-center gap-4 text-white/70 lg:justify-end">
                         {socials.map(({ href, icon: Icon, label, seed }) => (
                             <motion.a
                                 key={href}

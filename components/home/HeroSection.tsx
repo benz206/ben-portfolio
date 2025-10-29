@@ -82,7 +82,7 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="flex relative justify-center items-start pt-24 pb-16 min-h-screen home-section sm:pb-20 sm:pt-28 lg:h-screen lg:items-center lg:pb-0 lg:pt-0">
+        <section className="flex relative justify-center items-center pt-24 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">

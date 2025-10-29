@@ -43,12 +43,15 @@ type JobProps = {
 };
 
 function Job({ job, onSelect, delay, isActive }: JobProps) {
+    const layoutId = `${job.company}-${job.period}`;
+
     return (
         <motion.li
             className="list-none"
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay, ease: "easeOut" }}
+            transition={{ delay, type: "spring", stiffness: 140, damping: 20 }}
+            whileHover={{ y: -6 }}
         >
             <Card
                 variant="glass"
@@ -56,52 +59,71 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                 ambientVariant={job.ambientVariant ?? "violet"}
                 ambientClassName="opacity-40"
                 className={cn(
-                    "flex items-start gap-5 p-6 transition-transform duration-300 focus-within:ring-2 focus-within:ring-white/60",
-                    !isActive && "hover:-translate-y-1",
-                    isActive ? "ring-1 ring-white/20" : "ring-0"
+                    "flex items-start gap-5 p-6 backdrop-blur-xl focus-within:ring-2 focus-within:ring-white/60",
+                    isActive ? "ring-1 ring-white/25" : "ring-0"
                 )}
+                motionProps={{
+                    layoutId,
+                    whileHover: { scale: isActive ? 1 : 1.02 },
+                    whileTap: { scale: 0.99 },
+                    transition: { type: "spring", stiffness: 220, damping: 26 },
+                }}
             >
-                <button
+                <motion.button
                     type="button"
                     onClick={onSelect}
                     disabled={isActive}
                     className="flex items-start w-full gap-5 text-left focus-visible:outline-none disabled:cursor-default"
+                    layoutId={`${layoutId}-button`}
                 >
-                    <Image
-                        src={job.image.src}
-                        alt={job.image.alt}
-                        width={56}
-                        height={56}
-                        priority={job.image.priority}
-                        className="z-10 object-contain rounded-lg h-14 w-14"
-                    />
+                    <motion.div
+                        layoutId={`${layoutId}-container`}
+                        className="relative flex items-center justify-center w-16 h-16"
+                    >
+                        <Image
+                            src={job.image.src}
+                            alt={job.image.alt}
+                            width={64}
+                            height={64}
+                            priority={job.image.priority}
+                            className="z-10 object-contain w-16 h-16 rounded-xl"
+                        />
+                    </motion.div>
                     <div className="flex flex-col flex-1 gap-1 my-auto">
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                            <h3 className="text-base font-medium text-white">
+                            <motion.h3
+                                layoutId={`${layoutId}-company`}
+                                className="text-base font-medium text-white"
+                            >
                                 {job.company}
-                            </h3>
-                            <span
+                            </motion.h3>
+                            <motion.span
+                                layoutId={`${layoutId}-location`}
                                 className={`text-xs uppercase tracking-[0.2em] ${
                                     job.locationClass ?? "text-white/55"
                                 }`}
                             >
                                 {job.location}
-                            </span>
+                            </motion.span>
                         </div>
                         <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-                            <p className="font-extralight text-white/65">
+                            <motion.p
+                                layoutId={`${layoutId}-title`}
+                                className="font-extralight text-white/65"
+                            >
                                 {job.title}
-                            </p>
-                            <span
+                            </motion.p>
+                            <motion.span
+                                layoutId={`${layoutId}-period`}
                                 className={`text-xs uppercase tracking-[0.1em] ${
                                     job.periodClass ?? "text-white/45"
                                 }`}
                             >
                                 {job.period}
-                            </span>
+                            </motion.span>
                         </div>
                     </div>
-                </button>
+                </motion.button>
             </Card>
         </motion.li>
     );
@@ -232,7 +254,7 @@ export default function Experience() {
 
     return (
         <>
-            <ol className="grid gap-4 list-none md:grid-cols-2 md:gap-4">
+            <ol className="grid gap-4 ml-0 list-none md:grid-cols-2 md:gap-4">
                 {jobs.map((job, index) => (
                     <Job
                         key={job.company + job.period}
