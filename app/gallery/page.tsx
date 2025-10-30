@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-import { CldImage } from "next-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
 
 type ImageT = {
