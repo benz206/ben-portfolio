@@ -69,7 +69,8 @@ export default function CurrentlyPlaying() {
                 variant="glass"
                 ambient
                 ambientSeed="currently-playing"
-                ambientClassName="opacity-50"
+                ambientClassName="opacity-60"
+                ambientVariant="indigo"
                 className="relative flex h-32 mt-3 mx-auto w-full max-w-[700px] overflow-hidden rounded-2xl"
                 motionProps={{
                     initial: { opacity: 0 },
@@ -77,36 +78,26 @@ export default function CurrentlyPlaying() {
                     transition: { duration: 1 },
                 }}
             >
-                <div
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                        backgroundImage:
-                            "linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                />
-                <div className="absolute inset-0 bg-black/50" />
-                <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                    <div className="flex-shrink-0 h-full overflow-hidden shadow-xl w- max-w-36 aspect-square rounded-xl">
-                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-600 animate-pulse">
+                <div className="relative z-10 flex items-center p-0.5 m-4 ml-2 space-x-6 w-full">
+                    <div className="flex-shrink-0 h-full overflow-hidden shadow-xl max-w-36 aspect-square rounded-xl">
+                        <div className="w-full h-full animate-pulse">
                             <div className="flex items-center justify-center w-full h-full">
-                                <FaSpotify className="w-10 h-10 text-gray-500 animate-pulse" />
+                                <FaSpotify className="w-16 h-16 text-white/40 animate-pulse" />
                             </div>
                         </div>
                     </div>
 
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                         <div className="flex items-center mb-2 space-x-2">
-                            <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500 animate-pulse" />
-                            <div className="w-32 h-3 bg-gray-700 rounded animate-pulse"></div>
+                            <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-400 animate-pulse" />
+                            <div className="w-32 h-3 rounded bg-white/20 animate-pulse"></div>
                         </div>
 
-                        <div className="w-48 h-5 mb-3 bg-gray-700 rounded animate-pulse"></div>
+                        <div className="w-48 h-5 mb-3 rounded bg-white/25 animate-pulse"></div>
 
-                        <div className="w-full h-1.5 bg-gray-700 rounded-full">
+                        <div className="w-full h-1.5 bg-white/10 rounded-full">
                             <motion.div
-                                className="h-1.5 bg-green-500 rounded-full"
+                                className="h-1.5 bg-green-400 rounded-full"
                                 initial={{ width: "0%" }}
                                 animate={{ width: "60%" }}
                                 transition={{
@@ -174,7 +165,7 @@ export default function CurrentlyPlaying() {
                 <div className="flex flex-col justify-center flex-1 min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
-                        <span className="text-xs font-medium text-slate-400 truncate">
+                        <span className="text-xs font-medium truncate text-slate-400">
                             {track.paused === "true"
                                 ? "Last Listened To"
                                 : "Now Playing"}{" "}
