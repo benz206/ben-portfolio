@@ -1,13 +1,7 @@
 "use client";
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { CldImage, getCldImageUrl } from "next-cloudinary";
-import {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type ImageT = {
     public_id: string;
@@ -32,6 +26,8 @@ const itemAnim: Variants = {
     },
 };
 
+const viewportOptions = { once: true, margin: "200px 0px 200px 0px" };
+
 function PhotoTile({
     image,
     placeholder,
@@ -41,36 +37,33 @@ function PhotoTile({
     placeholder?: string;
     onSelect: (image: ImageT) => void;
 }) {
-    const ref = useRef<HTMLButtonElement | null>(null);
-    const shouldLoadImage = useInView(ref, { once: true, amount: 0.35 });
-
     return (
         <motion.button
-            ref={ref}
             type="button"
-            className="block overflow-hidden w-full rounded-2xl transition duration-200 group hover:brightness-110"
+            className="block w-full overflow-hidden transition duration-200 rounded-2xl group hover:brightness-110"
             onClick={() => onSelect(image)}
             variants={itemAnim}
+            initial="hidden"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
+            viewport={viewportOptions}
+            whileInView="visible"
         >
-            <div className="overflow-hidden relative w-full rounded-2xl aspect-square">
-                {shouldLoadImage && (
-                    <CldImage
-                        fill
-                        src={image.public_id}
-                        alt={image.public_id}
-                        placeholder="blur"
-                        blurDataURL={placeholder}
-                        loading="lazy"
-                        crop="fill"
-                        quality="auto"
-                        dpr="auto"
-                        format="webp"
-                        sizes="(min-width: 1280px) 360px, (min-width: 768px) 320px, 260px"
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                    />
-                )}
+            <div className="relative w-full overflow-hidden rounded-2xl aspect-square">
+                <CldImage
+                    fill
+                    src={image.public_id}
+                    alt={image.public_id}
+                    placeholder="blur"
+                    blurDataURL={placeholder}
+                    loading="lazy"
+                    crop="fill"
+                    quality="auto"
+                    dpr="auto"
+                    format="webp"
+                    sizes="(min-width: 1280px) 360px, (min-width: 768px) 320px, 260px"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                />
             </div>
         </motion.button>
     );
@@ -117,8 +110,8 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
     return (
         <section className="relative overflow-hidden bg-[#05070f] text-white">
             <div className="absolute inset-0 z-0 pointer-events-none bg-noir-gradient" />
-            <div className="absolute inset-0 z-0 opacity-80 pointer-events-none bg-noir-radial" />
-            <div className="absolute inset-0 z-0 bg-gradient-to-b via-transparent pointer-events-none from-black/45 to-black/80" />
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-80 bg-noir-radial" />
+            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b via-transparent from-black/45 to-black/80" />
             <div className="relative z-10 mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div className="space-y-3">
@@ -136,11 +129,11 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
 
                 <motion.div
                     className={`grid w-full min-h-[60vh] gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 ${
-                        selectedImage ? "blur-sm" : ""}`}
+                        selectedImage ? "blur-sm" : ""
+                    }`}
                     variants={boxAnim}
                     initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.1 }}
+                    animate="visible"
                 >
                     {images.map((image) => (
                         <PhotoTile
@@ -155,7 +148,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
 
             {selectedImage && (
                 <motion.div
-                    className="flex fixed top-0 left-0 z-20 justify-center items-center w-full h-full backdrop-blur-md bg-neutral-950/80"
+                    className="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full backdrop-blur-md bg-neutral-950/80"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -164,7 +157,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                     }}
                 >
                     <motion.div
-                        className="flex relative flex-col items-center px-4 w-full max-w-4xl sm:px-8"
+                        className="relative flex flex-col items-center w-full max-w-4xl px-4 sm:px-8"
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.45 }}
