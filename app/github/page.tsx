@@ -1,10 +1,15 @@
 "use client";
+import Link from "next/link";
 import { motion, useInView, easeInOut } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
+import { FiChevronDown } from "react-icons/fi";
 import { ImGithub } from "react-icons/im";
 import { FaCodeFork, FaStar } from "react-icons/fa6";
 import Card from "@/components/Card";
+import CommitGraph, {
+    ContributionStats,
+} from "@/components/GitHub/CommitGraph";
 import LanguageBar from "@/components/GitHub/LanguageBar";
 import { GitHubRepo } from "@/types";
 
@@ -25,6 +30,12 @@ const fadeIn = {
 };
 
 const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
+
+const summaryDateFormatter = new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+});
 
 const sortRepositories = (
     repos: GitHubRepo[],
@@ -69,25 +80,37 @@ export default function GithubPage() {
     const [repoData, setRepoData] = useState<GitHubRepo[]>([]);
     const [filteredRepoData, setFilteredRepoData] = useState<GitHubRepo[]>([]);
     const [isLoading, setLoading] = useState(true);
+    const [graphStats, setGraphStats] = useState<ContributionStats | null>(
+        null
+    );
+    const [graphLoading, setGraphLoading] = useState(true);
+    const [graphError, setGraphError] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<SortOption>(SortOption.Stars);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const heroRef = useRef(null);
-    // const heroInView = useInView(heroRef, { once: true, amount: 'some' });
-    const heroInView = true;
+    const heroInView = useInView(heroRef, { once: true, amount: "some" });
     const timelineRef = useRef(null);
-    // const timelineInView = useInView(timelineRef, {
-    //     once: true,
-    //     amount: 'some',
-    // });
-    const timelineInView = true;
+    const timelineInView = useInView(timelineRef, {
+        once: true,
+        amount: "some",
+    });
 
     const fetchWithCache = async (url: string, cacheKey: string) => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < 24 * 60 * 60 * 1000) return data;
+            try {
+                const { data, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
+                    return data;
+                }
+            } catch (error) {
+                console.error("Error parsing cached GitHub data:", error);
+            }
         }
         const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`GitHub request failed with ${response.status}`);
+        }
         const data = await response.json();
         localStorage.setItem(
             cacheKey,
@@ -183,6 +206,14 @@ export default function GithubPage() {
         )[0];
     }, [repoData]);
 
+    const focusRepos = useMemo(() => {
+        return [...repoData]
+            .sort(
+                (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0)
+            )
+            .slice(1, 3);
+    }, [repoData]);
+
     const statItems = useMemo(
         () => [
             { label: "Live repositories", value: totals.repos },
@@ -210,13 +241,26 @@ export default function GithubPage() {
         setSortOrder(option === SortOption.Name ? "asc" : "desc");
     };
 
-    if (isLoading && !repoData.length) {
-        return (
-            <main className="flex min-h-screen items-center justify-center bg-[#050506]">
-                <AiOutlineLoading className="w-16 h-16 animate-spin text-white/60" />
-            </main>
-        );
-    }
+    const handleScrollClick = () => {
+        const nextSection = document.getElementById("github-stream");
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
+    const renderMetricValue = (value: number | undefined) => {
+        if (graphLoading) return "—";
+        if (graphError) return "—";
+        return formatNumber(value ?? 0);
+    };
+
+    const bestDayDescription = graphError
+        ? graphError
+        : graphStats?.bestDay.date
+        ? summaryDateFormatter.format(new Date(graphStats.bestDay.date))
+        : graphLoading
+        ? "Calibrating grid..."
+        : "The highest energy spike across the grid.";
 
     return (
         <main className="relative overflow-hidden bg-[#050506] text-white">
@@ -224,127 +268,119 @@ export default function GithubPage() {
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 bg-noir-radial opacity-70" />
             </div>
-            <section className="relative flex items-center min-h-screen px-6 py-24 sm:px-12">
-                <motion.div
-                    ref={heroRef}
-                    className="z-10 mx-auto grid w-full max-w-6xl gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center"
-                    initial="hidden"
-                    animate={heroInView ? "visible" : "hidden"}
-                    variants={{
-                        visible: { transition: { staggerChildren: 0.12 } },
-                        hidden: {},
-                    }}
-                >
-                    <motion.div variants={fadeIn} className="space-y-10">
-                        <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-white/60">
-                            Repo radar
-                            {lastUpdatedLabel && (
-                                <span className="rounded-full bg-white/10 px-2 py-1 text-[0.6rem] tracking-[0.2em] text-white/50">
-                                    Refreshed {lastUpdatedLabel}
-                                </span>
-                            )}
-                        </div>
-                        <h1 className="text-4xl font-semibold leading-tight text-balance sm:text-5xl lg:text-6xl">
-                            An immersive stream of my GitHub work in motion.
-                        </h1>
-                        <p className="max-w-2xl text-lg text-white/65">
-                            Explore infrastructure spikes, polished tools, and
-                            playful experiments. Curated live, sorted at will,
-                            framed inside a cinematic surface.
-                        </p>
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            {statItems.map((item) => (
-                                <Card
-                                    key={item.label}
-                                    variant="glass"
-                                    ambient
-                                    ambientSeed={item.label}
-                                    ambientClassName="opacity-40"
-                                    className="relative flex flex-col gap-2 p-6 border border-white/10 bg-white/5 backdrop-blur"
-                                    motionProps={{ variants: fadeIn }}
-                                >
-                                    <span className="text-xs uppercase tracking-[0.25em] text-white/40">
-                                        {item.label}
-                                    </span>
-                                    <span className="text-3xl font-semibold">
-                                        {formatNumber(item.value)}
-                                    </span>
-                                </Card>
-                            ))}
-                        </div>
-                    </motion.div>
-                    <motion.div variants={fadeIn} className="relative">
-                        {spotlightRepo ? (
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed={spotlightRepo.name}
-                                ambientClassName="opacity-60"
-                                className="relative flex flex-col h-full gap-6 p-8 overflow-hidden border border-white/10 bg-white/5 backdrop-blur"
-                            >
-                                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
-                                    Spotlight repository
-                                </span>
-                                <div className="space-y-4">
-                                    <h2 className="text-3xl font-semibold tracking-tight">
-                                        {spotlightRepo.name}
-                                    </h2>
-                                    <p className="text-sm text-white/70">
-                                        {spotlightRepo.description ||
-                                            "A live project anchored in this season's focus."}
-                                    </p>
-                                    <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-                                        <span className="flex items-center gap-2">
-                                            <FaStar className="w-4 h-4 text-yellow-400" />
-                                            {formatNumber(
-                                                spotlightRepo.stargazers_count ||
-                                                    0
-                                            )}
-                                        </span>
-                                        <span className="flex items-center gap-2">
-                                            <FaCodeFork className="w-4 h-4" />
-                                            {formatNumber(
-                                                spotlightRepo.forks_count || 0
-                                            )}
-                                        </span>
-                                        {spotlightRepo.language && (
-                                            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em]">
-                                                {spotlightRepo.language}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="mt-auto space-y-4">
-                                    <div className="flex items-center justify-between text-sm text-white/60">
-                                        <span>Language mix</span>
-                                        <a
-                                            href={spotlightRepo.html_url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white transition hover:border-white/40 hover:text-white"
-                                        >
-                                            <ImGithub className="w-4 h-4" />
-                                            Open repo
-                                        </a>
-                                    </div>
-                                    <LanguageBar repo={spotlightRepo.name} />
-                                </div>
-                            </Card>
-                        ) : (
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed="empty"
-                                ambientClassName="opacity-40"
-                                className="flex flex-col items-center justify-center h-full gap-4 p-8 border border-white/10 bg-white/5 text-white/60"
-                            >
-                                No repositories found right now.
-                            </Card>
-                        )}
-                    </motion.div>
-                </motion.div>
+            <section className="relative z-10 flex justify-center px-4 pt-10 sm:px-6">
+                <div className="w-full max-w-5xl">
+                    <div className="grid gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm sm:grid-cols-3">
+                        <Link
+                            href="#github-stream"
+                            className="flex flex-col gap-1 rounded-2xl border border-transparent px-4 py-3 text-sm uppercase tracking-[0.25em] text-white/65 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+                        >
+                            <span className="text-xs text-white/45">
+                                Stream
+                            </span>
+                            <span>Live repos</span>
+                        </Link>
+                        <Link
+                            href="#github-insights"
+                            className="flex flex-col gap-1 rounded-2xl border border-transparent px-4 py-3 text-sm uppercase tracking-[0.25em] text-white/65 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+                        >
+                            <span className="text-xs text-white/45">
+                                Insights
+                            </span>
+                            <span>Language pulse</span>
+                        </Link>
+                        <Link
+                            href="#github-focus"
+                            className="flex flex-col gap-1 rounded-2xl border border-transparent px-4 py-3 text-sm uppercase tracking-[0.25em] text-white/65 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+                        >
+                            <span className="text-xs text-white/45">
+                                Signal
+                            </span>
+                            <span>Focus repos</span>
+                        </Link>
+                    </div>
+                </div>
             </section>
-            <section className="relative min-h-screen px-6 py-24 border-t border-white/5 sm:px-12">
+
+            <section className="relative flex justify-center px-6 py-20 sm:px-12">
+                <div className="relative flex w-full max-w-5xl flex-col gap-8 rounded-3xl border border-white/10 bg-white/5 p-8 text-white/75 backdrop-blur">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <span className="text-xs uppercase tracking-[0.3em] text-white/45">
+                            Activity Headlines
+                        </span>
+                        <div className="flex gap-3 text-xs uppercase tracking-[0.3em] text-white/40">
+                            <span>Last 52 weeks</span>
+                            <span className="hidden sm:inline">•</span>
+                            <span>Powered by live data</span>
+                        </div>
+                    </div>
+                    <div className="grid gap-6 sm:grid-cols-3">
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/45">
+                                Current streak
+                            </span>
+                            <div className="mt-2 text-3xl font-semibold text-white">
+                                {renderMetricValue(
+                                    graphStats?.currentStreak.length
+                                )}
+                                {renderMetricValue(
+                                    graphStats?.currentStreak.length
+                                ) !== "—" && (
+                                    <span className="ml-1 text-sm font-normal text-white/60">
+                                        days
+                                    </span>
+                                )}
+                            </div>
+                            <p className="mt-2 text-sm text-white/60">
+                                Still shipping and keeping the momentum alive.
+                            </p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/45">
+                                Longest streak
+                            </span>
+                            <div className="mt-2 text-3xl font-semibold text-white">
+                                {renderMetricValue(
+                                    graphStats?.longestStreak.length
+                                )}
+                                {renderMetricValue(
+                                    graphStats?.longestStreak.length
+                                ) !== "—" && (
+                                    <span className="ml-1 text-sm font-normal text-white/60">
+                                        days
+                                    </span>
+                                )}
+                            </div>
+                            <p className="mt-2 text-sm text-white/60">
+                                A stretch of flow where commits landed daily.
+                            </p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/45">
+                                Peak day
+                            </span>
+                            <div className="mt-2 text-3xl font-semibold text-white">
+                                {renderMetricValue(graphStats?.bestDay.count)}
+                                {renderMetricValue(
+                                    graphStats?.bestDay.count
+                                ) !== "—" && (
+                                    <span className="ml-1 text-sm font-normal text-white/60">
+                                        commits
+                                    </span>
+                                )}
+                            </div>
+                            <p className="mt-2 text-sm text-white/60">
+                                {bestDayDescription}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section
+                id="github-stream"
+                className="relative min-h-screen px-6 py-24 border-t border-white/5 sm:px-12"
+            >
                 <div className="flex flex-col w-full max-w-6xl gap-16 mx-auto lg:flex-row">
                     <motion.aside
                         className="flex flex-col w-full gap-12 lg:max-w-sm"
@@ -422,6 +458,7 @@ export default function GithubPage() {
                             </div>
                         </motion.div>
                         <motion.div
+                            id="github-insights"
                             variants={fadeIn}
                             className="space-y-4 text-sm text-white/60"
                         >
@@ -446,101 +483,188 @@ export default function GithubPage() {
                         }
                         transition={{ duration: 0.7, ease: easeInOut }}
                     >
-                        {filteredRepoData.length === 0 && (
+                        {graphError ? (
                             <Card
                                 variant="glass"
                                 ambient
-                                ambientSeed="empty-state"
+                                ambientSeed="error-spotlight"
+                                ambientClassName="opacity-40"
+                                className="flex h-full min-h-[240px] flex-col items-center justify-center gap-4 border border-red-500/30 bg-red-500/10 text-red-200"
+                            >
+                                <span className="text-xs uppercase tracking-[0.3em]">
+                                    GitHub data offline
+                                </span>
+                                <span className="text-sm text-center">
+                                    {graphError}
+                                </span>
+                            </Card>
+                        ) : isLoading || graphLoading ? (
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientSeed="loading-spotlight"
                                 ambientClassName="opacity-40"
                                 className="flex min-h-[240px] flex-col items-center justify-center border border-white/10 bg-white/5 p-10 text-center text-white/60"
                             >
-                                No repositories match this sort right now.
+                                <span className="text-xs uppercase tracking-[0.3em]">
+                                    Calibrating spotlight
+                                </span>
                             </Card>
-                        )}
-                        {filteredRepoData.map((repo, index) => {
-                            const updatedLabel = new Date(
-                                repo.updated_at
-                            ).toLocaleDateString(undefined, {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                            });
-                            return (
-                                <Card
-                                    key={repo.id}
-                                    variant="minimal"
-                                    ambient
-                                    ambientSeed={repo.name}
-                                    ambientClassName="opacity-30"
-                                    className="relative p-8 overflow-hidden transition border group border-white/10 bg-white/5 backdrop-blur hover:border-white/30"
-                                    motionProps={{
-                                        initial: { opacity: 0, y: 40 },
-                                        animate: timelineInView
-                                            ? { opacity: 1, y: 0 }
-                                            : { opacity: 0, y: 40 },
-                                        transition: {
-                                            delay: index * 0.08,
-                                            duration: 0.65,
-                                            ease: easeInOut,
-                                        },
-                                    }}
-                                >
-                                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-                                        <div className="flex-1 space-y-4">
-                                            <div className="flex flex-wrap items-center gap-4">
-                                                <h3 className="text-2xl font-semibold tracking-tight">
-                                                    {repo.name}
-                                                </h3>
-                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
-                                                    Updated {updatedLabel}
+                        ) : spotlightRepo ? (
+                            <Card
+                                variant="minimal"
+                                ambient
+                                ambientSeed={spotlightRepo.name}
+                                ambientClassName="opacity-30"
+                                className="relative p-8 overflow-hidden transition border group border-white/10 bg-white/5 backdrop-blur hover:border-white/30"
+                                motionProps={{
+                                    initial: { opacity: 0, y: 40 },
+                                    animate: timelineInView
+                                        ? { opacity: 1, y: 0 }
+                                        : { opacity: 0, y: 40 },
+                                    transition: {
+                                        delay: 0.1,
+                                        duration: 0.65,
+                                        ease: easeInOut,
+                                    },
+                                }}
+                            >
+                                <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                                    <div className="flex-1 space-y-4">
+                                        <div className="flex flex-wrap items-center gap-4">
+                                            <h3 className="text-2xl font-semibold tracking-tight">
+                                                {spotlightRepo.name}
+                                            </h3>
+                                            <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
+                                                Updated {lastUpdatedLabel}
+                                            </span>
+                                            {spotlightRepo.language && (
+                                                <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70">
+                                                    {spotlightRepo.language}
                                                 </span>
-                                                {repo.language && (
-                                                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70">
-                                                        {repo.language}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="max-w-3xl text-sm leading-relaxed text-white/70">
-                                                {repo.description ||
-                                                    "This project is still catching its breath after the latest deploy."}
-                                            </p>
-                                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-                                                <span className="inline-flex items-center gap-2">
-                                                    <FaStar className="w-4 h-4 text-yellow-400" />
-                                                    {formatNumber(
-                                                        repo.stargazers_count ||
-                                                            0
-                                                    )}
-                                                </span>
-                                                <span className="inline-flex items-center gap-2">
-                                                    <FaCodeFork className="w-4 h-4" />
-                                                    {formatNumber(
-                                                        repo.forks_count || 0
-                                                    )}
-                                                </span>
-                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/50">
-                                                    {repo.visibility}
-                                                </span>
-                                            </div>
+                                            )}
                                         </div>
-                                        <div className="flex flex-col gap-4 lg:w-48">
-                                            <a
-                                                href={repo.html_url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
-                                            >
-                                                <ImGithub className="w-5 h-5" />
-                                                View
-                                            </a>
-                                            <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">
-                                                #{index + 1}
-                                            </div>
+                                        <p className="max-w-3xl text-sm leading-relaxed text-white/70">
+                                            {spotlightRepo.description ||
+                                                "This project is still catching its breath after the latest deploy."}
+                                        </p>
+                                        <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+                                            <span className="inline-flex items-center gap-2">
+                                                <FaStar className="w-4 h-4 text-yellow-400" />
+                                                {formatNumber(
+                                                    spotlightRepo.stargazers_count ||
+                                                        0
+                                                )}
+                                            </span>
+                                            <span className="inline-flex items-center gap-2">
+                                                <FaCodeFork className="w-4 h-4" />
+                                                {formatNumber(
+                                                    spotlightRepo.forks_count ||
+                                                        0
+                                                )}
+                                            </span>
+                                            <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/50">
+                                                {spotlightRepo.visibility}
+                                            </span>
                                         </div>
                                     </div>
+                                    <div className="flex flex-col gap-4 lg:w-48">
+                                        <a
+                                            href={spotlightRepo.html_url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
+                                        >
+                                            <ImGithub className="w-5 h-5" />
+                                            View
+                                        </a>
+                                        <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">
+                                            #{1}
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        ) : (
+                            <CommitGraph
+                                username="benz206"
+                                onStatsChange={setGraphStats}
+                                onLoadingChange={setGraphLoading}
+                                onErrorChange={setGraphError}
+                            />
+                        )}
+                        {graphError && (
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <Card
+                                    variant="minimal"
+                                    ambient
+                                    ambientSeed="focus-error"
+                                    ambientClassName="opacity-30"
+                                    className="flex min-h-[160px] flex-col items-center justify-center gap-3 border border-red-500/30 bg-red-500/10 text-red-200"
+                                >
+                                    <span className="text-[0.65rem] uppercase tracking-[0.3em]">
+                                        Focus metrics unavailable
+                                    </span>
+                                    <span className="text-xs text-center">
+                                        {graphError}
+                                    </span>
                                 </Card>
-                            );
-                        })}
+                            </div>
+                        )}
+                        {!graphError && (isLoading || graphLoading) && (
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                {[0, 1].map((index) => (
+                                    <Card
+                                        key={index}
+                                        variant="glass"
+                                        ambient
+                                        ambientSeed={`loading-card-${index}`}
+                                        ambientClassName="opacity-40"
+                                        className="flex min-h-[240px] flex-col items-center justify-center border border-white/10 bg-white/5 p-10 text-center text-white/60"
+                                    >
+                                        <AiOutlineLoading className="w-10 h-10 text-white/60" />
+                                        <p className="mt-2 text-sm text-white/60">
+                                            Loading...
+                                        </p>
+                                    </Card>
+                                ))}
+                            </div>
+                        )}
+                        {!graphError &&
+                            !isLoading &&
+                            !graphLoading &&
+                            focusRepos.length > 0 && (
+                                <motion.div
+                                    variants={fadeIn}
+                                    className="p-6 space-y-6 border rounded-3xl border-white/10 bg-white/5 backdrop-blur"
+                                >
+                                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+                                        <span>Focus repositories</span>
+                                        <span>{focusRepos.length} tracked</span>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {focusRepos.map((repo, index) => (
+                                            <div
+                                                key={repo.id}
+                                                className="flex items-center gap-4"
+                                            >
+                                                <div className="w-10 h-10 text-sm font-semibold leading-10 text-center border rounded-2xl border-white/10 bg-white/5">
+                                                    {index + 1}
+                                                </div>
+                                                <div className="flex items-center justify-between flex-1">
+                                                    <span className="text-sm font-medium text-white/80">
+                                                        {repo.name}
+                                                    </span>
+                                                    <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                                                        {repo.stargazers_count ||
+                                                            0}{" "}
+                                                        stars
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
                     </motion.div>
                 </div>
             </section>
