@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import Providers from "./providers";
 import Layout from "@/components/Layout";
+import ViewCounter from "@/components/ViewCounter";
 
 export const metadata: Metadata = {
     title: "Ben's Portfolio",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body>
                 <Providers>
+                    <ViewCounter />
                     <Layout>{children}</Layout>
                 </Providers>
             </body>

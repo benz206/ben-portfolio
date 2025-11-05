@@ -6,6 +6,7 @@ import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 import { AmbientGradient } from "@/components/AmbientGradient";
 
 const motionProps = {
@@ -57,6 +58,27 @@ const socials = [
 ] as const;
 
 export default function Footer() {
+    const [views, setViews] = useState<number | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await fetch("/api/views");
+                if (!response.ok) return;
+                const { count } = await response.json();
+                setViews(count);
+            } catch (error) {
+                console.error("Failed to fetch global views", error);
+            }
+        })();
+    }, []);
+
+    const viewText = useMemo(() => {
+        if (views === null) return null;
+        const count = new Intl.NumberFormat().format(views);
+        return `${count} visits tracked`;
+    }, [views]);
+
     return (
         <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16">
             <div className="flex w-11/12 max-w-[1080px] flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
@@ -79,6 +101,11 @@ export default function Footer() {
                     </p>
                     <div className="text-xs font-thin text-white/40">
                         © {new Date().getFullYear()} Ben Zhou
+                        {viewText && (
+                            <span className="ml-3 text-white/35">
+                                {viewText}
+                            </span>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col flex-1 items-center gap-6 lg:items-end">
