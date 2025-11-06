@@ -93,7 +93,7 @@ export default function Footer() {
                         </a>
                         .{" "}
                         <Link
-                            href="/;thanks"
+                            href="/thanks"
                             className="underline underline-offset-auto"
                         >
                             Thanks.
@@ -108,13 +108,13 @@ export default function Footer() {
                         )}
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 items-center gap-6 lg:items-end">
-                    <div className="flex flex-wrap justify-center gap-4 text-white/70 lg:justify-end">
+                <div className="flex flex-col flex-1 gap-6 items-center lg:items-end">
+                    <div className="flex flex-wrap gap-4 justify-center text-white/70 lg:justify-end">
                         {socials.map(({ href, icon: Icon, label, seed }) => (
                             <motion.a
                                 key={href}
                                 {...motionProps}
-                                className="group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-md border border-white/30 bg-transparent text-lg text-white/70 transition-colors duration-300 hover:border-white/60 hover:text-white"
+                                className="flex overflow-hidden relative justify-center items-center w-11 h-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
                                 href={href}
                                 target="_blank"
                                 aria-label={label}
