@@ -1,12 +1,25 @@
 "use client";
-import { motion, useInView, easeInOut } from "framer-motion";
+import { motion, easeInOut } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { ImGithub } from "react-icons/im";
-import { FaCodeFork, FaStar } from "react-icons/fa6";
+import { FaCodeFork, FaStar, FaGithub } from "react-icons/fa6";
 import Card from "@/components/Card";
-import LanguageBar from "@/components/GitHub/LanguageBar";
+import {
+    AmbientGradient,
+    type AmbientVariant,
+} from "@/components/AmbientGradient";
+import MacroboardImage from "@/public/projects/Macroboard.png";
 import { GitHubRepo } from "@/types";
+
+type ContributionDay = {
+    date: string;
+    count: number;
+    level: number;
+};
+
+type ContributionWeek = ContributionDay[];
 
 enum SortOption {
     Name = "name",
@@ -72,14 +85,18 @@ export default function GithubPage() {
     const [sortBy, setSortBy] = useState<SortOption>(SortOption.Stars);
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const heroRef = useRef(null);
-    // const heroInView = useInView(heroRef, { once: true, amount: 'some' });
     const heroInView = true;
     const timelineRef = useRef(null);
-    // const timelineInView = useInView(timelineRef, {
-    //     once: true,
-    //     amount: 'some',
-    // });
     const timelineInView = true;
+    const [searchTerm, setSearchTerm] = useState("");
+    const [stats, setStats] = useState<{
+        commits: number;
+        contributions: number;
+        publicRepos: number;
+    } | null>(null);
+    const [contributionWeeks, setContributionWeeks] = useState<
+        ContributionWeek[]
+    >([]);
 
     const fetchWithCache = async (url: string, cacheKey: string) => {
         const cached = localStorage.getItem(cacheKey);
@@ -99,11 +116,21 @@ export default function GithubPage() {
     useEffect(() => {
         (async () => {
             try {
-                const data = await fetchWithCache(
-                    "https://api.github.com/users/benz206/repos",
-                    "github_repos"
-                );
-                const filtered = data.filter((repo: GitHubRepo) => {
+                const [repos, profile, contributions] = await Promise.all([
+                    fetchWithCache(
+                        "https://api.github.com/users/benz206/repos",
+                        "github_repos"
+                    ),
+                    fetchWithCache(
+                        "https://api.github.com/users/benz206",
+                        "github_profile"
+                    ),
+                    fetchWithCache(
+                        "https://github-contributions-api.jogruber.de/v4/benz206",
+                        "github_contributions"
+                    ),
+                ]);
+                const filtered = repos.filter((repo: GitHubRepo) => {
                     const name = repo.name.toLowerCase();
                     if (name === "benz206") return false;
                     if (name.includes("experiments")) return false;
@@ -111,6 +138,33 @@ export default function GithubPage() {
                     return true;
                 });
                 setRepoData(filtered);
+                const totalCommits = contributions?.contributions?.reduce(
+                    (sum: number, year: { total: number }) => sum + year.total,
+                    0
+                );
+                const lastYear = contributions?.contributions?.[0]?.total ?? 0;
+                setStats({
+                    commits: lastYear,
+                    contributions: totalCommits ?? 0,
+                    publicRepos: profile?.public_repos ?? filtered.length,
+                });
+
+                const rawDays: ContributionDay[] =
+                    contributions?.contributions ?? [];
+                const daysForYear = rawDays.slice(-364);
+                const paddedDays: ContributionDay[] = [...daysForYear];
+                while (paddedDays.length % 7 !== 0) {
+                    paddedDays.unshift({
+                        date: `placeholder-${paddedDays.length}`,
+                        count: 0,
+                        level: 0,
+                    });
+                }
+                const weeks: ContributionWeek[] = [];
+                for (let i = 0; i < paddedDays.length; i += 7) {
+                    weeks.push(paddedDays.slice(i, i + 7));
+                }
+                setContributionWeeks(weeks);
             } catch (error) {
                 console.error("Error fetching repository data:", error);
             } finally {
@@ -120,8 +174,12 @@ export default function GithubPage() {
     }, []);
 
     useEffect(() => {
-        setFilteredRepoData(sortRepositories(repoData, sortBy, sortOrder));
-    }, [repoData, sortBy, sortOrder]);
+        setFilteredRepoData(
+            sortRepositories(repoData, sortBy, sortOrder).filter((repo) =>
+                repo.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+    }, [repoData, sortBy, sortOrder, searchTerm]);
 
     const totals = useMemo(() => {
         const stars = repoData.reduce(
@@ -176,21 +234,36 @@ export default function GithubPage() {
             }));
     }, [repoData]);
 
-    const spotlightRepo = useMemo(() => {
-        if (!repoData.length) return null;
-        return [...repoData].sort(
-            (a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0)
-        )[0];
-    }, [repoData]);
-
+    const statVariants: AmbientVariant[] = [
+        "violet",
+        "magenta",
+        "blue",
+        "sunset",
+    ];
     const statItems = useMemo(
         () => [
-            { label: "Live repositories", value: totals.repos },
-            { label: "Total stars", value: totals.stars },
-            { label: "Forks captured", value: totals.forks },
-            { label: "Active languages", value: totals.languages },
+            {
+                label: "Commits (past year)",
+                value: stats?.commits ?? 0,
+                ambientVariant: statVariants[0],
+            },
+            {
+                label: "Public repositories",
+                value: stats?.publicRepos ?? totals.repos,
+                ambientVariant: statVariants[1],
+            },
+            {
+                label: "Total stars",
+                value: totals.stars,
+                ambientVariant: statVariants[2],
+            },
+            {
+                label: "Forks captured",
+                value: totals.forks,
+                ambientVariant: statVariants[3],
+            },
         ],
-        [totals]
+        [stats, totals]
     );
 
     const lastUpdatedLabel = lastUpdated
@@ -210,6 +283,17 @@ export default function GithubPage() {
         setSortOrder(option === SortOption.Name ? "asc" : "desc");
     };
 
+    const contributionLevelGradients = useMemo(
+        () => [
+            "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)",
+            "linear-gradient(135deg, rgba(245,217,255,0.75) 0%, rgba(171,120,255,0.2) 100%)",
+            "linear-gradient(135deg, rgba(200,180,255,0.8) 0%, rgba(110,90,255,0.25) 100%)",
+            "linear-gradient(135deg, rgba(164,208,255,0.85) 0%, rgba(74,144,226,0.3) 100%)",
+            "linear-gradient(135deg, rgba(255,151,206,0.9) 0%, rgba(235,101,192,0.35) 100%)",
+        ],
+        []
+    );
+
     if (isLoading && !repoData.length) {
         return (
             <main className="flex min-h-screen items-center justify-center bg-[#050506]">
@@ -224,10 +308,13 @@ export default function GithubPage() {
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 bg-noir-radial opacity-70" />
             </div>
-            <section className="relative flex items-center min-h-screen px-6 py-24 sm:px-12">
+
+            <section className="relative flex min-h-[200vh] items-center px-4 pb-16 pt-24 sm:px-6 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 opacity-80 bg-noir-radial" />
                 <motion.div
                     ref={heroRef}
-                    className="z-10 mx-auto grid w-full max-w-6xl gap-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center"
+                    className="relative z-10 mx-auto grid w-full max-w-[1080px] gap-12 sm:gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start"
                     initial="hidden"
                     animate={heroInView ? "visible" : "hidden"}
                     variants={{
@@ -235,32 +322,25 @@ export default function GithubPage() {
                         hidden: {},
                     }}
                 >
-                    <motion.div variants={fadeIn} className="space-y-10">
-                        <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-white/60">
-                            Repo radar
-                            {lastUpdatedLabel && (
-                                <span className="rounded-full bg-white/10 px-2 py-1 text-[0.6rem] tracking-[0.2em] text-white/50">
-                                    Refreshed {lastUpdatedLabel}
-                                </span>
-                            )}
+                    <motion.div
+                        variants={fadeIn}
+                        className="space-y-8 lg:space-y-12"
+                    >
+                        <div className="space-y-2 lg:space-y-6">
+                            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+                                GitHub
+                            </h1>
                         </div>
-                        <h1 className="text-4xl font-semibold leading-tight text-balance sm:text-5xl lg:text-6xl">
-                            An immersive stream of my GitHub work in motion.
-                        </h1>
-                        <p className="max-w-2xl text-lg text-white/65">
-                            Explore infrastructure spikes, polished tools, and
-                            playful experiments. Curated live, sorted at will,
-                            framed inside a cinematic surface.
-                        </p>
                         <div className="grid gap-4 sm:grid-cols-2">
                             {statItems.map((item) => (
                                 <Card
                                     key={item.label}
                                     variant="glass"
                                     ambient
+                                    ambientVariant={item.ambientVariant}
                                     ambientSeed={item.label}
                                     ambientClassName="opacity-40"
-                                    className="relative flex flex-col gap-2 p-6 border border-white/10 bg-white/5 backdrop-blur"
+                                    className="flex flex-col gap-2 p-6"
                                     motionProps={{ variants: fadeIn }}
                                 >
                                     <span className="text-xs uppercase tracking-[0.25em] text-white/40">
@@ -273,275 +353,347 @@ export default function GithubPage() {
                             ))}
                         </div>
                     </motion.div>
-                    <motion.div variants={fadeIn} className="relative">
-                        {spotlightRepo ? (
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed={spotlightRepo.name}
-                                ambientClassName="opacity-60"
-                                className="relative flex flex-col h-full gap-6 p-8 overflow-hidden border border-white/10 bg-white/5 backdrop-blur"
-                            >
-                                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
-                                    Spotlight repository
-                                </span>
-                                <div className="space-y-4">
-                                    <h2 className="text-3xl font-semibold tracking-tight">
-                                        {spotlightRepo.name}
-                                    </h2>
-                                    <p className="text-sm text-white/70">
-                                        {spotlightRepo.description ||
-                                            "A live project anchored in this season's focus."}
-                                    </p>
-                                    <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-                                        <span className="flex items-center gap-2">
-                                            <FaStar className="w-4 h-4 text-yellow-400" />
-                                            {formatNumber(
-                                                spotlightRepo.stargazers_count ||
-                                                    0
-                                            )}
-                                        </span>
-                                        <span className="flex items-center gap-2">
-                                            <FaCodeFork className="w-4 h-4" />
-                                            {formatNumber(
-                                                spotlightRepo.forks_count || 0
-                                            )}
-                                        </span>
-                                        {spotlightRepo.language && (
-                                            <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em]">
-                                                {spotlightRepo.language}
-                                            </span>
-                                        )}
-                                    </div>
+                    <Card
+                        variant="glass"
+                        ambient
+                        ambientVariant="magenta"
+                        ambientSeed="macroboard"
+                        ambientClassName="opacity-45"
+                        className="relative flex flex-col h-full gap-6 p-8"
+                        motionProps={{ variants: fadeIn }}
+                    >
+                        <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                            Macroboard spotlight
+                        </span>
+                        <div className="space-y-4">
+                            <h2 className="text-3xl font-semibold tracking-tight">
+                                Spotify Macroboard
+                            </h2>
+                            <p className="text-sm text-white/70">
+                                Custom wireless macroboard tailored for Spotify
+                                with a handcrafted PCB, translucent chassis, and
+                                synchronized OLED telemetry.
+                            </p>
+                            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
+                                <Image
+                                    src={MacroboardImage}
+                                    alt="Spotify macroboard"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </div>
+                            <div className="grid gap-2 text-xs uppercase tracking-[0.2em] text-white/50 sm:grid-cols-2">
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-white/70">Stack</span>
+                                    <span>ESP32 · EasyEDA · C++ · Next.js</span>
                                 </div>
-                                <div className="mt-auto space-y-4">
-                                    <div className="flex items-center justify-between text-sm text-white/60">
-                                        <span>Language mix</span>
-                                        <a
-                                            href={spotlightRepo.html_url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white transition hover:border-white/40 hover:text-white"
-                                        >
-                                            <ImGithub className="w-4 h-4" />
-                                            Open repo
-                                        </a>
-                                    </div>
-                                    <LanguageBar repo={spotlightRepo.name} />
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-white/70">
+                                        Highlights
+                                    </span>
+                                    <span>
+                                        Wireless control · Synced lighting ·
+                                        OLED telemetry
+                                    </span>
                                 </div>
-                            </Card>
-                        ) : (
-                            <Card
-                                variant="glass"
-                                ambient
-                                ambientSeed="empty"
-                                ambientClassName="opacity-40"
-                                className="flex flex-col items-center justify-center h-full gap-4 p-8 border border-white/10 bg-white/5 text-white/60"
+                            </div>
+                            <a
+                                href="https://github.com/benz206/SpotifyMacroboard"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
                             >
-                                No repositories found right now.
-                            </Card>
-                        )}
-                    </motion.div>
+                                View project
+                            </a>
+                        </div>
+                    </Card>
+                    <Card
+                        variant="glass"
+                        ambient
+                        ambientVariant="violet"
+                        ambientSeed="contribution-card"
+                        ambientClassName="opacity-35"
+                        className="relative flex flex-col gap-4 p-6"
+                    >
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.2em] text-white/45">
+                            <span>Contributions · Past 52 weeks</span>
+                            <span>
+                                {formatNumber(stats?.commits ?? 0)} commits
+                            </span>
+                        </div>
+                        <div className="flex gap-1.5 overflow-x-auto pb-1">
+                            {contributionWeeks.map((week, weekIndex) => (
+                                <div
+                                    key={`week-${weekIndex}`}
+                                    className="flex flex-col gap-1.5"
+                                >
+                                    {week.map((day, dayIndex) => {
+                                        const level = Math.min(
+                                            Math.max(day.level ?? 0, 0),
+                                            4
+                                        );
+                                        const gradient =
+                                            contributionLevelGradients[level];
+                                        const label =
+                                            day.date &&
+                                            !day.date.startsWith("placeholder")
+                                                ? `${
+                                                      day.count
+                                                  } contributions on ${new Date(
+                                                      day.date
+                                                  ).toLocaleDateString(
+                                                      undefined,
+                                                      {
+                                                          month: "short",
+                                                          day: "numeric",
+                                                      }
+                                                  )}`
+                                                : "";
+                                        return (
+                                            <div
+                                                key={
+                                                    day.date ||
+                                                    `placeholder-${weekIndex}-${dayIndex}`
+                                                }
+                                                title={label}
+                                                className="h-3.5 w-3.5 rounded-md border border-white/10"
+                                                style={{
+                                                    background: gradient,
+                                                    opacity:
+                                                        day.date.startsWith(
+                                                            "placeholder"
+                                                        )
+                                                            ? 0.15
+                                                            : 1,
+                                                }}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
                 </motion.div>
             </section>
-            <section className="relative min-h-screen px-6 py-24 border-t border-white/5 sm:px-12">
-                <div className="flex flex-col w-full max-w-6xl gap-16 mx-auto lg:flex-row">
-                    <motion.aside
-                        className="flex flex-col w-full gap-12 lg:max-w-sm"
-                        initial="hidden"
-                        animate={timelineInView ? "visible" : "hidden"}
-                        variants={{
-                            visible: { transition: { staggerChildren: 0.12 } },
-                            hidden: {},
-                        }}
-                    >
-                        <motion.div variants={fadeIn} className="space-y-4">
+
+            <section className="relative flex flex-col min-h-screen px-4 py-24 border-t border-white/5 sm:px-6 lg:px-12">
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 opacity-75 bg-noir-radial" />
+                <div className="relative z-10 mx-auto flex h-[100vh] w-full max-w-[1080px] flex-col gap-10">
+                    <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="space-y-2">
                             <span className="text-xs uppercase tracking-[0.3em] text-white/50">
-                                Sort canvas
+                                Repository explorer
                             </span>
-                            <div className="flex flex-wrap gap-3">
-                                {Object.values(SortOption).map((option) => {
-                                    const active = sortBy === option;
-                                    return (
-                                        <button
-                                            key={option}
-                                            onClick={() =>
-                                                handleSortChange(option)
-                                            }
-                                            className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.25em] transition ${
-                                                active
-                                                    ? "border-white bg-white text-black"
-                                                    : "border-white/15 bg-white/5 text-white/70 hover:border-white/40 hover:text-white"
-                                            }`}
-                                        >
-                                            {getSortLabel(option)}
-                                            {active && (
-                                                <span className="ml-2 text-[0.65rem] tracking-[0.2em]">
-                                                    {sortOrder === "asc"
-                                                        ? "asc"
-                                                        : "desc"}
-                                                </span>
-                                            )}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            variants={fadeIn}
-                            className="p-6 space-y-6 border rounded-3xl border-white/10 bg-white/5 backdrop-blur"
-                        >
-                            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
-                                <span>Language pulse</span>
-                                <span>{languagePulse.length} tracked</span>
-                            </div>
-                            <div className="space-y-4">
-                                {languagePulse.length === 0 && (
-                                    <span className="text-sm text-white/50">
-                                        Language data is warming up.
-                                    </span>
-                                )}
-                                {languagePulse.slice(0, 6).map((entry) => (
-                                    <div
-                                        key={entry.language}
-                                        className="flex items-center gap-4"
+                            <h2 className="text-3xl font-semibold tracking-tight">
+                                Filter, sort, and dive into featured repos.
+                            </h2>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                            {Object.values(SortOption).map((option) => {
+                                const active = sortBy === option;
+                                return (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleSortChange(option)}
+                                        className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.25em] transition ${
+                                            active
+                                                ? "border-white bg-white text-black"
+                                                : "border-white/15 bg-white/5 text-white/70 hover:border-white/40 hover:text-white"
+                                        }`}
                                     >
-                                        <div className="w-10 h-10 text-sm font-semibold leading-10 text-center border rounded-2xl border-white/10 bg-white/5">
-                                            {entry.percentage}%
-                                        </div>
-                                        <div className="flex items-center justify-between flex-1">
-                                            <span className="text-sm font-medium text-white/80">
-                                                {entry.language}
+                                        {getSortLabel(option)}
+                                        {active && (
+                                            <span className="ml-2 text-[0.65rem] tracking-[0.2em]">
+                                                {sortOrder === "asc"
+                                                    ? "asc"
+                                                    : "desc"}
                                             </span>
-                                            <span className="text-xs uppercase tracking-[0.25em] text-white/40">
-                                                {entry.count} repos
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            variants={fadeIn}
-                            className="space-y-4 text-sm text-white/60"
-                        >
-                            <span className="text-xs uppercase tracking-[0.3em] text-white/50">
-                                How to explore
-                            </span>
-                            <p>
-                                Tap a sort mode to reorder the stream. Each card
-                                glows from its commit energy, with metrics
-                                tucked alongside quick access.
-                            </p>
-                        </motion.div>
-                    </motion.aside>
-                    <motion.div
-                        ref={timelineRef}
-                        className="flex flex-col w-full gap-10"
-                        initial={{ opacity: 0, y: 48 }}
-                        animate={
-                            timelineInView
-                                ? { opacity: 1, y: 0 }
-                                : { opacity: 0, y: 48 }
-                        }
-                        transition={{ duration: 0.7, ease: easeInOut }}
-                    >
-                        {filteredRepoData.length === 0 && (
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </header>
+                    <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+                        <aside className="flex flex-col w-full gap-6 lg:max-w-sm">
                             <Card
                                 variant="glass"
                                 ambient
-                                ambientSeed="empty-state"
-                                ambientClassName="opacity-40"
-                                className="flex min-h-[240px] flex-col items-center justify-center border border-white/10 bg-white/5 p-10 text-center text-white/60"
+                                ambientVariant="indigo"
+                                ambientSeed="search"
+                                ambientClassName="opacity-30"
+                                className="flex flex-col gap-3 p-6"
+                                motionProps={{ variants: fadeIn }}
                             >
-                                No repositories match this sort right now.
+                                <label className="flex flex-col gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
+                                    Search repos
+                                    <input
+                                        value={searchTerm}
+                                        onChange={(event) =>
+                                            setSearchTerm(event.target.value)
+                                        }
+                                        placeholder="Search by name"
+                                        className="px-4 py-3 text-sm text-white border rounded-full border-white/10 bg-white/10 placeholder:text-white/40 focus:border-white/40 focus:outline-none focus:ring-0"
+                                    />
+                                </label>
                             </Card>
-                        )}
-                        {filteredRepoData.map((repo, index) => {
-                            const updatedLabel = new Date(
-                                repo.updated_at
-                            ).toLocaleDateString(undefined, {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                            });
-                            return (
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientVariant="sunset"
+                                ambientSeed="language-pulse"
+                                ambientClassName="opacity-35"
+                                className="flex flex-col gap-4 p-6"
+                                motionProps={{ variants: fadeIn }}
+                            >
+                                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+                                    <span>Language pulse</span>
+                                    <span>{languagePulse.length} tracked</span>
+                                </div>
+                                <div className="space-y-4">
+                                    {languagePulse.length === 0 && (
+                                        <span className="text-sm text-white/50">
+                                            Language data is warming up.
+                                        </span>
+                                    )}
+                                    {languagePulse.slice(0, 6).map((entry) => (
+                                        <div
+                                            key={entry.language}
+                                            className="flex items-center gap-4"
+                                        >
+                                            <div className="flex items-center justify-center w-10 h-10 text-sm font-semibold border rounded-2xl border-white/10 bg-white/5">
+                                                {entry.percentage}%
+                                            </div>
+                                            <div className="flex items-center justify-between flex-1">
+                                                <span className="text-sm font-medium text-white/80">
+                                                    {entry.language}
+                                                </span>
+                                                <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                                                    {entry.count} repos
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Card>
+                        </aside>
+                        <motion.div
+                            ref={timelineRef}
+                            className="flex flex-col flex-1 w-full gap-8 pr-2 overflow-y-auto"
+                            initial={{ opacity: 0, y: 48 }}
+                            animate={
+                                timelineInView
+                                    ? { opacity: 1, y: 0 }
+                                    : { opacity: 0, y: 48 }
+                            }
+                            transition={{ duration: 0.7, ease: easeInOut }}
+                        >
+                            {filteredRepoData.length === 0 && (
                                 <Card
-                                    key={repo.id}
-                                    variant="minimal"
+                                    variant="glass"
                                     ambient
-                                    ambientSeed={repo.name}
+                                    ambientVariant="violet"
+                                    ambientSeed="empty-state"
                                     ambientClassName="opacity-30"
-                                    className="relative p-8 overflow-hidden transition border group border-white/10 bg-white/5 backdrop-blur hover:border-white/30"
-                                    motionProps={{
-                                        initial: { opacity: 0, y: 40 },
-                                        animate: timelineInView
-                                            ? { opacity: 1, y: 0 }
-                                            : { opacity: 0, y: 40 },
-                                        transition: {
-                                            delay: index * 0.08,
-                                            duration: 0.65,
-                                            ease: easeInOut,
-                                        },
-                                    }}
+                                    className="flex min-h-[240px] flex-col items-center justify-center p-10 text-center text-white/60"
                                 >
-                                    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-                                        <div className="flex-1 space-y-4">
-                                            <div className="flex flex-wrap items-center gap-4">
-                                                <h3 className="text-2xl font-semibold tracking-tight">
-                                                    {repo.name}
-                                                </h3>
-                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
-                                                    Updated {updatedLabel}
-                                                </span>
-                                                {repo.language && (
-                                                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70">
-                                                        {repo.language}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="max-w-3xl text-sm leading-relaxed text-white/70">
-                                                {repo.description ||
-                                                    "This project is still catching its breath after the latest deploy."}
-                                            </p>
-                                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-                                                <span className="inline-flex items-center gap-2">
-                                                    <FaStar className="w-4 h-4 text-yellow-400" />
-                                                    {formatNumber(
-                                                        repo.stargazers_count ||
-                                                            0
-                                                    )}
-                                                </span>
-                                                <span className="inline-flex items-center gap-2">
-                                                    <FaCodeFork className="w-4 h-4" />
-                                                    {formatNumber(
-                                                        repo.forks_count || 0
-                                                    )}
-                                                </span>
-                                                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/50">
-                                                    {repo.visibility}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-4 lg:w-48">
-                                            <a
-                                                href={repo.html_url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
-                                            >
-                                                <ImGithub className="w-5 h-5" />
-                                                View
-                                            </a>
-                                            <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">
-                                                #{index + 1}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    No repositories match the current filters.
                                 </Card>
-                            );
-                        })}
-                    </motion.div>
+                            )}
+                            {filteredRepoData.map((repo, index) => {
+                                const updatedLabel = new Date(
+                                    repo.updated_at
+                                ).toLocaleDateString(undefined, {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                });
+                                return (
+                                    <Card
+                                        key={repo.id}
+                                        variant="glass"
+                                        ambient
+                                        ambientVariant="magenta"
+                                        ambientSeed={repo.name}
+                                        ambientClassName="opacity-25"
+                                        className="relative p-8 transition hover:border-white/40"
+                                        motionProps={{
+                                            initial: { opacity: 0, y: 40 },
+                                            animate: timelineInView
+                                                ? { opacity: 1, y: 0 }
+                                                : { opacity: 0, y: 40 },
+                                            transition: {
+                                                delay: index * 0.08,
+                                                duration: 0.65,
+                                                ease: easeInOut,
+                                            },
+                                        }}
+                                    >
+                                        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                                            <div className="flex-1 space-y-4">
+                                                <div className="flex flex-wrap items-center gap-4">
+                                                    <h3 className="text-2xl font-semibold tracking-tight">
+                                                        {repo.name}
+                                                    </h3>
+                                                    <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
+                                                        Updated {updatedLabel}
+                                                    </span>
+                                                    {repo.language && (
+                                                        <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70">
+                                                            {repo.language}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <p className="max-w-3xl text-sm leading-relaxed text-white/70">
+                                                    {repo.description ||
+                                                        "This project is still catching its breath after the latest deploy."}
+                                                </p>
+                                                <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+                                                    <span className="inline-flex items-center gap-2">
+                                                        <FaStar className="w-4 h-4 text-yellow-400" />
+                                                        {formatNumber(
+                                                            repo.stargazers_count ||
+                                                                0
+                                                        )}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-2">
+                                                        <FaCodeFork className="w-4 h-4" />
+                                                        {formatNumber(
+                                                            repo.forks_count ||
+                                                                0
+                                                        )}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-2">
+                                                        <FaGithub className="w-4 h-4" />
+                                                        {formatNumber(
+                                                            repo.watchers_count ||
+                                                                0
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-4 lg:w-48">
+                                                <a
+                                                    href={repo.html_url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
+                                                >
+                                                    <ImGithub className="w-5 h-5" />
+                                                    View repo
+                                                </a>
+                                                <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">
+                                                    #{index + 1}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                );
+                            })}
+                        </motion.div>
+                    </div>
                 </div>
             </section>
         </main>
