@@ -305,13 +305,13 @@ export default function GithubPage() {
     return (
         <main className="relative overflow-hidden bg-[#050506] text-white">
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 bg-noir-radial opacity-70" />
+                <div className="absolute inset-0 bg-noir-gradient opacity-65" />
+                <div className="absolute inset-0 bg-noir-radial opacity-35" />
             </div>
 
             <section className="relative flex min-h-[200vh] items-center px-4 pb-16 pt-24 sm:px-6 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
-                <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 opacity-80 bg-noir-radial" />
+                <div className="absolute inset-0 bg-noir-gradient opacity-45" />
+                <div className="absolute inset-0 opacity-35 bg-noir-radial" />
                 <motion.div
                     ref={heroRef}
                     className="relative z-10 mx-auto grid w-full max-w-[1080px] gap-12 sm:gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start"
@@ -339,7 +339,7 @@ export default function GithubPage() {
                                     ambient
                                     ambientVariant={item.ambientVariant}
                                     ambientSeed={item.label}
-                                    ambientClassName="opacity-40"
+                                    ambientClassName="opacity-45"
                                     className="flex flex-col gap-2 p-6"
                                     motionProps={{ variants: fadeIn }}
                                 >
@@ -516,7 +516,7 @@ export default function GithubPage() {
                             })}
                         </div>
                     </header>
-                    <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+                    <div className="flex flex-col gap-6 text-white lg:flex-row lg:gap-8">
                         <aside className="flex flex-col w-full gap-6 lg:max-w-sm">
                             <Card
                                 variant="glass"
@@ -567,7 +567,7 @@ export default function GithubPage() {
                                                 {entry.percentage}%
                                             </div>
                                             <div className="flex items-center justify-between flex-1">
-                                                <span className="text-sm font-medium text-white/80">
+                                                <span className="text-sm font-medium text-white/90">
                                                     {entry.language}
                                                 </span>
                                                 <span className="text-xs uppercase tracking-[0.25em] text-white/40">
@@ -617,8 +617,8 @@ export default function GithubPage() {
                                         ambient
                                         ambientVariant="magenta"
                                         ambientSeed={repo.name}
-                                        ambientClassName="opacity-25"
-                                        className="relative p-8 transition hover:border-white/40"
+                                        ambientClassName="opacity-40"
+                                        className="relative p-8 transition hover:border-white/50"
                                         motionProps={{
                                             initial: { opacity: 0, y: 40 },
                                             animate: timelineInView
@@ -646,11 +646,11 @@ export default function GithubPage() {
                                                         </span>
                                                     )}
                                                 </div>
-                                                <p className="max-w-3xl text-sm leading-relaxed text-white/70">
+                                                <p className="max-w-3xl text-sm leading-relaxed text-white/80">
                                                     {repo.description ||
                                                         "This project is still catching its breath after the latest deploy."}
                                                 </p>
-                                                <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+                                                <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
                                                     <span className="inline-flex items-center gap-2">
                                                         <FaStar className="w-4 h-4 text-yellow-400" />
                                                         {formatNumber(
