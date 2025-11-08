@@ -3,6 +3,7 @@ import Link from "next/link";
 import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
 import matter from "gray-matter";
+import type { AmbientVariant } from "@/components/AmbientGradient";
 
 type RawBlogMetadata = {
     title: string;
@@ -12,6 +13,36 @@ type RawBlogMetadata = {
     created: string;
     updated: string;
 };
+
+const ambientVariants: AmbientVariant[] = [
+    "violet",
+    "blue",
+    "sunset",
+    "emerald",
+    "tangerine",
+    "crimson",
+    "amber",
+    "aqua",
+    "magenta",
+    "slate",
+    "indigo",
+    "rose",
+];
+
+function hashString(value: string) {
+    let hash = 0;
+    for (let i = 0; i < value.length; i += 1) {
+        hash = (hash << 5) - hash + value.charCodeAt(i);
+        hash |= 0;
+    }
+    return Math.abs(hash);
+}
+
+function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
+    const seed = `${post.slug}|${post.title}|${post.tags.join(",")}`;
+    const hash = hashString(seed);
+    return ambientVariants[hash % ambientVariants.length];
+}
 
 async function fetchPosts(): Promise<RawBlogMetadata[]> {
     const { Octokit } = await import("@octokit/rest");
@@ -94,19 +125,23 @@ export const revalidate = 3600;
 
 export default async function BlogPage() {
     const posts = await fetchPosts();
-    const enhancedPosts = posts.map((post) => ({
-        ...post,
-        createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        }),
-        updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        }),
-    }));
+    const enhancedPosts = posts.map((post) => {
+        const ambientVariant = selectAmbientVariant(post);
+        return {
+            ...post,
+            createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            }),
+            updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            }),
+            ambientVariant,
+        };
+    });
 
     const [featuredPost, ...restPosts] = enhancedPosts;
 
@@ -146,9 +181,9 @@ export default async function BlogPage() {
                             <Card
                                 variant="minimal"
                                 ambient
-                                ambientSeed={featuredPost.slug}
                                 ambientClassName="opacity-30 group-hover:opacity-45 transition-opacity"
                                 className="flex flex-col gap-8 p-10 transition-transform group-hover:-translate-y-1 md:flex-row md:items-start md:justify-between md:p-12"
+                                ambientVariant={featuredPost.ambientVariant}
                             >
                                 <div className="space-y-5 md:max-w-2xl">
                                     <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/50">
@@ -192,9 +227,9 @@ export default async function BlogPage() {
                                             <Card
                                                 variant="minimal"
                                                 ambient
-                                                ambientSeed={post.slug}
                                                 ambientClassName="opacity-20 group-hover:opacity-40 transition-opacity"
                                                 className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
+                                                ambientVariant={post.ambientVariant}
                                             >
                                                 <div className="space-y-3">
                                                     <time className="text-xs uppercase tracking-[0.2em] text-white/40" dateTime={post.updated}>
