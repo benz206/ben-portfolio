@@ -80,7 +80,7 @@ export default function Footer() {
     }, [views]);
 
     return (
-        <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16">
+        <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16 snap-end snap-always">
             <div className="flex w-11/12 max-w-[1080px] flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
