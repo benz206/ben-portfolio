@@ -1,5 +1,6 @@
 import matter from "gray-matter";
 import MdxLayout from "@/components/MdxLayout";
+import PostViewCounter from "@/components/PostViewCounter";
 import { getMDXComponents } from "@/mdx-components";
 
 type RawBlogMetadata = {
@@ -121,6 +122,11 @@ export default async function BlogPostPage({
             metadata={metadata}
             createdDate={createdDate}
             updatedDate={updatedDate}
+            viewCounter={
+                <span className="py-2 text-xs font-light lg:text-sm text-[#ececec]/70">
+                    <PostViewCounter slug={slug} />
+                </span>
+            }
         >
             <MDX source={content} components={components as any} />
         </MdxLayout>
