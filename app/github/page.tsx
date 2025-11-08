@@ -303,15 +303,10 @@ export default function GithubPage() {
     }
 
     return (
-        <main className="relative overflow-hidden bg-[#050506] text-white">
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-noir-gradient opacity-65" />
-                <div className="absolute inset-0 bg-noir-radial opacity-35" />
-            </div>
-
+        <main className="relative overflow-hidden text-white">
             <section className="relative flex min-h-[200vh] items-center px-4 pb-16 pt-24 sm:px-6 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
-                <div className="absolute inset-0 bg-noir-gradient opacity-45" />
-                <div className="absolute inset-0 opacity-35 bg-noir-radial" />
+                <div className="absolute inset-0 bg-noir-gradient" />
+                <div className="absolute inset-0 bg-noir-radial opacity-80" />
                 <motion.div
                     ref={heroRef}
                     className="relative z-10 mx-auto grid w-full max-w-[1080px] gap-12 sm:gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start"
@@ -338,8 +333,7 @@ export default function GithubPage() {
                                     variant="glass"
                                     ambient
                                     ambientVariant={item.ambientVariant}
-                                    ambientSeed={item.label}
-                                    ambientClassName="opacity-45"
+                                    ambientClassName="opacity-40"
                                     className="flex flex-col gap-2 p-6"
                                     motionProps={{ variants: fadeIn }}
                                 >
@@ -357,7 +351,6 @@ export default function GithubPage() {
                         variant="glass"
                         ambient
                         ambientVariant="magenta"
-                        ambientSeed="macroboard"
                         ambientClassName="opacity-45"
                         className="relative flex flex-col h-full gap-6 p-8"
                         motionProps={{ variants: fadeIn }}
@@ -412,7 +405,6 @@ export default function GithubPage() {
                         variant="glass"
                         ambient
                         ambientVariant="violet"
-                        ambientSeed="contribution-card"
                         ambientClassName="opacity-35"
                         className="relative flex flex-col gap-4 p-6"
                     >
@@ -522,7 +514,6 @@ export default function GithubPage() {
                                 variant="glass"
                                 ambient
                                 ambientVariant="indigo"
-                                ambientSeed="search"
                                 ambientClassName="opacity-30"
                                 className="flex flex-col gap-3 p-6"
                                 motionProps={{ variants: fadeIn }}
@@ -543,7 +534,6 @@ export default function GithubPage() {
                                 variant="glass"
                                 ambient
                                 ambientVariant="sunset"
-                                ambientSeed="language-pulse"
                                 ambientClassName="opacity-35"
                                 className="flex flex-col gap-4 p-6"
                                 motionProps={{ variants: fadeIn }}
@@ -595,7 +585,6 @@ export default function GithubPage() {
                                     variant="glass"
                                     ambient
                                     ambientVariant="violet"
-                                    ambientSeed="empty-state"
                                     ambientClassName="opacity-30"
                                     className="flex min-h-[240px] flex-col items-center justify-center p-10 text-center text-white/60"
                                 >
