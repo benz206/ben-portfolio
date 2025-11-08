@@ -91,24 +91,25 @@ export async function GET(_req: NextRequest) {
                     height: number;
                 };
                 if (data && width && height) {
-                    let rTotal = 0;
-                    let gTotal = 0;
-                    let bTotal = 0;
-                    let count = 0;
+                    let selectedColor: [number, number, number] = dominantColor;
+                    let bestScore = -1;
                     const sampleStride = 20;
                     for (let i = 0; i < data.length; i += 4 * sampleStride) {
-                        rTotal += data[i];
-                        gTotal += data[i + 1];
-                        bTotal += data[i + 2];
-                        count++;
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        const max = Math.max(r, g, b);
+                        const min = Math.min(r, g, b);
+                        const maxNorm = max / 255;
+                        const saturation = maxNorm === 0 ? 0 : (max - min) / max;
+                        const value = maxNorm;
+                        const score = saturation * value;
+                        if (score > bestScore) {
+                            selectedColor = [r, g, b];
+                            bestScore = score;
+                        }
                     }
-                    if (count > 0) {
-                        dominantColor = [
-                            Math.round(rTotal / count),
-                            Math.round(gTotal / count),
-                            Math.round(bTotal / count),
-                        ];
-                    }
+                    dominantColor = selectedColor;
                 }
             } catch {}
         }
