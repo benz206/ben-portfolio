@@ -59,7 +59,7 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                 ambientVariant={job.ambientVariant ?? "violet"}
                 ambientClassName="opacity-40"
                 className={cn(
-                    "flex items-start gap-5 p-6 backdrop-blur-xl focus-within:ring-2 focus-within:ring-white/60",
+                    "flex gap-5 items-start p-6 backdrop-blur-xl focus-within:ring-2 focus-within:ring-white/60",
                     isActive ? "ring-1 ring-white/25" : "ring-0"
                 )}
                 motionProps={{
@@ -73,12 +73,12 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                     type="button"
                     onClick={onSelect}
                     disabled={isActive}
-                    className="flex items-start w-full gap-5 text-left focus-visible:outline-none disabled:cursor-default"
+                    className="flex gap-5 items-start w-full text-left focus-visible:outline-none disabled:cursor-default"
                     layoutId={`${layoutId}-button`}
                 >
                     <motion.div
                         layoutId={`${layoutId}-container`}
-                        className="relative flex items-center justify-center w-16 h-16"
+                        className="flex relative justify-center items-center w-16 h-16"
                     >
                         <Image
                             src={job.image.src}
@@ -86,11 +86,11 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                             width={64}
                             height={64}
                             priority={job.image.priority}
-                            className="z-10 object-contain w-16 h-16 rounded-xl"
+                            className="object-contain z-10 w-16 h-16 rounded-xl"
                         />
                     </motion.div>
                     <div className="flex flex-col flex-1 gap-1 my-auto">
-                        <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap gap-2 justify-between items-center">
                             <motion.h3
                                 layoutId={`${layoutId}-company`}
                                 className="text-base font-medium text-white"
@@ -106,7 +106,7 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                                 {job.location}
                             </motion.span>
                         </div>
-                        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                        <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
                             <motion.p
                                 layoutId={`${layoutId}-title`}
                                 className="font-extralight text-white/65"
@@ -175,7 +175,7 @@ const jobs: Job[] = [
         title: "Firmware Team Member",
         company: "Midnight Sun",
         location: "Waterloo",
-        period: "Sep 2024 — Present",
+        period: "Sep 2024 — January 2025",
         description:
             "• Developing ping testing functions in Python and C to verify connectivity across CAN networks",
         image: {
@@ -271,7 +271,7 @@ export default function Experience() {
             <AnimatePresence>
                 {selectedJob && (
                     <motion.div
-                        className="fixed inset-0 z-40 flex items-center justify-center px-4 py-10 bg-black/60 backdrop-blur"
+                        className="flex fixed inset-0 z-40 justify-center items-center px-4 py-10 backdrop-blur bg-black/60"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -296,7 +296,7 @@ export default function Experience() {
                                 }
                                 ambientSeed={selectedJob.title}
                                 ambientClassName="opacity-60"
-                                className="flex flex-col gap-6 p-8 md:p-10 rounded-3xl"
+                                className="flex flex-col gap-6 p-8 rounded-xl md:p-8"
                                 motionProps={{
                                     layoutId: `${selectedJob.company}-${selectedJob.period}`,
                                     transition: {
@@ -306,18 +306,18 @@ export default function Experience() {
                                     },
                                 }}
                             >
-                                <div className="flex items-start justify-between">
-                                    <div className="flex items-start gap-4">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex gap-4 items-start">
                                         <motion.div
                                             layoutId={`${selectedJob.company}-${selectedJob.period}-container`}
-                                            className="flex items-center justify-center w-16 h-16"
+                                            className="flex justify-center items-center w-16 h-16"
                                         >
                                             <Image
                                                 src={selectedJob.image.src}
                                                 alt={selectedJob.image.alt}
                                                 width={64}
                                                 height={64}
-                                                className="z-10 object-contain w-16 h-16 rounded-xl"
+                                                className="object-contain z-10 w-16 h-16 rounded-xl"
                                             />
                                         </motion.div>
                                         <div className="flex flex-col gap-3 text-white">
@@ -359,14 +359,6 @@ export default function Experience() {
                                             </motion.p>
                                         </div>
                                     </div>
-                                    <button
-                                        type="button"
-                                        onClick={closeModal}
-                                        aria-label="Close experience details"
-                                        className="flex items-center justify-center transition border rounded-full w-9 h-9 border-white/20 text-white/60 hover:text-white hover:border-white/40"
-                                    >
-                                        <FiX className="w-4 h-4" />
-                                    </button>
                                 </div>
                                 <motion.p
                                     initial={{ opacity: 0, y: 12 }}
