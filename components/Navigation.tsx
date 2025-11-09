@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
+import { useNavigationCommands } from "@/components/CommandPalette/useNavigationCommands";
 
 const motionAnim = {
     // whileHover: { scale: 1.1 },
@@ -24,6 +26,8 @@ export default function Navigation() {
     const [scrollY, setScrollY] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
+    const { open } = useCommandMenu();
+    useNavigationCommands();
 
     useEffect(() => {
         const container = document.querySelector(".home-scroll");
@@ -101,6 +105,15 @@ export default function Navigation() {
                             </motion.div>
                         ))}
                         <motion.div {...motionAnim}>
+                            <button
+                                type="button"
+                                onClick={open}
+                                className="text-sm font-medium text-white/70 transition-colors duration-200 hover:text-white"
+                            >
+                                Command Menu
+                            </button>
+                        </motion.div>
+                        <motion.div {...motionAnim}>
                             <Link
                                 className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"
@@ -111,6 +124,17 @@ export default function Navigation() {
                         </motion.div>
                     </div>
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
+                        <button
+                            type="button"
+                            onClick={open}
+                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
+                            aria-label="Open command menu"
+                        >
+                            <span className="sr-only">Open command menu</span>
+                            <span className="text-xs uppercase tracking-[0.3em] text-white/70">
+                                ⌘K
+                            </span>
+                        </button>
                         <button
                             type="button"
                             className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"

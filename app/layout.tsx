@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Providers from "./providers";
 import Layout from "@/components/Layout";
 import ViewCounter from "@/components/ViewCounter";
+import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
 
 export const metadata: Metadata = {
     title: "Ben's Portfolio",
@@ -35,7 +36,9 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <ViewCounter />
-                    <Layout>{children}</Layout>
+                    <CommandProvider>
+                        <Layout>{children}</Layout>
+                    </CommandProvider>
                 </Providers>
             </body>
         </html>
