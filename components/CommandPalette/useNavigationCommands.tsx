@@ -1,12 +1,13 @@
 "use client";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type { CommandDescriptor } from "@/types/command";
 import { useCommandMenu } from "./CommandProvider";
 
-const navigationCommands = [
+const navigationCommands: CommandDescriptor[] = [
     {
         id: "nav-home",
-        label: "Go to Home",
+        label: "Home",
         href: "/",
         section: "Navigation",
         keywords: ["root", "landing"],
@@ -14,7 +15,7 @@ const navigationCommands = [
     },
     {
         id: "nav-projects",
-        label: "Go to Projects",
+        label: "Projects",
         href: "/projects",
         section: "Navigation",
         keywords: ["portfolio", "work"],
@@ -22,7 +23,7 @@ const navigationCommands = [
     },
     {
         id: "nav-blogs",
-        label: "Go to Blog",
+        label: "Blog",
         href: "/blog",
         section: "Navigation",
         keywords: ["articles", "writing"],
@@ -30,44 +31,57 @@ const navigationCommands = [
     },
     {
         id: "nav-gallery",
-        label: "Go to Gallery",
+        label: "Gallery",
         href: "/gallery",
         section: "Navigation",
         keywords: ["photos", "images"],
         meta: "Page",
     },
     {
-        id: "nav-github",
-        label: "Go to GitHub Analytics",
-        href: "/github",
+        id: "nav-resume",
+        label: "Resume",
+        href: "/resume.pdf",
         section: "Navigation",
-        keywords: ["repos", "stat"],
+        keywords: ["pdf", "download"],
         meta: "Page",
-    },
-    {
-        id: "nav-thanks",
-        label: "Go to Thank You",
-        href: "/thanks",
-        section: "Navigation",
-        keywords: ["gratitude", "message"],
-        meta: "Page",
-    },
+    }
 ];
 
 export function useNavigationCommands() {
     const { registerCommands } = useCommandMenu();
     const pathname = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
+        const commands = navigationCommands.map((command) => {
+            const href = command.href;
+            const meta = href === pathname ? "Current" : command.meta;
+            let action = command.action;
+            if (command.id === "nav-resume" && href) {
+                action = () => {
+                    if (typeof window !== "undefined") {
+                        window.open(href, "_blank", "noopener,noreferrer");
+                    }
+                };
+            } else if (!action && href) {
+                action = () => {
+                    if (href !== pathname) {
+                        router.push(href);
+                    }
+                };
+            }
+            return {
+                ...command,
+                meta,
+                action,
+            };
+        });
         const unregister = registerCommands({
             source: "navigation",
-            commands: navigationCommands.map((command) => ({
-                ...command,
-                meta: command.href === pathname ? "Current" : command.meta,
-            })),
+            commands,
             replace: true,
         });
         return unregister;
-    }, [pathname, registerCommands]);
+    }, [pathname, registerCommands, router]);
 }
 

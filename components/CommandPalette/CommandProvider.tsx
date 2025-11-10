@@ -219,7 +219,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 isOpen &&
                 createPortal(
                     <div className="fixed inset-0 z-[999] flex items-start justify-center bg-black/60 backdrop-blur-sm px-4 pt-[15vh] sm:px-6">
-                        <Card variant="glass" className="w-full max-w-xl overflow-hidden border border-white/10 bg-black/70">
+                        <Card variant="glass" className="overflow-hidden !p-1 w-full max-w-xl border border-white/10 bg-black/70">
                             <div className="flex items-center px-4 py-3 border-b border-white/10">
                                 <div className="flex-1">
                                     <input
@@ -230,14 +230,14 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                             setActiveIndex(0);
                                         }}
                                         placeholder="Search actions..."
-                                        className="w-full bg-transparent text-sm text-white placeholder:text-white/40 outline-none"
+                                        className="w-full text-sm text-white bg-transparent outline-none placeholder:text-white/40"
                                     />
                                 </div>
                                 <span className="hidden text-xs text-white/40 sm:inline-flex">Esc</span>
                             </div>
                             <div className="max-h-[320px] overflow-y-auto">
                                 {sections.length === 0 && (
-                                    <div className="px-4 py-12 text-center text-sm text-white/60">
+                                    <div className="px-4 py-12 text-sm text-center text-white/60">
                                         No commands found.
                                     </div>
                                 )}
@@ -257,8 +257,8 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                         onMouseEnter={() => setActiveIndex(index)}
                                                         onClick={() => runCommand(command)}
                                                         className={cn(
-                                                            "flex w-full items-center justify-between rounded-md px-3 py-2 text-left transition-colors",
-                                                            isActive ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+                                                            "flex justify-between items-center px-3 py-2 w-full text-left rounded-md transition-colors",
+                                                            isActive ? "text-white bg-white/15" : "text-white/80 hover:bg-white/10 hover:text-white"
                                                         )}
                                                     >
                                                         <div className="flex flex-col gap-1">
@@ -269,7 +269,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex gap-3 items-center">
                                                             {command.meta && (
                                                                 <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
                                                                     {command.meta}

@@ -80,7 +80,7 @@ export default function Navigation() {
     const offset = scrollY > 12;
 
     return (
-        <nav className="fixed top-0 z-40 flex justify-center w-full">
+        <nav className="flex fixed top-0 z-40 justify-center w-full">
             <div
                 className={`flex w-full justify-center transition-all duration-300 ${
                     offset ? "backdrop-blur bg-black/50" : "bg-transparent"
@@ -93,7 +93,7 @@ export default function Navigation() {
                     >
                         Home
                     </Link>
-                    <div className="items-center hidden gap-8 ml-auto lg:flex">
+                    <div className="hidden gap-8 items-center ml-auto lg:flex">
                         {links.map((link) => (
                             <motion.div key={link.href} {...motionAnim}>
                                 <Link
@@ -105,15 +105,6 @@ export default function Navigation() {
                             </motion.div>
                         ))}
                         <motion.div {...motionAnim}>
-                            <button
-                                type="button"
-                                onClick={open}
-                                className="text-sm font-medium text-white/70 transition-colors duration-200 hover:text-white"
-                            >
-                                Command Menu
-                            </button>
-                        </motion.div>
-                        <motion.div {...motionAnim}>
                             <Link
                                 className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"
@@ -123,11 +114,11 @@ export default function Navigation() {
                             </Link>
                         </motion.div>
                     </div>
-                    <div className="flex items-center gap-4 ml-auto lg:hidden">
+                    <div className="flex gap-4 items-center ml-auto lg:hidden">
                         <button
                             type="button"
                             onClick={open}
-                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
+                            className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
                             aria-label="Open command menu"
                         >
                             <span className="sr-only">Open command menu</span>
@@ -137,7 +128,7 @@ export default function Navigation() {
                         </button>
                         <button
                             type="button"
-                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
+                            className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
                             onClick={() => setIsOpen(!isOpen)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
@@ -145,9 +136,9 @@ export default function Navigation() {
                         >
                             <span className="sr-only">{isOpen ? "Close menu" : "Open menu"}</span>
                             <div className="relative w-6 h-5">
-                                <div className={`absolute left-0 top-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "translate-y-[9px] rotate-45" : ""}`} />
+                                <div className={`absolute left-0 top-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "rotate-45 translate-y-[9px]" : ""}`} />
                                 <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "opacity-0" : "opacity-100"}`} />
-                                <div className={`absolute left-0 bottom-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "-translate-y-[9px] -rotate-45" : ""}`} />
+                                <div className={`absolute left-0 bottom-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
                             </div>
                         </button>
                     </div>
@@ -156,14 +147,14 @@ export default function Navigation() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 lg:hidden"
+                        className="flex fixed inset-0 z-50 justify-center items-center bg-black/70 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsOpen(false)}
                     >
                         <motion.div
-                            className="flex flex-col items-center w-full max-w-sm gap-6 px-6"
+                            className="flex flex-col gap-6 items-center px-6 w-full max-w-sm"
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 10, opacity: 0 }}
