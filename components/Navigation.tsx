@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
 import { useNavigationCommands } from "@/components/CommandPalette/useNavigationCommands";
 
 const motionAnim = {
@@ -26,7 +25,6 @@ export default function Navigation() {
     const [scrollY, setScrollY] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
-    const { open } = useCommandMenu();
     useNavigationCommands();
 
     useEffect(() => {
@@ -115,17 +113,6 @@ export default function Navigation() {
                         </motion.div>
                     </div>
                     <div className="flex gap-4 items-center ml-auto lg:hidden">
-                        <button
-                            type="button"
-                            onClick={open}
-                            className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
-                            aria-label="Open command menu"
-                        >
-                            <span className="sr-only">Open command menu</span>
-                            <span className="text-xs uppercase tracking-[0.3em] text-white/70">
-                                ⌘K
-                            </span>
-                        </button>
                         <button
                             type="button"
                             className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
