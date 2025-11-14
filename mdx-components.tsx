@@ -40,6 +40,40 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </strong>
         ),
+        em: ({ children }) => <em className="italic">{children}</em>,
+        del: ({ children }) => (
+            <del className="line-through opacity-70">{children}</del>
+        ),
+        s: ({ children }) => (
+            <s className="line-through opacity-70">{children}</s>
+        ),
+        blockquote: ({ children }) => (
+            <blockquote className="pl-4 my-4 italic text-gray-300 border-l-4 border-gray-500">
+                {children}
+            </blockquote>
+        ),
+        table: ({ children }) => (
+            <div className="my-6 overflow-x-auto">
+                <table className="min-w-full border border-collapse border-gray-600">
+                    {children}
+                </table>
+            </div>
+        ),
+        thead: ({ children }) => (
+            <thead className="bg-gray-800">{children}</thead>
+        ),
+        tbody: ({ children }) => <tbody>{children}</tbody>,
+        tr: ({ children }) => (
+            <tr className="border-b border-gray-600">{children}</tr>
+        ),
+        th: ({ children }) => (
+            <th className="px-4 py-2 font-bold text-left border border-gray-600">
+                {children}
+            </th>
+        ),
+        td: ({ children }) => (
+            <td className="px-4 py-2 border border-gray-600">{children}</td>
+        ),
         img: (props) => {
             if (!props.src || typeof props.src !== "string") return null;
             return <MDXImage src={props.src} alt={props.alt} />;
@@ -60,7 +94,25 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                     />
                 );
             }
-            return <code className={className}>{children}</code>;
+            return (
+                <code className="rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200">
+                    {children}
+                </code>
+            );
+        },
+        input: (props) => {
+            if (props.type === "checkbox") {
+                return (
+                    <input
+                        type="checkbox"
+                        className="w-4 h-4 mr-2 cursor-pointer accent-blue-500"
+                        disabled={props.disabled}
+                        checked={props.checked}
+                        readOnly
+                    />
+                );
+            }
+            return <input {...props} />;
         },
         hr: () => (
             <div className="my-6 max-w-[1170px] h-[1px] bg-[#383838] transition-colors duration-1000" />
