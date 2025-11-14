@@ -116,7 +116,7 @@ async function fetchPosts(): Promise<RawBlogMetadata[]> {
     );
 
     posts.sort(
-        (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime()
+        (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
     );
     return posts;
 }
