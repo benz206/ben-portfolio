@@ -2,8 +2,10 @@
 import Link from "next/link";
 import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
+import BlogViewCounter from "@/components/BlogViewCounter";
 import matter from "gray-matter";
 import type { AmbientVariant } from "@/components/AmbientGradient";
+import { getRedisClient } from "@/utils/redis";
 
 type RawBlogMetadata = {
     title: string;
@@ -42,6 +44,33 @@ function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
     const seed = `${post.slug}|${post.title}|${post.tags.join(",")}`;
     const hash = hashString(seed);
     return ambientVariants[hash % ambientVariants.length];
+}
+
+async function fetchViewCounts(slugs: string[]): Promise<Record<string, number>> {
+    const viewCounts: Record<string, number> = {};
+    try {
+        const client = await getRedisClient();
+        const PREFIX = "views:post:";
+        const toNumber = (value: string | null) => {
+            if (!value) return 0;
+            const parsed = Number(value);
+            return Number.isNaN(parsed) ? 0 : parsed;
+        };
+        
+        await Promise.all(
+            slugs.map(async (slug) => {
+                const key = `${PREFIX}${slug}`;
+                const count = toNumber(await client.get(key));
+                viewCounts[slug] = count;
+            })
+        );
+    } catch (error) {
+        console.error("Failed to fetch view counts", error);
+        slugs.forEach((slug) => {
+            viewCounts[slug] = 0;
+        });
+    }
+    return viewCounts;
 }
 
 async function fetchPosts(): Promise<RawBlogMetadata[]> {
@@ -125,6 +154,9 @@ export const revalidate = 3600;
 
 export default async function BlogPage() {
     const posts = await fetchPosts();
+    const slugs = posts.map((post) => post.slug);
+    const viewCounts = await fetchViewCounts(slugs);
+    
     const enhancedPosts = posts.map((post) => {
         const ambientVariant = selectAmbientVariant(post);
         return {
@@ -140,6 +172,7 @@ export default async function BlogPage() {
                 day: "numeric",
             }),
             ambientVariant,
+            views: viewCounts[post.slug] || 0,
         };
     });
 
@@ -201,10 +234,13 @@ export default async function BlogPage() {
                                     <time className="text-sm text-white/50" dateTime={featuredPost.updated}>
                                         Updated {featuredPost.updatedFormatted}
                                     </time>
-                                    <div className="flex flex-wrap gap-2">
-                                        {featuredPost.tags.map((tag) => (
-                                            <Hashtag key={tag} hashtag={tag} />
-                                        ))}
+                                    <div className="flex flex-wrap items-center gap-2 justify-between w-full">
+                                        <div className="flex flex-wrap gap-2">
+                                            {featuredPost.tags.map((tag) => (
+                                                <Hashtag key={tag} hashtag={tag} />
+                                            ))}
+                                        </div>
+                                        <BlogViewCounter views={featuredPost.views} />
                                     </div>
                                 </div>
                             </Card>
@@ -231,7 +267,7 @@ export default async function BlogPage() {
                                                 className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
                                                 ambientVariant={post.ambientVariant}
                                             >
-                                                <div className="space-y-3">
+                                                <div className="space-y-3 flex-1">
                                                     <time className="text-xs uppercase tracking-[0.2em] text-white/40" dateTime={post.updated}>
                                                         {post.updatedFormatted}
                                                     </time>
@@ -242,13 +278,18 @@ export default async function BlogPage() {
                                                         {post.description || "Read the full entry."}
                                                     </p>
                                                 </div>
-                                                {post.tags.length > 0 && (
-                                                    <div className="flex flex-wrap gap-2 text-sm text-white/60">
-                                                        {post.tags.map((tag) => (
-                                                            <Hashtag key={tag} hashtag={tag} />
-                                                        ))}
-                                                    </div>
-                                                )}
+                                                <div className="flex flex-wrap items-center gap-2 justify-between">
+                                                    {post.tags.length > 0 ? (
+                                                        <div className="flex flex-wrap gap-2 text-sm text-white/60">
+                                                            {post.tags.map((tag) => (
+                                                                <Hashtag key={tag} hashtag={tag} />
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div />
+                                                    )}
+                                                    <BlogViewCounter views={post.views} />
+                                                </div>
                                             </Card>
                                         </Link>
                                     ))}
