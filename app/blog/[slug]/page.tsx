@@ -116,6 +116,7 @@ export default async function BlogPostPage({
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
     const { MDXRemote } = await import("next-mdx-remote/rsc");
+    const remarkGfm = (await import("remark-gfm")).default;
     const MDX = MDXRemote as any;
     return (
         <MdxLayout
@@ -128,7 +129,15 @@ export default async function BlogPostPage({
                 </span>
             }
         >
-            <MDX source={content} components={components as any} />
+            <MDX
+                source={content}
+                components={components as any}
+                options={{
+                    mdxOptions: {
+                        remarkPlugins: [remarkGfm],
+                    },
+                }}
+            />
         </MdxLayout>
     );
 }

@@ -3,6 +3,7 @@ import YouTubeEmbed from "./components/mdx/YoutubeEmbed";
 import GenericCodeBlock from "./components/CodeBlocks/GenericCodeBlock";
 import styles from "@/styles/mdx.module.css";
 import MDXImage from "@/components/mdx/MDXImage";
+import ResponsiveTable from "@/components/mdx/ResponsiveTable";
 
 export function getMDXComponents(components: MDXComponents): MDXComponents {
     return {
@@ -52,27 +53,19 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </blockquote>
         ),
-        table: ({ children }) => (
-            <div className="my-6 overflow-x-auto">
-                <table className="min-w-full border border-collapse border-gray-600">
-                    {children}
-                </table>
-            </div>
-        ),
-        thead: ({ children }) => (
-            <thead className="bg-gray-800">{children}</thead>
-        ),
+        table: ({ children }) => <ResponsiveTable>{children}</ResponsiveTable>,
+        thead: ({ children }) => <thead className="">{children}</thead>,
         tbody: ({ children }) => <tbody>{children}</tbody>,
         tr: ({ children }) => (
-            <tr className="border-b border-gray-600">{children}</tr>
+            <tr className="border-b border-gray-500">{children}</tr>
         ),
         th: ({ children }) => (
-            <th className="px-4 py-2 font-bold text-left border border-gray-600">
+            <th className="px-4 py-2 font-bold text-left border border-gray-500">
                 {children}
             </th>
         ),
         td: ({ children }) => (
-            <td className="px-4 py-2 border border-gray-600">{children}</td>
+            <td className="px-4 py-2 border border-gray-500">{children}</td>
         ),
         img: (props) => {
             if (!props.src || typeof props.src !== "string") return null;
@@ -95,7 +88,13 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 );
             }
             return (
-                <code className="rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200">
+                <code
+                    className="rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200"
+                    style={{
+                        fontFamily:
+                            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                    }}
+                >
                     {children}
                 </code>
             );
