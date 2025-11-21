@@ -240,7 +240,7 @@ export default async function BlogPage() {
                                                 <Hashtag key={tag} hashtag={tag} />
                                             ))}
                                         </div>
-                                        <BlogViewCounter views={featuredPost.views} />
+                                        <BlogViewCounter slug={featuredPost.slug} initialViews={featuredPost.views} />
                                     </div>
                                 </div>
                             </Card>
@@ -288,7 +288,7 @@ export default async function BlogPage() {
                                                     ) : (
                                                         <div />
                                                     )}
-                                                    <BlogViewCounter views={post.views} />
+                                                    <BlogViewCounter slug={post.slug} initialViews={post.views} />
                                                 </div>
                                             </Card>
                                         </Link>
