@@ -59,14 +59,16 @@ const socials = [
 
 export default function Footer() {
     const [views, setViews] = useState<number | null>(null);
+    const [dailyViews, setDailyViews] = useState<number | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
                 const response = await fetch("/api/views");
                 if (!response.ok) return;
-                const { count } = await response.json();
+                const { count, daily } = await response.json();
                 setViews(count);
+                setDailyViews(daily ?? 0);
             } catch (error) {
                 console.error("Failed to fetch global views", error);
             }
@@ -104,6 +106,11 @@ export default function Footer() {
                         {viewText && (
                             <span className="ml-3 text-white/35">
                                 {viewText}
+                                {dailyViews !== null && dailyViews > 0 && (
+                                    <span className="ml-2 text-green-500">
+                                        +{dailyViews} today
+                                    </span>
+                                )}
                             </span>
                         )}
                     </div>
