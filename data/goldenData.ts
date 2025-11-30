@@ -73,7 +73,7 @@ export const goldenPeople: GoldenPerson[] = [
         description: "Taking a chance on me.",
     },
     {
-        name: "Gigg",
+        name: "Ms. Gigg",
         description: "To be ambitious.",
     },
     {
@@ -81,11 +81,15 @@ export const goldenPeople: GoldenPerson[] = [
         description: "To be happy.",
     },
     {
-        name: "Mr Gray",
+        name: "Mr. Gray",
         description: "To be happy.",
     },
     {
         name: "StealthHeart+Ambee",
         description: "To be happy and kind.",
     },
+    {
+        name: "Markouyang",
+        description: "Should've came to Waterloo.",
+    }
 ];
