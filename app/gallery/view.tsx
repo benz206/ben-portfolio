@@ -40,7 +40,7 @@ function PhotoTile({
     return (
         <motion.button
             type="button"
-            className="block w-full overflow-hidden transition duration-200 rounded-2xl group hover:brightness-110"
+            className="block w-full overflow-hidden transition duration-200 rounded-xl group hover:brightness-110"
             onClick={() => onSelect(image)}
             variants={itemAnim}
             initial="hidden"
@@ -49,7 +49,7 @@ function PhotoTile({
             viewport={viewportOptions}
             whileInView="visible"
         >
-            <div className="relative w-full overflow-hidden rounded-2xl aspect-square">
+            <div className="relative w-full overflow-hidden rounded-xl aspect-square">
                 <CldImage
                     fill
                     src={image.public_id}
@@ -171,7 +171,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                             transition={{ duration: 0.35 }}
                         >
                             <CldImage
-                                className="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl shadow-black/30"
+                                className="max-h-[75vh] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/30"
                                 width={selectedImage.width}
                                 height={selectedImage.height}
                                 src={selectedImage.public_id}
