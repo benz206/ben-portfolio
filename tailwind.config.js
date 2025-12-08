@@ -27,6 +27,10 @@ module.exports = {
                     "radial-gradient(circle at 20% 20%, rgba(255,154,122,0.2), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255,104,181,0.18), transparent 45%), radial-gradient(circle at 40% 80%, rgba(255,204,112,0.18), transparent 55%)",
                 "noir-radial-emerald":
                     "radial-gradient(circle at 20% 20%, rgba(112,255,213,0.2), transparent 55%), radial-gradient(circle at 80% 10%, rgba(112,186,255,0.18), transparent 45%), radial-gradient(circle at 40% 80%, rgba(122,255,168,0.18), transparent 55%)",
+                "noir-gradient-berry":
+                    "linear-gradient(150deg, rgba(6,3,20,0.97) 0%, rgba(12,3,29,0.98) 45%, rgba(9,1,20,0.99) 100%)",
+                "noir-radial-berry":
+                    "radial-gradient(circle at 18% 18%, rgba(129, 140, 248, 0.10), transparent 55%), radial-gradient(circle at 78% 16%, rgba(190, 24, 93, 0.14), transparent 52%), radial-gradient(circle at 26% 80%, rgba(76, 29, 149, 0.10), transparent 58%), radial-gradient(circle at 86% 82%, rgba(48, 17, 40, 0.18), transparent 55%)",
             },
             spacing: {
                 0: "0rem",
