@@ -2,6 +2,7 @@ import matter from "gray-matter";
 import MdxLayout from "@/components/MdxLayout";
 import PostViewCounter from "@/components/PostViewCounter";
 import { getMDXComponents } from "@/mdx-components";
+import { notFound } from "next/navigation";
 
 type RawBlogMetadata = {
     title: string;
@@ -47,24 +48,36 @@ async function fetchPost(slug: string) {
     const repo = "blog";
     const filePath = `posts/${slug}.mdx`;
 
-    const fileResponse = await octokit.rest.repos.getContent({
-        owner,
-        repo,
-        path: filePath,
-    });
+    let fileResponse: any;
+    try {
+        fileResponse = await octokit.rest.repos.getContent({
+            owner,
+            repo,
+            path: filePath,
+        });
+    } catch {
+        return null;
+    }
     const fileContent = Buffer.from(
         (fileResponse.data as any).content,
         "base64"
     ).toString("utf8");
     const { data, content } = matter(fileContent);
 
-    const commitsResponse = await octokit.rest.repos.listCommits({
-        owner,
-        repo,
-        path: filePath,
-    });
-    const latestCommit = commitsResponse.data[0];
-    const oldestCommit = commitsResponse.data[commitsResponse.data.length - 1];
+    let latestCommit: any = null;
+    let oldestCommit: any = null;
+    try {
+        const commitsResponse = await octokit.rest.repos.listCommits({
+            owner,
+            repo,
+            path: filePath,
+        });
+        latestCommit = commitsResponse.data[0] ?? null;
+        oldestCommit = commitsResponse.data[commitsResponse.data.length - 1] ?? null;
+    } catch {
+        latestCommit = null;
+        oldestCommit = null;
+    }
 
     const createdDate = oldestCommit?.commit.committer?.date || null;
     const updatedDate = latestCommit?.commit.committer?.date || null;
@@ -110,9 +123,9 @@ export default async function BlogPostPage({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
-    const { metadata, content, createdDate, updatedDate } = await fetchPost(
-        slug
-    );
+    const post = await fetchPost(slug);
+    if (!post) notFound();
+    const { metadata, content, createdDate, updatedDate } = post;
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
     const { MDXRemote } = await import("next-mdx-remote/rsc");
