@@ -25,7 +25,7 @@ export default function MDXImage({
     }, [src]);
 
     return (
-        <div className="flex justify-center w-full my-4">
+        <span className="inline-flex justify-center my-4 w-full">
             <Image
                 src={src}
                 alt={alt || "Image"}
@@ -35,6 +35,6 @@ export default function MDXImage({
                 className="max-h-[600px] h-auto w-auto max-w-full rounded-lg shadow-lg"
                 {...props}
             />
-        </div>
+        </span>
     );
 }
