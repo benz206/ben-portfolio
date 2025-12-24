@@ -10,6 +10,7 @@ export interface CommandDescriptor {
     action?: () => void;
     icon?: ReactNode;
     meta?: string;
+    closeOnRun?: boolean;
 }
 
 export interface RegisterCommandsOptions {

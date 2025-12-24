@@ -22,14 +22,6 @@ const navigationCommands: CommandDescriptor[] = [
         meta: "Page",
     },
     {
-        id: "nav-blogs",
-        label: "Blog",
-        href: "/blog",
-        section: "Navigation",
-        keywords: ["articles", "writing"],
-        meta: "Page",
-    },
-    {
         id: "nav-gallery",
         label: "Gallery",
         href: "/gallery",
@@ -44,16 +36,78 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["pdf", "download"],
         meta: "Page",
-    }
+    },
 ];
 
 export function useNavigationCommands() {
-    const { registerCommands } = useCommandMenu();
+    const { registerCommands, pushView } = useCommandMenu();
     const pathname = usePathname();
     const router = useRouter();
 
     useEffect(() => {
-        const commands = navigationCommands.map((command) => {
+        const commands: CommandDescriptor[] = [
+            ...navigationCommands,
+            {
+                id: "nav-blog",
+                label: "Blog",
+                section: "Navigation",
+                keywords: ["posts", "archive", "mdx", "articles", "writing"],
+                meta: "Posts",
+                closeOnRun: false,
+                action: () => {
+                    void (async () => {
+                        try {
+                            const res = await fetch("/api/blog/public");
+                            const posts = (await res.json()) as Array<{
+                                slug: string;
+                                title: string;
+                                description?: string;
+                                tags?: string[];
+                            }>;
+
+                            pushView({
+                                id: "blog-posts",
+                                placeholder: "Search blog posts...",
+                                commands: [
+                                    {
+                                        id: "blog-all-posts-page",
+                                        label: "Open Blog page",
+                                        href: "/blog",
+                                        section: "Blog",
+                                        meta: "Page",
+                                    },
+                                    ...posts.map((post) => ({
+                                        id: `blog-post-${post.slug}`,
+                                        label: post.title,
+                                        description: post.description,
+                                        href: `/blog/${post.slug}`,
+                                        section: "Blog",
+                                        meta: "Post",
+                                        keywords: [
+                                            post.slug,
+                                            ...(post.tags ?? []),
+                                        ],
+                                    })),
+                                ],
+                            });
+                        } catch {
+                            pushView({
+                                id: "blog-posts",
+                                placeholder: "Search blog posts...",
+                                commands: [
+                                    {
+                                        id: "blog-posts-error",
+                                        label: "Failed to load posts",
+                                        section: "Blog",
+                                        meta: "Error",
+                                    },
+                                ],
+                            });
+                        }
+                    })();
+                },
+            },
+        ].map((command) => {
             const href = command.href;
             const meta = href === pathname ? "Current" : command.meta;
             let action = command.action;
@@ -82,6 +136,5 @@ export function useNavigationCommands() {
             replace: true,
         });
         return unregister;
-    }, [pathname, registerCommands, router]);
+    }, [pathname, registerCommands, router, pushView]);
 }
-
