@@ -79,11 +79,26 @@ body,
 .swirl-bg {
     position: absolute;
     inset: -20%;
-    background:
-        radial-gradient(circle at 12% 18%, rgba(59, 7, 100, 0.55), transparent 52%),
-        radial-gradient(circle at 78% 30%, rgba(162, 28, 175, 0.55), transparent 56%),
-        radial-gradient(circle at 16% 88%, rgba(30, 64, 175, 0.45), transparent 58%),
-        radial-gradient(circle at 88% 82%, rgba(76, 5, 105, 0.75), transparent 55%);
+    background: radial-gradient(
+            circle at 12% 18%,
+            rgba(59, 7, 100, 0.55),
+            transparent 52%
+        ),
+        radial-gradient(
+            circle at 78% 30%,
+            rgba(162, 28, 175, 0.55),
+            transparent 56%
+        ),
+        radial-gradient(
+            circle at 16% 88%,
+            rgba(30, 64, 175, 0.45),
+            transparent 58%
+        ),
+        radial-gradient(
+            circle at 88% 82%,
+            rgba(76, 5, 105, 0.75),
+            transparent 55%
+        );
     filter: blur(52px);
     opacity: 0.7;
     mix-blend-mode: normal;
