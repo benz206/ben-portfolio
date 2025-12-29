@@ -116,7 +116,7 @@ export default function Navigation() {
                         <button
                             type="button"
                             className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
-                            onClick={() => setIsOpen(!isOpen)}
+                            onClick={() => setIsOpen((v) => !v)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
                             aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -137,14 +137,14 @@ export default function Navigation() {
                         className="flex fixed inset-0 z-50 justify-center items-center bg-black/70 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, pointerEvents: "none" }}
                         onClick={() => setIsOpen(false)}
                     >
                         <motion.div
                             className="flex flex-col gap-6 items-center px-6 w-full max-w-sm"
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 10, opacity: 0 }}
+                            exit={{ y: 10, opacity: 0, pointerEvents: "none" }}
                             onClick={(e) => e.stopPropagation()}
                             id="mobile-menu"
                         >
