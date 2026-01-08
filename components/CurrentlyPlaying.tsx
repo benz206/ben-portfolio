@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
-import { FaSpotify } from "react-icons/fa";
+import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
 
 type SpotifyTrack = {
@@ -79,21 +79,21 @@ export default function CurrentlyPlaying() {
                 }}
             >
                 <div className="relative z-10 flex items-center p-0.5 m-4 ml-2 space-x-6 w-full">
-                    <div className="flex-shrink-0 h-full overflow-hidden shadow-xl max-w-36 aspect-square rounded-xl">
+                    <div className="overflow-hidden flex-shrink-0 h-full rounded-xl shadow-xl max-w-36 aspect-square">
                         <div className="w-full h-full animate-pulse">
-                            <div className="flex items-center justify-center w-full h-full">
-                                <FaSpotify className="w-16 h-16 text-white/40 animate-pulse" />
+                            <div className="flex justify-center items-center w-full h-full">
+                                <FaSpotify className="w-16 h-16 animate-pulse text-white/40" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 justify-center min-w-0">
                         <div className="flex items-center mb-2 space-x-2">
                             <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-400 animate-pulse" />
-                            <div className="w-32 h-3 rounded bg-white/20 animate-pulse"></div>
+                            <div className="w-32 h-3 rounded animate-pulse bg-white/20"></div>
                         </div>
 
-                        <div className="w-48 h-5 mb-3 rounded bg-white/25 animate-pulse"></div>
+                        <div className="mb-3 w-48 h-5 rounded animate-pulse bg-white/25"></div>
 
                         <div className="w-full h-1.5 bg-white/10 rounded-full">
                             <motion.div
@@ -150,7 +150,7 @@ export default function CurrentlyPlaying() {
                 </>
             )}
             <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="w-20 h-20 overflow-hidden shadow-xl rounded-xl">
+                <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl">
                     {track.albumArt && (
                         <Image
                             src={track.albumArt}
@@ -162,7 +162,7 @@ export default function CurrentlyPlaying() {
                         />
                     )}
                 </div>
-                <div className="flex flex-col justify-center flex-1 min-w-0">
+                <div className="flex flex-col flex-1 justify-center min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
                         <span className="text-xs font-medium truncate text-slate-400">

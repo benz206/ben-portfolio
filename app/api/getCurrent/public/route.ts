@@ -1,6 +1,6 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextResponse } from "next/server";
-import jpeg from "jpeg-js";
+import sharp from "sharp";
 import { NextRequest } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 
@@ -84,20 +84,20 @@ export async function GET(_req: NextRequest) {
             try {
                 const imgRes = await fetch(imageUrl);
                 const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-                const decoded = jpeg.decode(imgBuffer, { useTArray: true });
-                const { data, width, height } = decoded as unknown as {
-                    data: Uint8Array;
-                    width: number;
-                    height: number;
-                };
-                if (data && width && height) {
+                const { data, info } = await sharp(imgBuffer)
+                    .resize(72, 72, { fit: "inside", withoutEnlargement: true })
+                    .ensureAlpha()
+                    .raw()
+                    .toBuffer({ resolveWithObject: true });
+                if (data && info?.width && info?.height && info.channels >= 3) {
                     let selectedColor: [number, number, number] = dominantColor;
                     let bestScore = -1;
                     const sampleStride = 20;
-                    for (let i = 0; i < data.length; i += 4 * sampleStride) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
+                    const step = info.channels * sampleStride;
+                    for (let i = 0; i < data.length; i += step) {
+                        const r = data[i] ?? 0;
+                        const g = data[i + 1] ?? 0;
+                        const b = data[i + 2] ?? 0;
                         const max = Math.max(r, g, b);
                         const min = Math.min(r, g, b);
                         const maxNorm = max / 255;

@@ -5,16 +5,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigationCommands } from "@/components/CommandPalette/useNavigationCommands";
 
-const motionAnim = {
-    // whileHover: { scale: 1.1 },
-    // transition: {
-    //     type: "spring" as const,
-    //     stiffness: 300,
-    //     damping: 10,
-    // },
-    // whileTap: { scale: 0.9 },
-} as const;
-
 const links = [
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Blog" },
@@ -93,7 +83,7 @@ export default function Navigation() {
                     </Link>
                     <div className="hidden gap-8 items-center ml-auto lg:flex">
                         {links.map((link) => (
-                            <motion.div key={link.href} {...motionAnim}>
+                            <motion.div key={link.href}>
                                 <Link
                                     className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                     href={link.href}
@@ -102,7 +92,7 @@ export default function Navigation() {
                                 </Link>
                             </motion.div>
                         ))}
-                        <motion.div {...motionAnim}>
+                        <motion.div>
                             <Link
                                 className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"

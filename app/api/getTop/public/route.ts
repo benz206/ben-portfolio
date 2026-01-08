@@ -1,6 +1,6 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextRequest, NextResponse } from "next/server";
-import jpeg from "jpeg-js";
+import sharp from "sharp";
 import { getRedisClient } from "@/utils/redis";
 
 export const runtime = "nodejs";
@@ -37,23 +37,25 @@ async function fetchDominantColorFromImageUrl(
         const imgRes = await fetch(imageUrl);
         if (!imgRes.ok) return dominantColor;
         const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-        const decoded = jpeg.decode(imgBuffer, { useTArray: true });
-        const { data, width, height } = decoded as unknown as {
-            data: Uint8Array;
-            width: number;
-            height: number;
-        };
-        if (!data || !width || !height) return dominantColor;
+        const { data, info } = await sharp(imgBuffer)
+            .resize(72, 72, { fit: "inside", withoutEnlargement: true })
+            .ensureAlpha()
+            .raw()
+            .toBuffer({ resolveWithObject: true });
+        if (!data || !info?.width || !info?.height || info.channels < 3) {
+            return dominantColor;
+        }
 
         const buckets = new Map<
             number,
             { w: number; r: number; g: number; b: number; count: number }
         >();
         const sampleStride = 12;
-        for (let i = 0; i < data.length; i += 4 * sampleStride) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
+        const step = info.channels * sampleStride;
+        for (let i = 0; i < data.length; i += step) {
+            const r = data[i] ?? 0;
+            const g = data[i + 1] ?? 0;
+            const b = data[i + 2] ?? 0;
 
             const max = Math.max(r, g, b);
             const min = Math.min(r, g, b);

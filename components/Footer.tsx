@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ImGithub } from "react-icons/im";
-import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";

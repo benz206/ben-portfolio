@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Card from "@/components/Card";
-import { FaSpotify } from "react-icons/fa";
+import { FaSpotify } from "react-icons/fa6";
 
 type TopItem = {
     name: string;

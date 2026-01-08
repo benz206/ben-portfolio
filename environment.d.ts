@@ -8,17 +8,3 @@ declare global {
         }
     }
 }
-
-declare module "jpeg-js" {
-    const jpeg: {
-        decode: (
-            data: Buffer | Uint8Array,
-            options?: { useTArray?: boolean; formatAsRGBA?: boolean }
-        ) => {
-            width: number;
-            height: number;
-            data: Uint8Array;
-        };
-    };
-    export default jpeg;
-}
