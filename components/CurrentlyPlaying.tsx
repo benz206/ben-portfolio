@@ -157,7 +157,6 @@ export default function CurrentlyPlaying() {
                             alt={`${track.album} album art`}
                             width={140}
                             height={140}
-                            unoptimized
                             className="object-cover w-full h-full"
                         />
                     )}
