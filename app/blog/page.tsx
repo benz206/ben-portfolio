@@ -3,18 +3,9 @@ import Link from "next/link";
 import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
 import BlogViewCounter from "@/components/BlogViewCounter";
-import matter from "gray-matter";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import { getRedisClient } from "@/utils/redis";
-
-type RawBlogMetadata = {
-    title: string;
-    description: string;
-    tags: string[];
-    slug: string;
-    created: string;
-    updated: string;
-};
+import { fetchBlogPosts, type RawBlogMetadata } from "@/utils/blog";
 
 const ambientVariants: AmbientVariant[] = [
     "violet",
@@ -73,87 +64,10 @@ async function fetchViewCounts(slugs: string[]): Promise<Record<string, number>>
     return viewCounts;
 }
 
-async function fetchPosts(): Promise<RawBlogMetadata[]> {
-    const { Octokit } = await import("@octokit/rest");
-    const octokit = new Octokit({ auth: process.env.BLOG_PAT });
-    const owner = "benz206";
-    const repo = "blog";
-    const directoryPath = "posts";
-
-    let response: any;
-    try {
-        response = await octokit.rest.repos.getContent({
-            owner,
-            repo,
-            path: directoryPath,
-        });
-    } catch (error) {
-        response = { data: [] } as any;
-    }
-
-    const files = Array.isArray(response.data) ? response.data : [];
-
-    const posts: RawBlogMetadata[] = await Promise.all(
-        files
-            .filter((file: any) => file.name.endsWith(".mdx"))
-            .map(async (file: any) => {
-                const commitsResponse = await octokit.rest.repos.listCommits({
-                    owner,
-                    repo,
-                    path: file.path,
-                });
-
-                const latestCommit = commitsResponse.data[0];
-                const oldestCommit =
-                    commitsResponse.data[commitsResponse.data.length - 1];
-
-                const createdDate =
-                    oldestCommit?.commit.committer?.date || null;
-
-                const updatedDate =
-                    latestCommit?.commit.committer?.date || null;
-
-                const fileResponse = await octokit.rest.repos.getContent({
-                    owner,
-                    repo,
-                    path: file.path,
-                });
-
-                const fileContent = Buffer.from(
-                    (fileResponse.data as any).content,
-                    "base64"
-                ).toString("utf8");
-
-                const { data } = matter(fileContent);
-                try {
-                    if (data.tags && typeof data.tags === "string") {
-                        data.tags = data.tags
-                            .split(",")
-                            .map((tag: string) => tag.trim());
-                    }
-                } catch {}
-
-                return {
-                    title: data.title || "Untitled",
-                    description: data.description || "",
-                    tags: data.tags || [],
-                    created: createdDate || new Date().toISOString(),
-                    updated: updatedDate || new Date().toISOString(),
-                    slug: file.name.replace(".mdx", ""),
-                };
-            })
-    );
-
-    posts.sort(
-        (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
-    );
-    return posts;
-}
-
 export const revalidate = 3600;
 
 export default async function BlogPage() {
-    const posts = await fetchPosts();
+    const posts = await fetchBlogPosts();
     const slugs = posts.map((post) => post.slug);
     const viewCounts = await fetchViewCounts(slugs);
     

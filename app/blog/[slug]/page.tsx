@@ -1,118 +1,12 @@
-import matter from "gray-matter";
 import MdxLayout from "@/components/MdxLayout";
 import PostViewCounter from "@/components/PostViewCounter";
 import { getMDXComponents } from "@/mdx-components";
 import { notFound } from "next/navigation";
-
-type RawBlogMetadata = {
-    title: string;
-    description: string;
-    tags: string[];
-    slug: string;
-    created: string;
-    updated: string;
-};
-
-async function fetchSlugs(): Promise<string[]> {
-    const { Octokit } = await import("@octokit/rest");
-    const octokit = new Octokit({ auth: process.env.BLOG_PAT });
-    const owner = "benz206";
-    const repo = "blog";
-    const directoryPath = "posts";
-
-    let response: any;
-    try {
-        response = await octokit.rest.repos.getContent({
-            owner,
-            repo,
-            path: directoryPath,
-        });
-    } catch {
-        return [];
-    }
-    const files = Array.isArray(response.data) ? response.data : [];
-    return files
-        .filter((f: any) => f.name.endsWith(".mdx"))
-        .map((f: any) => f.name.replace(".mdx", ""));
-}
+import { fetchBlogPost, fetchBlogSlugs } from "@/utils/blog";
 
 export async function generateStaticParams() {
-    const slugs = await fetchSlugs();
+    const slugs = await fetchBlogSlugs();
     return slugs.map((slug) => ({ slug }));
-}
-
-async function fetchPost(slug: string) {
-    const { Octokit } = await import("@octokit/rest");
-    const octokit = new Octokit({ auth: process.env.BLOG_PAT });
-    const owner = "benz206";
-    const repo = "blog";
-    const filePath = `posts/${slug}.mdx`;
-
-    let fileResponse: any;
-    try {
-        fileResponse = await octokit.rest.repos.getContent({
-            owner,
-            repo,
-            path: filePath,
-        });
-    } catch {
-        return null;
-    }
-    const fileContent = Buffer.from(
-        (fileResponse.data as any).content,
-        "base64"
-    ).toString("utf8");
-    const { data, content } = matter(fileContent);
-
-    let latestCommit: any = null;
-    let oldestCommit: any = null;
-    try {
-        const commitsResponse = await octokit.rest.repos.listCommits({
-            owner,
-            repo,
-            path: filePath,
-        });
-        latestCommit = commitsResponse.data[0] ?? null;
-        oldestCommit = commitsResponse.data[commitsResponse.data.length - 1] ?? null;
-    } catch {
-        latestCommit = null;
-        oldestCommit = null;
-    }
-
-    const createdDate = oldestCommit?.commit.committer?.date || null;
-    const updatedDate = latestCommit?.commit.committer?.date || null;
-
-    if (data.tags && typeof data.tags === "string") {
-        data.tags = data.tags.split(",").map((t: string) => t.trim());
-    }
-
-    const metadata: RawBlogMetadata = {
-        title: data.title,
-        description: data.description,
-        tags: data.tags || [],
-        slug,
-        created: createdDate || new Date().toISOString(),
-        updated: updatedDate || new Date().toISOString(),
-    };
-
-    return {
-        metadata,
-        content,
-        createdDate: createdDate
-            ? new Date(createdDate).toLocaleDateString("en-CA", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
-            : "",
-        updatedDate: updatedDate
-            ? new Date(updatedDate).toLocaleDateString("en-CA", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
-            : "",
-    };
 }
 
 export const revalidate = 3600;
@@ -123,7 +17,7 @@ export default async function BlogPostPage({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
-    const post = await fetchPost(slug);
+    const post = await fetchBlogPost(slug);
     if (!post) notFound();
     const { metadata, content, createdDate, updatedDate } = post;
     // Not a React hook, just a mapper, safe to call here
