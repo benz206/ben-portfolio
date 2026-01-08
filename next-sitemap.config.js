@@ -2,7 +2,7 @@
 
 async function getBlogSlugs() {
     try {
-        const { Octokit } = require("@octokit/rest");
+        const { Octokit } = await import("@octokit/rest");
         const octokit = new Octokit({ auth: process.env.BLOG_PAT });
         const owner = "benz206";
         const repo = "blog";
