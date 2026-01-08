@@ -215,7 +215,7 @@ export default async function BlogPage() {
                                 variant="minimal"
                                 ambient
                                 ambientClassName="opacity-30 group-hover:opacity-45 transition-opacity"
-                                className="flex flex-col gap-8 p-10 transition-transform group-hover:-translate-y-1 md:flex-row md:items-start md:justify-between md:p-12"
+                                className="flex flex-col gap-8 p-10 transition-transform group-hover:-translate-y-1 md:flex-row md:items-stretch md:justify-between md:p-12"
                                 ambientVariant={featuredPost.ambientVariant}
                             >
                                 <div className="space-y-5 md:max-w-2xl">
@@ -230,12 +230,12 @@ export default async function BlogPage() {
                                         {featuredPost.description || "Tap in for the full story."}
                                     </p>
                                 </div>
-                                <div className="flex flex-col gap-4 items-start md:items-end">
+                                <div className="flex flex-col gap-4 items-start md:items-end md:justify-start">
                                     <time className="text-sm text-white/50" dateTime={featuredPost.updated}>
                                         Updated {featuredPost.updatedFormatted}
                                     </time>
-                                    <div className="flex flex-wrap items-center gap-2 justify-between w-full">
-                                        <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2 justify-end items-center mt-auto w-full">
+                                        <div className="flex flex-wrap gap-2 justify-end">
                                             {featuredPost.tags.map((tag) => (
                                                 <Hashtag key={tag} hashtag={tag} />
                                             ))}
@@ -267,7 +267,7 @@ export default async function BlogPage() {
                                                 className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
                                                 ambientVariant={post.ambientVariant}
                                             >
-                                                <div className="space-y-3 flex-1">
+                                                <div className="flex-1 space-y-3">
                                                     <time className="text-xs uppercase tracking-[0.2em] text-white/40" dateTime={post.updated}>
                                                         {post.updatedFormatted}
                                                     </time>
@@ -278,7 +278,7 @@ export default async function BlogPage() {
                                                         {post.description || "Read the full entry."}
                                                     </p>
                                                 </div>
-                                                <div className="flex flex-wrap items-center gap-2 justify-between">
+                                                <div className="flex flex-wrap gap-2 justify-between items-center">
                                                     {post.tags.length > 0 ? (
                                                         <div className="flex flex-wrap gap-2 text-sm text-white/60">
                                                             {post.tags.map((tag) => (
