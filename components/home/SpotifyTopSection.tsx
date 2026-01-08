@@ -87,7 +87,6 @@ function TopCard({
                             alt={item.name}
                             width={140}
                             height={140}
-                            unoptimized
                             className="object-cover w-full h-full"
                         />
                     ) : (
