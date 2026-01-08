@@ -6,7 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
     subsets: ["latin"],
-    weight: ["900", "700", "500", "400", "300", "100"],
+    weight: ["900", "700", "600", "500", "400", "300", "200", "100"],
 });
 
 export default function Providers({ children }: PropsWithChildren) {
