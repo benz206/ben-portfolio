@@ -14,10 +14,12 @@ type ESPInfo = {
     loop: string;
 };
 
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
+
 export async function GET(req: NextRequest, context: { params: Promise<{ password: string }> }) {
     const { password } = await context.params;
     if (password !== process.env.PASSWORD) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: NO_STORE_HEADERS });
     }
 
     try {
@@ -28,7 +30,10 @@ export async function GET(req: NextRequest, context: { params: Promise<{ passwor
 
         if (!response.ok) {
             const errorMessage = await response.text();
-            return NextResponse.json({ error: errorMessage }, { status: response.status });
+            return NextResponse.json(
+                { error: errorMessage },
+                { status: response.status, headers: NO_STORE_HEADERS }
+            );
         }
 
         const current = await response.json();
@@ -36,20 +41,26 @@ export async function GET(req: NextRequest, context: { params: Promise<{ passwor
             `https://bzhou.ca/api/getColor/${current.item.album.images[0].url.split("/")[4]}`
         ).then((r) => r.json());
 
-        return NextResponse.json({
-            title: current.item.name,
-            artist: current.item.artists[0].name,
-            album: current.item.album.name,
-            color: dominantColor.answer,
-            duration: String(Math.round(current.item.duration_ms / 1000)),
-            progress: String(Math.round(current.progress_ms / 1000)),
-            paused: String(!current.is_playing),
-            volume: String(current.device.volume_percent),
-            shuffle: current.shuffle_state,
-            loop: current.repeat_state,
-        } as ESPInfo);
+        return NextResponse.json(
+            {
+                title: current.item.name,
+                artist: current.item.artists[0].name,
+                album: current.item.album.name,
+                color: dominantColor.answer,
+                duration: String(Math.round(current.item.duration_ms / 1000)),
+                progress: String(Math.round(current.progress_ms / 1000)),
+                paused: String(!current.is_playing),
+                volume: String(current.device.volume_percent),
+                shuffle: current.shuffle_state,
+                loop: current.repeat_state,
+            } as ESPInfo,
+            { headers: NO_STORE_HEADERS }
+        );
     } catch (error) {
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500, headers: NO_STORE_HEADERS }
+        );
     }
 }
 

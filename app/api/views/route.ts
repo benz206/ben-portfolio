@@ -4,6 +4,10 @@ import { getRedisClient } from "@/utils/redis";
 const KEY = "views:global";
 const DAILY_KEY = "views:global:daily";
 const DAILY_DATE_KEY = "views:global:daily:date";
+const PUBLIC_CACHE_HEADERS = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=600",
+};
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
 const getTodayDate = () => {
     return new Date().toISOString().split('T')[0];
@@ -31,12 +35,12 @@ export async function GET() {
         return NextResponse.json({ 
             count,
             daily: dailyCount 
-        });
+        }, { headers: PUBLIC_CACHE_HEADERS });
     } catch (error) {
         console.error("Failed to fetch global views", error);
         return NextResponse.json(
             { error: "Failed to fetch views" },
-            { status: 500 }
+            { status: 500, headers: NO_STORE_HEADERS }
         );
     }
 }
@@ -64,12 +68,12 @@ export async function POST() {
         return NextResponse.json({ 
             count,
             daily: dailyCount 
-        });
+        }, { headers: NO_STORE_HEADERS });
     } catch (error) {
         console.error("Failed to increment global views", error);
         return NextResponse.json(
             { error: "Failed to increment views" },
-            { status: 500 }
+            { status: 500, headers: NO_STORE_HEADERS }
         );
     }
 }

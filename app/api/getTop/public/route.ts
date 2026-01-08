@@ -6,6 +6,10 @@ import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 export const runtime = "nodejs";
 
 const CACHE_TTL_SECONDS = 60 * 60 * 24;
+const PUBLIC_CACHE_HEADERS = {
+    "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+};
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
 type TopItem = {
     name: string;
@@ -57,7 +61,7 @@ export async function GET(_req: NextRequest) {
         if (cachedRaw) {
             try {
                 const cached = JSON.parse(cachedRaw) as TopResponse;
-                return NextResponse.json(cached);
+                return NextResponse.json(cached, { headers: PUBLIC_CACHE_HEADERS });
             } catch {}
         }
 
@@ -119,7 +123,7 @@ export async function GET(_req: NextRequest) {
             EX: CACHE_TTL_SECONDS,
         });
 
-        return NextResponse.json(payload);
+        return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
     } catch (error) {
         const redis = await getRedisClient().catch(() => null);
         if (redis) {
@@ -127,14 +131,14 @@ export async function GET(_req: NextRequest) {
             if (cachedRaw) {
                 try {
                     const cached = JSON.parse(cachedRaw) as TopResponse;
-                    return NextResponse.json(cached);
+                    return NextResponse.json(cached, { headers: PUBLIC_CACHE_HEADERS });
                 } catch {}
             }
         }
 
         return NextResponse.json(
             { error: "Failed to fetch Spotify top items" },
-            { status: 500 }
+            { status: 500, headers: NO_STORE_HEADERS }
         );
     }
 }

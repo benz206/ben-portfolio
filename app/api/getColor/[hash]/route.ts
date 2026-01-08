@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const LONG_CACHE_HEADERS = {
+    "Cache-Control": "public, s-maxage=31536000, stale-while-revalidate=86400",
+};
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
+
 function findNearestColor(rgbArray: number[]): number[] {
     const colors: number[][] = [
         [255, 0, 0],
@@ -52,10 +57,13 @@ export async function GET(req: NextRequest, context: { params: Promise<{ hash: s
     const { hash } = await context.params;
     const rgb = parseHashToRgb(hash);
     if (!rgb) {
-        return NextResponse.json({ error: "Invalid color hash. Use R,G,B or hex (rrggbb)." }, { status: 400 });
+        return NextResponse.json(
+            { error: "Invalid color hash. Use R,G,B or hex (rrggbb)." },
+            { status: 400, headers: NO_STORE_HEADERS }
+        );
     }
     const nearest = findNearestColor(rgb);
-    return NextResponse.json({ color: rgb, nearest });
+    return NextResponse.json({ color: rgb, nearest }, { headers: LONG_CACHE_HEADERS });
 }
 
 

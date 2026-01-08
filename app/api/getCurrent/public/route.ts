@@ -7,6 +7,10 @@ import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 export const runtime = "nodejs";
 
 const CACHE_WINDOW_MS = 6000;
+const PUBLIC_CACHE_HEADERS = {
+    "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
+};
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
 type SpotifyTrackInfo = {
     title: string;
@@ -50,11 +54,11 @@ export async function GET(_req: NextRequest) {
                 ? { ...entry.data, paused: "true" }
                 : entry.data;
             await redis.set(cacheKey, JSON.stringify({ data: payload, timestamp: now }));
-            return NextResponse.json(payload);
+            return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
         };
 
         if (!shouldRefresh && cachedEntry) {
-            return NextResponse.json(cachedEntry.data);
+            return NextResponse.json(cachedEntry.data, { headers: PUBLIC_CACHE_HEADERS });
         }
 
         const accessToken = await getSpotifyAccessToken();
@@ -67,7 +71,10 @@ export async function GET(_req: NextRequest) {
                 return respondWithCached(cachedEntry, true);
             }
             const errorMessage = await response.text();
-            return NextResponse.json({ error: errorMessage }, { status: response.status });
+            return NextResponse.json(
+                { error: errorMessage },
+                { status: response.status, headers: NO_STORE_HEADERS }
+            );
         }
 
         const current = await response.json();
@@ -75,7 +82,10 @@ export async function GET(_req: NextRequest) {
             if (cachedEntry) {
                 return respondWithCached(cachedEntry, true);
             }
-            return NextResponse.json({ error: "No track currently playing" }, { status: 404 });
+            return NextResponse.json(
+                { error: "No track currently playing" },
+                { status: 404, headers: NO_STORE_HEADERS }
+            );
         }
 
         const imageUrl = current.item.album.images[0]?.url as string | undefined;
@@ -96,7 +106,7 @@ export async function GET(_req: NextRequest) {
 
         await redis.set(cacheKey, JSON.stringify({ data: trackInfo, timestamp: now }));
 
-        return NextResponse.json(trackInfo);
+        return NextResponse.json(trackInfo, { headers: PUBLIC_CACHE_HEADERS });
     } catch (error) {
         const redis = await getRedisClient().catch(() => null);
         if (redis) {
@@ -112,14 +122,20 @@ export async function GET(_req: NextRequest) {
                         "spotify:currently-playing",
                         JSON.stringify({ data: payload, timestamp: Date.now() })
                     );
-                    return NextResponse.json(payload);
+                    return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
                 } catch {}
             }
         }
         if (error instanceof SyntaxError) {
-            return NextResponse.json({ error: "Not currently playing" }, { status: 500 });
+            return NextResponse.json(
+                { error: "Not currently playing" },
+                { status: 500, headers: NO_STORE_HEADERS }
+            );
         }
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500, headers: NO_STORE_HEADERS }
+        );
     }
 }
 
