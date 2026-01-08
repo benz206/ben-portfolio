@@ -51,19 +51,48 @@ export async function POST() {
         const count = await client.incr(KEY);
         
         const today = getTodayDate();
-        const storedDate = await client.get(DAILY_DATE_KEY);
-        
-        if (storedDate !== today) {
-            await client.set(DAILY_KEY, "0");
-            await client.set(DAILY_DATE_KEY, today);
-            await client.expireAt(DAILY_DATE_KEY, getNextMidnightTimestamp());
-        }
-        
-        const dailyCount = await client.incr(DAILY_KEY);
-        
-        if (dailyCount === 1 && storedDate !== today) {
-            await client.expireAt(DAILY_KEY, getNextMidnightTimestamp());
-        }
+        const nextMidnight = getNextMidnightTimestamp();
+
+        const dailyResult = await client.eval(
+            `
+local dailyKey = KEYS[1]
+local dateKey = KEYS[2]
+local today = ARGV[1]
+local midnight = tonumber(ARGV[2])
+
+local stored = redis.call("GET", dateKey)
+if stored ~= today then
+  redis.call("SET", dailyKey, "0")
+  redis.call("SET", dateKey, today)
+  redis.call("EXPIREAT", dailyKey, midnight)
+  redis.call("EXPIREAT", dateKey, midnight)
+else
+  local ttlDaily = redis.call("TTL", dailyKey)
+  if ttlDaily < 0 then
+    redis.call("EXPIREAT", dailyKey, midnight)
+  end
+  local ttlDate = redis.call("TTL", dateKey)
+  if ttlDate < 0 then
+    redis.call("EXPIREAT", dateKey, midnight)
+  end
+end
+
+return redis.call("INCR", dailyKey)
+            `.trim(),
+            {
+                keys: [DAILY_KEY, DAILY_DATE_KEY],
+                arguments: [today, String(nextMidnight)],
+            }
+        );
+
+        const dailyCount =
+            typeof dailyResult === "number"
+                ? dailyResult
+                : toNumber(
+                      typeof dailyResult === "string"
+                          ? dailyResult
+                          : String(dailyResult)
+                  );
         
         return NextResponse.json({ 
             count,
@@ -77,5 +106,3 @@ export async function POST() {
         );
     }
 }
-
-
