@@ -1,8 +1,8 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
 import { NextRequest } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 
 export const runtime = "nodejs";
 
@@ -78,41 +78,8 @@ export async function GET(_req: NextRequest) {
             return NextResponse.json({ error: "No track currently playing" }, { status: 404 });
         }
 
-        let dominantColor: [number, number, number] = [29, 185, 84];
         const imageUrl = current.item.album.images[0]?.url as string | undefined;
-        if (imageUrl) {
-            try {
-                const imgRes = await fetch(imageUrl);
-                const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-                const { data, info } = await sharp(imgBuffer)
-                    .resize(72, 72, { fit: "inside", withoutEnlargement: true })
-                    .ensureAlpha()
-                    .raw()
-                    .toBuffer({ resolveWithObject: true });
-                if (data && info?.width && info?.height && info.channels >= 3) {
-                    let selectedColor: [number, number, number] = dominantColor;
-                    let bestScore = -1;
-                    const sampleStride = 20;
-                    const step = info.channels * sampleStride;
-                    for (let i = 0; i < data.length; i += step) {
-                        const r = data[i] ?? 0;
-                        const g = data[i + 1] ?? 0;
-                        const b = data[i + 2] ?? 0;
-                        const max = Math.max(r, g, b);
-                        const min = Math.min(r, g, b);
-                        const maxNorm = max / 255;
-                        const saturation = maxNorm === 0 ? 0 : (max - min) / max;
-                        const value = maxNorm;
-                        const score = saturation * value;
-                        if (score > bestScore) {
-                            selectedColor = [r, g, b];
-                            bestScore = score;
-                        }
-                    }
-                    dominantColor = selectedColor;
-                }
-            } catch {}
-        }
+        const dominantColor = await getDominantColorFromImageUrl(imageUrl);
         const trackInfo: SpotifyTrackInfo = {
             title: current.item.name,
             artist: current.item.artists[0].name,

@@ -1,7 +1,7 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextRequest, NextResponse } from "next/server";
-import sharp from "sharp";
 import { getRedisClient } from "@/utils/redis";
+import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 
 export const runtime = "nodejs";
 
@@ -26,86 +26,6 @@ type TopResponse = {
     artists: TopItem[];
     updatedAt: number;
 };
-
-async function fetchDominantColorFromImageUrl(
-    imageUrl?: string
-): Promise<[number, number, number]> {
-    let dominantColor: [number, number, number] = [29, 185, 84];
-    if (!imageUrl) return dominantColor;
-
-    try {
-        const imgRes = await fetch(imageUrl);
-        if (!imgRes.ok) return dominantColor;
-        const imgBuffer = Buffer.from(await imgRes.arrayBuffer());
-        const { data, info } = await sharp(imgBuffer)
-            .resize(72, 72, { fit: "inside", withoutEnlargement: true })
-            .ensureAlpha()
-            .raw()
-            .toBuffer({ resolveWithObject: true });
-        if (!data || !info?.width || !info?.height || info.channels < 3) {
-            return dominantColor;
-        }
-
-        const buckets = new Map<
-            number,
-            { w: number; r: number; g: number; b: number; count: number }
-        >();
-        const sampleStride = 12;
-        const step = info.channels * sampleStride;
-        for (let i = 0; i < data.length; i += step) {
-            const r = data[i] ?? 0;
-            const g = data[i + 1] ?? 0;
-            const b = data[i + 2] ?? 0;
-
-            const max = Math.max(r, g, b);
-            const min = Math.min(r, g, b);
-            if (max < 30) continue;
-
-            const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-            if (luma < 18 || luma > 238) continue;
-
-            const sat = max === 0 ? 0 : (max - min) / max;
-            const v = max / 255;
-            const w = Math.pow(sat, 0.85) * Math.pow(v, 1.05);
-            if (w <= 0) continue;
-
-            const key = ((r >> 5) << 6) | ((g >> 5) << 3) | (b >> 5);
-            const entry = buckets.get(key);
-            if (entry) {
-                entry.w += w;
-                entry.r += r * w;
-                entry.g += g * w;
-                entry.b += b * w;
-                entry.count += 1;
-            } else {
-                buckets.set(key, { w, r: r * w, g: g * w, b: b * w, count: 1 });
-            }
-        }
-
-        let bestKey: number | null = null;
-        let bestScore = -1;
-        buckets.forEach((v, k) => {
-            const score = v.w * Math.log2(v.count + 1);
-            if (score > bestScore) {
-                bestScore = score;
-                bestKey = k;
-            }
-        });
-
-        if (bestKey !== null) {
-            const v = buckets.get(bestKey);
-            if (v && v.w > 0) {
-                dominantColor = [
-                    Math.round(v.r / v.w),
-                    Math.round(v.g / v.w),
-                    Math.round(v.b / v.w),
-                ];
-            }
-        }
-    } catch {}
-
-    return dominantColor;
-}
 
 async function fetchTop(
     accessToken: string,
@@ -177,13 +97,13 @@ export async function GET(_req: NextRequest) {
             Promise.all(
                 tracksBase.map(async (t: any) => ({
                     ...t,
-                    color: await fetchDominantColorFromImageUrl(t.image),
+                    color: await getDominantColorFromImageUrl(t.image),
                 }))
             ),
             Promise.all(
                 artistsBase.map(async (a: any) => ({
                     ...a,
-                    color: await fetchDominantColorFromImageUrl(a.image),
+                    color: await getDominantColorFromImageUrl(a.image),
                 }))
             ),
         ]);
