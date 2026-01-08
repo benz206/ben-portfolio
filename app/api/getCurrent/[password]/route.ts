@@ -1,5 +1,6 @@
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextRequest, NextResponse } from "next/server";
+import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 type ESPInfo = {
     title: string;
@@ -36,10 +37,20 @@ export async function GET(req: NextRequest, context: { params: Promise<{ passwor
             );
         }
 
-        const current = await response.json();
-        const dominantColor = await fetch(
-            `https://bzhou.ca/api/getColor/${current.item.album.images[0].url.split("/")[4]}`
-        ).then((r) => r.json());
+        const current = (await response.json()) as SpotifyPlaybackState;
+        if (!current.item) {
+            return NextResponse.json(
+                { error: "No track currently playing" },
+                { status: 404, headers: NO_STORE_HEADERS }
+            );
+        }
+
+        const hash = current.item.album.images?.[0]?.url.split("/")[4];
+        const dominantColor = hash
+            ? ((await fetch(`https://bzhou.ca/api/getColor/${hash}`).then((r) =>
+                  r.json()
+              )) as { answer: [number, number, number] })
+            : { answer: [29, 185, 84] as [number, number, number] };
 
         return NextResponse.json(
             {
@@ -48,9 +59,9 @@ export async function GET(req: NextRequest, context: { params: Promise<{ passwor
                 album: current.item.album.name,
                 color: dominantColor.answer,
                 duration: String(Math.round(current.item.duration_ms / 1000)),
-                progress: String(Math.round(current.progress_ms / 1000)),
+                progress: String(Math.round((current.progress_ms ?? 0) / 1000)),
                 paused: String(!current.is_playing),
-                volume: String(current.device.volume_percent),
+                volume: String(current.device?.volume_percent ?? 0),
                 shuffle: current.shuffle_state,
                 loop: current.repeat_state,
             } as ESPInfo,

@@ -2,6 +2,12 @@ import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { NextRequest, NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
+import type {
+    SpotifyArtist,
+    SpotifyPaging,
+    SpotifyTimeRange,
+    SpotifyTrack,
+} from "@/types/externalApis";
 
 export const runtime = "nodejs";
 
@@ -20,22 +26,20 @@ type TopItem = {
     followers?: number;
 };
 
-type Term = "short_term" | "medium_term" | "long_term";
-
-const term: Term = "short_term";
+const term: SpotifyTimeRange = "short_term";
 
 type TopResponse = {
-    timeRange: Term;
+    timeRange: SpotifyTimeRange;
     tracks: TopItem[];
     artists: TopItem[];
     updatedAt: number;
 };
 
-async function fetchTop(
+async function fetchTop<T>(
     accessToken: string,
     type: "tracks" | "artists",
     limit: number
-) {
+): Promise<SpotifyPaging<T>> {
     const url = new URL(`https://api.spotify.com/v1/me/top/${type}`);
     url.searchParams.set("time_range", term);
     url.searchParams.set("limit", String(limit));
@@ -49,7 +53,7 @@ async function fetchTop(
             `Spotify top ${type} failed: ${res.status} ${errorMessage}`.trim()
         );
     }
-    return (await res.json()) as any;
+    return (await res.json()) as SpotifyPaging<T>;
 }
 
 export async function GET(_req: NextRequest) {
@@ -67,45 +71,42 @@ export async function GET(_req: NextRequest) {
 
         const accessToken = await getSpotifyAccessToken();
         const [tracksRaw, artistsRaw] = await Promise.all([
-            fetchTop(accessToken, "tracks", 5),
-            fetchTop(accessToken, "artists", 5),
+            fetchTop<SpotifyTrack>(accessToken, "tracks", 5),
+            fetchTop<SpotifyArtist>(accessToken, "artists", 5),
         ]);
 
-        const tracksBase = (tracksRaw.items ?? []).slice(0, 3).map((t: any) => {
-            const image = t?.album?.images?.[0]?.url as string | undefined;
+        type TopItemBase = Omit<TopItem, "color">;
+
+        const tracksBase: TopItemBase[] = tracksRaw.items.slice(0, 3).map((t) => {
+            const image = t.album.images?.[0]?.url;
             return {
-                name: t?.name as string,
-                subtitle: (t?.artists ?? [])
-                    .map((a: any) => a?.name)
-                    .filter(Boolean)
-                    .join(", "),
+                name: t.name,
+                subtitle: t.artists.map((a) => a.name).join(", "),
                 image,
-                href: t?.external_urls?.spotify as string | undefined,
+                href: t.external_urls?.spotify,
             };
         });
 
-        const artistsBase = (artistsRaw.items ?? [])
-            .slice(0, 3)
-            .map((a: any) => {
-                const image = a?.images?.[0]?.url as string | undefined;
-                return {
-                    name: a?.name as string,
-                    subtitle: ((a?.genres ?? []) as string[]).slice(0, 2).join(" • "),
-                    image,
-                    href: a?.external_urls?.spotify as string | undefined,
-                    followers: (a?.followers?.total as number | undefined) ?? undefined,
-                };
-            });
+        const artistsBase: TopItemBase[] = artistsRaw.items.slice(0, 3).map((a) => {
+            const image = a.images?.[0]?.url;
+            return {
+                name: a.name,
+                subtitle: (a.genres ?? []).slice(0, 2).join(" • "),
+                image,
+                href: a.external_urls?.spotify,
+                followers: a.followers?.total ?? undefined,
+            };
+        });
 
         const [tracks, artists] = await Promise.all([
             Promise.all(
-                tracksBase.map(async (t: any) => ({
+                tracksBase.map(async (t) => ({
                     ...t,
                     color: await getDominantColorFromImageUrl(t.image),
                 }))
             ),
             Promise.all(
-                artistsBase.map(async (a: any) => ({
+                artistsBase.map(async (a) => ({
                     ...a,
                     color: await getDominantColorFromImageUrl(a.image),
                 }))

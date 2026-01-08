@@ -6,12 +6,13 @@ import { ImGithub } from "react-icons/im";
 import { FaCodeFork, FaStar, FaGithub } from "react-icons/fa6";
 import Card from "@/components/Card";
 import { GitHubRepo } from "@/types";
+import type {
+    GitHubContributionsDay,
+    GitHubContributionsResponse,
+    GitHubUserResponse,
+} from "@/types/externalApis";
 
-type ContributionDay = {
-    date: string;
-    count: number;
-    level: number;
-};
+type ContributionDay = GitHubContributionsDay;
 
 type ContributionWeek = ContributionDay[];
 
@@ -116,14 +117,14 @@ export default function GithubPage() {
     >([]);
     const [maxContributionCount, setMaxContributionCount] = useState(0);
 
-    const fetchWithCache = async (url: string, cacheKey: string) => {
+    const fetchWithCache = async <T,>(url: string, cacheKey: string): Promise<T> => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-            const { data, timestamp } = JSON.parse(cached);
+            const { data, timestamp } = JSON.parse(cached) as { data: T; timestamp: number };
             if (Date.now() - timestamp < 24 * 60 * 60 * 1000) return data;
         }
         const response = await fetch(url);
-        const data = await response.json();
+        const data = (await response.json()) as T;
         localStorage.setItem(
             cacheKey,
             JSON.stringify({ data, timestamp: Date.now() })
@@ -135,21 +136,21 @@ export default function GithubPage() {
         (async () => {
             try {
                 const [repos, profile, contributions] = await Promise.all([
-                    fetchWithCache(
+                    fetchWithCache<GitHubRepo[]>(
                         "https://api.github.com/users/benz206/repos",
                         "github_repos"
                     ),
-                    fetchWithCache(
+                    fetchWithCache<GitHubUserResponse>(
                         "https://api.github.com/users/benz206",
                         "github_profile"
                     ),
-                    fetchWithCache(
+                    fetchWithCache<GitHubContributionsResponse>(
                         "https://github-contributions-api.jogruber.de/v4/benz206",
                         "github_contributions"
                     ),
                 ]);
 
-                const filtered = repos.filter((repo: GitHubRepo) => {
+                const filtered = repos.filter((repo) => {
                     const name = repo.name.toLowerCase();
                     if (name === "benz206") return false;
                     if (name.includes("experiments")) return false;
@@ -157,19 +158,7 @@ export default function GithubPage() {
                     return true;
                 });
                 setRepoData(filtered);
-                const totalCommits = contributions?.contributions?.reduce(
-                    (sum: number, year: { total: number }) => sum + year.total,
-                    0
-                );
-                const lastYear = contributions?.contributions?.[0]?.total ?? 0;
-                setStats({
-                    commits: lastYear,
-                    contributions: totalCommits ?? 0,
-                    publicRepos: profile?.public_repos ?? filtered.length,
-                });
-
-                const rawDays: ContributionDay[] =
-                    contributions?.contributions ?? [];
+                const rawDays: ContributionDay[] = contributions.contributions;
                 const sortedDays = rawDays
                     .filter((day) => day.date)
                     .sort(
@@ -184,6 +173,20 @@ export default function GithubPage() {
                     const dayDate = new Date(day.date);
                     return dayDate >= yearAgo && dayDate <= now;
                 });
+                const lastYearCommits = recentDays.reduce(
+                    (sum, day) => sum + (day.count ?? 0),
+                    0
+                );
+                const totalCommits = Object.values(contributions.total).reduce(
+                    (sum, yearTotal) => sum + yearTotal,
+                    0
+                );
+                setStats({
+                    commits: lastYearCommits,
+                    contributions: totalCommits,
+                    publicRepos: profile.public_repos,
+                });
+
                 const maxCount = recentDays.reduce(
                     (max, day) => Math.max(max, day.count ?? 0),
                     0

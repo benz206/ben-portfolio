@@ -9,18 +9,29 @@ export type RawBlogMetadata = {
     updated: string;
 };
 
+type OctokitLike = {
+    rest: {
+        repos: {
+            getContent: (args: { owner: string; repo: string; path: string }) => Promise<{ data: unknown }>;
+            listCommits: (args: { owner: string; repo: string; path: string }) => Promise<{ data: any[] }>;
+        };
+    };
+};
+
 const BLOG_OWNER = "benz206";
 const BLOG_REPO = "blog";
 const BLOG_POSTS_DIR = "posts";
 
-async function getOctokit() {
-    const g = globalThis as any;
-    if (!g.__blogOctokitPromise) {
-        g.__blogOctokitPromise = import("@octokit/rest").then(
-            ({ Octokit }: any) => new Octokit({ auth: process.env.BLOG_PAT })
-        ) as Promise<any>;
+let octokitPromise: Promise<OctokitLike> | null = null;
+
+async function getOctokit(): Promise<OctokitLike> {
+    if (!octokitPromise) {
+        octokitPromise = import("@octokit/rest").then(
+            ({ Octokit }) =>
+                new Octokit(process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {}) as unknown as OctokitLike
+        );
     }
-    return g.__blogOctokitPromise as Promise<any>;
+    return octokitPromise;
 }
 
 function normalizeTags(tags: unknown): string[] {

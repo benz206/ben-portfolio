@@ -1,3 +1,5 @@
+import type { SpotifyTokenResponse } from "@/types/externalApis";
+
 let accessToken = "";
 let tokenExpiration = 0;
 
@@ -28,7 +30,7 @@ export default async function getSpotifyAccessToken() {
         }
     );
 
-    const tokenData = await tokenResponse.json();
+    const tokenData = (await tokenResponse.json()) as SpotifyTokenResponse;
 
     accessToken = tokenData.access_token;
     tokenExpiration = Date.now() + tokenData.expires_in * 1000;

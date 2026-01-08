@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
+import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
 
@@ -77,7 +78,7 @@ export async function GET(_req: NextRequest) {
             );
         }
 
-        const current = await response.json();
+        const current = (await response.json()) as SpotifyPlaybackState;
         if (!current.item) {
             if (cachedEntry) {
                 return respondWithCached(cachedEntry, true);
@@ -96,7 +97,7 @@ export async function GET(_req: NextRequest) {
             album: current.item.album.name,
             color: dominantColor,
             duration: String(Math.round(current.item.duration_ms / 1000)),
-            progress: String(Math.round(current.progress_ms / 1000)),
+            progress: String(Math.round((current.progress_ms ?? 0) / 1000)),
             paused: String(!current.is_playing),
             volume: String(current.device?.volume_percent || 0),
             shuffle: current.shuffle_state,
