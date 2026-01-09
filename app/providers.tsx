@@ -1,5 +1,3 @@
-"use client";
-
 import { PropsWithChildren } from "react";
 import { Roboto } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";

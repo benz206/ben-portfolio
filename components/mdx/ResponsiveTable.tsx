@@ -1,5 +1,3 @@
-"use client";
-
 import { ReactNode, Children, isValidElement } from "react";
 import Card from "@/components/Card";
 
