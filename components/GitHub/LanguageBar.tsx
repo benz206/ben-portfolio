@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 type Language = {
@@ -79,7 +80,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
     const total = Object.values(languages).reduce((acc, curr) => acc + curr, 0);
 
     return (
-        <div className="flex w-full h-2 overflow-hidden rounded-lg">
+        <div className="flex overflow-hidden w-full h-2 rounded-lg">
             {Object.entries(languages).map(([language, count]) => {
                 const tag = tags.find((tag) => tag.name === language);
                 const percentage = (count / total) * 100;

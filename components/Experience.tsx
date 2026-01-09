@@ -1,5 +1,5 @@
 "use client";
-import type { KeyboardEvent as ReactKeyboardEvent } from "react";
+
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { StaticImageData } from "next/image";
@@ -14,7 +14,6 @@ import MidnightSun from "@/public/experience/midnightsun.png";
 import GrandCharter from "@/public/experience/grandcharter.jpeg";
 import Card from "@/components/Card";
 import type { AmbientVariant } from "@/components/AmbientGradient";
-import { FiX } from "react-icons/fi";
 import { cn } from "@/utils/cn";
 
 type Job = {
@@ -131,7 +130,7 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
 
 const jobs: Job[] = [
     {
-        title: "Software Engineering Intern #7",
+        title: "Software Engineering Intern",
         company: "Grand Charter",
         location: "New York",
         period: "Sep 2025 — Present",

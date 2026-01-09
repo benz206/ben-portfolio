@@ -1,4 +1,5 @@
 "use client";
+
 import Image, { ImageProps } from "next/image";
 import { getImageDimensions } from "@/utils/getImageDimensions";
 import { useEffect, useState } from "react";

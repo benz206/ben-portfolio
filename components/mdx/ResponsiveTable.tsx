@@ -1,5 +1,6 @@
 "use client";
-import { ReactElement, ReactNode, Children, isValidElement } from "react";
+
+import { ReactNode, Children, isValidElement } from "react";
 import Card from "@/components/Card";
 
 interface ResponsiveTableProps {
@@ -132,10 +133,9 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
             )}
             <div
                 className={`my-6 overflow-x-auto ${
-                    hasData ? "hidden lg:block" : ""
-                }`}
+                    hasData ? "hidden lg:block" : ""}`}
             >
-                <table className="min-w-full border border-collapse border-gray-600">
+                <table className="min-w-full border border-gray-600 border-collapse">
                     {children}
                 </table>
             </div>

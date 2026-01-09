@@ -1,4 +1,5 @@
 "use client";
+
 import {
     createContext,
     useCallback,
@@ -383,7 +384,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex gap-3 items-center">
                                                             {command.meta && (
                                                                 <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
                                                                     {

@@ -1,8 +1,8 @@
 "use client";
-import Link from "next/link";
+
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaFolderOpen, FaHouse, FaImages, FaPenNib, FaWandMagicSparkles } from "react-icons/fa6";
+import { FaFolderOpen, FaHouse, FaImages, FaPenNib } from "react-icons/fa6";
 import Card from "@/components/Card";
 import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
 
