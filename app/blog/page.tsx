@@ -39,22 +39,19 @@ function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
 
 async function fetchViewCounts(slugs: string[]): Promise<Record<string, number>> {
     const viewCounts: Record<string, number> = {};
+    if (slugs.length === 0) return viewCounts;
+    
     try {
         const client = await getRedisClient();
         const PREFIX = "views:post:";
-        const toNumber = (value: string | null) => {
-            if (!value) return 0;
-            const parsed = Number(value);
-            return Number.isNaN(parsed) ? 0 : parsed;
-        };
+        const keys = slugs.map((slug) => `${PREFIX}${slug}`);
+        const values = await client.mGet(keys);
         
-        await Promise.all(
-            slugs.map(async (slug) => {
-                const key = `${PREFIX}${slug}`;
-                const count = toNumber(await client.get(key));
-                viewCounts[slug] = count;
-            })
-        );
+        slugs.forEach((slug, index) => {
+            const raw = values[index];
+            const parsed = raw ? Number(raw) : 0;
+            viewCounts[slug] = Number.isNaN(parsed) ? 0 : parsed;
+        });
     } catch (error) {
         console.error("Failed to fetch view counts", error);
         slugs.forEach((slug) => {
