@@ -41,9 +41,9 @@ const recentRoles: RoleCard[] = [
     },
     {
         title: "Software Engineering Intern",
-        company: "Fuego.io",
+        company: "Fuego",
         location: "San Francisco",
-        period: "Jan 2025 — Apr 2025",
+        period: "Jan 2025 - Apr 2025",
         image: {
             src: FuegoLogo,
             alt: "Fuego logo",
@@ -159,7 +159,7 @@ export default function HeroSection() {
                                     alt={role.image.alt}
                                     width={56}
                                     height={56}
-                                    className="object-contain z-10 flex-shrink-0 w-14 h-14 rounded-lg sm:h-16 sm:w-16"
+                                    className="hidden object-contain z-10 flex-shrink-0 w-8 h-8 rounded-lg sm:block sm:h-16 sm:w-16"
                                 />
 
                                 <div className="flex flex-col flex-1 gap-1 sm:my-auto">
