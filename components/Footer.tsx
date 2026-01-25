@@ -102,7 +102,7 @@ export default function Footer() {
                         </Link>
                     </p>
                     <div className="text-xs font-thin text-white/40">
-                        © {new Date().getFullYear()} Ben Zhou
+                        © {new Date().getFullYear()} Ben
                         {viewText && (
                             <span className="ml-3 text-white/35">
                                 {viewText}

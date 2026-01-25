@@ -31,6 +31,14 @@ const navigationCommands: CommandDescriptor[] = [
         meta: "Page",
     },
     {
+        id: "nav-status",
+        label: "Status",
+        href: "/status",
+        section: "Navigation",
+        keywords: ["services", "health", "uptime"],
+        meta: "Page",
+    },
+    {
         id: "nav-resume",
         label: "Resume",
         href: "/resume.pdf",

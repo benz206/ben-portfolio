@@ -8,11 +8,11 @@ import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
 export const metadata: Metadata = {
     title: "Ben's Portfolio",
     description:
-        "Ben's Portfolio Website made with Next.js, TypeScript, and TailwindCSS.",
+        "Ben's Portfolio.",
     openGraph: {
-        title: "Ben Z's Portfolio",
+        title: "Ben's Portfolio",
         description:
-            "Ben's Portfolio Website made with Next.js, TypeScript, and TailwindCSS.",
+            "Ben's Portfolio.",
         images: [
             {
                 url: "https://i.imgur.com/6KdqAaf.png",
