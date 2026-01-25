@@ -9,7 +9,7 @@ import { useNavigationCommands } from "@/components/CommandPalette/useNavigation
 const links = [
     { href: "/projects", label: "Projects" },
     { href: "/blog", label: "Blog" },
-    { href: "/gallery", label: "Gallery" }
+    { href: "/gallery", label: "Gallery" },
 ];
 
 export default function Navigation() {
@@ -112,11 +112,29 @@ export default function Navigation() {
                             aria-controls="mobile-menu"
                             aria-label={isOpen ? "Close menu" : "Open menu"}
                         >
-                            <span className="sr-only">{isOpen ? "Close menu" : "Open menu"}</span>
+                            <span className="sr-only">
+                                {isOpen ? "Close menu" : "Open menu"}
+                            </span>
                             <div className="relative w-6 h-5">
-                                <div className={`absolute left-0 top-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "rotate-45 translate-y-[9px]" : ""}`} />
-                                <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "opacity-0" : "opacity-100"}`} />
-                                <div className={`absolute left-0 bottom-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`} />
+                                <div
+                                    className={`absolute left-0 top-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
+                                        isOpen
+                                            ? "rotate-45 translate-y-[9px]"
+                                            : ""
+                                    }`}
+                                />
+                                <div
+                                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
+                                        isOpen ? "opacity-0" : "opacity-100"
+                                    }`}
+                                />
+                                <div
+                                    className={`absolute left-0 bottom-0 h-[2px] w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
+                                        isOpen
+                                            ? "-rotate-45 -translate-y-[9px]"
+                                            : ""
+                                    }`}
+                                />
                             </div>
                         </button>
                     </div>

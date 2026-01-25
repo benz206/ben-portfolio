@@ -12,8 +12,16 @@ export type RawBlogMetadata = {
 type OctokitLike = {
     rest: {
         repos: {
-            getContent: (args: { owner: string; repo: string; path: string }) => Promise<{ data: unknown }>;
-            listCommits: (args: { owner: string; repo: string; path: string }) => Promise<{ data: any[] }>;
+            getContent: (args: {
+                owner: string;
+                repo: string;
+                path: string;
+            }) => Promise<{ data: unknown }>;
+            listCommits: (args: {
+                owner: string;
+                repo: string;
+                path: string;
+            }) => Promise<{ data: any[] }>;
         };
     };
 };
@@ -28,15 +36,22 @@ async function getOctokit(): Promise<OctokitLike> {
     if (!octokitPromise) {
         octokitPromise = import("@octokit/rest").then(
             ({ Octokit }) =>
-                new Octokit(process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {}) as unknown as OctokitLike
+                new Octokit(
+                    process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {}
+                ) as unknown as OctokitLike
         );
     }
     return octokitPromise;
 }
 
 function normalizeTags(tags: unknown): string[] {
-    if (Array.isArray(tags)) return tags.filter((t) => typeof t === "string") as string[];
-    if (typeof tags === "string") return tags.split(",").map((t) => t.trim()).filter(Boolean);
+    if (Array.isArray(tags))
+        return tags.filter((t) => typeof t === "string") as string[];
+    if (typeof tags === "string")
+        return tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean);
     return [];
 }
 
@@ -56,7 +71,9 @@ async function getRepoFileContent(path: string): Promise<string | null> {
     }
 }
 
-async function getCommitDates(path: string): Promise<{ created: string | null; updated: string | null }> {
+async function getCommitDates(
+    path: string
+): Promise<{ created: string | null; updated: string | null }> {
     const octokit = await getOctokit();
     try {
         const commitsResponse = await octokit.rest.repos.listCommits({
@@ -65,7 +82,8 @@ async function getCommitDates(path: string): Promise<{ created: string | null; u
             path,
         });
         const latestCommit = commitsResponse.data[0] ?? null;
-        const oldestCommit = commitsResponse.data[commitsResponse.data.length - 1] ?? null;
+        const oldestCommit =
+            commitsResponse.data[commitsResponse.data.length - 1] ?? null;
         return {
             created: oldestCommit?.commit.committer?.date ?? null,
             updated: latestCommit?.commit.committer?.date ?? null,
@@ -85,7 +103,10 @@ export async function fetchBlogSlugs(): Promise<string[]> {
         });
         const files = Array.isArray(response.data) ? response.data : [];
         return files
-            .filter((f: any) => typeof f?.name === "string" && f.name.endsWith(".mdx"))
+            .filter(
+                (f: any) =>
+                    typeof f?.name === "string" && f.name.endsWith(".mdx")
+            )
             .map((f: any) => f.name.replace(".mdx", ""));
     } catch {
         return [];
@@ -109,7 +130,10 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
 
     const posts: RawBlogMetadata[] = await Promise.all(
         files
-            .filter((file: any) => typeof file?.name === "string" && file.name.endsWith(".mdx"))
+            .filter(
+                (file: any) =>
+                    typeof file?.name === "string" && file.name.endsWith(".mdx")
+            )
             .map(async (file: any) => {
                 const path = file.path as string;
                 const { created, updated } = await getCommitDates(path);
@@ -174,5 +198,3 @@ export async function fetchBlogPost(slug: string): Promise<{
             : "",
     };
 }
-
-

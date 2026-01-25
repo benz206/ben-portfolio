@@ -18,4 +18,3 @@ export interface RegisterCommandsOptions {
     commands: CommandDescriptor[];
     replace?: boolean;
 }
-

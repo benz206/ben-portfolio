@@ -42,7 +42,9 @@ const fadeIn = {
 };
 
 export default function GithubContributionsSection() {
-    const [contributionWeeks, setContributionWeeks] = useState<ContributionWeek[]>([]);
+    const [contributionWeeks, setContributionWeeks] = useState<
+        ContributionWeek[]
+    >([]);
     const [maxContributionCount, setMaxContributionCount] = useState(0);
 
     const contributionLevelGradients = useMemo(
@@ -79,7 +81,8 @@ export default function GithubContributionsSection() {
                     "github_contributions_home"
                 );
 
-                const rawDays: ContributionDay[] = contributions?.contributions ?? [];
+                const rawDays: ContributionDay[] =
+                    contributions?.contributions ?? [];
                 const contributionMap = new Map<string, ContributionDay>();
                 rawDays.forEach((day) => {
                     if (day.date) {
@@ -166,7 +169,9 @@ export default function GithubContributionsSection() {
             if (!firstRealDay) return;
 
             const date = new Date(firstRealDay.date);
-            const label = date.toLocaleDateString(undefined, { month: "short" });
+            const label = date.toLocaleDateString(undefined, {
+                month: "short",
+            });
 
             if (!labels.length || label !== lastLabel) {
                 labels.push({ index, label });
@@ -246,77 +251,89 @@ export default function GithubContributionsSection() {
                                         gridTemplateColumns: `repeat(${contributionWeeks.length}, minmax(0, 1fr))`,
                                     }}
                                 >
-                                    {contributionWeeks.map((week, weekIndex) => (
-                                        <div
-                                            key={`week-${weekIndex}`}
-                                            className="flex flex-col gap-[2px]"
-                                        >
-                                            {week.map((day, dayIndex) => {
-                                                const level = resolveContributionLevel(
-                                                    day,
-                                                    maxContributionCount
-                                                );
-                                                const gradient =
-                                                    contributionLevelGradients[level];
-                                                const validatedGradient =
-                                                    gradient ??
-                                                    contributionLevelGradients[0];
-                                                const isPlaceholder =
-                                                    day.date.startsWith(
-                                                        "placeholder-start"
-                                                    ) ||
-                                                    day.date.startsWith(
-                                                        "placeholder-end"
+                                    {contributionWeeks.map(
+                                        (week, weekIndex) => (
+                                            <div
+                                                key={`week-${weekIndex}`}
+                                                className="flex flex-col gap-[2px]"
+                                            >
+                                                {week.map((day, dayIndex) => {
+                                                    const level =
+                                                        resolveContributionLevel(
+                                                            day,
+                                                            maxContributionCount
+                                                        );
+                                                    const gradient =
+                                                        contributionLevelGradients[
+                                                            level
+                                                        ];
+                                                    const validatedGradient =
+                                                        gradient ??
+                                                        contributionLevelGradients[0];
+                                                    const isPlaceholder =
+                                                        day.date.startsWith(
+                                                            "placeholder-start"
+                                                        ) ||
+                                                        day.date.startsWith(
+                                                            "placeholder-end"
+                                                        );
+                                                    const label =
+                                                        day.date &&
+                                                        !isPlaceholder
+                                                            ? `${
+                                                                  day.count
+                                                              } contributions on ${new Date(
+                                                                  day.date
+                                                              ).toLocaleDateString(
+                                                                  undefined,
+                                                                  {
+                                                                      month: "short",
+                                                                      day: "numeric",
+                                                                  }
+                                                              )}`
+                                                            : "";
+                                                    return (
+                                                        <div
+                                                            key={
+                                                                day.date ||
+                                                                `placeholder-${weekIndex}-${dayIndex}`
+                                                            }
+                                                            title={label}
+                                                            className="h-[10px] w-[10px] rounded-[2px]"
+                                                            style={
+                                                                isPlaceholder
+                                                                    ? {
+                                                                          background:
+                                                                              "transparent",
+                                                                          opacity: 0,
+                                                                      }
+                                                                    : {
+                                                                          backgroundColor:
+                                                                              validatedGradient,
+                                                                      }
+                                                            }
+                                                        />
                                                     );
-                                                const label =
-                                                    day.date && !isPlaceholder
-                                                        ? `${day.count} contributions on ${new Date(
-                                                              day.date
-                                                          ).toLocaleDateString(
-                                                              undefined,
-                                                              {
-                                                                  month: "short",
-                                                                  day: "numeric",
-                                                              }
-                                                          )}`
-                                                        : "";
-                                                return (
-                                                    <div
-                                                        key={
-                                                            day.date ||
-                                                            `placeholder-${weekIndex}-${dayIndex}`
-                                                        }
-                                                        title={label}
-                                                        className="h-[10px] w-[10px] rounded-[2px]"
-                                                        style={
-                                                            isPlaceholder
-                                                                ? {
-                                                                      background:
-                                                                          "transparent",
-                                                                      opacity: 0,
-                                                                  }
-                                                                : {
-                                                                      backgroundColor:
-                                                                          validatedGradient,
-                                                                  }
-                                                        }
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                    ))}
+                                                })}
+                                            </div>
+                                        )
+                                    )}
                                 </div>
                                 <div className="mt-3 flex items-center justify-between text-[11px] text-white/40">
                                     <span>Less</span>
                                     <div className="flex items-center gap-1.5">
-                                        {contributionLevelGradients.map((color, idx) => (
-                                            <span
-                                                // using index is fine here; static palette
-                                                key={`legend-${idx}`}
-                                                className="h-[10px] w-[10px] rounded-[2px]"
-                                                style={{ backgroundColor: color }}
-                                            />
-                                        ))}
+                                        {contributionLevelGradients.map(
+                                            (color, idx) => (
+                                                <span
+                                                    // using index is fine here; static palette
+                                                    key={`legend-${idx}`}
+                                                    className="h-[10px] w-[10px] rounded-[2px]"
+                                                    style={{
+                                                        backgroundColor: color,
+                                                    }}
+                                                />
+                                            )
+                                        )}
                                     </div>
                                     <span>More</span>
                                 </div>
@@ -328,7 +345,3 @@ export default function GithubContributionsSection() {
         </section>
     );
 }
-
-
-
-

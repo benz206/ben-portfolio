@@ -7,12 +7,10 @@ import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
 
 export const metadata: Metadata = {
     title: "Ben's Portfolio",
-    description:
-        "Ben's Portfolio.",
+    description: "Ben's Portfolio.",
     openGraph: {
         title: "Ben's Portfolio",
-        description:
-            "Ben's Portfolio.",
+        description: "Ben's Portfolio.",
         images: [
             {
                 url: "https://i.imgur.com/6KdqAaf.png",

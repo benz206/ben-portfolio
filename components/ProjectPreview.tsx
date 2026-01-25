@@ -29,7 +29,11 @@ export default function ProjectPreview({
             className="list-none"
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut", delay: index * 0.06 }}
+            transition={{
+                duration: 0.55,
+                ease: "easeOut",
+                delay: index * 0.06,
+            }}
         >
             <motion.button
                 type="button"
@@ -79,10 +83,10 @@ export default function ProjectPreview({
                             <LanguageBadge key={language} language={language} />
                         ))}
                     </div>
-                <AmbientGradient
-                    seed={title}
-                    className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
-                />
+                    <AmbientGradient
+                        seed={title}
+                        className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
+                    />
                 </div>
             </motion.button>
         </motion.li>

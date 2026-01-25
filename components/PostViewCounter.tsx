@@ -34,5 +34,3 @@ export default function PostViewCounter({ slug, className }: Props) {
     const formatted = new Intl.NumberFormat().format(views);
     return <span className={className}>{formatted} views</span>;
 }
-
-

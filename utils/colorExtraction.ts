@@ -95,5 +95,3 @@ export async function getDominantColorFromImageUrl(
 
     return fallbackColor;
 }
-
-

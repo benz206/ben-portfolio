@@ -32,7 +32,8 @@ export async function GET(_req: NextRequest) {
         const redis = await getRedisClient();
         const cacheKey = "spotify:currently-playing";
         const cachedRaw = await redis.get(cacheKey);
-        let cachedEntry: { data: SpotifyTrackInfo; timestamp: number } | null = null;
+        let cachedEntry: { data: SpotifyTrackInfo; timestamp: number } | null =
+            null;
         if (cachedRaw) {
             try {
                 cachedEntry = JSON.parse(cachedRaw) as {
@@ -45,7 +46,8 @@ export async function GET(_req: NextRequest) {
         }
 
         const now = Date.now();
-        const shouldRefresh = !cachedEntry || now - cachedEntry.timestamp >= CACHE_WINDOW_MS;
+        const shouldRefresh =
+            !cachedEntry || now - cachedEntry.timestamp >= CACHE_WINDOW_MS;
 
         const respondWithCached = async (
             entry: { data: SpotifyTrackInfo; timestamp: number },
@@ -54,12 +56,19 @@ export async function GET(_req: NextRequest) {
             const payload = forcePaused
                 ? { ...entry.data, paused: "true" }
                 : entry.data;
-            await redis.set(cacheKey, JSON.stringify({ data: payload, timestamp: now }));
-            return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
+            await redis.set(
+                cacheKey,
+                JSON.stringify({ data: payload, timestamp: now })
+            );
+            return NextResponse.json(payload, {
+                headers: PUBLIC_CACHE_HEADERS,
+            });
         };
 
         if (!shouldRefresh && cachedEntry) {
-            return NextResponse.json(cachedEntry.data, { headers: PUBLIC_CACHE_HEADERS });
+            return NextResponse.json(cachedEntry.data, {
+                headers: PUBLIC_CACHE_HEADERS,
+            });
         }
 
         const accessToken = await getSpotifyAccessToken();
@@ -89,7 +98,9 @@ export async function GET(_req: NextRequest) {
             );
         }
 
-        const imageUrl = current.item.album.images[0]?.url as string | undefined;
+        const imageUrl = current.item.album.images[0]?.url as
+            | string
+            | undefined;
         const dominantColor = await getDominantColorFromImageUrl(imageUrl);
         const trackInfo: SpotifyTrackInfo = {
             title: current.item.name,
@@ -105,7 +116,10 @@ export async function GET(_req: NextRequest) {
             albumArt: current.item.album.images[0]?.url,
         };
 
-        await redis.set(cacheKey, JSON.stringify({ data: trackInfo, timestamp: now }));
+        await redis.set(
+            cacheKey,
+            JSON.stringify({ data: trackInfo, timestamp: now })
+        );
 
         return NextResponse.json(trackInfo, { headers: PUBLIC_CACHE_HEADERS });
     } catch (error) {
@@ -123,7 +137,9 @@ export async function GET(_req: NextRequest) {
                         "spotify:currently-playing",
                         JSON.stringify({ data: payload, timestamp: Date.now() })
                     );
-                    return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
+                    return NextResponse.json(payload, {
+                        headers: PUBLIC_CACHE_HEADERS,
+                    });
                 } catch {}
             }
         }
@@ -139,5 +155,3 @@ export async function GET(_req: NextRequest) {
         );
     }
 }
-
-

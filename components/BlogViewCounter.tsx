@@ -9,7 +9,11 @@ type Props = {
     className?: string;
 };
 
-export default function BlogViewCounter({ slug, initialViews = 0, className }: Props) {
+export default function BlogViewCounter({
+    slug,
+    initialViews = 0,
+    className,
+}: Props) {
     const [views, setViews] = useState<number>(initialViews);
 
     useEffect(() => {
@@ -39,4 +43,3 @@ export default function BlogViewCounter({ slug, initialViews = 0, className }: P
         </div>
     );
 }
-

@@ -17,10 +17,16 @@ type ESPInfo = {
 
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
-export async function GET(req: NextRequest, context: { params: Promise<{ password: string }> }) {
+export async function GET(
+    req: NextRequest,
+    context: { params: Promise<{ password: string }> }
+) {
     const { password } = await context.params;
     if (password !== process.env.PASSWORD) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: NO_STORE_HEADERS });
+        return NextResponse.json(
+            { error: "Unauthorized" },
+            { status: 401, headers: NO_STORE_HEADERS }
+        );
     }
 
     try {
@@ -74,5 +80,3 @@ export async function GET(req: NextRequest, context: { params: Promise<{ passwor
         );
     }
 }
-
-

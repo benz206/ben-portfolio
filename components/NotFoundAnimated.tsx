@@ -7,10 +7,30 @@ import Card from "@/components/Card";
 import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
 
 const links = [
-    { href: "/", label: "Home", icon: FaHouse, description: "Back to the landing page." },
-    { href: "/projects", label: "Projects", icon: FaFolderOpen, description: "Browse my work." },
-    { href: "/blog", label: "Blog", icon: FaPenNib, description: "Read the latest posts." },
-    { href: "/gallery", label: "Gallery", icon: FaImages, description: "Photos & snapshots." },
+    {
+        href: "/",
+        label: "Home",
+        icon: FaHouse,
+        description: "Back to the landing page.",
+    },
+    {
+        href: "/projects",
+        label: "Projects",
+        icon: FaFolderOpen,
+        description: "Browse my work.",
+    },
+    {
+        href: "/blog",
+        label: "Blog",
+        icon: FaPenNib,
+        description: "Read the latest posts.",
+    },
+    {
+        href: "/gallery",
+        label: "Gallery",
+        icon: FaImages,
+        description: "Photos & snapshots.",
+    },
 ] as const;
 
 export default function NotFoundAnimated() {

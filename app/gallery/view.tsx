@@ -130,7 +130,8 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
 
                 <motion.div
                     className={`grid w-full min-h-[60vh] gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 ${
-                        selectedImage ? "blur-sm" : ""}`}
+                        selectedImage ? "blur-sm" : ""
+                    }`}
                     variants={boxAnim}
                     initial="hidden"
                     animate="visible"

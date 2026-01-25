@@ -37,16 +37,18 @@ function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
     return ambientVariants[hash % ambientVariants.length];
 }
 
-async function fetchViewCounts(slugs: string[]): Promise<Record<string, number>> {
+async function fetchViewCounts(
+    slugs: string[]
+): Promise<Record<string, number>> {
     const viewCounts: Record<string, number> = {};
     if (slugs.length === 0) return viewCounts;
-    
+
     try {
         const client = await getRedisClient();
         const PREFIX = "views:post:";
         const keys = slugs.map((slug) => `${PREFIX}${slug}`);
         const values = await client.mGet(keys);
-        
+
         slugs.forEach((slug, index) => {
             const raw = values[index];
             const parsed = raw ? Number(raw) : 0;
@@ -67,21 +69,27 @@ export default async function BlogPage() {
     const posts = await fetchBlogPosts();
     const slugs = posts.map((post) => post.slug);
     const viewCounts = await fetchViewCounts(slugs);
-    
+
     const enhancedPosts = posts.map((post) => {
         const ambientVariant = selectAmbientVariant(post);
         return {
             ...post,
-            createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-            }),
-            updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-            }),
+            createdFormatted: new Date(post.created).toLocaleDateString(
+                "en-CA",
+                {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }
+            ),
+            updatedFormatted: new Date(post.updated).toLocaleDateString(
+                "en-CA",
+                {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }
+            ),
             ambientVariant,
             views: viewCounts[post.slug] || 0,
         };
@@ -138,20 +146,30 @@ export default async function BlogPage() {
                                         {featuredPost.title}
                                     </h2>
                                     <p className="text-base text-white/70">
-                                        {featuredPost.description || "Tap in for the full story."}
+                                        {featuredPost.description ||
+                                            "Tap in for the full story."}
                                     </p>
                                 </div>
                                 <div className="flex flex-col gap-4 items-start md:items-end md:justify-start">
-                                    <time className="text-sm text-white/50" dateTime={featuredPost.updated}>
+                                    <time
+                                        className="text-sm text-white/50"
+                                        dateTime={featuredPost.updated}
+                                    >
                                         Updated {featuredPost.updatedFormatted}
                                     </time>
                                     <div className="flex flex-wrap gap-2 justify-end items-center mt-auto w-full">
                                         <div className="flex flex-wrap gap-2 justify-end">
                                             {featuredPost.tags.map((tag) => (
-                                                <Hashtag key={tag} hashtag={tag} />
+                                                <Hashtag
+                                                    key={tag}
+                                                    hashtag={tag}
+                                                />
                                             ))}
                                         </div>
-                                        <BlogViewCounter slug={featuredPost.slug} initialViews={featuredPost.views} />
+                                        <BlogViewCounter
+                                            slug={featuredPost.slug}
+                                            initialViews={featuredPost.views}
+                                        />
                                     </div>
                                 </div>
                             </Card>
@@ -176,30 +194,50 @@ export default async function BlogPage() {
                                                 ambient
                                                 ambientClassName="opacity-20 group-hover:opacity-40 transition-opacity"
                                                 className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
-                                                ambientVariant={post.ambientVariant}
+                                                ambientVariant={
+                                                    post.ambientVariant
+                                                }
                                             >
                                                 <div className="flex-1 space-y-3">
-                                                    <time className="text-xs uppercase tracking-[0.2em] text-white/40" dateTime={post.updated}>
+                                                    <time
+                                                        className="text-xs uppercase tracking-[0.2em] text-white/40"
+                                                        dateTime={post.updated}
+                                                    >
                                                         {post.updatedFormatted}
                                                     </time>
                                                     <h4 className="text-2xl font-semibold text-white transition-colors group-hover:text-blue-100">
                                                         {post.title}
                                                     </h4>
                                                     <p className="text-sm text-white/60">
-                                                        {post.description || "Read the full entry."}
+                                                        {post.description ||
+                                                            "Read the full entry."}
                                                     </p>
                                                 </div>
                                                 <div className="flex flex-wrap gap-2 justify-between items-center">
                                                     {post.tags.length > 0 ? (
                                                         <div className="flex flex-wrap gap-2 text-sm text-white/60">
-                                                            {post.tags.map((tag) => (
-                                                                <Hashtag key={tag} hashtag={tag} />
-                                                            ))}
+                                                            {post.tags.map(
+                                                                (tag) => (
+                                                                    <Hashtag
+                                                                        key={
+                                                                            tag
+                                                                        }
+                                                                        hashtag={
+                                                                            tag
+                                                                        }
+                                                                    />
+                                                                )
+                                                            )}
                                                         </div>
                                                     ) : (
                                                         <div />
                                                     )}
-                                                    <BlogViewCounter slug={post.slug} initialViews={post.views} />
+                                                    <BlogViewCounter
+                                                        slug={post.slug}
+                                                        initialViews={
+                                                            post.views
+                                                        }
+                                                    />
                                                 </div>
                                             </Card>
                                         </Link>

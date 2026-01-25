@@ -41,7 +41,8 @@ function parseHashToRgb(hash: string): number[] | null {
     const trimmed = hash.trim();
     if (trimmed.includes(",")) {
         const parts = trimmed.split(",").map((p) => parseInt(p.trim(), 10));
-        if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) return null;
+        if (parts.length !== 3 || parts.some((n) => Number.isNaN(n)))
+            return null;
         return parts.map((n) => Math.max(0, Math.min(255, n)));
     }
     const clean = trimmed.replace(/^#/, "");
@@ -53,7 +54,10 @@ function parseHashToRgb(hash: string): number[] | null {
     return [r, g, b];
 }
 
-export async function GET(req: NextRequest, context: { params: Promise<{ hash: string }> }) {
+export async function GET(
+    req: NextRequest,
+    context: { params: Promise<{ hash: string }> }
+) {
     const { hash } = await context.params;
     const rgb = parseHashToRgb(hash);
     if (!rgb) {
@@ -63,7 +67,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ hash: s
         );
     }
     const nearest = findNearestColor(rgb);
-    return NextResponse.json({ color: rgb, nearest }, { headers: LONG_CACHE_HEADERS });
+    return NextResponse.json(
+        { color: rgb, nearest },
+        { headers: LONG_CACHE_HEADERS }
+    );
 }
-
-

@@ -72,5 +72,3 @@ export type GitHubContributionsResponse = {
     total: Record<string, number>;
     contributions: GitHubContributionsDay[];
 };
-
-

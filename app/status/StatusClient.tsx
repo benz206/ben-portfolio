@@ -227,7 +227,9 @@ export default function StatusClient() {
                 name: "GitHub API",
                 description: "Profile + repos",
                 check: async () => {
-                    const res = await fetch("https://api.github.com/users/benz206");
+                    const res = await fetch(
+                        "https://api.github.com/users/benz206"
+                    );
                     if (!res.ok) {
                         return {
                             status: "down",
@@ -276,7 +278,10 @@ export default function StatusClient() {
                     }
                     const data = (await res.json()) as {
                         total?: Record<string, number>;
-                        contributions?: Array<{ date?: string; count?: number }>;
+                        contributions?: Array<{
+                            date?: string;
+                            count?: number;
+                        }>;
                     };
                     const year = new Date().getFullYear().toString();
                     const contributions = data.contributions ?? [];
@@ -508,7 +513,9 @@ export default function StatusClient() {
     const summary = useMemo(() => {
         const total = services.length;
         const okCount = services.filter((s) => s.status === "ok").length;
-        const degradedCount = services.filter((s) => s.status === "degraded").length;
+        const degradedCount = services.filter(
+            (s) => s.status === "degraded"
+        ).length;
         const downCount = services.filter((s) => s.status === "down").length;
         return { total, okCount, degradedCount, downCount };
     }, [services]);
@@ -566,7 +573,11 @@ export default function StatusClient() {
                     className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeInOut", delay: 0.08 }}
+                    transition={{
+                        duration: 0.6,
+                        ease: "easeInOut",
+                        delay: 0.08,
+                    }}
                 >
                     <Card
                         variant="glass"
@@ -583,7 +594,8 @@ export default function StatusClient() {
                             <StatusBadge status={overallStatus} />
                         </div>
                         <div className="text-2xl font-semibold">
-                            {summary.okCount === summary.total && summary.total > 0
+                            {summary.okCount === summary.total &&
+                            summary.total > 0
                                 ? "All clear"
                                 : summary.downCount > 0
                                 ? "Issues"
@@ -655,7 +667,11 @@ export default function StatusClient() {
                     className="grid gap-6 md:grid-cols-2"
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeInOut", delay: 0.1 }}
+                    transition={{
+                        duration: 0.6,
+                        ease: "easeInOut",
+                        delay: 0.1,
+                    }}
                 >
                     {services.map((service) => (
                         <Card

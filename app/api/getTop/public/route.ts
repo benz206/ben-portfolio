@@ -65,7 +65,9 @@ export async function GET(_req: NextRequest) {
         if (cachedRaw) {
             try {
                 const cached = JSON.parse(cachedRaw) as TopResponse;
-                return NextResponse.json(cached, { headers: PUBLIC_CACHE_HEADERS });
+                return NextResponse.json(cached, {
+                    headers: PUBLIC_CACHE_HEADERS,
+                });
             } catch {}
         }
 
@@ -77,26 +79,30 @@ export async function GET(_req: NextRequest) {
 
         type TopItemBase = Omit<TopItem, "color">;
 
-        const tracksBase: TopItemBase[] = tracksRaw.items.slice(0, 3).map((t) => {
-            const image = t.album.images?.[0]?.url;
-            return {
-                name: t.name,
-                subtitle: t.artists.map((a) => a.name).join(", "),
-                image,
-                href: t.external_urls?.spotify,
-            };
-        });
+        const tracksBase: TopItemBase[] = tracksRaw.items
+            .slice(0, 3)
+            .map((t) => {
+                const image = t.album.images?.[0]?.url;
+                return {
+                    name: t.name,
+                    subtitle: t.artists.map((a) => a.name).join(", "),
+                    image,
+                    href: t.external_urls?.spotify,
+                };
+            });
 
-        const artistsBase: TopItemBase[] = artistsRaw.items.slice(0, 3).map((a) => {
-            const image = a.images?.[0]?.url;
-            return {
-                name: a.name,
-                subtitle: (a.genres ?? []).slice(0, 2).join(" • "),
-                image,
-                href: a.external_urls?.spotify,
-                followers: a.followers?.total ?? undefined,
-            };
-        });
+        const artistsBase: TopItemBase[] = artistsRaw.items
+            .slice(0, 3)
+            .map((a) => {
+                const image = a.images?.[0]?.url;
+                return {
+                    name: a.name,
+                    subtitle: (a.genres ?? []).slice(0, 2).join(" • "),
+                    image,
+                    href: a.external_urls?.spotify,
+                    followers: a.followers?.total ?? undefined,
+                };
+            });
 
         const [tracks, artists] = await Promise.all([
             Promise.all(
@@ -132,7 +138,9 @@ export async function GET(_req: NextRequest) {
             if (cachedRaw) {
                 try {
                     const cached = JSON.parse(cachedRaw) as TopResponse;
-                    return NextResponse.json(cached, { headers: PUBLIC_CACHE_HEADERS });
+                    return NextResponse.json(cached, {
+                        headers: PUBLIC_CACHE_HEADERS,
+                    });
                 } catch {}
             }
         }
@@ -143,5 +151,3 @@ export async function GET(_req: NextRequest) {
         );
     }
 }
-
-

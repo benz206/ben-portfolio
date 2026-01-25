@@ -10,7 +10,7 @@ const PUBLIC_CACHE_HEADERS = {
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
 const getTodayDate = () => {
-    return new Date().toISOString().split('T')[0];
+    return new Date().toISOString().split("T")[0];
 };
 
 const getNextMidnightTimestamp = () => {
@@ -31,11 +31,14 @@ export async function GET() {
         const client = await getRedisClient();
         const count = toNumber(await client.get(KEY));
         const dailyCount = toNumber(await client.get(DAILY_KEY));
-        
-        return NextResponse.json({ 
-            count,
-            daily: dailyCount 
-        }, { headers: PUBLIC_CACHE_HEADERS });
+
+        return NextResponse.json(
+            {
+                count,
+                daily: dailyCount,
+            },
+            { headers: PUBLIC_CACHE_HEADERS }
+        );
     } catch (error) {
         console.error("Failed to fetch global views", error);
         return NextResponse.json(
@@ -49,7 +52,7 @@ export async function POST() {
     try {
         const client = await getRedisClient();
         const count = await client.incr(KEY);
-        
+
         const today = getTodayDate();
         const nextMidnight = getNextMidnightTimestamp();
 
@@ -93,11 +96,14 @@ return redis.call("INCR", dailyKey)
                           ? dailyResult
                           : String(dailyResult)
                   );
-        
-        return NextResponse.json({ 
-            count,
-            daily: dailyCount 
-        }, { headers: NO_STORE_HEADERS });
+
+        return NextResponse.json(
+            {
+                count,
+                daily: dailyCount,
+            },
+            { headers: NO_STORE_HEADERS }
+        );
     } catch (error) {
         console.error("Failed to increment global views", error);
         return NextResponse.json(

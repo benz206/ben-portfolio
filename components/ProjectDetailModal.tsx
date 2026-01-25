@@ -13,7 +13,10 @@ interface ProjectDetailModalProps {
     onClose: () => void;
 }
 
-export default function ProjectDetailModal({ project, onClose }: ProjectDetailModalProps) {
+export default function ProjectDetailModal({
+    project,
+    onClose,
+}: ProjectDetailModalProps) {
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
             if (event.key === "Escape") {
@@ -54,7 +57,10 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
                         radius="2xl"
                         className="relative flex flex-col gap-8 overflow-hidden bg-[#05070f]/95 p-8 sm:p-10"
                     >
-                        <AmbientGradient seed={project.slug ?? project.title} className="opacity-55" />
+                        <AmbientGradient
+                            seed={project.slug ?? project.title}
+                            className="opacity-55"
+                        />
                         <div className="relative z-10 flex items-start justify-between gap-6">
                             <div className="space-y-3">
                                 <span className="text-xs uppercase tracking-[0.35em] text-white/45">
@@ -84,7 +90,10 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
 
                         <div className="relative z-10 flex flex-wrap gap-2">
                             {project.languages.map((language) => (
-                                <LanguageBadge key={language} language={language} />
+                                <LanguageBadge
+                                    key={language}
+                                    language={language}
+                                />
                             ))}
                         </div>
                     </Card>
@@ -93,4 +102,3 @@ export default function ProjectDetailModal({ project, onClose }: ProjectDetailMo
         </AnimatePresence>
     );
 }
-

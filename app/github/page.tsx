@@ -17,10 +17,7 @@ type ContributionDay = GitHubContributionsDay;
 
 type ContributionWeek = ContributionDay[];
 
-const resolveContributionLevel = (
-    day: ContributionDay,
-    maxCount: number
-) => {
+const resolveContributionLevel = (day: ContributionDay, maxCount: number) => {
     if (typeof day.level === "number" && !Number.isNaN(day.level)) {
         return Math.min(Math.max(day.level, 0), 4);
     }
@@ -118,10 +115,16 @@ export default function GithubPage() {
     >([]);
     const [maxContributionCount, setMaxContributionCount] = useState(0);
 
-    const fetchWithCache = async <T,>(url: string, cacheKey: string): Promise<T> => {
+    const fetchWithCache = async <T,>(
+        url: string,
+        cacheKey: string
+    ): Promise<T> => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-            const { data, timestamp } = JSON.parse(cached) as { data: T; timestamp: number };
+            const { data, timestamp } = JSON.parse(cached) as {
+                data: T;
+                timestamp: number;
+            };
             if (Date.now() - timestamp < 24 * 60 * 60 * 1000) return data;
         }
         const response = await fetch(url);
@@ -328,7 +331,9 @@ export default function GithubPage() {
                                 GitHub
                             </h1>
                             <p className="max-w-2xl text-sm text-white/70 sm:text-base">
-                                Track my open-source projects, filter through repositories, and explore contribution trends from the past year.
+                                Track my open-source projects, filter through
+                                repositories, and explore contribution trends
+                                from the past year.
                             </p>
                         </div>
                     </motion.div>
@@ -345,38 +350,92 @@ export default function GithubPage() {
                                 {formatNumber(stats?.commits ?? 0)} commits
                             </span>
                         </div>
-                        <div className="grid overflow-hidden gap-1 pb-1 w-full" style={{ gridTemplateColumns: `repeat(${contributionWeeks.length}, minmax(0, 1fr))` }}>
+                        <div
+                            className="grid overflow-hidden gap-1 pb-1 w-full"
+                            style={{
+                                gridTemplateColumns: `repeat(${contributionWeeks.length}, minmax(0, 1fr))`,
+                            }}
+                        >
                             {contributionWeeks.map((week, weekIndex) => (
-                                <div key={`week-${weekIndex}`} className="flex flex-col gap-1">
+                                <div
+                                    key={`week-${weekIndex}`}
+                                    className="flex flex-col gap-1"
+                                >
                                     {week.map((day, dayIndex) => {
-                                        const level = resolveContributionLevel(day, maxContributionCount);
-                                        const gradient = contributionLevelGradients[level];
-                                        const validatedGradient = gradient ?? contributionLevelGradients[0];
-                                        const isPlaceholder = day.date.startsWith("placeholder");
+                                        const level = resolveContributionLevel(
+                                            day,
+                                            maxContributionCount
+                                        );
+                                        const gradient =
+                                            contributionLevelGradients[level];
+                                        const validatedGradient =
+                                            gradient ??
+                                            contributionLevelGradients[0];
+                                        const isPlaceholder =
+                                            day.date.startsWith("placeholder");
                                         const label =
                                             day.date && !isPlaceholder
-                                                ? `${day.count} contributions on ${new Date(day.date).toLocaleDateString(undefined, {
-                                                      month: "short",
-                                                      day: "numeric",
-                                                  })}`
+                                                ? `${
+                                                      day.count
+                                                  } contributions on ${new Date(
+                                                      day.date
+                                                  ).toLocaleDateString(
+                                                      undefined,
+                                                      {
+                                                          month: "short",
+                                                          day: "numeric",
+                                                      }
+                                                  )}`
                                                 : "";
-                                        const cellIndex = weekIndex * 7 + dayIndex;
-                                        const animationDelay = `${(cellIndex % 18) * 0.3}s`;
-                                        const animationDuration = `${14 + (cellIndex % 6)}s`;
+                                        const cellIndex =
+                                            weekIndex * 7 + dayIndex;
+                                        const animationDelay = `${
+                                            (cellIndex % 18) * 0.3
+                                        }s`;
+                                        const animationDuration = `${
+                                            14 + (cellIndex % 6)
+                                        }s`;
                                         return (
                                             <div
-                                                key={day.date || `placeholder-${weekIndex}-${dayIndex}`}
+                                                key={
+                                                    day.date ||
+                                                    `placeholder-${weekIndex}-${dayIndex}`
+                                                }
                                                 title={label}
-                                                className={`h-4 w-4 rounded-[4px] border border-white/10${isPlaceholder ? "":" github-cell"}`}
+                                                className={`h-4 w-4 rounded-[4px] border border-white/10${
+                                                    isPlaceholder
+                                                        ? ""
+                                                        : " github-cell"
+                                                }`}
                                                 style={{
-                                                    background: validatedGradient,
-                                                    opacity: isPlaceholder ? 0.15 : 1,
-                                                    animationDelay: isPlaceholder ? undefined : animationDelay,
-                                                    animationDuration: isPlaceholder ? undefined : animationDuration,
-                                                    animationTimingFunction: isPlaceholder ? undefined : "ease-in-out",
-                                                    animationIterationCount: isPlaceholder ? undefined : "infinite",
-                                                    animationDirection: isPlaceholder ? undefined : "alternate",
-                                                    animationName: isPlaceholder ? undefined : "githubHueCycle",
+                                                    background:
+                                                        validatedGradient,
+                                                    opacity: isPlaceholder
+                                                        ? 0.15
+                                                        : 1,
+                                                    animationDelay:
+                                                        isPlaceholder
+                                                            ? undefined
+                                                            : animationDelay,
+                                                    animationDuration:
+                                                        isPlaceholder
+                                                            ? undefined
+                                                            : animationDuration,
+                                                    animationTimingFunction:
+                                                        isPlaceholder
+                                                            ? undefined
+                                                            : "ease-in-out",
+                                                    animationIterationCount:
+                                                        isPlaceholder
+                                                            ? undefined
+                                                            : "infinite",
+                                                    animationDirection:
+                                                        isPlaceholder
+                                                            ? undefined
+                                                            : "alternate",
+                                                    animationName: isPlaceholder
+                                                        ? undefined
+                                                        : "githubHueCycle",
                                                 }}
                                             />
                                         );

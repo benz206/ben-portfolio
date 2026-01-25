@@ -94,30 +94,30 @@ export const goldenPeople: GoldenPerson[] = [
     },
     {
         name: "Mr. Meng",
-        description: "#1 founding engineer"
+        description: "#1 founding engineer",
     },
     {
         name: "clgains",
-        description: "strongest software engineer"
+        description: "strongest software engineer",
     },
     {
         name: "Head of People",
-        description: "SJFZ SJFZ SJFZ"
+        description: "SJFZ SJFZ SJFZ",
     },
     {
         name: "Ishaan",
-        description: "SGMO stakeholder"
+        description: "SGMO stakeholder",
     },
     {
         name: "Nathan",
-        description: "word of the day?"
+        description: "word of the day?",
     },
     {
         name: "vish",
-        description: "ben ben ben"
+        description: "ben ben ben",
     },
     {
         name: "Izzy Fleming",
-        description: "#1 Ops"
-    }
+        description: "#1 Ops",
+    },
 ];

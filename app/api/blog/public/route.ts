@@ -25,7 +25,8 @@ export async function GET() {
     } catch {
         return NextResponse.json([], {
             headers: {
-                "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+                "Cache-Control":
+                    "public, s-maxage=300, stale-while-revalidate=3600",
             },
         });
     }
@@ -33,7 +34,10 @@ export async function GET() {
     const files = Array.isArray(response.data) ? response.data : [];
     const posts: BlogPostSummary[] = await Promise.all(
         files
-            .filter((file: any) => typeof file?.name === "string" && file.name.endsWith(".mdx"))
+            .filter(
+                (file: any) =>
+                    typeof file?.name === "string" && file.name.endsWith(".mdx")
+            )
             .map(async (file: any) => {
                 const fileResponse = await octokit.rest.repos.getContent({
                     owner,
@@ -41,19 +45,31 @@ export async function GET() {
                     path: file.path,
                 });
 
-                const fileContent = Buffer.from((fileResponse.data as any).content, "base64").toString("utf8");
+                const fileContent = Buffer.from(
+                    (fileResponse.data as any).content,
+                    "base64"
+                ).toString("utf8");
                 const { data } = matter(fileContent);
 
                 let tags: string[] | undefined = undefined;
                 try {
                     if (Array.isArray(data.tags)) tags = data.tags;
-                    if (typeof data.tags === "string") tags = data.tags.split(",").map((t: string) => t.trim());
+                    if (typeof data.tags === "string")
+                        tags = data.tags
+                            .split(",")
+                            .map((t: string) => t.trim());
                 } catch {}
 
                 return {
                     slug: file.name.replace(".mdx", ""),
-                    title: typeof data.title === "string" ? data.title : "Untitled",
-                    description: typeof data.description === "string" ? data.description : undefined,
+                    title:
+                        typeof data.title === "string"
+                            ? data.title
+                            : "Untitled",
+                    description:
+                        typeof data.description === "string"
+                            ? data.description
+                            : undefined,
                     tags,
                 };
             })
@@ -63,9 +79,8 @@ export async function GET() {
 
     return NextResponse.json(posts, {
         headers: {
-            "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+            "Cache-Control":
+                "public, s-maxage=3600, stale-while-revalidate=86400",
         },
     });
 }
-
-

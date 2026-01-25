@@ -615,7 +615,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://github.com/benz206/SchoolAnnouncements",
         slug: "school-announcements",
         color: "green-400",
-    }
+    },
 ];
 
 export default projectPreviews;

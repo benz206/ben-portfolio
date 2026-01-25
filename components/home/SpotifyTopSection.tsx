@@ -161,11 +161,13 @@ export default function SpotifyTopSection() {
                                 Spotify
                             </span>
                         </div>
-                        <h2 className="text-2xl font-semibold sm:text-3xl">Top Songs & Artists</h2>
+                        <h2 className="text-2xl font-semibold sm:text-3xl">
+                            Top Songs & Artists
+                        </h2>
                         <p className="max-w-2xl text-sm font-light text-white/60">
                             What I've been listening to <b>recently</b>.
                         </p>
-                        </div>
+                    </div>
                 </motion.div>
 
                 {isLoading ? (

@@ -27,7 +27,10 @@ export async function GET(
         const params = await context.params;
         const slug = decodeURIComponent(params.slug);
         if (!slug) {
-            return NextResponse.json({ count: 0 }, { headers: NO_STORE_HEADERS });
+            return NextResponse.json(
+                { count: 0 },
+                { headers: NO_STORE_HEADERS }
+            );
         }
         const client = await getRedisClient();
         const count = toNumber(await client.get(getKey(slug)));
@@ -49,7 +52,10 @@ export async function POST(
         const params = await context.params;
         const slug = decodeURIComponent(params.slug);
         if (!slug) {
-            return NextResponse.json({ count: 0 }, { headers: NO_STORE_HEADERS });
+            return NextResponse.json(
+                { count: 0 },
+                { headers: NO_STORE_HEADERS }
+            );
         }
         const client = await getRedisClient();
         const count = await client.incr(getKey(slug));
@@ -62,5 +68,3 @@ export async function POST(
         );
     }
 }
-
-

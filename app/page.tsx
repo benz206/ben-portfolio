@@ -1,4 +1,3 @@
-
 import HeroSection from "@/components/home/HeroSection";
 import SpotifyTopSection from "@/components/home/SpotifyTopSection";
 import ExperienceSection from "@/components/home/Experience";
