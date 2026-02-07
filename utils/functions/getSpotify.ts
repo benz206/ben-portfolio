@@ -1,15 +1,33 @@
 import type { SpotifyTokenResponse } from "@/types/externalApis";
+import { getRedisClient } from "@/utils/redis";
 
-let accessToken = "";
-let tokenExpiration = 0;
+const REDIS_TOKEN_KEY = "spotify:access_token";
+const REDIS_EXPIRY_KEY = "spotify:token_expiry";
+
+let memoryToken = "";
+let memoryExpiry = 0;
 
 export default async function getSpotifyAccessToken() {
     const { SPOTIFY_CLIENTID, SPOTIFY_SECRET, SPOTIFY_REFRESHTOKEN } =
         process.env;
 
-    if (Date.now() < tokenExpiration) {
-        return accessToken;
+    if (memoryToken && Date.now() < memoryExpiry) {
+        return memoryToken;
     }
+
+    try {
+        const redis = await getRedisClient();
+        const [cachedToken, cachedExpiry] = await Promise.all([
+            redis.get(REDIS_TOKEN_KEY),
+            redis.get(REDIS_EXPIRY_KEY),
+        ]);
+
+        if (cachedToken && cachedExpiry && Date.now() < Number(cachedExpiry)) {
+            memoryToken = cachedToken;
+            memoryExpiry = Number(cachedExpiry);
+            return cachedToken;
+        }
+    } catch {}
 
     const authString = Buffer.from(
         `${SPOTIFY_CLIENTID}:${SPOTIFY_SECRET}`
@@ -32,8 +50,20 @@ export default async function getSpotifyAccessToken() {
 
     const tokenData = (await tokenResponse.json()) as SpotifyTokenResponse;
 
-    accessToken = tokenData.access_token;
-    tokenExpiration = Date.now() + tokenData.expires_in * 1000;
+    const expiry = Date.now() + tokenData.expires_in * 1000;
+    memoryToken = tokenData.access_token;
+    memoryExpiry = expiry;
 
-    return accessToken;
+    try {
+        const redis = await getRedisClient();
+        const ttlSeconds = Math.max(Math.floor(tokenData.expires_in * 0.9), 1);
+        await Promise.all([
+            redis.set(REDIS_TOKEN_KEY, tokenData.access_token, {
+                EX: ttlSeconds,
+            }),
+            redis.set(REDIS_EXPIRY_KEY, String(expiry), { EX: ttlSeconds }),
+        ]);
+    } catch {}
+
+    return tokenData.access_token;
 }
