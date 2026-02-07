@@ -36,9 +36,6 @@ module.exports = {
                 "noir-radial-spotify":
                     "radial-gradient(circle at 18% 20%, rgba(34,197,94,0.16), transparent 55%), radial-gradient(circle at 78% 18%, rgba(99,102,241,0.14), transparent 52%), radial-gradient(circle at 35% 82%, rgba(236,72,153,0.12), transparent 58%)",
             },
-            spacing: {
-                0: "0rem",
-            },
             keyframes: {
                 "fade-in": {
                     "0%": { opacity: 0 },

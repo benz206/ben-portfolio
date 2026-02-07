@@ -1,37 +1,30 @@
-const withMDX = require("@next/mdx")();
+import createMDX from "@next/mdx";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    reactStrictMode: true,
     pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
     images: {
         remotePatterns: [
             {
                 protocol: "https",
                 hostname: "i.imgur.com",
-                port: "",
                 pathname: "/**",
             },
             {
                 protocol: "https",
                 hostname: "cdn.jsdelivr.net",
-                port: "",
                 pathname: "/**",
             },
             {
                 protocol: "https",
                 hostname: "i.scdn.co",
-                port: "",
                 pathname: "/**",
             },
         ],
     },
-    webpack(config) {
-        config.resolve.fallback = {
-            ...config.resolve.fallback,
-            fs: false,
-        };
-        return config;
-    },
 };
 
-module.exports = withMDX(nextConfig);
+const withMDX = createMDX();
+
+export default withMDX(nextConfig);
