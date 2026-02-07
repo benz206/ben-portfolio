@@ -37,7 +37,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             </a>
         ),
         strong: ({ children }) => (
-            <strong className="font-bold animate-breathing-gradient bg-rainbow-gradient bg-clip-text">
+            <strong className="font-bold bg-clip-text">
                 {children}
             </strong>
         ),
@@ -104,7 +104,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 return (
                     <input
                         type="checkbox"
-                        className="w-4 h-4 mr-2 cursor-pointer accent-blue-500"
+                        className="mr-2 w-4 h-4 cursor-pointer accent-blue-500"
                         disabled={props.disabled}
                         checked={props.checked}
                         readOnly

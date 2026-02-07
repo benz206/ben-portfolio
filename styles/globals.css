@@ -11,7 +11,7 @@
 
     ol,
     ul {
-        list-style-type: list-revert;
+        list-style-type: revert;
         margin-left: 1.5rem;
     }
 
@@ -52,13 +52,6 @@
     .card-xl {
         @apply p-10;
     }
-}
-
-html,
-body,
-#__next {
-    height: 100%;
-    width: 100%;
 }
 
 .home-scroll {
