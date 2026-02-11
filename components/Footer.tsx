@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
@@ -57,6 +58,12 @@ const socials = [
     },
 ] as const;
 
+const clubs = [
+    { src: "/clubs/uwcsa.png", alt: "UWCSA" },
+    { src: "/clubs/watai.jpeg", alt: "WAT.ai" },
+    { src: "/clubs/midnightsun.png", alt: "Midnight Sun" },
+] as const;
+
 export default function Footer() {
     const [views, setViews] = useState<number | null>(null);
     const [dailyViews, setDailyViews] = useState<number | null>(null);
@@ -100,12 +107,12 @@ export default function Footer() {
             <div className="flex w-11/12 max-w-[1080px] flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
-                        If you want to talk, message me anytime{" "}
+                        Message me anytime @
                         <a
                             href="mailto:ben.zhou@uwaterloo.ca"
                             className="underline underline-offset-auto"
                         >
-                            @ben.zhou@uwaterloo.ca
+                            ben.zhou [at] uwaterloo.ca
                         </a>
                         .{" "}
                         <Link
@@ -130,7 +137,7 @@ export default function Footer() {
                         {viewers !== null && viewers > 0 && (
                             <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
                                 <span className="relative flex h-1.5 w-1.5">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                                    <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
                                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
                                 </span>
                                 {viewers} viewing
@@ -157,6 +164,22 @@ export default function Footer() {
                                     <Icon />
                                 </span>
                             </motion.a>
+                        ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
+                        {clubs.map((club) => (
+                            <span
+                                key={club.src}
+                                className="flex overflow-hidden justify-center items-center w-6 h-6 rounded-sm"
+                            >
+                                <Image
+                                    src={club.src}
+                                    alt={club.alt}
+                                    width={32}
+                                    height={32}
+                                    className="object-cover w-full h-full"
+                                />
+                            </span>
                         ))}
                     </div>
                 </div>
