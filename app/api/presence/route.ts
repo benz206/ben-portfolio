@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 
 const KEY = "presence:viewers";
-const WINDOW_SECONDS = 15 * 60;
+const WINDOW_SECONDS = 2 * 60;
 const NO_STORE = { "Cache-Control": "no-store" };
 
 export async function GET() {
@@ -23,7 +23,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const { sessionId } = await request.json();
+        const { sessionId, leave } = await request.json();
         if (!sessionId || typeof sessionId !== "string") {
             return NextResponse.json(
                 { error: "Missing sessionId" },
@@ -35,12 +35,20 @@ export async function POST(request: NextRequest) {
         const now = Date.now();
         const cutoff = now - WINDOW_SECONDS * 1000;
 
-        await client
-            .multi()
-            .zAdd(KEY, { score: now, value: sessionId })
-            .zRemRangeByScore(KEY, "-inf", cutoff)
-            .expire(KEY, WINDOW_SECONDS + 60)
-            .exec();
+        if (leave) {
+            await client
+                .multi()
+                .zRem(KEY, sessionId)
+                .zRemRangeByScore(KEY, "-inf", cutoff)
+                .exec();
+        } else {
+            await client
+                .multi()
+                .zAdd(KEY, { score: now, value: sessionId })
+                .zRemRangeByScore(KEY, "-inf", cutoff)
+                .expire(KEY, WINDOW_SECONDS + 60)
+                .exec();
+        }
 
         const count = await client.zCard(KEY);
         return NextResponse.json({ viewers: count }, { headers: NO_STORE });

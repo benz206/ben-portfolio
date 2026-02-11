@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 const VIEWED_KEY = "portfolio:viewed";
 const SESSION_KEY = "portfolio:sessionId";
-const HEARTBEAT_INTERVAL = 5 * 60 * 1000;
+const HEARTBEAT_INTERVAL = 30_000;
 
 function getSessionId() {
     let id = sessionStorage.getItem(SESSION_KEY);
@@ -35,6 +35,16 @@ export default function ViewCounter() {
             }).catch(() => {});
         };
 
+        const sendLeave = () => {
+            navigator.sendBeacon(
+                "/api/presence",
+                new Blob(
+                    [JSON.stringify({ sessionId, leave: true })],
+                    { type: "application/json" }
+                )
+            );
+        };
+
         sendHeartbeat();
         heartbeatRef.current = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
 
@@ -52,10 +62,14 @@ export default function ViewCounter() {
             }
         };
 
+        const onPageHide = () => sendLeave();
+
         document.addEventListener("visibilitychange", onVisibilityChange);
+        window.addEventListener("pagehide", onPageHide);
 
         return () => {
             document.removeEventListener("visibilitychange", onVisibilityChange);
+            window.removeEventListener("pagehide", onPageHide);
             if (heartbeatRef.current) clearInterval(heartbeatRef.current);
         };
     }, []);
