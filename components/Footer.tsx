@@ -60,6 +60,7 @@ const socials = [
 export default function Footer() {
     const [views, setViews] = useState<number | null>(null);
     const [dailyViews, setDailyViews] = useState<number | null>(null);
+    const [viewers, setViewers] = useState<number | null>(null);
 
     useEffect(() => {
         (async () => {
@@ -73,6 +74,19 @@ export default function Footer() {
                 console.error("Failed to fetch global views", error);
             }
         })();
+
+        const fetchPresence = async () => {
+            try {
+                const res = await fetch("/api/presence");
+                if (!res.ok) return;
+                const { viewers: v } = await res.json();
+                setViewers(v);
+            } catch {}
+        };
+
+        fetchPresence();
+        const interval = setInterval(fetchPresence, 30_000);
+        return () => clearInterval(interval);
     }, []);
 
     const viewText = useMemo(() => {
@@ -111,6 +125,15 @@ export default function Footer() {
                                         +{dailyViews} today
                                     </span>
                                 )}
+                            </span>
+                        )}
+                        {viewers !== null && viewers > 0 && (
+                            <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
+                                <span className="relative flex h-1.5 w-1.5">
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
+                                </span>
+                                {viewers} viewing
                             </span>
                         )}
                     </div>
