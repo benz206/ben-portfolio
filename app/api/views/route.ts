@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 
+export const runtime = "nodejs";
+
 const KEY = "views:global";
 const DAILY_KEY = "views:global:daily";
 const DAILY_DATE_KEY = "views:global:daily:date";

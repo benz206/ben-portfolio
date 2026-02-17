@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 
+export const runtime = "nodejs";
+
 const KEY = "presence:viewers";
 const WINDOW_SECONDS = 2 * 60;
 const NO_STORE = { "Cache-Control": "no-store" };

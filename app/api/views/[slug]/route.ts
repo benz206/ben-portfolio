@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
 
+export const runtime = "nodejs";
+
 const PREFIX = "views:post:";
 const PUBLIC_CACHE_HEADERS = {
     "Cache-Control": "public, s-maxage=60, stale-while-revalidate=600",
