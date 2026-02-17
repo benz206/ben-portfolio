@@ -26,7 +26,7 @@ function findNearestColor(rgbArray: number[]): number[] {
         const distance = Math.sqrt(
             Math.pow(rgbArray[0] - color[0], 2) +
                 Math.pow(rgbArray[1] - color[1], 2) +
-                Math.pow(rgbArray[2] - color[2], 2)
+                Math.pow(rgbArray[2] - color[2], 2),
         );
         if (distance < minDistance) {
             minDistance = distance;
@@ -56,19 +56,19 @@ function parseHashToRgb(hash: string): number[] | null {
 
 export async function GET(
     req: NextRequest,
-    context: { params: Promise<{ hash: string }> }
+    context: { params: Promise<{ hash: string }> },
 ) {
     const { hash } = await context.params;
     const rgb = parseHashToRgb(hash);
     if (!rgb) {
         return NextResponse.json(
             { error: "Invalid color hash. Use R,G,B or hex (rrggbb)." },
-            { status: 400, headers: NO_STORE_HEADERS }
+            { status: 400, headers: NO_STORE_HEADERS },
         );
     }
     const nearest = findNearestColor(rgb);
     return NextResponse.json(
         { color: rgb, nearest },
-        { headers: LONG_CACHE_HEADERS }
+        { headers: LONG_CACHE_HEADERS },
     );
 }

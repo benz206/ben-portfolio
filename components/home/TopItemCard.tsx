@@ -20,8 +20,8 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
         kind === "track"
             ? item.subtitle
             : followers
-            ? `${followers} followers`
-            : item.subtitle;
+              ? `${followers} followers`
+              : item.subtitle;
 
     return (
         <Card

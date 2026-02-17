@@ -37,8 +37,8 @@ async function getOctokit(): Promise<OctokitLike> {
         octokitPromise = import("@octokit/rest").then(
             ({ Octokit }) =>
                 new Octokit(
-                    process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {}
-                ) as unknown as OctokitLike
+                    process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {},
+                ) as unknown as OctokitLike,
         );
     }
     return octokitPromise;
@@ -72,7 +72,7 @@ async function getRepoFileContent(path: string): Promise<string | null> {
 }
 
 async function getCommitDates(
-    path: string
+    path: string,
 ): Promise<{ created: string | null; updated: string | null }> {
     const octokit = await getOctokit();
     try {
@@ -105,7 +105,7 @@ export async function fetchBlogSlugs(): Promise<string[]> {
         return files
             .filter(
                 (f: any) =>
-                    typeof f?.name === "string" && f.name.endsWith(".mdx")
+                    typeof f?.name === "string" && f.name.endsWith(".mdx"),
             )
             .map((f: any) => f.name.replace(".mdx", ""));
     } catch {
@@ -132,7 +132,8 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
         files
             .filter(
                 (file: any) =>
-                    typeof file?.name === "string" && file.name.endsWith(".mdx")
+                    typeof file?.name === "string" &&
+                    file.name.endsWith(".mdx"),
             )
             .map(async (file: any) => {
                 const path = file.path as string;
@@ -148,11 +149,11 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
                     updated: updated || new Date().toISOString(),
                     slug: (file.name as string).replace(".mdx", ""),
                 };
-            })
+            }),
     );
 
     posts.sort(
-        (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+        (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
     );
     return posts;
 }

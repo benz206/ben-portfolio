@@ -17,7 +17,7 @@ async function getBlogSlugs() {
         const files = Array.isArray(response.data) ? response.data : [];
         return files
             .filter(
-                (f) => typeof f?.name === "string" && f.name.endsWith(".mdx")
+                (f) => typeof f?.name === "string" && f.name.endsWith(".mdx"),
             )
             .map((f) => f.name.replace(/\.mdx$/, ""));
     } catch {
@@ -31,7 +31,7 @@ module.exports = {
     additionalPaths: async (config) => {
         const slugs = await getBlogSlugs();
         const paths = await Promise.all(
-            slugs.map((slug) => config.transform(config, `/blog/${slug}`))
+            slugs.map((slug) => config.transform(config, `/blog/${slug}`)),
         );
         return paths;
     },

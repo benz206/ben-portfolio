@@ -51,14 +51,14 @@ export async function GET(_req: NextRequest) {
 
         const respondWithCached = async (
             entry: { data: SpotifyTrackInfo; timestamp: number },
-            forcePaused = false
+            forcePaused = false,
         ) => {
             const payload = forcePaused
                 ? { ...entry.data, paused: "true" }
                 : entry.data;
             await redis.set(
                 cacheKey,
-                JSON.stringify({ data: payload, timestamp: now })
+                JSON.stringify({ data: payload, timestamp: now }),
             );
             return NextResponse.json(payload, {
                 headers: PUBLIC_CACHE_HEADERS,
@@ -83,7 +83,7 @@ export async function GET(_req: NextRequest) {
             const errorMessage = await response.text();
             return NextResponse.json(
                 { error: errorMessage },
-                { status: response.status, headers: NO_STORE_HEADERS }
+                { status: response.status, headers: NO_STORE_HEADERS },
             );
         }
 
@@ -94,7 +94,7 @@ export async function GET(_req: NextRequest) {
             }
             return NextResponse.json(
                 { error: "No track currently playing" },
-                { status: 404, headers: NO_STORE_HEADERS }
+                { status: 404, headers: NO_STORE_HEADERS },
             );
         }
 
@@ -118,7 +118,7 @@ export async function GET(_req: NextRequest) {
 
         await redis.set(
             cacheKey,
-            JSON.stringify({ data: trackInfo, timestamp: now })
+            JSON.stringify({ data: trackInfo, timestamp: now }),
         );
 
         return NextResponse.json(trackInfo, { headers: PUBLIC_CACHE_HEADERS });
@@ -135,7 +135,10 @@ export async function GET(_req: NextRequest) {
                     const payload = { ...cachedEntry.data, paused: "true" };
                     await redis.set(
                         "spotify:currently-playing",
-                        JSON.stringify({ data: payload, timestamp: Date.now() })
+                        JSON.stringify({
+                            data: payload,
+                            timestamp: Date.now(),
+                        }),
                     );
                     return NextResponse.json(payload, {
                         headers: PUBLIC_CACHE_HEADERS,
@@ -146,12 +149,12 @@ export async function GET(_req: NextRequest) {
         if (error instanceof SyntaxError) {
             return NextResponse.json(
                 { error: "Not currently playing" },
-                { status: 500, headers: NO_STORE_HEADERS }
+                { status: 500, headers: NO_STORE_HEADERS },
             );
         }
         return NextResponse.json(
             { error: "Internal Server Error" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

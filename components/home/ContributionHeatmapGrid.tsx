@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import type { ContributionDay, ContributionWeek } from "@/components/home/useGithubContributions";
+import type {
+    ContributionDay,
+    ContributionWeek,
+} from "@/components/home/useGithubContributions";
 
 type ContributionHeatmapGridProps = {
     weeks: ContributionWeek[];
@@ -34,7 +37,7 @@ export default function ContributionHeatmapGrid({
 }: ContributionHeatmapGridProps) {
     const contributionLevelGradients = useMemo(
         () => ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-        []
+        [],
     );
 
     return (
@@ -46,7 +49,9 @@ export default function ContributionHeatmapGrid({
                 }}
             >
                 {weeks.map((_, weekIndex) => {
-                    const month = monthLabels.find((m) => m.index === weekIndex);
+                    const month = monthLabels.find(
+                        (m) => m.index === weekIndex,
+                    );
                     return (
                         <div
                             key={`month-${weekIndex}`}
@@ -64,14 +69,16 @@ export default function ContributionHeatmapGrid({
                 }}
             >
                 {weeks.map((week, weekIndex) => (
-                    <div key={`week-${weekIndex}`} className="flex flex-col gap-[2px]">
+                    <div
+                        key={`week-${weekIndex}`}
+                        className="flex flex-col gap-[2px]"
+                    >
                         {week.map((day, dayIndex) => {
                             const level = resolveContributionLevel(
                                 day,
-                                maxCount
+                                maxCount,
                             );
-                            const gradient =
-                                contributionLevelGradients[level];
+                            const gradient = contributionLevelGradients[level];
                             const validatedGradient =
                                 gradient ?? contributionLevelGradients[0];
                             const isPlaceholder =
@@ -79,10 +86,8 @@ export default function ContributionHeatmapGrid({
                                 day.date.startsWith("placeholder-end");
                             const label =
                                 day.date && !isPlaceholder
-                                    ? `${
-                                          day.count
-                                      } contributions on ${new Date(
-                                          day.date
+                                    ? `${day.count} contributions on ${new Date(
+                                          day.date,
                                       ).toLocaleDateString(undefined, {
                                           month: "short",
                                           day: "numeric",

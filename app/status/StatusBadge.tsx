@@ -9,18 +9,18 @@ export default function StatusBadge({
         status === "ok"
             ? "Operational"
             : status === "degraded"
-            ? "Degraded"
-            : status === "down"
-            ? "Down"
-            : "Checking";
+              ? "Degraded"
+              : status === "down"
+                ? "Down"
+                : "Checking";
     const color =
         status === "ok"
             ? "bg-emerald-500/20 text-emerald-200"
             : status === "degraded"
-            ? "bg-amber-500/20 text-amber-200"
-            : status === "down"
-            ? "bg-rose-500/20 text-rose-200"
-            : "bg-white/10 text-white/60";
+              ? "bg-amber-500/20 text-amber-200"
+              : status === "down"
+                ? "bg-rose-500/20 text-rose-200"
+                : "bg-white/10 text-white/60";
     return (
         <span
             className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.25em] ${color}`}

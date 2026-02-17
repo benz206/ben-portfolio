@@ -10,7 +10,7 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
     const total = services.length;
     const okCount = services.filter((s) => s.status === "ok").length;
     const degradedCount = services.filter(
-        (s) => s.status === "degraded"
+        (s) => s.status === "degraded",
     ).length;
     const downCount = services.filter((s) => s.status === "down").length;
 
@@ -18,10 +18,10 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
         downCount > 0
             ? "down"
             : degradedCount > 0
-            ? "degraded"
-            : okCount === total && total > 0
-            ? "ok"
-            : "loading";
+              ? "degraded"
+              : okCount === total && total > 0
+                ? "ok"
+                : "loading";
 
     return (
         <>
@@ -43,10 +43,10 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                     {okCount === total && total > 0
                         ? "All clear"
                         : downCount > 0
-                        ? "Issues"
-                        : degradedCount > 0
-                        ? "Degraded"
-                        : "Checking"}
+                          ? "Issues"
+                          : degradedCount > 0
+                            ? "Degraded"
+                            : "Checking"}
                 </div>
             </Card>
             <Card

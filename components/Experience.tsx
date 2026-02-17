@@ -33,7 +33,7 @@ function Job({ job, onSelect, delay, isActive }: JobProps) {
                 ambientClassName="opacity-40"
                 className={cn(
                     "flex gap-5 items-start p-6 backdrop-blur-xl focus-within:ring-2 focus-within:ring-white/60",
-                    isActive ? "ring-1 ring-white/25" : "ring-0"
+                    isActive ? "ring-1 ring-white/25" : "ring-0",
                 )}
                 motionProps={{
                     layoutId,

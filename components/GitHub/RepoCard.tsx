@@ -18,7 +18,7 @@ export default function RepoCard({ repo, index }: RepoCardProps) {
             month: "short",
             day: "numeric",
             year: "numeric",
-        }
+        },
     );
 
     return (

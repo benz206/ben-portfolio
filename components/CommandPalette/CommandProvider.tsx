@@ -59,7 +59,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [sources, setSources] = useState<Map<string, CommandDescriptor[]>>(
-        new Map()
+        new Map(),
     );
     const [activeIndex, setActiveIndex] = useState(0);
     const [viewStack, setViewStack] = useState<
@@ -163,7 +163,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
             ([name, list]) => ({
                 name,
                 commands: list,
-            })
+            }),
         );
     }, [filtered]);
 
@@ -183,7 +183,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 router.push(command.href);
             }
         },
-        [router]
+        [router],
     );
 
     const pushView = useCallback(
@@ -196,7 +196,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
             setSearch("");
             setActiveIndex(0);
         },
-        []
+        [],
     );
 
     const popView = useCallback(() => {
@@ -292,7 +292,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
             pushView,
             popView,
         }),
-        [isOpen, search, registerCommands, pushView, popView]
+        [isOpen, search, registerCommands, pushView, popView],
     );
 
     return (
@@ -359,7 +359,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                         type="button"
                                                         onMouseEnter={() =>
                                                             setActiveIndex(
-                                                                index
+                                                                index,
                                                             )
                                                         }
                                                         onClick={() =>
@@ -369,7 +369,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                             "flex justify-between items-center px-3 py-2 w-full text-left rounded-md transition-colors",
                                                             isActive
                                                                 ? "text-white bg-white/15"
-                                                                : "text-white/80 hover:bg-white/10 hover:text-white"
+                                                                : "text-white/80 hover:bg-white/10 hover:text-white",
                                                         )}
                                                     >
                                                         <div className="flex flex-col gap-1">
@@ -411,7 +411,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                             </div>
                         </Card>
                     </div>,
-                    document.body
+                    document.body,
                 )}
         </CommandContext.Provider>
     );

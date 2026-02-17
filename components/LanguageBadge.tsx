@@ -61,7 +61,7 @@ export default function LanguageBadge({
         <span
             className={cn(
                 "inline-flex relative justify-center items-center",
-                className
+                className,
             )}
         >
             <span

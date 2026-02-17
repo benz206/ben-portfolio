@@ -19,13 +19,13 @@ const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
 export async function GET(
     req: NextRequest,
-    context: { params: Promise<{ password: string }> }
+    context: { params: Promise<{ password: string }> },
 ) {
     const { password } = await context.params;
     if (password !== process.env.PASSWORD) {
         return NextResponse.json(
             { error: "Unauthorized" },
-            { status: 401, headers: NO_STORE_HEADERS }
+            { status: 401, headers: NO_STORE_HEADERS },
         );
     }
 
@@ -39,7 +39,7 @@ export async function GET(
             const errorMessage = await response.text();
             return NextResponse.json(
                 { error: errorMessage },
-                { status: response.status, headers: NO_STORE_HEADERS }
+                { status: response.status, headers: NO_STORE_HEADERS },
             );
         }
 
@@ -47,14 +47,14 @@ export async function GET(
         if (!current.item) {
             return NextResponse.json(
                 { error: "No track currently playing" },
-                { status: 404, headers: NO_STORE_HEADERS }
+                { status: 404, headers: NO_STORE_HEADERS },
             );
         }
 
         const hash = current.item.album.images?.[0]?.url.split("/")[4];
         const dominantColor = hash
             ? ((await fetch(`https://bzhou.ca/api/getColor/${hash}`).then((r) =>
-                  r.json()
+                  r.json(),
               )) as { answer: [number, number, number] })
             : { answer: [29, 185, 84] as [number, number, number] };
 
@@ -71,12 +71,12 @@ export async function GET(
                 shuffle: current.shuffle_state,
                 loop: current.repeat_state,
             } as ESPInfo,
-            { headers: NO_STORE_HEADERS }
+            { headers: NO_STORE_HEADERS },
         );
     } catch (error) {
         return NextResponse.json(
             { error: "Internal Server Error" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

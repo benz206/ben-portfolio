@@ -41,7 +41,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
         });
         const total = Object.values(counts).reduce(
             (sum, count) => sum + count,
-            0
+            0,
         );
         return Object.entries(counts)
             .sort((a, b) => b[1] - a[1])

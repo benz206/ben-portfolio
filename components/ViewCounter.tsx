@@ -22,9 +22,11 @@ export default function ViewCounter() {
         const sessionId = getSessionId();
 
         if (!sessionStorage.getItem(VIEWED_KEY)) {
-            fetch("/api/views", { method: "POST" }).then(() => {
-                sessionStorage.setItem(VIEWED_KEY, "1");
-            }).catch(() => {});
+            fetch("/api/views", { method: "POST" })
+                .then(() => {
+                    sessionStorage.setItem(VIEWED_KEY, "1");
+                })
+                .catch(() => {});
         }
 
         const sendHeartbeat = () => {
@@ -38,10 +40,9 @@ export default function ViewCounter() {
         const sendLeave = () => {
             navigator.sendBeacon(
                 "/api/presence",
-                new Blob(
-                    [JSON.stringify({ sessionId, leave: true })],
-                    { type: "application/json" }
-                )
+                new Blob([JSON.stringify({ sessionId, leave: true })], {
+                    type: "application/json",
+                }),
             );
         };
 
@@ -52,7 +53,10 @@ export default function ViewCounter() {
             if (document.visibilityState === "visible") {
                 sendHeartbeat();
                 if (!heartbeatRef.current) {
-                    heartbeatRef.current = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
+                    heartbeatRef.current = setInterval(
+                        sendHeartbeat,
+                        HEARTBEAT_INTERVAL,
+                    );
                 }
             } else {
                 if (heartbeatRef.current) {
@@ -68,7 +72,10 @@ export default function ViewCounter() {
         window.addEventListener("pagehide", onPageHide);
 
         return () => {
-            document.removeEventListener("visibilitychange", onVisibilityChange);
+            document.removeEventListener(
+                "visibilitychange",
+                onVisibilityChange,
+            );
             window.removeEventListener("pagehide", onPageHide);
             if (heartbeatRef.current) clearInterval(heartbeatRef.current);
         };

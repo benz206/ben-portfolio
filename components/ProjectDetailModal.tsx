@@ -24,7 +24,7 @@ export default function ProjectDetailModal({
                 onClose();
             }
         },
-        [onClose]
+        [onClose],
     );
 
     useEffect(() => {

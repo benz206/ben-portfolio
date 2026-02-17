@@ -32,9 +32,7 @@ export default function StatusClient() {
                     const start = performance.now();
                     try {
                         const result = await service.check();
-                        const latencyMs = Math.round(
-                            performance.now() - start
-                        );
+                        const latencyMs = Math.round(performance.now() - start);
                         return {
                             id: service.id,
                             name: service.name,
@@ -56,7 +54,7 @@ export default function StatusClient() {
                             latencyMs: Math.round(performance.now() - start),
                         } as ServiceStatus;
                     }
-                })
+                }),
             );
             if (!cancelled) {
                 setServices(results);
@@ -74,7 +72,7 @@ export default function StatusClient() {
     const summary = useMemo(() => {
         const okCount = services.filter((s) => s.status === "ok").length;
         const degradedCount = services.filter(
-            (s) => s.status === "degraded"
+            (s) => s.status === "degraded",
         ).length;
         const downCount = services.filter((s) => s.status === "down").length;
         return { okCount, degradedCount, downCount };

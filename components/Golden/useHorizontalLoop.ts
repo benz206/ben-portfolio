@@ -12,7 +12,10 @@ type HorizontalLoopConfig = {
 
 export function useHorizontalLoop() {
     return useCallback(
-        (items: Element[] | NodeListOf<Element>, config: HorizontalLoopConfig = {}) => {
+        (
+            items: Element[] | NodeListOf<Element>,
+            config: HorizontalLoopConfig = {},
+        ) => {
             const tl = gsap.timeline({
                 repeat: config.repeat,
                 paused: config.paused,
@@ -42,13 +45,13 @@ export function useHorizontalLoop() {
             gsap.set(elements, {
                 xPercent: (i: number, el: HTMLElement) => {
                     const w = (widths[i] = parseFloat(
-                        gsap.getProperty(el, "width", "px") as string
+                        gsap.getProperty(el, "width", "px") as string,
                     ));
                     xPercents[i] = snap(
                         (parseFloat(gsap.getProperty(el, "x", "px") as string) /
                             w) *
                             100 +
-                            (gsap.getProperty(el, "xPercent") as number)
+                            (gsap.getProperty(el, "xPercent") as number),
                     );
                     return xPercents[i];
                 },
@@ -59,7 +62,10 @@ export function useHorizontalLoop() {
                 (xPercents[length - 1] / 100) * widths[length - 1] -
                 startX +
                 elements[length - 1].offsetWidth *
-                    (gsap.getProperty(elements[length - 1], "scaleX") as number) +
+                    (gsap.getProperty(
+                        elements[length - 1],
+                        "scaleX",
+                    ) as number) +
                 (parseFloat(String(config.paddingRight)) || 0);
             for (let i = 0; i < length; i += 1) {
                 const item = elements[i];
@@ -71,17 +77,20 @@ export function useHorizontalLoop() {
                 tl.to(
                     item,
                     {
-                        xPercent: snap(((curX - distanceToLoop) / widths[i]) * 100),
+                        xPercent: snap(
+                            ((curX - distanceToLoop) / widths[i]) * 100,
+                        ),
                         duration: distanceToLoop / pixelsPerSecond,
                     },
-                    0
+                    0,
                 )
                     .fromTo(
                         item,
                         {
                             xPercent: snap(
-                                ((curX - distanceToLoop + totalWidth) / widths[i]) *
-                                    100
+                                ((curX - distanceToLoop + totalWidth) /
+                                    widths[i]) *
+                                    100,
                             ),
                         },
                         {
@@ -91,7 +100,7 @@ export function useHorizontalLoop() {
                                 pixelsPerSecond,
                             immediateRender: false,
                         },
-                        distanceToLoop / pixelsPerSecond
+                        distanceToLoop / pixelsPerSecond,
                     )
                     .add("label" + i, distanceToStart / pixelsPerSecond);
                 times[i] = distanceToStart / pixelsPerSecond;
@@ -111,14 +120,24 @@ export function useHorizontalLoop() {
                 vars.overwrite = true;
                 return tl.tweenTo(time, vars);
             }
-            (tl as gsap.core.Timeline & { next: (vars?: gsap.TweenVars) => void }).next =
-                (vars?: gsap.TweenVars) => toIndex(curIndex + 1, vars);
-            (tl as gsap.core.Timeline & { previous: (vars?: gsap.TweenVars) => void }).previous =
-                (vars?: gsap.TweenVars) => toIndex(curIndex - 1, vars);
-            (tl as gsap.core.Timeline & { current: () => number }).current = () =>
-                curIndex;
-            (tl as gsap.core.Timeline & { toIndex: (index: number, vars?: gsap.TweenVars) => void }).toIndex =
-                (index: number, vars?: gsap.TweenVars) => toIndex(index, vars);
+            (
+                tl as gsap.core.Timeline & {
+                    next: (vars?: gsap.TweenVars) => void;
+                }
+            ).next = (vars?: gsap.TweenVars) => toIndex(curIndex + 1, vars);
+            (
+                tl as gsap.core.Timeline & {
+                    previous: (vars?: gsap.TweenVars) => void;
+                }
+            ).previous = (vars?: gsap.TweenVars) => toIndex(curIndex - 1, vars);
+            (tl as gsap.core.Timeline & { current: () => number }).current =
+                () => curIndex;
+            (
+                tl as gsap.core.Timeline & {
+                    toIndex: (index: number, vars?: gsap.TweenVars) => void;
+                }
+            ).toIndex = (index: number, vars?: gsap.TweenVars) =>
+                toIndex(index, vars);
             (tl as gsap.core.Timeline & { times: number[] }).times = times;
             tl.progress(1, true).progress(0, true);
             if (config.reversed) {
@@ -127,6 +146,6 @@ export function useHorizontalLoop() {
             }
             return tl;
         },
-        []
+        [],
     );
 }

@@ -40,13 +40,55 @@ export const serviceSplash: Record<
 };
 
 export const initialServices: ServiceStatus[] = [
-    { id: "blog", name: "Blog Feed", description: "GitHub blog repo", status: "loading", metrics: [] },
-    { id: "github", name: "GitHub API", description: "Profile + repos", status: "loading", metrics: [] },
-    { id: "github-contrib", name: "GitHub Contributions", description: "Contributions feed", status: "loading", metrics: [] },
-    { id: "spotify-now", name: "Spotify Now Playing", description: "Playback state", status: "loading", metrics: [] },
-    { id: "spotify-top", name: "Spotify Top Items", description: "Top tracks + artists", status: "loading", metrics: [] },
-    { id: "redis", name: "Redis", description: "Cache + views", status: "loading", metrics: [] },
-    { id: "cloudinary", name: "Cloudinary", description: "Image storage", status: "loading", metrics: [] },
+    {
+        id: "blog",
+        name: "Blog Feed",
+        description: "GitHub blog repo",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "github",
+        name: "GitHub API",
+        description: "Profile + repos",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "github-contrib",
+        name: "GitHub Contributions",
+        description: "Contributions feed",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "spotify-now",
+        name: "Spotify Now Playing",
+        description: "Playback state",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "spotify-top",
+        name: "Spotify Top Items",
+        description: "Top tracks + artists",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "redis",
+        name: "Redis",
+        description: "Cache + views",
+        status: "loading",
+        metrics: [],
+    },
+    {
+        id: "cloudinary",
+        name: "Cloudinary",
+        description: "Image storage",
+        status: "loading",
+        metrics: [],
+    },
 ];
 
 const formatNumber = (value: number) =>
@@ -72,7 +114,7 @@ const formatDate = (value?: string) => {
 
 const sumRecentContributions = (
     contributions: Array<{ date?: string; count?: number }>,
-    days: number
+    days: number,
 ) => {
     const now = new Date();
     const start = new Date(now);
@@ -96,11 +138,17 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("/api/blog/public");
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "Blog feed request failed" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "Blog feed request failed",
+                    };
                 const posts = (await res.json()) as Array<{ slug: string }>;
                 return {
                     status: "ok",
-                    metrics: [{ label: "Posts", value: formatNumber(posts.length) }],
+                    metrics: [
+                        { label: "Posts", value: formatNumber(posts.length) },
+                    ],
                 };
             },
         },
@@ -111,7 +159,11 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("https://api.github.com/users/benz206");
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "GitHub API request failed" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "GitHub API request failed",
+                    };
                 const profile = (await res.json()) as {
                     public_repos?: number;
                     followers?: number;
@@ -120,9 +172,18 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "Repos", value: formatNumber(profile.public_repos ?? 0) },
-                        { label: "Followers", value: formatNumber(profile.followers ?? 0) },
-                        { label: "Following", value: formatNumber(profile.following ?? 0) },
+                        {
+                            label: "Repos",
+                            value: formatNumber(profile.public_repos ?? 0),
+                        },
+                        {
+                            label: "Followers",
+                            value: formatNumber(profile.followers ?? 0),
+                        },
+                        {
+                            label: "Following",
+                            value: formatNumber(profile.following ?? 0),
+                        },
                     ],
                 };
             },
@@ -133,10 +194,14 @@ export function buildServiceChecks(): ServiceDefinition[] {
             description: "Contributions feed",
             check: async () => {
                 const res = await fetch(
-                    "https://github-contributions-api.jogruber.de/v4/benz206"
+                    "https://github-contributions-api.jogruber.de/v4/benz206",
                 );
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "Contributions feed unavailable" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "Contributions feed unavailable",
+                    };
                 const data = (await res.json()) as {
                     total?: Record<string, number>;
                     contributions?: Array<{ date?: string; count?: number }>;
@@ -146,7 +211,10 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 const recent = sumRecentContributions(contributions, 30);
                 const yearTotal =
                     data.total?.[year] ??
-                    contributions.reduce((sum, day) => sum + (day.count ?? 0), 0);
+                    contributions.reduce(
+                        (sum, day) => sum + (day.count ?? 0),
+                        0,
+                    );
                 return {
                     status: "ok",
                     metrics: [
@@ -163,9 +231,17 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("/api/getCurrent/public");
                 if (res.status === 404)
-                    return { status: "ok", metrics: [{ label: "State", value: "Idle" }], detail: "No track" };
+                    return {
+                        status: "ok",
+                        metrics: [{ label: "State", value: "Idle" }],
+                        detail: "No track",
+                    };
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "Spotify playback unavailable" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "Spotify playback unavailable",
+                    };
                 const data = (await res.json()) as {
                     title?: string;
                     artist?: string;
@@ -175,7 +251,10 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: paused ? "degraded" : "ok",
                     metrics: [
-                        { label: "State", value: paused ? "Paused" : "Playing" },
+                        {
+                            label: "State",
+                            value: paused ? "Paused" : "Playing",
+                        },
                         { label: "Track", value: data.title ?? "Unknown" },
                         { label: "Artist", value: data.artist ?? "Unknown" },
                     ],
@@ -189,7 +268,11 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("/api/getTop/public");
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "Spotify top items unavailable" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "Spotify top items unavailable",
+                    };
                 const data = (await res.json()) as {
                     tracks?: Array<unknown>;
                     artists?: Array<unknown>;
@@ -198,9 +281,18 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "Top tracks", value: formatNumber(data.tracks?.length ?? 0) },
-                        { label: "Top artists", value: formatNumber(data.artists?.length ?? 0) },
-                        { label: "Updated", value: formatTime(data.updatedAt) ?? "Unknown" },
+                        {
+                            label: "Top tracks",
+                            value: formatNumber(data.tracks?.length ?? 0),
+                        },
+                        {
+                            label: "Top artists",
+                            value: formatNumber(data.artists?.length ?? 0),
+                        },
+                        {
+                            label: "Updated",
+                            value: formatTime(data.updatedAt) ?? "Unknown",
+                        },
                     ],
                     updatedAt: data.updatedAt,
                 };
@@ -213,13 +305,26 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("/api/views");
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "View counters unavailable" };
-                const data = (await res.json()) as { count?: number; daily?: number };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "View counters unavailable",
+                    };
+                const data = (await res.json()) as {
+                    count?: number;
+                    daily?: number;
+                };
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "All time", value: formatNumber(data.count ?? 0) },
-                        { label: "Today", value: formatNumber(data.daily ?? 0) },
+                        {
+                            label: "All time",
+                            value: formatNumber(data.count ?? 0),
+                        },
+                        {
+                            label: "Today",
+                            value: formatNumber(data.daily ?? 0),
+                        },
                     ],
                 };
             },
@@ -231,7 +336,11 @@ export function buildServiceChecks(): ServiceDefinition[] {
             check: async () => {
                 const res = await fetch("/api/status/cloudinary");
                 if (!res.ok)
-                    return { status: "down", metrics: [], detail: "Cloudinary search failed" };
+                    return {
+                        status: "down",
+                        metrics: [],
+                        detail: "Cloudinary search failed",
+                    };
                 const data = (await res.json()) as {
                     total?: number;
                     latestUploadedAt?: string;
@@ -240,7 +349,10 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "Images", value: formatNumber(data.total ?? 0) },
+                        {
+                            label: "Images",
+                            value: formatNumber(data.total ?? 0),
+                        },
                         { label: "Latest", value: latest ?? "Unknown" },
                     ],
                 };

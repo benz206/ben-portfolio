@@ -8,7 +8,7 @@ type ContributionWeek = GitHubContributionsDay[];
 
 const resolveContributionLevel = (
     day: GitHubContributionsDay,
-    maxCount: number
+    maxCount: number,
 ) => {
     if (typeof day.level === "number" && !Number.isNaN(day.level)) {
         return Math.min(Math.max(day.level, 0), 4);
@@ -50,7 +50,7 @@ export default function ContributionHeatmap({
             "linear-gradient(135deg, rgba(34,197,94,0.75) 0%, rgba(22,163,74,0.62) 100%)",
             "linear-gradient(135deg, rgba(22,163,74,0.92) 0%, rgba(4,120,87,0.82) 100%)",
         ],
-        []
+        [],
     );
 
     return (
@@ -72,9 +72,15 @@ export default function ContributionHeatmap({
                 }}
             >
                 {weeks.map((week, weekIndex) => (
-                    <div key={`week-${weekIndex}`} className="flex flex-col gap-1">
+                    <div
+                        key={`week-${weekIndex}`}
+                        className="flex flex-col gap-1"
+                    >
                         {week.map((day, dayIndex) => {
-                            const level = resolveContributionLevel(day, maxCount);
+                            const level = resolveContributionLevel(
+                                day,
+                                maxCount,
+                            );
                             const gradient = contributionLevelGradients[level];
                             const validatedGradient =
                                 gradient ?? contributionLevelGradients[0];
@@ -83,7 +89,7 @@ export default function ContributionHeatmap({
                             const label =
                                 day.date && !isPlaceholder
                                     ? `${day.count} contributions on ${new Date(
-                                          day.date
+                                          day.date,
                                       ).toLocaleDateString(undefined, {
                                           month: "short",
                                           day: "numeric",

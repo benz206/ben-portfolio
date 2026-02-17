@@ -39,7 +39,7 @@ export default function GithubPage() {
 
     const fetchWithCache = async <T,>(
         url: string,
-        cacheKey: string
+        cacheKey: string,
     ): Promise<T> => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
@@ -53,7 +53,7 @@ export default function GithubPage() {
         const data = (await response.json()) as T;
         localStorage.setItem(
             cacheKey,
-            JSON.stringify({ data, timestamp: Date.now() })
+            JSON.stringify({ data, timestamp: Date.now() }),
         );
         return data;
     };
@@ -64,15 +64,15 @@ export default function GithubPage() {
                 const [repos, profile, contributions] = await Promise.all([
                     fetchWithCache<GitHubRepo[]>(
                         "https://api.github.com/users/benz206/repos",
-                        "github_repos"
+                        "github_repos",
                     ),
                     fetchWithCache<GitHubUserResponse>(
                         "https://api.github.com/users/benz206",
-                        "github_profile"
+                        "github_profile",
                     ),
                     fetchWithCache<GitHubContributionsResponse>(
                         "https://github-contributions-api.jogruber.de/v4/benz206",
-                        "github_contributions"
+                        "github_contributions",
                     ),
                 ]);
 
@@ -92,7 +92,7 @@ export default function GithubPage() {
                     .sort(
                         (a, b) =>
                             new Date(a.date).valueOf() -
-                            new Date(b.date).valueOf()
+                            new Date(b.date).valueOf(),
                     );
                 const now = new Date();
                 const yearAgo = new Date(now);
@@ -103,11 +103,11 @@ export default function GithubPage() {
                 });
                 const lastYearCommits = recentDays.reduce(
                     (sum, day) => sum + (day.count ?? 0),
-                    0
+                    0,
                 );
                 const totalCommits = Object.values(contributions.total).reduce(
                     (sum, yearTotal) => sum + yearTotal,
-                    0
+                    0,
                 );
                 setStats({
                     commits: lastYearCommits,
@@ -117,7 +117,7 @@ export default function GithubPage() {
 
                 const maxCount = recentDays.reduce(
                     (max, day) => Math.max(max, day.count ?? 0),
-                    0
+                    0,
                 );
                 const paddedDays: GitHubContributionsDay[] = [...recentDays];
                 while (paddedDays.length % 7 !== 0) {

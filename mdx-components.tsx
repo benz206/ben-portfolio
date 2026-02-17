@@ -37,9 +37,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             </a>
         ),
         strong: ({ children }) => (
-            <strong className="font-bold bg-clip-text">
-                {children}
-            </strong>
+            <strong className="font-bold bg-clip-text">{children}</strong>
         ),
         em: ({ children }) => <em className="italic">{children}</em>,
         del: ({ children }) => (

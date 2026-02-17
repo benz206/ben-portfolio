@@ -94,7 +94,7 @@ export default function Golden({ people }: GoldenProps) {
     const renderPerson = (
         person: GoldenPerson,
         index: number,
-        rowOffset: number = 0
+        rowOffset: number = 0,
     ) => {
         const actualIndex = index + rowOffset;
         const isHovered = hoveredIndex === actualIndex;
@@ -187,8 +187,8 @@ export default function Golden({ people }: GoldenProps) {
                                         renderPerson(
                                             person,
                                             index,
-                                            rowOffsets[rowIndex] || 0
-                                        )
+                                            rowOffsets[rowIndex] || 0,
+                                        ),
                                     )}
                                 </div>
                             ))}

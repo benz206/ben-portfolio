@@ -24,21 +24,21 @@ export async function GET() {
             typeof result.total_count === "number"
                 ? result.total_count
                 : Array.isArray(result.resources)
-                ? result.resources.length
-                : 0;
+                  ? result.resources.length
+                  : 0;
         const latest =
             Array.isArray(result.resources) && result.resources.length > 0
-                ? result.resources[0]?.uploaded_at ??
-                  result.resources[0]?.created_at
+                ? (result.resources[0]?.uploaded_at ??
+                  result.resources[0]?.created_at)
                 : null;
         return NextResponse.json(
             { total, latestUploadedAt: latest },
-            { headers: PUBLIC_CACHE_HEADERS }
+            { headers: PUBLIC_CACHE_HEADERS },
         );
     } catch (error) {
         return NextResponse.json(
             { error: "Failed to fetch Cloudinary status" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

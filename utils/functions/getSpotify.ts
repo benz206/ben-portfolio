@@ -30,7 +30,7 @@ export default async function getSpotifyAccessToken() {
     } catch {}
 
     const authString = Buffer.from(
-        `${SPOTIFY_CLIENTID}:${SPOTIFY_SECRET}`
+        `${SPOTIFY_CLIENTID}:${SPOTIFY_SECRET}`,
     ).toString("base64");
 
     const tokenResponse = await fetch(
@@ -45,7 +45,7 @@ export default async function getSpotifyAccessToken() {
                 grant_type: "refresh_token",
                 refresh_token: SPOTIFY_REFRESHTOKEN || "",
             }),
-        }
+        },
     );
 
     const tokenData = (await tokenResponse.json()) as SpotifyTokenResponse;

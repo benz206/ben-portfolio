@@ -38,7 +38,7 @@ type TopResponse = {
 async function fetchTop<T>(
     accessToken: string,
     type: "tracks" | "artists",
-    limit: number
+    limit: number,
 ): Promise<SpotifyPaging<T>> {
     const url = new URL(`https://api.spotify.com/v1/me/top/${type}`);
     url.searchParams.set("time_range", term);
@@ -50,7 +50,7 @@ async function fetchTop<T>(
     if (!res.ok) {
         const errorMessage = await res.text().catch(() => "");
         throw new Error(
-            `Spotify top ${type} failed: ${res.status} ${errorMessage}`.trim()
+            `Spotify top ${type} failed: ${res.status} ${errorMessage}`.trim(),
         );
     }
     return (await res.json()) as SpotifyPaging<T>;
@@ -109,13 +109,13 @@ export async function GET(_req: NextRequest) {
                 tracksBase.map(async (t) => ({
                     ...t,
                     color: await getDominantColorFromImageUrl(t.image),
-                }))
+                })),
             ),
             Promise.all(
                 artistsBase.map(async (a) => ({
                     ...a,
                     color: await getDominantColorFromImageUrl(a.image),
-                }))
+                })),
             ),
         ]);
 
@@ -147,7 +147,7 @@ export async function GET(_req: NextRequest) {
 
         return NextResponse.json(
             { error: "Failed to fetch Spotify top items" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

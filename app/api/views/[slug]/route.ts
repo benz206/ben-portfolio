@@ -21,7 +21,7 @@ type Params = {
 
 export async function GET(
     _request: Request,
-    context: { params: Promise<Params> }
+    context: { params: Promise<Params> },
 ) {
     try {
         const params = await context.params;
@@ -29,7 +29,7 @@ export async function GET(
         if (!slug) {
             return NextResponse.json(
                 { count: 0 },
-                { headers: NO_STORE_HEADERS }
+                { headers: NO_STORE_HEADERS },
             );
         }
         const client = await getRedisClient();
@@ -39,14 +39,14 @@ export async function GET(
         console.error("Failed to fetch post views", error);
         return NextResponse.json(
             { error: "Failed to fetch views" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }
 
 export async function POST(
     _request: Request,
-    context: { params: Promise<Params> }
+    context: { params: Promise<Params> },
 ) {
     try {
         const params = await context.params;
@@ -54,7 +54,7 @@ export async function POST(
         if (!slug) {
             return NextResponse.json(
                 { count: 0 },
-                { headers: NO_STORE_HEADERS }
+                { headers: NO_STORE_HEADERS },
             );
         }
         const client = await getRedisClient();
@@ -64,7 +64,7 @@ export async function POST(
         console.error("Failed to increment post views", error);
         return NextResponse.json(
             { error: "Failed to increment views" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

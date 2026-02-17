@@ -23,7 +23,7 @@ export function useGoldenRows(people: GoldenPerson[], rowsCount = 3) {
     const shuffledPeople = useMemo(
         () =>
             [...people].sort((a, b) => hashString(a.name) - hashString(b.name)),
-        [people]
+        [people],
     );
 
     const rows = useMemo(() => {
@@ -43,9 +43,9 @@ export function useGoldenRows(people: GoldenPerson[], rowsCount = 3) {
     const rowOffsets = useMemo(
         () =>
             rows.map((_, idx) =>
-                rows.slice(0, idx).reduce((acc, r) => acc + r.length, 0)
+                rows.slice(0, idx).reduce((acc, r) => acc + r.length, 0),
             ),
-        [rows]
+        [rows],
     );
 
     return { rows, rowOffsets };

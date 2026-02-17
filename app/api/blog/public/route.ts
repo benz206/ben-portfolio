@@ -36,7 +36,8 @@ export async function GET() {
         files
             .filter(
                 (file: any) =>
-                    typeof file?.name === "string" && file.name.endsWith(".mdx")
+                    typeof file?.name === "string" &&
+                    file.name.endsWith(".mdx"),
             )
             .map(async (file: any) => {
                 const fileResponse = await octokit.rest.repos.getContent({
@@ -47,7 +48,7 @@ export async function GET() {
 
                 const fileContent = Buffer.from(
                     (fileResponse.data as any).content,
-                    "base64"
+                    "base64",
                 ).toString("utf8");
                 const { data } = matter(fileContent);
 
@@ -72,7 +73,7 @@ export async function GET() {
                             : undefined,
                     tags,
                 };
-            })
+            }),
     );
 
     posts.sort((a, b) => a.title.localeCompare(b.title));

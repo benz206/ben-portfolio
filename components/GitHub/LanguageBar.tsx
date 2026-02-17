@@ -36,7 +36,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
 
     const fetchWithCache = async (
         url: string,
-        cacheKey: string
+        cacheKey: string,
     ): Promise<Language> => {
         const cachedData = localStorage.getItem(cacheKey);
         if (cachedData) {
@@ -55,7 +55,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
             JSON.stringify({
                 data,
                 timestamp: new Date().getTime(),
-            })
+            }),
         );
 
         return data;
@@ -66,7 +66,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
             try {
                 const data = await fetchWithCache(
                     `https://api.github.com/repos/benz206/${repo}/languages`,
-                    `github_languages_${repo}`
+                    `github_languages_${repo}`,
                 );
                 setLanguages(data);
             } catch (error) {

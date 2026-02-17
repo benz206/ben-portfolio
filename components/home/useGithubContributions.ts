@@ -41,7 +41,7 @@ export function useGithubContributions(): ContributionState {
             if (typeof window !== "undefined") {
                 localStorage.setItem(
                     cacheKey,
-                    JSON.stringify({ data, timestamp: Date.now() })
+                    JSON.stringify({ data, timestamp: Date.now() }),
                 );
             }
             return data;
@@ -51,7 +51,7 @@ export function useGithubContributions(): ContributionState {
             try {
                 const contributions = await fetchWithCache(
                     "https://github-contributions-api.jogruber.de/v4/benz206",
-                    "github_contributions_home"
+                    "github_contributions_home",
                 );
 
                 const rawDays: ContributionDay[] =
@@ -90,7 +90,7 @@ export function useGithubContributions(): ContributionState {
                             date: key,
                             count,
                             level: 0,
-                        }
+                        },
                     );
                 }
 
@@ -135,7 +135,7 @@ export function useGithubContributions(): ContributionState {
             const firstRealDay = week.find(
                 (day) =>
                     !day.date.startsWith("placeholder-start") &&
-                    !day.date.startsWith("placeholder-end")
+                    !day.date.startsWith("placeholder-end"),
             );
             if (!firstRealDay) return;
 

@@ -16,7 +16,7 @@ export async function GET() {
         console.error("Presence GET failed", error);
         return NextResponse.json(
             { error: "Failed to fetch presence" },
-            { status: 500, headers: NO_STORE }
+            { status: 500, headers: NO_STORE },
         );
     }
 }
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         if (!sessionId || typeof sessionId !== "string") {
             return NextResponse.json(
                 { error: "Missing sessionId" },
-                { status: 400, headers: NO_STORE }
+                { status: 400, headers: NO_STORE },
             );
         }
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         console.error("Presence POST failed", error);
         return NextResponse.json(
             { error: "Failed to update presence" },
-            { status: 500, headers: NO_STORE }
+            { status: 500, headers: NO_STORE },
         );
     }
 }

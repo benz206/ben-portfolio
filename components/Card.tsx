@@ -65,7 +65,7 @@ export default function Card({
         cardSizeClasses[size],
         cardRadiusClasses[radius],
         ambient && "relative overflow-hidden isolate",
-        className
+        className,
     );
 
     if (motionProps) {

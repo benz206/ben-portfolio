@@ -18,9 +18,8 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
     useEffect(() => {
         const loadCodeBlock = async () => {
             try {
-                const { CodeBlock: CodeBlockComponent } = await import(
-                    "react-code-block"
-                );
+                const { CodeBlock: CodeBlockComponent } =
+                    await import("react-code-block");
                 setCodeBlock(() => CodeBlockComponent);
             } catch (error) {
                 console.error("Failed to load CodeBlock component:", error);

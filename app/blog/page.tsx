@@ -38,7 +38,7 @@ function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
 }
 
 async function fetchViewCounts(
-    slugs: string[]
+    slugs: string[],
 ): Promise<Record<string, number>> {
     const viewCounts: Record<string, number> = {};
     if (slugs.length === 0) return viewCounts;
@@ -80,7 +80,7 @@ export default async function BlogPage() {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
-                }
+                },
             ),
             updatedFormatted: new Date(post.updated).toLocaleDateString(
                 "en-CA",
@@ -88,7 +88,7 @@ export default async function BlogPage() {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
-                }
+                },
             ),
             ambientVariant,
             views: viewCounts[post.slug] || 0,
@@ -226,7 +226,7 @@ export default async function BlogPage() {
                                                                             tag
                                                                         }
                                                                     />
-                                                                )
+                                                                ),
                                                             )}
                                                         </div>
                                                     ) : (

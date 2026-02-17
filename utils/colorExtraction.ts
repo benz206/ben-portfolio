@@ -12,7 +12,7 @@ type ColorExtractionOptions = {
 
 export async function getDominantColorFromImageUrl(
     imageUrl?: string,
-    options: ColorExtractionOptions = {}
+    options: ColorExtractionOptions = {},
 ): Promise<RgbColor> {
     const fallbackColor = options.fallbackColor ?? DEFAULT_FALLBACK_COLOR;
     const resize = options.resize ?? 72;

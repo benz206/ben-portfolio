@@ -37,13 +37,13 @@ export async function GET() {
                 count,
                 daily: dailyCount,
             },
-            { headers: PUBLIC_CACHE_HEADERS }
+            { headers: PUBLIC_CACHE_HEADERS },
         );
     } catch (error) {
         console.error("Failed to fetch global views", error);
         return NextResponse.json(
             { error: "Failed to fetch views" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }
@@ -85,7 +85,7 @@ return redis.call("INCR", dailyKey)
             {
                 keys: [DAILY_KEY, DAILY_DATE_KEY],
                 arguments: [today, String(nextMidnight)],
-            }
+            },
         );
 
         const dailyCount =
@@ -94,7 +94,7 @@ return redis.call("INCR", dailyKey)
                 : toNumber(
                       typeof dailyResult === "string"
                           ? dailyResult
-                          : String(dailyResult)
+                          : String(dailyResult),
                   );
 
         return NextResponse.json(
@@ -102,13 +102,13 @@ return redis.call("INCR", dailyKey)
                 count,
                 daily: dailyCount,
             },
-            { headers: NO_STORE_HEADERS }
+            { headers: NO_STORE_HEADERS },
         );
     } catch (error) {
         console.error("Failed to increment global views", error);
         return NextResponse.json(
             { error: "Failed to increment views" },
-            { status: 500, headers: NO_STORE_HEADERS }
+            { status: 500, headers: NO_STORE_HEADERS },
         );
     }
 }

@@ -74,7 +74,8 @@
 .swirl-bg {
     position: absolute;
     inset: -20%;
-    background: radial-gradient(
+    background:
+        radial-gradient(
             circle at 12% 18%,
             rgba(59, 7, 100, 0.55),
             transparent 52%

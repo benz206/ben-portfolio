@@ -11,7 +11,7 @@ export enum SortOption {
 const sortRepositories = (
     repos: GitHubRepo[],
     sortBy: SortOption,
-    sortOrder: "asc" | "desc"
+    sortOrder: "asc" | "desc",
 ) => {
     return [...repos].sort((a, b) => {
         let aValue: string | number = 0;
@@ -54,7 +54,7 @@ export function useRepoFilterSort(repos: GitHubRepo[]) {
 
     const filteredRepoData = useMemo(() => {
         return sortRepositories(repos, sortBy, sortOrder).filter((repo) =>
-            repo.name.toLowerCase().includes(searchTerm.toLowerCase())
+            repo.name.toLowerCase().includes(searchTerm.toLowerCase()),
         );
     }, [repos, sortBy, sortOrder, searchTerm]);
 
