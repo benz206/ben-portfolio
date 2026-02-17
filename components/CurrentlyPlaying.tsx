@@ -1,68 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
-
-type SpotifyTrack = {
-    title: string;
-    artist: string;
-    album: string;
-    color: [number, number, number];
-    duration: string;
-    progress: string;
-    paused: string;
-    volume: string;
-    shuffle: boolean;
-    loop: string;
-    albumArt?: string;
-};
+import { useCurrentlyPlaying } from "./useCurrentlyPlaying";
 
 export default function CurrentlyPlaying() {
-    const [track, setTrack] = useState<SpotifyTrack | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [currentProgress, setCurrentProgress] = useState(0);
-
-    const fetchCurrentlyPlaying = async () => {
-        try {
-            const response = await fetch("/api/getCurrent/public");
-            if (response.ok) {
-                const data = await response.json();
-                setTrack(data);
-                setCurrentProgress(parseInt(data.progress));
-                setError(null);
-            } else {
-                setError("Not currently playing");
-            }
-        } catch (err) {
-            setError("Failed to fetch track");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchCurrentlyPlaying();
-        const interval = setInterval(fetchCurrentlyPlaying, 30000);
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        if (!track || track.paused === "true") return;
-
-        const progressInterval = setInterval(() => {
-            setCurrentProgress((prev) => {
-                const newProgress = prev + 1;
-                const duration = parseInt(track.duration);
-                return newProgress > duration ? duration : newProgress;
-            });
-        }, 5000);
-
-        return () => clearInterval(progressInterval);
-    }, [track]);
+    const { track, isLoading, error, currentProgress } = useCurrentlyPlaying();
 
     if (isLoading) {
         return (
@@ -80,7 +25,7 @@ export default function CurrentlyPlaying() {
                 }}
             >
                 <div className="relative z-10 flex items-center p-0.5 m-4 ml-2 space-x-6 w-full">
-                    <div className="overflow-hidden flex-shrink-0 h-full rounded-xl shadow-xl max-w-36 aspect-square">
+                    <div className="overflow-hidden shrink-0 h-full rounded-xl shadow-xl max-w-36 aspect-square">
                         <div className="w-full h-full animate-pulse">
                             <div className="flex justify-center items-center w-full h-full">
                                 <FaSpotify className="w-16 h-16 animate-pulse text-white/40" />
@@ -90,7 +35,7 @@ export default function CurrentlyPlaying() {
 
                     <div className="flex flex-col flex-1 justify-center min-w-0">
                         <div className="flex items-center mb-2 space-x-2">
-                            <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-400 animate-pulse" />
+                            <FaSpotify className="shrink-0 w-4 h-4 text-green-400 animate-pulse" />
                             <div className="w-32 h-3 rounded animate-pulse bg-white/20"></div>
                         </div>
 
@@ -164,7 +109,7 @@ export default function CurrentlyPlaying() {
                 </div>
                 <div className="flex flex-col flex-1 justify-center min-w-0">
                     <div className="flex items-center mb-2 space-x-2">
-                        <FaSpotify className="flex-shrink-0 w-4 h-4 text-green-500" />
+                        <FaSpotify className="shrink-0 w-4 h-4 text-green-500" />
                         <span className="text-xs font-medium truncate text-slate-400">
                             {track.paused === "true"
                                 ? "Last Listened To"
