@@ -1,13 +1,31 @@
 "use client";
 
 import { useCopyToClipboard } from "react-use";
-import { themes } from "prism-react-renderer";
+import { PrismTheme } from "prism-react-renderer";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 type CodeBlockProps = {
     code: string;
     language: string;
+};
+
+const catppuccinMochaTheme: PrismTheme = {
+    plain: {
+        color: "#cdd6f4",
+        backgroundColor: "#1e1e2e",
+    },
+    styles: [
+        { types: ["comment"], style: { color: "#6c7086" } },
+        { types: ["string", "char", "inserted"], style: { color: "#a6e3a1" } },
+        { types: ["number", "constant", "builtin", "boolean"], style: { color: "#fab387" } },
+        { types: ["function", "class-name"], style: { color: "#89b4fa" } },
+        { types: ["keyword", "operator"], style: { color: "#cba6f7" } },
+        { types: ["punctuation"], style: { color: "#bac2de" } },
+        { types: ["property", "variable"], style: { color: "#f9e2af" } },
+        { types: ["tag", "important", "deleted"], style: { color: "#f38ba8" } },
+        { types: ["attr-name", "selector"], style: { color: "#94e2d5" } },
+    ],
 };
 
 export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
@@ -49,7 +67,7 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
     }
 
     return (
-        <CodeBlock code={code} language={language} theme={themes.vsDark}>
+        <CodeBlock code={code} language={language} theme={catppuccinMochaTheme}>
             <motion.div className="relative my-2">
                 <CodeBlock.Code className="bg-[#242424] lg:!p-6 !px-5 !py-4 rounded-xl shadow-lg overflow-auto">
                     <div className="table-row">
