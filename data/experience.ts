@@ -59,7 +59,7 @@ export const experienceJobs: ExperienceJob[] = [
         title: "Software Developer",
         company: "WAT.ai - AI Sentiment Pulse",
         location: "Waterloo",
-        period: "May 2025 — Present",
+        period: "May 2025 — Dec 2025",
         description:
             "• Created a webscraper using Python to extract and score 100+ articles on Yahoo News for overall sentiments",
         image: {
