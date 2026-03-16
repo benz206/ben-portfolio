@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import MdxLayout from "@/components/MdxLayout";
 import PostViewCounter from "@/components/PostViewCounter";
 import { getMDXComponents } from "@/mdx-components";
@@ -10,6 +11,45 @@ export async function generateStaticParams() {
 }
 
 export const revalidate = 3600;
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await fetchBlogPost(slug);
+
+    if (!post) {
+        return {
+            title: "Blog - Ben's Portfolio",
+            alternates: {
+                canonical: `/blog/${slug}`,
+            },
+        };
+    }
+
+    return {
+        title: `${post.metadata.title} - Ben's Portfolio`,
+        description: post.metadata.description,
+        alternates: {
+            canonical: `/blog/${slug}`,
+        },
+        openGraph: {
+            title: post.metadata.title,
+            description: post.metadata.description,
+            url: `/blog/${slug}`,
+            type: "article",
+            publishedTime: post.metadata.created,
+            modifiedTime: post.metadata.updated,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.metadata.title,
+            description: post.metadata.description,
+        },
+    };
+}
 
 export default async function BlogPostPage({
     params,

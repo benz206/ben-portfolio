@@ -1,4 +1,5 @@
 // Removed animations to avoid client-only framer-motion in server component
+import type { Metadata } from "next";
 import Link from "next/link";
 import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
@@ -6,6 +7,25 @@ import BlogViewCounter from "@/components/BlogViewCounter";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import { getRedisClient } from "@/utils/redis";
 import { fetchBlogPosts, type RawBlogMetadata } from "@/utils/blog";
+
+export const metadata: Metadata = {
+    title: "Blog - Ben's Portfolio",
+    description: "Blog posts about my projects and experiences.",
+    alternates: {
+        canonical: "/blog",
+    },
+    openGraph: {
+        title: "Blog - Ben's Portfolio",
+        description: "Blog posts about my projects and experiences.",
+        url: "/blog",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Blog - Ben's Portfolio",
+        description: "Blog posts about my projects and experiences.",
+    },
+};
 
 const ambientVariants: AmbientVariant[] = [
     "violet",

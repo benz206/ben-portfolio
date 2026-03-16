@@ -6,11 +6,16 @@ import ViewCounter from "@/components/ViewCounter";
 import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
 
 export const metadata: Metadata = {
+    metadataBase: new URL("https://bzhou.ca"),
     title: "Ben's Portfolio",
     description: "Ben's Portfolio.",
+    alternates: {
+        canonical: "/",
+    },
     openGraph: {
         title: "Ben's Portfolio",
         description: "Ben's Portfolio.",
+        siteName: "Ben's Portfolio",
         images: [
             {
                 url: "https://i.imgur.com/6KdqAaf.png",
@@ -18,6 +23,20 @@ export const metadata: Metadata = {
         ],
         type: "website",
         url: "https://bzhou.ca",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Ben's Portfolio",
+        description: "Ben's Portfolio.",
+        images: ["https://i.imgur.com/6KdqAaf.png"],
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+        },
     },
     other: {
         "theme-color": "#339ccd",
