@@ -1,5 +1,1 @@
-@reference "tailwindcss";
-
-.mdxParagraph {
-    @apply my-3 text-xs font-light leading-5 lg:text-base;
-}
+/* MDX article styles are handled via inline Tailwind in mdx-components.tsx */

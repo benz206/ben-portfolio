@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FiEye } from "react-icons/fi";
+import { cn } from "@/utils/cn";
 
 type Props = {
     slug: string;
@@ -37,7 +38,7 @@ export default function BlogViewCounter({
 
     const formatted = new Intl.NumberFormat().format(views);
     return (
-        <div className={`flex items-center gap-1.5 ${className || ""}`}>
+        <div className={cn("flex items-center gap-1.5", className)}>
             <FiEye className="w-4 h-4 text-white/50" />
             <span className="text-sm text-white/50">{formatted}</span>
         </div>

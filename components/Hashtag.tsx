@@ -1,8 +1,7 @@
 export default function Hashtag({ hashtag }: { hashtag: string }) {
-    // TODO: Add a funny hashtag search function
     return (
-        <div className="inline-block px-1 underline border-[#ececec] rounded-lg">
+        <span className="inline-flex items-center rounded-full bg-white/[0.08] px-2.5 py-1 text-xs text-white/50">
             #{hashtag}
-        </div>
+        </span>
     );
 }

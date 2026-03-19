@@ -1,12 +1,10 @@
-// Removed animations to avoid client-only framer-motion in server component
 import type { Metadata } from "next";
 import Link from "next/link";
-import Card from "@/components/Card";
 import Hashtag from "@/components/Hashtag";
 import BlogViewCounter from "@/components/BlogViewCounter";
-import type { AmbientVariant } from "@/components/AmbientGradient";
+import { AmbientGradient } from "@/components/AmbientGradient";
 import { getRedisClient } from "@/utils/redis";
-import { fetchBlogPosts, type RawBlogMetadata } from "@/utils/blog";
+import { fetchBlogPosts } from "@/utils/blog";
 
 export const metadata: Metadata = {
     title: "Blog - Ben's Portfolio",
@@ -26,36 +24,6 @@ export const metadata: Metadata = {
         description: "Blog posts about my projects and experiences.",
     },
 };
-
-const ambientVariants: AmbientVariant[] = [
-    "violet",
-    "blue",
-    "sunset",
-    "emerald",
-    "tangerine",
-    "crimson",
-    "amber",
-    "aqua",
-    "magenta",
-    "slate",
-    "indigo",
-    "rose",
-];
-
-function hashString(value: string) {
-    let hash = 0;
-    for (let i = 0; i < value.length; i += 1) {
-        hash = (hash << 5) - hash + value.charCodeAt(i);
-        hash |= 0;
-    }
-    return Math.abs(hash);
-}
-
-function selectAmbientVariant(post: RawBlogMetadata): AmbientVariant {
-    const seed = `${post.slug}|${post.title}|${post.tags.join(",")}`;
-    const hash = hashString(seed);
-    return ambientVariants[hash % ambientVariants.length];
-}
 
 async function fetchViewCounts(
     slugs: string[],
@@ -90,152 +58,157 @@ export default async function BlogPage() {
     const slugs = posts.map((post) => post.slug);
     const viewCounts = await fetchViewCounts(slugs);
 
-    const enhancedPosts = posts.map((post) => {
-        const ambientVariant = selectAmbientVariant(post);
-        return {
-            ...post,
-            createdFormatted: new Date(post.created).toLocaleDateString(
-                "en-CA",
-                {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                },
-            ),
-            updatedFormatted: new Date(post.updated).toLocaleDateString(
-                "en-CA",
-                {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                },
-            ),
-            ambientVariant,
-            views: viewCounts[post.slug] || 0,
-        };
-    });
+    const enhancedPosts = posts.map((post) => ({
+        ...post,
+        createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        }),
+        updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        }),
+        views: viewCounts[post.slug] || 0,
+    }));
 
     const [featuredPost, ...restPosts] = enhancedPosts;
 
     return (
-        <section className="relative overflow-hidden bg-[#050506] text-white">
-            <div className="absolute inset-0 bg-noir-gradient" />
-            <div className="absolute inset-0 opacity-70 bg-noir-radial" />
-            <div className="relative mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
-                <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-                    <div className="space-y-3">
-                        <span className="text-xs uppercase tracking-[0.4em] text-white/40">
-                            My thoughts and opinions
-                        </span>
-                        <h1 className="text-4xl font-semibold lg:text-5xl">
-                            Blog
-                        </h1>
-                    </div>
-                    <p className="max-w-md text-sm text-white/60 sm:text-right">
-                        Blog posts about my projects and experiences.
+        <div className="relative min-h-screen overflow-hidden bg-[#050506] text-white">
+            {/* Background noir gradient */}
+            <div className="pointer-events-none absolute inset-0 bg-noir-gradient" />
+            <div className="pointer-events-none absolute inset-0 opacity-50 bg-noir-radial" />
+
+            {/* Per-post ambient splash behind the featured post area */}
+            {featuredPost && (
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] opacity-[0.14]">
+                    <AmbientGradient seed={featuredPost.slug} />
+                </div>
+            )}
+
+            <div className="relative mx-auto max-w-[700px] px-6 pb-32 pt-16 lg:pt-24">
+                {/* Header */}
+                <div className="mb-16 space-y-3">
+                    <span className="text-xs uppercase tracking-[0.4em] text-white/35">
+                        My thoughts and opinions
+                    </span>
+                    <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
+                        Blog
+                    </h1>
+                    <p className="text-base text-white/50">
+                        Writing about projects, ideas, and things I find
+                        interesting.
                     </p>
                 </div>
+
                 {!featuredPost ? (
-                    <div className="flex flex-col justify-center items-center h-48 text-center">
-                        <p className="text-lg font-semibold text-white/70">
+                    <div className="flex flex-col items-center justify-center py-24 text-center">
+                        <p className="text-lg font-semibold text-white/60">
                             No posts yet, but the notebook is open.
                         </p>
-                        <p className="mt-2 text-sm text-white/50">
+                        <p className="mt-2 text-sm text-white/40">
                             Check back soon for fresh build logs and deep dives.
                         </p>
                     </div>
                 ) : (
-                    <>
+                    <div className="space-y-16">
+                        {/* Featured post */}
                         <Link
                             href={`/blog/${featuredPost.slug}`}
-                            className="block group"
+                            className="group block"
                         >
-                            <Card
-                                variant="minimal"
-                                ambient
-                                ambientClassName="opacity-30 group-hover:opacity-45 transition-opacity"
-                                className="flex flex-col gap-8 p-10 transition-transform group-hover:-translate-y-1 md:flex-row md:items-stretch md:justify-between md:p-12"
-                                ambientVariant={featuredPost.ambientVariant}
-                            >
-                                <div className="space-y-5 md:max-w-2xl">
-                                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/50">
-                                        <span>Latest</span>
-                                        <span className="flex-1 h-px bg-white/10" />
-                                    </div>
-                                    <h2 className="text-3xl font-semibold leading-snug transition-colors group-hover:text-white md:text-[2.5rem]">
-                                        {featuredPost.title}
-                                    </h2>
-                                    <p className="text-base text-white/70">
-                                        {featuredPost.description ||
-                                            "Tap in for the full story."}
+                            <article className="space-y-3">
+                                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/35">
+                                    <span>Latest</span>
+                                    <span className="h-px flex-1 bg-white/10" />
+                                </div>
+                                <h2 className="text-2xl font-bold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
+                                    {featuredPost.title}
+                                </h2>
+                                {featuredPost.description && (
+                                    <p className="text-base leading-relaxed text-white/55">
+                                        {featuredPost.description}
                                     </p>
-                                </div>
-                                <div className="flex flex-col gap-4 items-start md:items-end md:justify-start">
-                                    <time
-                                        className="text-sm text-white/50"
-                                        dateTime={featuredPost.updated}
-                                    >
-                                        Updated {featuredPost.updatedFormatted}
+                                )}
+                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-sm text-white/40">
+                                    <time dateTime={featuredPost.updated}>
+                                        {featuredPost.updatedFormatted}
                                     </time>
-                                    <div className="flex flex-wrap gap-2 justify-end items-center mt-auto w-full">
-                                        <div className="flex flex-wrap gap-2 justify-end">
-                                            {featuredPost.tags.map((tag) => (
-                                                <Hashtag
-                                                    key={tag}
-                                                    hashtag={tag}
-                                                />
-                                            ))}
-                                        </div>
-                                        <BlogViewCounter
-                                            slug={featuredPost.slug}
-                                            initialViews={featuredPost.views}
-                                        />
-                                    </div>
+                                    <span aria-hidden="true">·</span>
+                                    <BlogViewCounter
+                                        slug={featuredPost.slug}
+                                        initialViews={featuredPost.views}
+                                    />
+                                    {featuredPost.tags.length > 0 && (
+                                        <>
+                                            <span aria-hidden="true">·</span>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {featuredPost.tags.map(
+                                                    (tag) => (
+                                                        <Hashtag
+                                                            key={tag}
+                                                            hashtag={tag}
+                                                        />
+                                                    ),
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
-                            </Card>
+                            </article>
                         </Link>
+
+                        {/* Archive */}
                         {restPosts.length > 0 && (
-                            <div className="space-y-10">
-                                <div className="flex justify-between items-center text-white/60">
-                                    <h3 className="text-sm uppercase tracking-[0.35em]">
-                                        Archive
-                                    </h3>
-                                    <span className="w-24 h-px bg-white/10" />
+                            <div>
+                                <div className="mb-8 flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/35">
+                                    <span>Archive</span>
+                                    <span className="h-px flex-1 bg-white/10" />
                                 </div>
-                                <div className="grid gap-8 md:grid-cols-2">
-                                    {restPosts.map((post) => (
-                                        <Link
-                                            key={post.slug}
-                                            href={`/blog/${post.slug}`}
-                                            className="block group"
-                                        >
-                                            <Card
-                                                variant="minimal"
-                                                ambient
-                                                ambientClassName="opacity-20 group-hover:opacity-40 transition-opacity"
-                                                className="flex flex-col gap-6 p-8 h-full transition-transform group-hover:-translate-y-1"
-                                                ambientVariant={
-                                                    post.ambientVariant
-                                                }
+
+                                <div>
+                                    {restPosts.map((post, i) => (
+                                        <div key={post.slug}>
+                                            {i > 0 && (
+                                                <div className="h-px bg-white/[0.06]" />
+                                            )}
+                                            <Link
+                                                href={`/blog/${post.slug}`}
+                                                className="group block py-8"
                                             >
-                                                <div className="flex-1 space-y-3">
-                                                    <time
-                                                        className="text-xs uppercase tracking-[0.2em] text-white/40"
-                                                        dateTime={post.updated}
-                                                    >
-                                                        {post.updatedFormatted}
-                                                    </time>
-                                                    <h4 className="text-2xl font-semibold text-white transition-colors group-hover:text-blue-100">
+                                                <article className="space-y-2">
+                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/35">
+                                                        <time
+                                                            dateTime={
+                                                                post.updated
+                                                            }
+                                                        >
+                                                            {
+                                                                post.updatedFormatted
+                                                            }
+                                                        </time>
+                                                        <span aria-hidden="true">
+                                                            ·
+                                                        </span>
+                                                        <BlogViewCounter
+                                                            slug={post.slug}
+                                                            initialViews={
+                                                                post.views
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <h3 className="text-lg font-semibold leading-snug transition-colors group-hover:text-white/70">
                                                         {post.title}
-                                                    </h4>
-                                                    <p className="text-sm text-white/60">
-                                                        {post.description ||
-                                                            "Read the full entry."}
-                                                    </p>
-                                                </div>
-                                                <div className="flex flex-wrap gap-2 justify-between items-center">
-                                                    {post.tags.length > 0 ? (
-                                                        <div className="flex flex-wrap gap-2 text-sm text-white/60">
+                                                    </h3>
+                                                    {post.description && (
+                                                        <p className="line-clamp-2 text-sm leading-relaxed text-white/50">
+                                                            {post.description}
+                                                        </p>
+                                                    )}
+                                                    {post.tags.length > 0 && (
+                                                        <div className="flex flex-wrap gap-1.5 pt-1">
                                                             {post.tags.map(
                                                                 (tag) => (
                                                                     <Hashtag
@@ -249,25 +222,17 @@ export default async function BlogPage() {
                                                                 ),
                                                             )}
                                                         </div>
-                                                    ) : (
-                                                        <div />
                                                     )}
-                                                    <BlogViewCounter
-                                                        slug={post.slug}
-                                                        initialViews={
-                                                            post.views
-                                                        }
-                                                    />
-                                                </div>
-                                            </Card>
-                                        </Link>
+                                                </article>
+                                            </Link>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
                         )}
-                    </>
+                    </div>
                 )}
             </div>
-        </section>
+        </div>
     );
 }

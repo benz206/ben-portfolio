@@ -4,6 +4,7 @@ import PostViewCounter from "@/components/PostViewCounter";
 import { getMDXComponents } from "@/mdx-components";
 import { notFound } from "next/navigation";
 import { fetchBlogPost, fetchBlogSlugs } from "@/utils/blog";
+import { extractHeadings } from "@/utils/slugify";
 
 export async function generateStaticParams() {
     const slugs = await fetchBlogSlugs();
@@ -60,6 +61,7 @@ export default async function BlogPostPage({
     const post = await fetchBlogPost(slug);
     if (!post) notFound();
     const { metadata, content, createdDate, updatedDate } = post;
+    const headings = extractHeadings(content);
     // Not a React hook, just a mapper, safe to call here
     const components = getMDXComponents({});
     const { MDXRemote } = await import("next-mdx-remote/rsc");
@@ -70,11 +72,8 @@ export default async function BlogPostPage({
             metadata={metadata}
             createdDate={createdDate}
             updatedDate={updatedDate}
-            viewCounter={
-                <span className="py-2 text-xs font-light lg:text-sm text-[#ececec]/70">
-                    <PostViewCounter slug={slug} />
-                </span>
-            }
+            viewCounter={<PostViewCounter slug={slug} />}
+            headings={headings}
         >
             <MDX
                 source={content}
