@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { CldImage } from "next-cloudinary";
 import { useCallback, useEffect, useState } from "react";
 
@@ -96,8 +96,12 @@ export default function GalleryClient({
             }
         };
 
+        document.body.style.overflow = "hidden";
         window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
+        return () => {
+            document.body.style.overflow = "";
+            window.removeEventListener("keydown", handleKey);
+        };
     }, [selectedImage, handleClose]);
 
     return (
@@ -139,32 +143,27 @@ export default function GalleryClient({
                 </motion.div>
             </div>
 
-            {selectedImage && (
-                <motion.div
-                    className="flex fixed top-0 left-0 z-20 justify-center items-center w-full h-full backdrop-blur-md bg-neutral-950/80"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={(e) => {
-                        if (e.target === e.currentTarget) handleClose();
-                    }}
-                >
+            <AnimatePresence>
+                {selectedImage && (
                     <motion.div
-                        className="flex relative flex-col items-center px-4 w-full max-w-4xl sm:px-8"
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45 }}
-                        onClick={(e) => e.stopPropagation()}
+                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md bg-neutral-950/80"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        onClick={handleClose}
                     >
                         <motion.div
                             key={selectedImage.public_id}
-                            className="flex justify-center w-full"
-                            initial={{ opacity: 0, scale: 0.96 }}
+                            className="cursor-default"
+                            initial={{ opacity: 0, scale: 0.94 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.35 }}
+                            exit={{ opacity: 0, scale: 0.94 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <CldImage
-                                className="max-h-[75vh] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/30"
+                                className="max-h-[80vh] w-auto max-w-[90vw] rounded-xl object-contain shadow-2xl shadow-black/30"
                                 width={selectedImage.width}
                                 height={selectedImage.height}
                                 src={selectedImage.public_id}
@@ -180,8 +179,8 @@ export default function GalleryClient({
                             />
                         </motion.div>
                     </motion.div>
-                </motion.div>
-            )}
+                )}
+            </AnimatePresence>
         </section>
     );
 }
