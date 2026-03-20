@@ -1,23 +1,12 @@
 import { v2 as cloudinary } from "cloudinary";
+import { getCldImageUrl } from "next-cloudinary";
+import GalleryClient from "./view";
 
 type ImageT = {
     public_id: string;
     format: string;
     width: number;
     height: number;
-};
-
-const boxAnim = {
-    hidden: { opacity: 1, scale: 0 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: { delayChildren: 0.3, staggerChildren: 0.2 },
-    },
-};
-const itemAnim = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
 };
 
 cloudinary.config({
@@ -43,11 +32,43 @@ async function fetchImages(): Promise<ImageT[]> {
     }
 }
 
-export const revalidate = 86400;
+async function generateBlurPlaceholders(
+    images: ImageT[],
+): Promise<Record<string, string>> {
+    const entries = await Promise.all(
+        images.map(async (image) => {
+            const url = getCldImageUrl({
+                src: image.public_id,
+                width: 24,
+                height: 24,
+                crop: "fill",
+                quality: 1,
+                format: "webp",
+                blur: "800",
+            });
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return [image.public_id, ""] as const;
+                const buffer = Buffer.from(await res.arrayBuffer());
+                const base64 = buffer.toString("base64");
+                const mime =
+                    res.headers.get("content-type") || "image/webp";
+                return [
+                    image.public_id,
+                    `data:${mime};base64,${base64}`,
+                ] as const;
+            } catch {
+                return [image.public_id, ""] as const;
+            }
+        }),
+    );
+    return Object.fromEntries(entries.filter(([, v]) => v));
+}
 
-import GalleryClient from "./view";
+export const revalidate = 86400;
 
 export default async function GalleryPage() {
     const images = await fetchImages();
-    return <GalleryClient images={images} />;
+    const placeholders = await generateBlurPlaceholders(images);
+    return <GalleryClient images={images} placeholders={placeholders} />;
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { CldImage, getCldImageUrl } from "next-cloudinary";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { CldImage } from "next-cloudinary";
+import { useCallback, useEffect, useState } from "react";
 
 type ImageT = {
     public_id: string;
@@ -70,22 +70,14 @@ function PhotoTile({
     );
 }
 
-export default function GalleryClient({ images }: { images: ImageT[] }) {
+export default function GalleryClient({
+    images,
+    placeholders,
+}: {
+    images: ImageT[];
+    placeholders: Record<string, string>;
+}) {
     const [selectedImage, setSelectedImage] = useState<ImageT | null>(null);
-    const placeholderDataUrls = useMemo(() => {
-        const map: Record<string, string> = {};
-        images.forEach((image) => {
-            map[image.public_id] = getCldImageUrl({
-                src: image.public_id,
-                width: 40,
-                height: 40,
-                crop: "fill",
-                quality: "auto:low",
-                format: "auto",
-            });
-        });
-        return map;
-    }, [images]);
 
     const handleSelect = useCallback((image: ImageT) => {
         setSelectedImage(image);
@@ -140,7 +132,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                         <PhotoTile
                             key={image.public_id}
                             image={image}
-                            placeholder={placeholderDataUrls[image.public_id]}
+                            placeholder={placeholders[image.public_id]}
                             onSelect={handleSelect}
                         />
                     ))}
@@ -179,7 +171,7 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                                 alt={selectedImage.public_id}
                                 placeholder="blur"
                                 blurDataURL={
-                                    placeholderDataUrls[selectedImage.public_id]
+                                    placeholders[selectedImage.public_id]
                                 }
                                 crop="fill"
                                 quality="auto"
