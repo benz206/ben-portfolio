@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/utils/cn";
@@ -63,7 +65,7 @@ export default function Card({
         cardSizeClasses[size],
         cardRadiusClasses[radius],
         ambient && "relative overflow-hidden isolate",
-        className
+        className,
     );
 
     if (motionProps) {

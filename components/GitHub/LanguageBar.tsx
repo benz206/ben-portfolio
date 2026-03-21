@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 type Language = {
@@ -35,7 +36,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
 
     const fetchWithCache = async (
         url: string,
-        cacheKey: string
+        cacheKey: string,
     ): Promise<Language> => {
         const cachedData = localStorage.getItem(cacheKey);
         if (cachedData) {
@@ -54,7 +55,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
             JSON.stringify({
                 data,
                 timestamp: new Date().getTime(),
-            })
+            }),
         );
 
         return data;
@@ -65,7 +66,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
             try {
                 const data = await fetchWithCache(
                     `https://api.github.com/repos/benz206/${repo}/languages`,
-                    `github_languages_${repo}`
+                    `github_languages_${repo}`,
                 );
                 setLanguages(data);
             } catch (error) {
@@ -79,7 +80,7 @@ export default function LanguageBar({ repo }: { repo: string }) {
     const total = Object.values(languages).reduce((acc, curr) => acc + curr, 0);
 
     return (
-        <div className="flex w-full h-2 overflow-hidden rounded-lg">
+        <div className="flex overflow-hidden w-full h-2 rounded-lg">
             {Object.entries(languages).map(([language, count]) => {
                 const tag = tags.find((tag) => tag.name === language);
                 const percentage = (count / total) * 100;

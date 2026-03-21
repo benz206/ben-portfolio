@@ -29,7 +29,11 @@ export default function ProjectPreview({
             className="list-none"
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut", delay: index * 0.06 }}
+            transition={{
+                duration: 0.55,
+                ease: "easeOut",
+                delay: index * 0.06,
+            }}
         >
             <motion.button
                 type="button"
@@ -39,13 +43,13 @@ export default function ProjectPreview({
                 whileTap={onSelect ? { scale: 0.97 } : undefined}
                 className={cn(
                     "group relative flex h-full w-full overflow-hidden rounded-lg px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
-                    !onSelect && "cursor-default"
+                    !onSelect && "cursor-default",
                 )}
             >
                 <div
                     className={cn(
                         "relative isolate flex h-full w-full flex-col overflow-hidden rounded-lg bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
-                        accent.border
+                        accent.border,
                     )}
                 >
                     <div className="overflow-hidden relative w-full h-64">
@@ -79,10 +83,10 @@ export default function ProjectPreview({
                             <LanguageBadge key={language} language={language} />
                         ))}
                     </div>
-                <AmbientGradient
-                    seed={title}
-                    className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
-                />
+                    <AmbientGradient
+                        seed={title}
+                        className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
+                    />
                 </div>
             </motion.button>
         </motion.li>

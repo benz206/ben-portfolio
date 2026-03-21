@@ -175,7 +175,7 @@ export function AmbientGradient({
             <div
                 className={cn(
                     "overflow-hidden absolute inset-0 pointer-events-none",
-                    className
+                    className,
                 )}
                 aria-hidden
             >
@@ -195,33 +195,33 @@ export function AmbientGradient({
             <div
                 className={cn(
                     "overflow-hidden absolute inset-0 pointer-events-none",
-                    className
+                    className,
                 )}
                 aria-hidden
             >
                 <div
                     className={cn(
                         "absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent to-transparent",
-                        stops.line
+                        stops.line,
                     )}
                 />
                 <div className="absolute -inset-16">
                     <div
                         className={cn(
                             "absolute -left-10 -top-10 h-64 w-64 rounded-full blur-3xl",
-                            stops.a
+                            stops.a,
                         )}
                     />
                     <div
                         className={cn(
                             "absolute right-0 bottom-0 h-72 w-72 rounded-full blur-3xl",
-                            stops.b
+                            stops.b,
                         )}
                     />
                     <div
                         className={cn(
                             "absolute left-1/2 top-1/3 h-56 w-56 -translate-x-1/2 rounded-full blur-3xl",
-                            stops.c
+                            stops.c,
                         )}
                     />
                 </div>
@@ -286,19 +286,19 @@ export function AmbientGradient({
         corner1 === 0
             ? { left: `-${offA}px`, top: `-${offA}px` }
             : corner1 === 1
-            ? { right: `-${offA}px`, top: `-${offA}px` }
-            : corner1 === 2
-            ? { left: `-${offA}px`, bottom: `-${offA}px` }
-            : { right: `-${offA}px`, bottom: `-${offA}px` };
+              ? { right: `-${offA}px`, top: `-${offA}px` }
+              : corner1 === 2
+                ? { left: `-${offA}px`, bottom: `-${offA}px` }
+                : { right: `-${offA}px`, bottom: `-${offA}px` };
 
     const blob2Pos: React.CSSProperties =
         corner2 === 0
             ? { left: `-${offB}px`, top: `-${offB}px` }
             : corner2 === 1
-            ? { right: `-${offB}px`, top: `-${offB}px` }
-            : corner2 === 2
-            ? { left: `-${offB}px`, bottom: `-${offB}px` }
-            : { right: `-${offB}px`, bottom: `-${offB}px` };
+              ? { right: `-${offB}px`, top: `-${offB}px` }
+              : corner2 === 2
+                ? { left: `-${offB}px`, bottom: `-${offB}px` }
+                : { right: `-${offB}px`, bottom: `-${offB}px` };
 
     const left3Pct = 35 + ((h >>> 6) % 30);
     const top3Pct = 25 + ((h >>> 7) % 40);
@@ -309,7 +309,7 @@ export function AmbientGradient({
         <div
             className={cn(
                 "overflow-hidden absolute inset-0 pointer-events-none",
-                className
+                className,
             )}
             aria-hidden
         >

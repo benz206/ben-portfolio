@@ -1,7 +1,8 @@
 "use client";
-import { motion, type Variants } from "framer-motion";
-import { CldImage, getCldImageUrl } from "next-cloudinary";
-import { useCallback, useEffect, useMemo, useState } from "react";
+
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { CldImage } from "next-cloudinary";
+import { useCallback, useEffect, useState } from "react";
 
 type ImageT = {
     public_id: string;
@@ -40,7 +41,7 @@ function PhotoTile({
     return (
         <motion.button
             type="button"
-            className="block w-full overflow-hidden transition duration-200 rounded-2xl group hover:brightness-110"
+            className="block overflow-hidden w-full rounded-xl transition duration-200 group hover:brightness-110"
             onClick={() => onSelect(image)}
             variants={itemAnim}
             initial="hidden"
@@ -49,7 +50,7 @@ function PhotoTile({
             viewport={viewportOptions}
             whileInView="visible"
         >
-            <div className="relative w-full overflow-hidden rounded-2xl aspect-square">
+            <div className="overflow-hidden relative w-full rounded-xl aspect-square">
                 <CldImage
                     fill
                     src={image.public_id}
@@ -69,22 +70,14 @@ function PhotoTile({
     );
 }
 
-export default function GalleryClient({ images }: { images: ImageT[] }) {
+export default function GalleryClient({
+    images,
+    placeholders,
+}: {
+    images: ImageT[];
+    placeholders: Record<string, string>;
+}) {
     const [selectedImage, setSelectedImage] = useState<ImageT | null>(null);
-    const placeholderDataUrls = useMemo(() => {
-        const map: Record<string, string> = {};
-        images.forEach((image) => {
-            map[image.public_id] = getCldImageUrl({
-                src: image.public_id,
-                width: 40,
-                height: 40,
-                crop: "fill",
-                quality: "auto:low",
-                format: "auto",
-            });
-        });
-        return map;
-    }, [images]);
 
     const handleSelect = useCallback((image: ImageT) => {
         setSelectedImage(image);
@@ -103,15 +96,19 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
             }
         };
 
+        document.body.style.overflow = "hidden";
         window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
+        return () => {
+            document.body.style.overflow = "";
+            window.removeEventListener("keydown", handleKey);
+        };
     }, [selectedImage, handleClose]);
 
     return (
         <section className="relative overflow-hidden bg-[#05070f] text-white">
             <div className="absolute inset-0 z-0 pointer-events-none bg-noir-gradient" />
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-80 bg-noir-radial" />
-            <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b via-transparent from-black/45 to-black/80" />
+            <div className="absolute inset-0 z-0 opacity-80 pointer-events-none bg-noir-radial" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-b via-transparent pointer-events-none from-black/45 to-black/80" />
             <div className="relative z-10 mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div className="space-y-3">
@@ -139,46 +136,41 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                         <PhotoTile
                             key={image.public_id}
                             image={image}
-                            placeholder={placeholderDataUrls[image.public_id]}
+                            placeholder={placeholders[image.public_id]}
                             onSelect={handleSelect}
                         />
                     ))}
                 </motion.div>
             </div>
 
-            {selectedImage && (
-                <motion.div
-                    className="fixed top-0 left-0 z-20 flex items-center justify-center w-full h-full backdrop-blur-md bg-neutral-950/80"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={(e) => {
-                        if (e.target === e.currentTarget) handleClose();
-                    }}
-                >
+            <AnimatePresence>
+                {selectedImage && (
                     <motion.div
-                        className="relative flex flex-col items-center w-full max-w-4xl px-4 sm:px-8"
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.45 }}
-                        onClick={(e) => e.stopPropagation()}
+                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md bg-neutral-950/80"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        onClick={handleClose}
                     >
                         <motion.div
                             key={selectedImage.public_id}
-                            className="flex justify-center w-full"
-                            initial={{ opacity: 0, scale: 0.96 }}
+                            className="cursor-default"
+                            initial={{ opacity: 0, scale: 0.94 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.35 }}
+                            exit={{ opacity: 0, scale: 0.94 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <CldImage
-                                className="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl shadow-black/30"
+                                className="max-h-[80vh] w-auto max-w-[90vw] rounded-xl object-contain shadow-2xl shadow-black/30"
                                 width={selectedImage.width}
                                 height={selectedImage.height}
                                 src={selectedImage.public_id}
                                 alt={selectedImage.public_id}
                                 placeholder="blur"
                                 blurDataURL={
-                                    placeholderDataUrls[selectedImage.public_id]
+                                    placeholders[selectedImage.public_id]
                                 }
                                 crop="fill"
                                 quality="auto"
@@ -187,8 +179,8 @@ export default function GalleryClient({ images }: { images: ImageT[] }) {
                             />
                         </motion.div>
                     </motion.div>
-                </motion.div>
-            )}
+                )}
+            </AnimatePresence>
         </section>
     );
 }

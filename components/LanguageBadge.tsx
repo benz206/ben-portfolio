@@ -61,19 +61,19 @@ export default function LanguageBadge({
         <span
             className={cn(
                 "inline-flex relative justify-center items-center",
-                className
+                className,
             )}
         >
             <span
-                className="pointer-events-none absolute -inset-[4px] rounded-full opacity-30 blur-lg"
+                className="pointer-events-none absolute -inset-[4px] rounded-md opacity-30 blur-lg"
                 style={{ backgroundImage: gradientBackground }}
                 aria-hidden
             />
             <span
-                className="relative inline-flex items-center justify-center rounded-full px-[1.5px] py-[1.5px]"
+                className="relative inline-flex items-center justify-center rounded-md px-[1.5px] py-[1.5px]"
                 style={{ backgroundImage: gradientBackground }}
             >
-                <span className="relative inline-flex items-center justify-center rounded-full bg-[#050a18]/90 px-2 py-1 text-[10px] uppercase text-white/95">
+                <span className="relative inline-flex items-center justify-center rounded-[4px] bg-[#050a18]/90 px-2 py-1 text-[10px] uppercase text-white/95">
                     {label}
                 </span>
             </span>

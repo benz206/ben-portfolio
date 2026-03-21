@@ -1,5 +1,5 @@
 export const getImageDimensions = (
-    src: string
+    src: string,
 ): Promise<{ width: number; height: number }> => {
     return new Promise((resolve, reject) => {
         const img = new Image();

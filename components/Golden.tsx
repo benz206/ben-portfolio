@@ -1,7 +1,10 @@
 "use client";
+
 import { useMemo, useState, useEffect, useRef } from "react";
 import { motion, easeOut } from "framer-motion";
-import { gsap } from "gsap";
+import { useGoldenRows } from "@/components/Golden/useGoldenRows";
+import { useHorizontalLoop } from "@/components/Golden/useHorizontalLoop";
+import { useTypedText } from "@/components/Golden/useTypedText";
 
 interface GoldenPerson {
     name: string;
@@ -22,52 +25,14 @@ function getShortDescription(text: string, maxLength: number = 120): string {
     );
 }
 
-function hashString(input: string): number {
-    let hash = 2166136261;
-    for (let i = 0; i < input.length; i += 1) {
-        hash ^= input.charCodeAt(i);
-        hash +=
-            (hash << 1) +
-            (hash << 4) +
-            (hash << 7) +
-            (hash << 8) +
-            (hash << 24);
-    }
-    return hash >>> 0;
-}
-
 export default function Golden({ people }: GoldenProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isPaused, setIsPaused] = useState(false);
     const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
     const timelinesRef = useRef<gsap.core.Timeline[]>([]);
 
-    const shuffledPeople = useMemo(
-        () =>
-            [...people].sort((a, b) => hashString(a.name) - hashString(b.name)),
-        [people]
-    );
-    const ROWS_COUNT = 3;
-    const rows = useMemo(() => {
-        const chunks: GoldenPerson[][] = [];
-        const total = shuffledPeople.length;
-        const base = Math.floor(total / ROWS_COUNT);
-        const remainder = total % ROWS_COUNT;
-        let start = 0;
-        for (let r = 0; r < ROWS_COUNT; r += 1) {
-            const size = base + (r < remainder ? 1 : 0);
-            chunks.push(shuffledPeople.slice(start, start + size));
-            start += size;
-        }
-        return chunks.filter((row) => row.length > 0);
-    }, [shuffledPeople]);
-    const rowOffsets = useMemo(
-        () =>
-            rows.map((_, idx) =>
-                rows.slice(0, idx).reduce((acc, r) => acc + r.length, 0)
-            ),
-        [rows]
-    );
+    const { rows, rowOffsets } = useGoldenRows(people, 3);
+    const horizontalLoop = useHorizontalLoop();
 
     useEffect(() => {
         const style = document.createElement("style");
@@ -87,124 +52,6 @@ export default function Golden({ people }: GoldenProps) {
             document.head.removeChild(style);
         };
     }, []);
-
-    function horizontalLoop(
-        items: Element[] | NodeListOf<Element>,
-        config: any = {}
-    ) {
-        const tl = gsap.timeline({
-            repeat: config.repeat,
-            paused: config.paused,
-            defaults: { ease: "none" },
-            onReverseComplete: () => {
-                tl.totalTime(tl.rawTime() + tl.duration() * 100);
-            },
-        });
-        const elements = gsap.utils.toArray(items) as HTMLElement[];
-        const length = elements.length;
-        if (length === 0) return tl;
-        const startX = elements[0].offsetLeft;
-        const times: number[] = [];
-        const widths: number[] = [];
-        const xPercents: number[] = [];
-        let curIndex = 0;
-        const pixelsPerSecond = (config.speed || 1) * 100;
-        const snap =
-            config.snap === false
-                ? (v: number) => v
-                : gsap.utils.snap(config.snap || 1);
-        let totalWidth: number;
-        let curX: number;
-        let distanceToStart: number;
-        let distanceToLoop: number;
-
-        gsap.set(elements, {
-            xPercent: (i: number, el: HTMLElement) => {
-                const w = (widths[i] = parseFloat(
-                    gsap.getProperty(el, "width", "px") as string
-                ));
-                xPercents[i] = snap(
-                    (parseFloat(gsap.getProperty(el, "x", "px") as string) /
-                        w) *
-                        100 +
-                        (gsap.getProperty(el, "xPercent") as number)
-                );
-                return xPercents[i];
-            },
-        });
-        gsap.set(elements, { x: 0 });
-        totalWidth =
-            elements[length - 1].offsetLeft +
-            (xPercents[length - 1] / 100) * widths[length - 1] -
-            startX +
-            elements[length - 1].offsetWidth *
-                (gsap.getProperty(elements[length - 1], "scaleX") as number) +
-            (parseFloat(config.paddingRight) || 0);
-        for (let i = 0; i < length; i += 1) {
-            const item = elements[i];
-            curX = (xPercents[i] / 100) * widths[i];
-            distanceToStart = item.offsetLeft + curX - startX;
-            distanceToLoop =
-                distanceToStart +
-                widths[i] * (gsap.getProperty(item, "scaleX") as number);
-            tl.to(
-                item,
-                {
-                    xPercent: snap(((curX - distanceToLoop) / widths[i]) * 100),
-                    duration: distanceToLoop / pixelsPerSecond,
-                },
-                0
-            )
-                .fromTo(
-                    item,
-                    {
-                        xPercent: snap(
-                            ((curX - distanceToLoop + totalWidth) / widths[i]) *
-                                100
-                        ),
-                    },
-                    {
-                        xPercent: xPercents[i],
-                        duration:
-                            (curX - distanceToLoop + totalWidth - curX) /
-                            pixelsPerSecond,
-                        immediateRender: false,
-                    },
-                    distanceToLoop / pixelsPerSecond
-                )
-                .add("label" + i, distanceToStart / pixelsPerSecond);
-            times[i] = distanceToStart / pixelsPerSecond;
-        }
-        function toIndex(index: number, vars: gsap.TweenVars = {}) {
-            Math.abs(index - curIndex) > length / 2 &&
-                (index += index > curIndex ? -length : length);
-            const newIndex = gsap.utils.wrap(0, length, index) as number;
-            let time = times[newIndex];
-            if (time > tl.time() !== index > curIndex) {
-                vars.modifiers = {
-                    time: gsap.utils.wrap(0, tl.duration()),
-                } as any;
-                time += tl.duration() * (index > curIndex ? 1 : -1);
-            }
-            curIndex = newIndex;
-            vars.overwrite = true;
-            return tl.tweenTo(time, vars);
-        }
-        (tl as any).next = (vars?: gsap.TweenVars) =>
-            toIndex(curIndex + 1, vars);
-        (tl as any).previous = (vars?: gsap.TweenVars) =>
-            toIndex(curIndex - 1, vars);
-        (tl as any).current = () => curIndex;
-        (tl as any).toIndex = (index: number, vars?: gsap.TweenVars) =>
-            toIndex(index, vars);
-        (tl as any).times = times;
-        tl.progress(1, true).progress(0, true);
-        if (config.reversed) {
-            tl.vars.onReverseComplete?.();
-            tl.reverse();
-        }
-        return tl;
-    }
 
     useEffect(() => {
         timelinesRef.current.forEach((t) => t?.kill());
@@ -247,7 +94,7 @@ export default function Golden({ people }: GoldenProps) {
     const renderPerson = (
         person: GoldenPerson,
         index: number,
-        rowOffset: number = 0
+        rowOffset: number = 0,
     ) => {
         const actualIndex = index + rowOffset;
         const isHovered = hoveredIndex === actualIndex;
@@ -256,7 +103,7 @@ export default function Golden({ people }: GoldenProps) {
             <div
                 key={`${person.name}-${actualIndex}`}
                 data-person-item="true"
-                className="relative flex-shrink-0 whitespace-nowrap cursor-pointer group"
+                className="relative shrink-0 whitespace-nowrap cursor-pointer group"
                 onMouseEnter={() => handleMouseEnter(actualIndex)}
                 onMouseLeave={handleMouseLeave}
             >
@@ -295,19 +142,7 @@ export default function Golden({ people }: GoldenProps) {
         hoveredDescription.trim().length > 0
             ? getShortDescription(hoveredDescription, 140)
             : "To all of those I have met before";
-    const [typedText, setTypedText] = useState("");
-    useEffect(() => {
-        let i = 0;
-        setTypedText("");
-        const interval = setInterval(() => {
-            i += 1;
-            setTypedText(displayText.slice(0, i));
-            if (i >= displayText.length) {
-                clearInterval(interval);
-            }
-        }, 18);
-        return () => clearInterval(interval);
-    }, [displayText]);
+    const typedText = useTypedText(displayText, 18);
 
     return (
         <motion.div
@@ -352,8 +187,8 @@ export default function Golden({ people }: GoldenProps) {
                                         renderPerson(
                                             person,
                                             index,
-                                            rowOffsets[rowIndex] || 0
-                                        )
+                                            rowOffsets[rowIndex] || 0,
+                                        ),
                                     )}
                                 </div>
                             ))}

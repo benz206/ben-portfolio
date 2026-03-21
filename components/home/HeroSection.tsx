@@ -1,31 +1,15 @@
 "use client";
 
-import Image from "next/image";
-import type { StaticImageData } from "next/image";
 import { motion } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
-import type { AmbientVariant } from "@/components/AmbientGradient";
-import Card from "@/components/Card";
 import CurrentlyPlaying from "@/components/CurrentlyPlaying";
 import FuegoLogo from "@/public/experience/fuego.webp";
 import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
 import SAPLogo from "@/public/experience/SAP.png";
+import RoleCard, { type RoleCardData } from "@/components/home/RoleCard";
+import { useScrollToSection } from "@/utils/hooks";
 
-type RoleCard = {
-    title: string;
-    company: string;
-    location: string;
-    period: string;
-    image: {
-        src: StaticImageData;
-        alt: string;
-    };
-    locationClass?: string;
-    periodClass?: string;
-    ambientVariant: AmbientVariant;
-};
-
-const recentRoles: RoleCard[] = [
+const recentRoles: RoleCardData[] = [
     {
         title: "Software Engineering Intern",
         company: "Grand Charter",
@@ -41,9 +25,9 @@ const recentRoles: RoleCard[] = [
     },
     {
         title: "Software Engineering Intern",
-        company: "Fuego.io",
+        company: "Fuego",
         location: "San Francisco",
-        period: "Jan 2025 — Apr 2025",
+        period: "Jan 2025 - Apr 2025",
         image: {
             src: FuegoLogo,
             alt: "Fuego logo",
@@ -74,15 +58,10 @@ export default function HeroSection() {
     const currentlyPlayingDelay =
         roleCardBaseDelay + recentRoles.length * roleCardStep + 0.35;
 
-    const handleScrollClick = () => {
-        const nextSection = document.getElementById("home-next-section");
-        if (nextSection) {
-            nextSection.scrollIntoView({ behavior: "smooth" });
-        }
-    };
+    const handleScrollClick = useScrollToSection("home-next-section");
 
     return (
-        <section className="flex relative justify-center items-center pt-24 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
+        <section className="flex relative justify-center items-center pt-8 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
@@ -135,62 +114,13 @@ export default function HeroSection() {
                             Roles
                         </span>
                         {recentRoles.map((role, index) => (
-                            <Card
+                            <RoleCard
                                 key={role.company}
-                                variant="glass"
-                                ambient
-                                ambientVariant={role.ambientVariant}
-                                ambientClassName="opacity-40"
-                                className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6"
-                                motionProps={{
-                                    initial: { opacity: 0, y: 24 },
-                                    whileInView: { opacity: 1, y: 0 },
-                                    viewport: { once: true, amount: 0.4 },
-                                    transition: {
-                                        duration: 0.6,
-                                        delay:
-                                            roleCardBaseDelay +
-                                            index * roleCardStep,
-                                    },
-                                }}
-                            >
-                                <Image
-                                    src={role.image.src}
-                                    alt={role.image.alt}
-                                    width={56}
-                                    height={56}
-                                    className="object-contain z-10 flex-shrink-0 w-14 h-14 rounded-lg sm:h-16 sm:w-16"
-                                />
-
-                                <div className="flex flex-col flex-1 gap-1 sm:my-auto">
-                                    <div className="flex flex-wrap gap-2 justify-between items-center">
-                                        <h2 className="text-base font-medium text-white">
-                                            {role.company}
-                                        </h2>
-                                        <span
-                                            className={`text-xs uppercase tracking-[0.2em] ${
-                                                role.locationClass ??
-                                                "text-white/55"
-                                            }`}
-                                        >
-                                            {role.location}
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
-                                        <p className="font-extralight text-white/65">
-                                            {role.title}
-                                        </p>
-                                        <span
-                                            className={`text-xs uppercase tracking-[0.1em] ${
-                                                role.periodClass ??
-                                                "text-white/45"
-                                            }`}
-                                        >
-                                            {role.period}
-                                        </span>
-                                    </div>
-                                </div>
-                            </Card>
+                                role={role}
+                                animationDelay={
+                                    roleCardBaseDelay + index * roleCardStep
+                                }
+                            />
                         ))}
                     </motion.div>
                 </div>

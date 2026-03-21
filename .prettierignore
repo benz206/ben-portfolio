@@ -4,3 +4,7 @@ coverage
 .next
 
 *.mdx
+
+tsconfig.json
+.eslintrc.json
+.prettierrc.json

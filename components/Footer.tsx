@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ImGithub } from "react-icons/im";
-import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 import { AmbientGradient } from "@/components/AmbientGradient";
 
 const motionProps = {
@@ -56,38 +58,100 @@ const socials = [
     },
 ] as const;
 
+const clubs = [
+    { src: "/clubs/uwcsa.png", alt: "UWCSA" },
+    { src: "/clubs/watai.jpeg", alt: "WAT.ai" },
+    { src: "/clubs/midnightsun.png", alt: "Midnight Sun" },
+] as const;
+
 export default function Footer() {
+    const [views, setViews] = useState<number | null>(null);
+    const [dailyViews, setDailyViews] = useState<number | null>(null);
+    const [viewers, setViewers] = useState<number | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await fetch("/api/views");
+                if (!response.ok) return;
+                const { count, daily } = await response.json();
+                setViews(count);
+                setDailyViews(daily ?? 0);
+            } catch (error) {
+                console.error("Failed to fetch global views", error);
+            }
+        })();
+
+        const fetchPresence = async () => {
+            try {
+                const res = await fetch("/api/presence");
+                if (!res.ok) return;
+                const { viewers: v } = await res.json();
+                setViewers(v);
+            } catch {}
+        };
+
+        fetchPresence();
+        const interval = setInterval(fetchPresence, 30_000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const viewText = useMemo(() => {
+        if (views === null) return null;
+        const count = new Intl.NumberFormat().format(views);
+        return `${count} visits tracked`;
+    }, [views]);
+
     return (
-        <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16">
+        <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16 snap-end snap-always">
             <div className="flex w-11/12 max-w-[1080px] flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
-                        If you want to talk, message me anytime{" "}
+                        Message me anytime @
                         <a
                             href="mailto:ben.zhou@uwaterloo.ca"
                             className="underline underline-offset-auto"
                         >
-                            @ben.zhou@uwaterloo.ca
+                            ben.zhou [at] uwaterloo.ca
                         </a>
                         .{" "}
                         <Link
-                            href="/;thanks"
+                            href="/thanks"
                             className="underline underline-offset-auto"
                         >
                             Thanks.
                         </Link>
                     </p>
                     <div className="text-xs font-thin text-white/40">
-                        © {new Date().getFullYear()} Ben Zhou
+                        © {new Date().getFullYear()} Ben
+                        {viewText && (
+                            <span className="ml-3 text-white/35">
+                                {viewText}
+                                {dailyViews !== null && dailyViews > 0 && (
+                                    <span className="ml-2 text-green-500">
+                                        +{dailyViews} today
+                                    </span>
+                                )}
+                            </span>
+                        )}
+                        {viewers !== null && viewers > 0 && (
+                            <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
+                                <span className="relative flex h-1.5 w-1.5">
+                                    <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
+                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
+                                </span>
+                                {viewers} viewing
+                            </span>
+                        )}
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 items-center gap-6 lg:items-end">
-                    <div className="flex flex-wrap justify-center gap-4 text-white/70 lg:justify-end">
+                <div className="flex flex-col flex-1 gap-6 items-center lg:items-end">
+                    <div className="flex flex-wrap gap-4 justify-center text-white/70 lg:justify-end">
                         {socials.map(({ href, icon: Icon, label, seed }) => (
                             <motion.a
                                 key={href}
                                 {...motionProps}
-                                className="group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-md border border-white/30 bg-transparent text-lg text-white/70 transition-colors duration-300 hover:border-white/60 hover:text-white"
+                                className="flex overflow-hidden relative justify-center items-center w-11 h-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
                                 href={href}
                                 target="_blank"
                                 aria-label={label}
@@ -100,6 +164,22 @@ export default function Footer() {
                                     <Icon />
                                 </span>
                             </motion.a>
+                        ))}
+                    </div>
+                    <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
+                        {clubs.map((club) => (
+                            <span
+                                key={club.src}
+                                className="flex overflow-hidden justify-center items-center w-6 h-6 rounded-sm"
+                            >
+                                <Image
+                                    src={club.src}
+                                    alt={club.alt}
+                                    width={32}
+                                    height={32}
+                                    className="object-cover w-full h-full"
+                                />
+                            </span>
                         ))}
                     </div>
                 </div>

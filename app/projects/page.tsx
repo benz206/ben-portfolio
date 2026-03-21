@@ -8,7 +8,8 @@ import type { ProjectPreviewProps } from "@/types";
 import ProjectDetailModal from "@/components/ProjectDetailModal";
 
 export default function Projects() {
-    const [selectedProject, setSelectedProject] = useState<ProjectPreviewProps | null>(null);
+    const [selectedProject, setSelectedProject] =
+        useState<ProjectPreviewProps | null>(null);
 
     const handleOpen = (project: ProjectPreviewProps) => {
         setSelectedProject(project);
@@ -46,7 +47,11 @@ export default function Projects() {
                     className="grid gap-10 md:grid-cols-2"
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeInOut", delay: 0.12 }}
+                    transition={{
+                        duration: 0.6,
+                        ease: "easeInOut",
+                        delay: 0.12,
+                    }}
                 >
                     {projectPreviews.map((project, index) => (
                         <ProjectPreview
@@ -60,7 +65,10 @@ export default function Projects() {
             </div>
 
             {selectedProject && (
-                <ProjectDetailModal project={selectedProject} onClose={handleClose} />
+                <ProjectDetailModal
+                    project={selectedProject}
+                    onClose={handleClose}
+                />
             )}
         </section>
     );

@@ -6,5 +6,3 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export default cn;
-
-

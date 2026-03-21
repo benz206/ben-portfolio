@@ -5,20 +5,11 @@ declare global {
             SPOTIFY_SECRET: string;
             SPOTIFY_REFRESHTOKEN: string;
             PASSWORD: string;
+            BLOG_PAT: string;
+            REDIS_URL: string;
+            NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: string;
+            NEXT_PUBLIC_CLOUDINARY_API_KEY: string;
+            CLOUDINARY_API_SECRET: string;
         }
     }
-}
-
-declare module "jpeg-js" {
-    const jpeg: {
-        decode: (
-            data: Buffer | Uint8Array,
-            options?: { useTArray?: boolean; formatAsRGBA?: boolean }
-        ) => {
-            width: number;
-            height: number;
-            data: Uint8Array;
-        };
-    };
-    export default jpeg;
 }
