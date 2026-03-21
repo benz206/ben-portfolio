@@ -53,56 +53,36 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
     }, [repos]);
 
     return (
-        <section className="flex relative flex-col px-4 py-24 min-h-screen border-t border-white/5 sm:px-6 lg:px-12">
-            <div className="absolute inset-0 bg-noir-gradient" />
-            <div className="absolute inset-0 opacity-75 bg-noir-radial" />
-            <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1080px] flex-col gap-10">
-                <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div className="space-y-2">
-                        <span className="text-xs uppercase tracking-[0.3em] text-white/50">
-                            Repository explorer
-                        </span>
-                        <h2 className="text-3xl font-semibold tracking-tight">
-                            Filter, sort, and dive into featured repos.
+        <section className="relative overflow-hidden border-t border-white/5 pb-24 pt-20 text-white lg:pb-32">
+            <div className="pointer-events-none absolute inset-0 bg-noir-gradient" />
+            <div className="pointer-events-none absolute inset-0 opacity-75 bg-noir-radial" />
+            <div className="relative z-10 mx-auto flex w-11/12 max-w-[1040px] flex-col gap-10">
+                <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/35">
+                            <span>Repository archive</span>
+                            <span className="h-px w-16 bg-white/10" />
+                        </div>
+                        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                            Filter, sort, and browse the full set.
                         </h2>
                     </div>
-                    <div className="flex flex-wrap gap-3">
-                        {sortOptions.map(({ option, label }) => {
-                            const active = sortBy === option;
-                            return (
-                                <button
-                                    key={option}
-                                    onClick={() => handleSortChange(option)}
-                                    className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.25em] transition ${
-                                        active
-                                            ? "border-white bg-white text-black"
-                                            : "border-white/15 bg-white/5 text-white/70 hover:border-white/40 hover:text-white"
-                                    }`}
-                                >
-                                    {label}
-                                    {active && (
-                                        <span className="ml-2 text-[0.65rem] tracking-[0.2em]">
-                                            {sortOrder === "asc"
-                                                ? "asc"
-                                                : "desc"}
-                                        </span>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
+                    <p className="max-w-md text-sm text-white/55 sm:text-right">
+                        A lighter pass over the full repo list, with quick
+                        sorting and language breakdowns.
+                    </p>
                 </header>
-                <div className="flex flex-col gap-6 text-white lg:flex-row lg:gap-8">
-                    <aside className="flex flex-col gap-6 w-full lg:max-w-sm">
+                <div className="grid gap-6 text-white lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8">
+                    <aside className="flex w-full flex-col gap-6 lg:sticky lg:top-24 lg:self-start">
                         <Card
                             variant="glass"
                             ambient
                             ambientVariant="indigo"
-                            ambientClassName="opacity-30"
+                            ambientClassName="opacity-25"
                             className="flex flex-col gap-3 p-6"
                             motionProps={{ variants: fadeIn }}
                         >
-                            <label className="flex flex-col gap-2 text-xs uppercase tracking-[0.3em] text-white/50">
+                            <label className="flex flex-col gap-2 text-xs uppercase tracking-[0.3em] text-white/45">
                                 Search repos
                                 <input
                                     value={searchTerm}
@@ -110,7 +90,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                         setSearchTerm(event.target.value)
                                     }
                                     placeholder="Search by name"
-                                    className="px-4 py-3 text-sm text-white rounded-full border border-white/10 bg-white/10 placeholder:text-white/40 focus:border-white/40 focus:outline-none focus:ring-0"
+                                    className="rounded-full border border-white/10 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/35 focus:border-white/35 focus:outline-none focus:ring-0"
                                 />
                             </label>
                         </Card>
@@ -118,11 +98,11 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                             variant="glass"
                             ambient
                             ambientVariant="sunset"
-                            ambientClassName="opacity-35"
+                            ambientClassName="opacity-25"
                             className="flex flex-col gap-4 p-6"
                             motionProps={{ variants: fadeIn }}
                         >
-                            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+                            <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/45">
                                 <span>Language pulse</span>
                                 <span>{languagePulse.length} tracked</span>
                             </div>
@@ -135,12 +115,12 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                 {languagePulse.slice(0, 6).map((entry) => (
                                     <div
                                         key={entry.language}
-                                        className="flex gap-4 items-center"
+                                        className="flex items-center gap-4"
                                     >
-                                        <div className="flex justify-center items-center w-10 h-10 text-sm font-semibold rounded-2xl border border-white/10 bg-white/5">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-sm font-semibold">
                                             {entry.percentage}%
                                         </div>
-                                        <div className="flex flex-1 justify-between items-center">
+                                        <div className="flex flex-1 items-center justify-between">
                                             <span className="text-sm font-medium text-white/90">
                                                 {entry.language}
                                             </span>
@@ -152,10 +132,35 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                 ))}
                             </div>
                         </Card>
+                        <div className="flex flex-wrap gap-3">
+                            {sortOptions.map(({ option, label }) => {
+                                const active = sortBy === option;
+                                return (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleSortChange(option)}
+                                        className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.25em] transition ${
+                                            active
+                                                ? "border-white bg-white text-black"
+                                                : "border-white/15 bg-white/5 text-white/65 hover:border-white/35 hover:text-white"
+                                        }`}
+                                    >
+                                        {label}
+                                        {active && (
+                                            <span className="ml-2 text-[0.65rem] tracking-[0.2em]">
+                                                {sortOrder === "asc"
+                                                    ? "asc"
+                                                    : "desc"}
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </aside>
                     <motion.div
                         ref={timelineRef}
-                        className="flex overflow-y-auto flex-col flex-1 gap-8 pr-2 w-full"
+                        className="flex w-full flex-col gap-6"
                         initial={{ opacity: 0, y: 48 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7, ease: easeInOut }}
@@ -165,7 +170,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                 variant="glass"
                                 ambient
                                 ambientVariant="violet"
-                                ambientClassName="opacity-30"
+                                ambientClassName="opacity-25"
                                 className="flex min-h-[240px] flex-col items-center justify-center p-10 text-center text-white/60"
                             >
                                 No repositories match the current filters.

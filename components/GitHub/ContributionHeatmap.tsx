@@ -58,83 +58,84 @@ export default function ContributionHeatmap({
             variant="glass"
             ambient
             ambientVariant="violet"
-            ambientClassName="opacity-35"
-            className="flex relative flex-col gap-4 p-6 w-full"
+            ambientClassName="opacity-25"
+            className="relative flex w-full flex-col gap-5 p-6"
         >
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.2em] text-white/45">
-                <span>Contributions · Past 52 weeks</span>
-                <span>{formatNumber(totalCommits)} commits</span>
+            <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.3em] text-white/40">
+                    <span>Past 52 weeks</span>
+                    <span>{formatNumber(totalCommits)} commits</span>
+                </div>
+                <p className="max-w-2xl text-sm leading-relaxed text-white/60">
+                    A condensed heatmap of the last year of GitHub activity.
+                </p>
             </div>
-            <div
-                className="grid overflow-hidden gap-1 pb-1 w-full"
-                style={{
-                    gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
-                }}
-            >
-                {weeks.map((week, weekIndex) => (
-                    <div
-                        key={`week-${weekIndex}`}
-                        className="flex flex-col gap-1"
-                    >
-                        {week.map((day, dayIndex) => {
-                            const level = resolveContributionLevel(
-                                day,
-                                maxCount,
-                            );
-                            const gradient = contributionLevelGradients[level];
-                            const validatedGradient =
-                                gradient ?? contributionLevelGradients[0];
-                            const isPlaceholder =
-                                day.date.startsWith("placeholder");
-                            const label =
-                                day.date && !isPlaceholder
-                                    ? `${day.count} contributions on ${new Date(
-                                          day.date,
-                                      ).toLocaleDateString(undefined, {
-                                          month: "short",
-                                          day: "numeric",
-                                      })}`
-                                    : "";
-                            const cellIndex = weekIndex * 7 + dayIndex;
-                            const animationDelay = `${(cellIndex % 18) * 0.3}s`;
-                            const animationDuration = `${14 + (cellIndex % 6)}s`;
-                            return (
-                                <div
-                                    key={
-                                        day.date ||
-                                        `placeholder-${weekIndex}-${dayIndex}`
-                                    }
-                                    title={label}
-                                    className={`h-4 w-4 rounded-[4px] border border-white/10${
-                                        isPlaceholder ? "" : " github-cell"
-                                    }`}
-                                    style={{
-                                        background: validatedGradient,
-                                        opacity: isPlaceholder ? 0.15 : 1,
-                                        animationDelay: isPlaceholder
-                                            ? undefined
-                                            : animationDelay,
-                                        animationDuration: isPlaceholder
-                                            ? undefined
-                                            : animationDuration,
-                                        animationTimingFunction: isPlaceholder
-                                            ? undefined
-                                            : "ease-in-out",
-                                        animationIterationCount: isPlaceholder
-                                            ? undefined
-                                            : "infinite",
-                                        animationDirection: isPlaceholder
-                                            ? undefined
-                                            : "alternate",
-                                        animationName: isPlaceholder
-                                            ? undefined
-                                            : "githubHueCycle",
-                                    }}
-                                />
-                            );
-                        })}
-                    </div>
-                ))}
+            <div className="overflow-x-auto pb-1">
+                <div
+                    className="grid min-w-max gap-1"
+                    style={{
+                        gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
+                    }}
+                >
+                    {weeks.map((week, weekIndex) => (
+                        <div
+                            key={`week-${weekIndex}`}
+                            className="flex flex-col gap-1"
+                        >
+                            {week.map((day, dayIndex) => {
+                                const level = resolveContributionLevel(
+                                    day,
+                                    maxCount,
+                                );
+                                const gradient =
+                                    contributionLevelGradients[level];
+                                const validatedGradient =
+                                    gradient ?? contributionLevelGradients[0];
+                                const isPlaceholder =
+                                    day.date.startsWith("placeholder");
+                                const label =
+                                    day.date && !isPlaceholder
+                                        ? `${day.count} contributions on ${new Date(
+                                              day.date,
+                                          ).toLocaleDateString(undefined, {
+                                              month: "short",
+                                              day: "numeric",
+                                          })}`
+                                        : "";
+                                return (
+                                    <div
+                                        key={
+                                            day.date ||
+                                            `placeholder-${weekIndex}-${dayIndex}`
+                                        }
+                                        title={label}
+                                        className="h-3.5 w-3.5 rounded-[4px] border border-white/10"
+                                        style={{
+                                            background: validatedGradient,
+                                            opacity: isPlaceholder ? 0.15 : 1,
+                                        }}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-white/35">
+                <span>Less</span>
+                <div className="flex items-center gap-1.5">
+                    {contributionLevelGradients.map((gradient, index) => (
+                        <span
+                            key={gradient}
+                            className="h-2.5 w-2.5 rounded-full border border-white/10"
+                            style={{
+                                background: gradient,
+                                opacity: index === 0 ? 0.45 : 1,
+                            }}
+                        />
+                    ))}
+                </div>
+                <span>More</span>
             </div>
         </Card>
     );

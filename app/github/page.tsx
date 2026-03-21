@@ -293,32 +293,20 @@ export default function GithubPage() {
 
     if (isLoading && !repoData.length) {
         return (
-            <main className="flex min-h-screen items-center justify-center bg-[#050506]">
-                <AiOutlineLoading className="w-16 h-16 animate-spin text-white/60" />
+            <main className="flex min-h-screen items-center justify-center bg-[#050506] text-white">
+                <AiOutlineLoading className="h-16 w-16 animate-spin text-white/50" />
             </main>
         );
     }
 
     return (
-        <main className="overflow-hidden relative text-white">
-            <style jsx global>{`
-                @keyframes githubHueCycle {
-                    0% {
-                        filter: hue-rotate(0deg) saturate(100%);
-                    }
-                    50% {
-                        filter: hue-rotate(30deg) saturate(130%);
-                    }
-                    100% {
-                        filter: hue-rotate(60deg) saturate(120%);
-                    }
-                }
-            `}</style>
-            <section className="relative flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-12">
-                <div className="absolute inset-0 bg-noir-gradient" />
-                <div className="absolute inset-0 opacity-80 bg-noir-radial" />
+        <main className="relative min-h-screen overflow-hidden bg-[#050506] text-white">
+            <div className="pointer-events-none absolute inset-0 bg-noir-gradient" />
+            <div className="pointer-events-none absolute inset-0 opacity-70 bg-noir-radial" />
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/70" />
+            <section className="relative z-10 mx-auto w-11/12 max-w-[1040px] pb-20 pt-16 lg:pb-24 lg:pt-24">
                 <motion.div
-                    className="relative z-10 mx-auto flex w-full max-w-[1080px] flex-col gap-12 sm:gap-16"
+                    className="flex flex-col gap-12"
                     initial="hidden"
                     animate="visible"
                     variants={{
@@ -326,24 +314,26 @@ export default function GithubPage() {
                         hidden: {},
                     }}
                 >
-                    <motion.div
-                        variants={fadeIn}
-                        className="space-y-8 lg:space-y-12"
-                    >
-                        <div className="space-y-2 lg:space-y-6">
-                            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                                GitHub
-                            </h1>
-                            <p className="max-w-2xl text-sm text-white/70 sm:text-base">
-                                Track my open-source projects, filter through
-                                repositories, and explore contribution trends
-                                from the past year.
+                    <motion.div variants={fadeIn} className="space-y-10">
+                        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                            <div className="space-y-3">
+                                <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                                    Open source and build logs
+                                </span>
+                                <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
+                                    GitHub
+                                </h1>
+                            </div>
+                            <p className="max-w-md text-sm text-white/60 sm:text-right">
+                                A running view of repositories, contribution
+                                rhythm, and the projects I keep shipping in
+                                public.
                             </p>
                         </div>
                     </motion.div>
                     <motion.div
                         variants={fadeIn}
-                        className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]"
+                        className="grid gap-4 lg:grid-cols-[1.35fr_0.85fr]"
                     >
                         <ContributionHeatmap
                             weeks={contributionWeeks}
@@ -354,122 +344,156 @@ export default function GithubPage() {
                             variant="glass"
                             ambient
                             ambientVariant="indigo"
-                            ambientClassName="opacity-30"
-                            className="flex flex-col justify-between gap-6 p-6"
+                            ambientClassName="opacity-25"
+                            className="flex flex-col justify-between gap-8 p-6"
                         >
-                            <div className="space-y-2">
-                                <span className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                    Overview
+                            <div className="space-y-3">
+                                <span className="text-xs uppercase tracking-[0.35em] text-white/40">
+                                    Snapshot
                                 </span>
-                                <p className="text-sm leading-relaxed text-white/70">
-                                    A merged view of live repo metadata and the
-                                    past year of contributions.
+                                <p className="text-sm leading-relaxed text-white/60">
+                                    Live repo metadata paired with the last year
+                                    of commits and contribution history.
                                 </p>
                             </div>
-                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                    <div className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                        Public repos
+                            <div className="space-y-4">
+                                <div className="flex items-end justify-between gap-4 border-b border-white/10 pb-4">
+                                    <div>
+                                        <div className="text-xs uppercase tracking-[0.3em] text-white/35">
+                                            Public repos
+                                        </div>
+                                        <div className="mt-2 text-3xl font-semibold text-white">
+                                            {formatNumber(stats?.publicRepos ?? 0)}
+                                        </div>
                                     </div>
-                                    <div className="mt-2 text-2xl font-semibold text-white">
-                                        {formatNumber(stats?.publicRepos ?? 0)}
+                                    <div className="text-right">
+                                        <div className="text-xs uppercase tracking-[0.3em] text-white/35">
+                                            Latest update
+                                        </div>
+                                        <div className="mt-2 text-sm font-medium text-white/75">
+                                            {lastUpdatedLabel ?? "Warming up"}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                    <div className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                        Last updated
+                                <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                                    <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                                        <div className="text-xs uppercase tracking-[0.3em] text-white/35">
+                                            Visible repos
+                                        </div>
+                                        <div className="mt-2 text-2xl font-semibold text-white">
+                                            {formatNumber(totals.repos)}
+                                        </div>
                                     </div>
-                                    <div className="mt-2 text-lg font-semibold text-white">
-                                        {lastUpdatedLabel ?? "Warming up"}
+                                    <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                                        <div className="text-xs uppercase tracking-[0.3em] text-white/35">
+                                            Total stars
+                                        </div>
+                                        <div className="mt-2 text-2xl font-semibold text-white">
+                                            {formatNumber(totals.stars)}
+                                        </div>
+                                    </div>
+                                    <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+                                        <div className="text-xs uppercase tracking-[0.3em] text-white/35">
+                                            Languages
+                                        </div>
+                                        <div className="mt-2 text-2xl font-semibold text-white">
+                                            {formatNumber(totals.languages)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </Card>
                     </motion.div>
-                    <motion.div
-                        id="github-activity"
-                        variants={fadeIn}
-                        className="grid gap-4 md:grid-cols-3"
-                    >
-                        <Card
-                            variant="glass"
-                            ambient
-                            ambientVariant="emerald"
-                            ambientClassName="opacity-30"
-                            className="p-6"
+                    <motion.div variants={fadeIn} className="space-y-4">
+                        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/35">
+                            <span>Activity</span>
+                            <span className="h-px flex-1 bg-white/10" />
+                        </div>
+                        <div
+                            id="github-activity"
+                            className="grid gap-4 md:grid-cols-3"
                         >
-                            <div className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                Current streak
-                            </div>
-                            <div className="mt-2 text-3xl font-semibold text-white">
-                                {formatNumber(stats?.currentStreak.length ?? 0)}
-                                <span className="ml-2 text-sm font-normal text-white/60">
-                                    days
-                                </span>
-                            </div>
-                            <p className="mt-3 text-sm text-white/60">
-                                {stats?.currentStreak.length
-                                    ? "Still shipping and keeping momentum alive."
-                                    : "The next push starts a new streak."}
-                            </p>
-                        </Card>
-                        <Card
-                            variant="glass"
-                            ambient
-                            ambientVariant="sunset"
-                            ambientClassName="opacity-30"
-                            className="p-6"
-                        >
-                            <div className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                Longest streak
-                            </div>
-                            <div className="mt-2 text-3xl font-semibold text-white">
-                                {formatNumber(stats?.longestStreak.length ?? 0)}
-                                <span className="ml-2 text-sm font-normal text-white/60">
-                                    days
-                                </span>
-                            </div>
-                            <p className="mt-3 text-sm text-white/60">
-                                A stretch of flow where commits landed daily.
-                            </p>
-                        </Card>
-                        <Card
-                            variant="glass"
-                            ambient
-                            ambientVariant="violet"
-                            ambientClassName="opacity-30"
-                            className="p-6"
-                        >
-                            <div className="text-xs uppercase tracking-[0.3em] text-white/45">
-                                Peak day
-                            </div>
-                            <div className="mt-2 text-3xl font-semibold text-white">
-                                {formatNumber(stats?.bestDay.count ?? 0)}
-                                <span className="ml-2 text-sm font-normal text-white/60">
-                                    commits
-                                </span>
-                            </div>
-                            <p className="mt-3 text-sm text-white/60">
-                                {stats?.bestDay.date
-                                    ? summaryDateFormatter.format(
-                                          new Date(stats.bestDay.date),
-                                      )
-                                    : "Calibrating peak activity."}
-                            </p>
-                        </Card>
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientVariant="emerald"
+                                ambientClassName="opacity-25"
+                                className="p-6"
+                            >
+                                <div className="text-xs uppercase tracking-[0.3em] text-white/40">
+                                    Current streak
+                                </div>
+                                <div className="mt-3 text-3xl font-semibold text-white">
+                                    {formatNumber(stats?.currentStreak.length ?? 0)}
+                                    <span className="ml-2 text-sm font-normal text-white/55">
+                                        days
+                                    </span>
+                                </div>
+                                <p className="mt-3 text-sm leading-relaxed text-white/55">
+                                    {stats?.currentStreak.length
+                                        ? "Still shipping and keeping momentum moving."
+                                        : "The next commit starts a fresh run."}
+                                </p>
+                            </Card>
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientVariant="sunset"
+                                ambientClassName="opacity-25"
+                                className="p-6"
+                            >
+                                <div className="text-xs uppercase tracking-[0.3em] text-white/40">
+                                    Longest streak
+                                </div>
+                                <div className="mt-3 text-3xl font-semibold text-white">
+                                    {formatNumber(stats?.longestStreak.length ?? 0)}
+                                    <span className="ml-2 text-sm font-normal text-white/55">
+                                        days
+                                    </span>
+                                </div>
+                                <p className="mt-3 text-sm leading-relaxed text-white/55">
+                                    The longest uninterrupted stretch of daily
+                                    work from the last year.
+                                </p>
+                            </Card>
+                            <Card
+                                variant="glass"
+                                ambient
+                                ambientVariant="violet"
+                                ambientClassName="opacity-25"
+                                className="p-6"
+                            >
+                                <div className="text-xs uppercase tracking-[0.3em] text-white/40">
+                                    Peak day
+                                </div>
+                                <div className="mt-3 text-3xl font-semibold text-white">
+                                    {formatNumber(stats?.bestDay.count ?? 0)}
+                                    <span className="ml-2 text-sm font-normal text-white/55">
+                                        commits
+                                    </span>
+                                </div>
+                                <p className="mt-3 text-sm leading-relaxed text-white/55">
+                                    {stats?.bestDay.date
+                                        ? summaryDateFormatter.format(
+                                              new Date(stats.bestDay.date),
+                                          )
+                                        : "Calibrating peak activity."}
+                                </p>
+                            </Card>
+                        </div>
                     </motion.div>
                     <motion.div
                         variants={fadeIn}
-                        className="grid gap-4 sm:grid-cols-4"
+                        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
                     >
                         {[
                             {
-                                label: "Visible repos",
-                                value: totals.repos,
+                                label: "Last year commits",
+                                value: stats?.commits ?? 0,
                             },
                             {
-                                label: "Total stars",
-                                value: totals.stars,
+                                label: "Lifetime contributions",
+                                value: stats?.contributions ?? 0,
                             },
                             {
                                 label: "Forks captured",
@@ -485,7 +509,7 @@ export default function GithubPage() {
                                 variant="glass"
                                 className="p-5"
                             >
-                                <div className="text-xs uppercase tracking-[0.3em] text-white/45">
+                                <div className="text-xs uppercase tracking-[0.3em] text-white/40">
                                     {item.label}
                                 </div>
                                 <div className="mt-2 text-2xl font-semibold text-white">
