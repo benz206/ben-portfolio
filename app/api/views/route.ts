@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { shouldCountView, getClientIp } from "@/utils/viewRateLimit";
 
 export const runtime = "nodejs";
 
@@ -50,9 +51,22 @@ export async function GET() {
     }
 }
 
-export async function POST() {
+export async function POST(request: Request) {
     try {
+        const ip = getClientIp(request);
+        const allowed = await shouldCountView(ip, "global");
+
         const client = await getRedisClient();
+
+        if (!allowed) {
+            const count = toNumber(await client.get(KEY));
+            const dailyCount = toNumber(await client.get(DAILY_KEY));
+            return NextResponse.json(
+                { count, daily: dailyCount },
+                { headers: NO_STORE_HEADERS },
+            );
+        }
+
         const count = await client.incr(KEY);
 
         const today = getTodayDate();

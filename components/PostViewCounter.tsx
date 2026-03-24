@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 
+const SESSION_VIEWED_PREFIX = "portfolio:post:viewed:";
+
 type Props = {
     slug: string;
     className?: string;
@@ -13,18 +15,25 @@ export default function PostViewCounter({ slug, className }: Props) {
 
     useEffect(() => {
         const controller = new AbortController();
+        const sessionKey = `${SESSION_VIEWED_PREFIX}${slug}`;
+        const alreadyCounted = sessionStorage.getItem(sessionKey);
+
         (async () => {
             try {
+                const method = alreadyCounted ? "GET" : "POST";
                 const response = await fetch(`/api/views/${slug}`, {
-                    method: "POST",
+                    method,
                     signal: controller.signal,
                 });
                 if (!response.ok) return;
                 const { count } = await response.json();
                 setViews(count);
+                if (!alreadyCounted) {
+                    sessionStorage.setItem(sessionKey, "1");
+                }
             } catch (error) {
                 if ((error as Error).name !== "AbortError") {
-                    console.error("Failed to increment post views", error);
+                    console.error("Failed to fetch post views", error);
                 }
             }
         })();

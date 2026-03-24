@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { shouldCountView, getClientIp } from "@/utils/viewRateLimit";
 
 export const runtime = "nodejs";
 
@@ -47,7 +48,7 @@ export async function GET(
 }
 
 export async function POST(
-    _request: Request,
+    request: Request,
     context: { params: Promise<Params> },
 ) {
     try {
@@ -59,8 +60,20 @@ export async function POST(
                 { headers: NO_STORE_HEADERS },
             );
         }
+
+        const ip = getClientIp(request);
+        const allowed = await shouldCountView(ip, `post:${slug}`);
+
         const client = await getRedisClient();
-        const count = await client.incr(getKey(slug));
+        const key = getKey(slug);
+
+        if (allowed) {
+            const count = await client.incr(key);
+            return NextResponse.json({ count }, { headers: NO_STORE_HEADERS });
+        }
+
+        // Rate-limited: return current count without incrementing
+        const count = toNumber(await client.get(key));
         return NextResponse.json({ count }, { headers: NO_STORE_HEADERS });
     } catch (error) {
         console.error("Failed to increment post views", error);
