@@ -103,7 +103,7 @@ export default function Navigation() {
                             </Link>
                         </motion.div>
                     </div>
-                    <div className="flex gap-4 items-center ml-auto lg:hidden">
+                    <div className="ml-auto flex items-center gap-4 lg:hidden">
                         <button
                             type="button"
                             className="flex relative justify-center items-center w-10 h-10 rounded-md border border-white/10 bg-white/5"
@@ -143,14 +143,14 @@ export default function Navigation() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="flex fixed inset-0 z-50 justify-center items-center bg-black/70 lg:hidden"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, pointerEvents: "none" }}
                         onClick={() => setIsOpen(false)}
                     >
                         <motion.div
-                            className="flex flex-col gap-6 items-center px-6 w-full max-w-sm"
+                            className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-white/10 bg-black/60 px-6 py-10 backdrop-blur"
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: 10, opacity: 0, pointerEvents: "none" }}

@@ -122,10 +122,10 @@ export default function Footer() {
                             Thanks.
                         </Link>
                     </p>
-                    <div className="text-xs font-thin text-white/40">
-                        © {new Date().getFullYear()} Ben
+                    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs font-thin text-white/40 lg:justify-start">
+                        <span>© {new Date().getFullYear()} Ben</span>
                         {viewText && (
-                            <span className="ml-3 text-white/35">
+                            <span className="text-white/35">
                                 {viewText}
                                 {dailyViews !== null && dailyViews > 0 && (
                                     <span className="ml-2 text-green-500">
@@ -135,7 +135,7 @@ export default function Footer() {
                             </span>
                         )}
                         {viewers !== null && viewers > 0 && (
-                            <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
+                            <span className="inline-flex items-center gap-1.5 text-white/35">
                                 <span className="relative flex h-1.5 w-1.5">
                                     <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
                                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />

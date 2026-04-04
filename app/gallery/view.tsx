@@ -108,8 +108,8 @@ export default function GalleryClient({
         <section className="relative overflow-hidden bg-[#05070f] text-white">
             <div className="absolute inset-0 z-0 pointer-events-none bg-noir-gradient" />
             <div className="absolute inset-0 z-0 opacity-80 pointer-events-none bg-noir-radial" />
-            <div className="absolute inset-0 z-0 bg-gradient-to-b via-transparent pointer-events-none from-black/45 to-black/80" />
-            <div className="relative z-10 mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
+            <div className="absolute inset-0 z-0 bg-linear-to-b via-transparent pointer-events-none from-black/45 to-black/80" />
+            <div className="relative z-10 mx-auto w-11/12 max-w-[1040px] space-y-12 pb-24 pt-16 lg:space-y-16 lg:pb-32 lg:pt-24">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div className="space-y-3">
                         <span className="text-xs uppercase tracking-[0.4em] text-white/40">
@@ -146,7 +146,7 @@ export default function GalleryClient({
             <AnimatePresence>
                 {selectedImage && (
                     <motion.div
-                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md bg-neutral-950/80"
+                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center bg-neutral-950/80 p-4 backdrop-blur-md sm:p-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -155,15 +155,23 @@ export default function GalleryClient({
                     >
                         <motion.div
                             key={selectedImage.public_id}
-                            className="cursor-default"
+                            className="relative cursor-default"
                             initial={{ opacity: 0, scale: 0.94 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.94 }}
                             transition={{ duration: 0.3, ease: "easeOut" }}
                             onClick={(e) => e.stopPropagation()}
                         >
+                            <button
+                                type="button"
+                                onClick={handleClose}
+                                aria-label="Close image"
+                                className="absolute right-3 top-3 z-10 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs uppercase tracking-[0.2em] text-white/75 transition hover:border-white/35 hover:text-white"
+                            >
+                                Close
+                            </button>
                             <CldImage
-                                className="max-h-[80vh] w-auto max-w-[90vw] rounded-xl object-contain shadow-2xl shadow-black/30"
+                                className="max-h-[78vh] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/30 sm:max-w-[90vw]"
                                 width={selectedImage.width}
                                 height={selectedImage.height}
                                 src={selectedImage.public_id}

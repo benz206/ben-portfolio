@@ -146,16 +146,16 @@ export default function Golden({ people }: GoldenProps) {
 
     return (
         <motion.div
-            className="overflow-hidden relative py-32 pb-40 w-full"
+            className="relative w-full overflow-hidden py-24 pb-28 sm:py-32 sm:pb-40"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: easeOut }}
             viewport={{ once: true, amount: 0.4 }}
         >
-            <div className="flex flex-col justify-center items-center space-y-6 w-full">
-                <div className="flex overflow-hidden relative justify-center items-center pb-2 w-full h-12 md:h-16">
+            <div className="flex w-full flex-col items-center justify-center space-y-6">
+                <div className="relative flex min-h-16 w-full items-center justify-center overflow-hidden px-4 pb-2 sm:min-h-20">
                     <span
-                        className="inline-block px-4 text-2xl text-center text-white whitespace-nowrap select-none md:text-4xl"
+                        className="inline-block max-w-full px-4 text-center text-2xl text-white select-none md:text-4xl"
                         style={{
                             fontFamily:
                                 "'Dancing Script', 'Brush Script MT', cursive",
@@ -169,7 +169,7 @@ export default function Golden({ people }: GoldenProps) {
                 {rows.map((row, rowIndex) => (
                     <div
                         key={`row-${rowIndex}`}
-                        className="overflow-hidden relative mx-auto w-full max-w-5xl fade-mask"
+                        className="fade-mask relative mx-auto w-full max-w-5xl overflow-hidden"
                     >
                         <div
                             ref={(el: HTMLDivElement | null) => {

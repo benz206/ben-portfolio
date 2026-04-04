@@ -28,7 +28,7 @@ export default function MdxLayout({
         <div className="relative min-h-screen bg-[#050506] text-[#ececec]">
             <ScatteredGradients seed={metadata.slug} />
 
-            <div className="relative mx-auto max-w-[1100px] px-6 pb-32 pt-16 lg:pt-20">
+            <div className="relative mx-auto max-w-[1100px] px-5 pb-24 pt-16 sm:px-6 sm:pb-32 lg:pt-20">
                 {/* Back navigation */}
                 <div className="mb-14 max-w-[700px]">
                     <Link
@@ -55,16 +55,16 @@ export default function MdxLayout({
                 </div>
 
                 {/* Article + sidebar layout */}
-                <div className="flex gap-16">
+                <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
                     {/* Article column */}
                     <div className="min-w-0 w-full max-w-[700px]">
                         <header className="mb-8 space-y-4">
-                            <h1 className="text-3xl font-bold leading-tight tracking-tight lg:text-[2.5rem]">
+                            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-[2.2rem] lg:text-[2.5rem]">
                                 {metadata.title}
                             </h1>
 
                             {metadata.description && (
-                                <p className="text-lg leading-relaxed text-white/55">
+                                <p className="text-base leading-relaxed text-white/55 sm:text-lg">
                                     {metadata.description}
                                 </p>
                             )}

@@ -47,8 +47,8 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
                 className="hidden object-contain z-10 w-8 h-8 rounded-lg shrink-0 sm:block sm:h-16 sm:w-16"
             />
 
-            <div className="flex flex-col flex-1 gap-1 sm:my-auto">
-                <div className="flex flex-wrap gap-2 justify-between items-center">
+            <div className="flex flex-1 flex-col gap-1 sm:my-auto">
+                <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-2">
                     <h2 className="text-base font-medium text-white">
                         {role.company}
                     </h2>
@@ -60,12 +60,12 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
                         {role.location}
                     </span>
                 </div>
-                <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
+                <div className="flex flex-col gap-1 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-2">
                     <p className="font-extralight text-white/65">
                         {role.title}
                     </p>
                     <span
-                        className={`text-xs uppercase tracking-[0.1em] ${
+                        className={`text-xs uppercase tracking-widest ${
                             role.periodClass ?? "text-white/45"
                         }`}
                     >

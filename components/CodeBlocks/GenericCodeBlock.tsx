@@ -58,7 +58,7 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
 
     if (!CodeBlock) {
         return (
-            <div className="bg-[#242424] lg:p-6 px-5 py-4 rounded-xl shadow-lg overflow-auto my-2">
+            <div className="my-2 overflow-x-auto rounded-xl bg-[#242424] px-4 py-4 shadow-lg sm:px-5 lg:p-6">
                 <pre className="text-white">
                     <code>{code}</code>
                 </pre>
@@ -69,17 +69,17 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
     return (
         <CodeBlock code={code} language={language} theme={catppuccinMochaTheme}>
             <motion.div className="relative my-2">
-                <CodeBlock.Code className="bg-[#242424] lg:!p-6 !px-5 !py-4 rounded-xl shadow-lg overflow-auto">
+                <CodeBlock.Code className="overflow-x-auto rounded-xl bg-[#242424] px-4! py-4! shadow-lg sm:px-5! lg:p-6!">
                     <div className="table-row">
-                        <CodeBlock.LineNumber className="table-cell pr-4 text-sm text-right text-gray-500 select-none" />
-                        <CodeBlock.LineContent className="table-cell">
+                        <CodeBlock.LineNumber className="table-cell pr-3 text-xs text-right text-gray-500 select-none sm:pr-4 sm:text-sm" />
+                        <CodeBlock.LineContent className="table-cell min-w-max">
                             <CodeBlock.Token />
                         </CodeBlock.LineContent>
                     </div>
                 </CodeBlock.Code>
 
                 <motion.button
-                    className="bg-[#333333] text-white hover:text-[#9cdcfe] rounded-full px-3.5 py-1.5 absolute top-2 right-2 text-sm font-semibold duration-500 ease-in-out transition-all"
+                    className="absolute right-2 top-2 rounded-full bg-[#333333] px-3 py-1.5 text-xs font-semibold text-white transition-all duration-500 ease-in-out hover:text-[#9cdcfe] sm:px-3.5 sm:text-sm"
                     onClick={copyCode}
                 >
                     {isCopied}

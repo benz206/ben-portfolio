@@ -26,7 +26,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             <div className="absolute inset-0 opacity-60 pointer-events-none">
                 <div className="absolute inset-0 via-transparent to-transparent bg-linear-to-br from-white/5" />
             </div>
-            <div className="flex gap-4 justify-between items-start">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <div className="space-y-1">
                     <h2 className="text-lg font-semibold">{service.name}</h2>
                     <p className="text-xs text-white/50">
@@ -46,23 +46,25 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                     service.metrics.map((metric) => (
                         <div
                             key={`${service.id}-${metric.label}`}
-                            className="flex gap-4 justify-between items-center"
+                            className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
                         >
                             <span className="text-xs uppercase tracking-[0.25em] text-white/40">
                                 {metric.label}
                             </span>
-                            <span className="text-sm text-white/80">
+                            <span className="wrap-break-word text-sm text-white/80 sm:text-right">
                                 {metric.value}
                             </span>
                         </div>
                     ))
                 )}
             </div>
-            <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.25em] text-white/35">
-                <span>
+            <div className="flex flex-col gap-2 text-[11px] uppercase tracking-[0.25em] text-white/35 sm:flex-row sm:items-center sm:justify-between">
+                <span className="inline-block">
                     {service.latencyMs ? `${service.latencyMs}ms` : "Checking"}
                 </span>
-                <span>{service.detail ? service.detail : "Last check"}</span>
+                <span className="wrap-break-word sm:text-right">
+                    {service.detail ? service.detail : "Last check"}
+                </span>
             </div>
         </Card>
     );

@@ -61,10 +61,10 @@ export default function HeroSection() {
     const handleScrollClick = useScrollToSection("home-next-section");
 
     return (
-        <section className="flex relative justify-center items-center pt-8 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
+        <section className="home-section relative flex min-h-screen justify-center px-0 pt-20 pb-24 sm:pt-24 sm:pb-28 lg:h-screen lg:items-center lg:pt-0 lg:pb-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
-            <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
+            <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-5 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8">
                         <motion.div
@@ -80,7 +80,7 @@ export default function HeroSection() {
                             <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
                                 Ben Zhou
                             </h1>
-                            <p className="max-w-xl font-thin text-md text-white/65">
+                            <p className="max-w-xl text-base font-thin text-white/65 sm:text-lg">
                                 Engineering student at the University of
                                 Waterloo with a passion for building{" "}
                                 <b>elegant</b>, <b>efficient</b>, and{" "}
@@ -125,7 +125,7 @@ export default function HeroSection() {
                     </motion.div>
                 </div>
             </div>
-            <div className="flex absolute bottom-12 left-1/2 flex-col items-center -translate-x-1/2 text-white/70">
+            <div className="absolute bottom-12 left-1/2 hidden -translate-x-1/2 flex-col items-center text-white/70 lg:flex">
                 <motion.button
                     type="button"
                     aria-label="Scroll to next section"

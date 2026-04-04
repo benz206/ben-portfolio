@@ -104,9 +104,17 @@ export default function StatusClient() {
                         </div>
                         <div className="space-y-2 text-sm text-white/60 sm:text-right">
                             <div>
-                                {summary.okCount} operational ·{" "}
-                                {summary.degradedCount} degraded ·{" "}
-                                {summary.downCount} down
+                                <span className="inline-block">
+                                    {summary.okCount} operational
+                                </span>{" "}
+                                <span className="inline-block">·</span>{" "}
+                                <span className="inline-block">
+                                    {summary.degradedCount} degraded
+                                </span>{" "}
+                                <span className="inline-block">·</span>{" "}
+                                <span className="inline-block">
+                                    {summary.downCount} down
+                                </span>
                             </div>
                             <div className="text-xs uppercase tracking-[0.3em] text-white/35">
                                 {lastCheckLabel
