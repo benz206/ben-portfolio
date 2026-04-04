@@ -55,45 +55,45 @@ export const experienceJobs: ExperienceJob[] = [
         locationClass: "text-[rgba(255,196,158,0.9)]",
         periodClass: "text-[rgba(255,220,200,0.85)]",
     },
-    {
-        title: "Software Developer",
-        company: "WAT.ai - AI Sentiment Pulse",
-        location: "Waterloo",
-        period: "May 2025 — Dec 2025",
-        description:
-            "• Created a webscraper using Python to extract and score 100+ articles on Yahoo News for overall sentiments",
-        image: {
-            src: WAT,
-            alt: "WAT.ai Logo",
-        },
-        ambientVariant: "emerald",
-    },
-    {
-        title: "Firmware Team Member",
-        company: "Midnight Sun",
-        location: "Waterloo",
-        period: "Sep 2024 — January 2025",
-        description:
-            "• Developing ping testing functions in Python and C to verify connectivity across CAN networks",
-        image: {
-            src: MidnightSun,
-            alt: "Midnight Sun Logo",
-        },
-        ambientVariant: "sunset",
-    },
-    {
-        title: "Prototype Engineering Intern",
-        company: "Averroes Technologies",
-        location: "Toronto",
-        period: "Jul 2024 — Aug 2024",
-        description:
-            "• Developed 12 firmware prototypes in C++ for iterative product validation",
-        image: {
-            src: Averroes,
-            alt: "Averroes Technologies Logo",
-        },
-        ambientVariant: "violet",
-    },
+    // {
+    //     title: "Software Developer",
+    //     company: "WAT.ai - AI Sentiment Pulse",
+    //     location: "Waterloo",
+    //     period: "May 2025 — Dec 2025",
+    //     description:
+    //         "• Created a webscraper using Python to extract and score 100+ articles on Yahoo News for overall sentiments",
+    //     image: {
+    //         src: WAT,
+    //         alt: "WAT.ai Logo",
+    //     },
+    //     ambientVariant: "emerald",
+    // },
+    // {
+    //     title: "Firmware Team Member",
+    //     company: "Midnight Sun",
+    //     location: "Waterloo",
+    //     period: "Sep 2024 — January 2025",
+    //     description:
+    //         "• Developing ping testing functions in Python and C to verify connectivity across CAN networks",
+    //     image: {
+    //         src: MidnightSun,
+    //         alt: "Midnight Sun Logo",
+    //     },
+    //     ambientVariant: "sunset",
+    // },
+    // {
+    //     title: "Prototype Engineering Intern",
+    //     company: "Averroes Technologies",
+    //     location: "Toronto",
+    //     period: "Jul 2024 — Aug 2024",
+    //     description:
+    //         "• Developed 12 firmware prototypes in C++ for iterative product validation",
+    //     image: {
+    //         src: Averroes,
+    //         alt: "Averroes Technologies Logo",
+    //     },
+    //     ambientVariant: "violet",
+    // },
     {
         title: "Software Developer Co-op Student",
         company: "SAP",
