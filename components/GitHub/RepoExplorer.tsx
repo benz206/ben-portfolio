@@ -56,7 +56,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
         <section className="flex relative flex-col px-4 py-24 min-h-screen border-t border-white/5 sm:px-6 lg:px-12">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-75 bg-noir-radial" />
-            <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1080px] flex-col gap-10">
+            <div className="relative z-10 mx-auto flex h-screen w-full max-w-270 flex-col gap-10">
                 <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="space-y-2">
                         <span className="text-xs uppercase tracking-[0.3em] text-white/50">
@@ -166,7 +166,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                 ambient
                                 ambientVariant="violet"
                                 ambientClassName="opacity-30"
-                                className="flex min-h-[240px] flex-col items-center justify-center p-10 text-center text-white/60"
+                                className="flex min-h-60 flex-col items-center justify-center p-10 text-center text-white/60"
                             >
                                 No repositories match the current filters.
                             </Card>

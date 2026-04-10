@@ -8,7 +8,7 @@ export default function ExperienceSection() {
     return (
         <section className="flex relative justify-center items-center py-20 min-h-screen text-white home-section bg-noir-gradient-warm">
             <div className="absolute inset-0 opacity-75 bg-noir-radial-warm" />
-            <div className="relative flex w-11/12 max-w-[1080px] flex-col gap-10">
+            <div className="relative flex w-11/12 max-w-270 flex-col gap-10">
                 <motion.div
                     className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
                     initial={{ opacity: 0, y: 24 }}

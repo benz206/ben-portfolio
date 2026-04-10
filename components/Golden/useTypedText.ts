@@ -5,7 +5,6 @@ export function useTypedText(text: string, speedMs: number) {
 
     useEffect(() => {
         let i = 0;
-        setTypedText("");
         const interval = setInterval(() => {
             i += 1;
             setTypedText(text.slice(0, i));

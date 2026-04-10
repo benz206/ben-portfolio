@@ -84,9 +84,9 @@ export default function StatusClient() {
         <section className="relative overflow-hidden text-white bg-[#050506]">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-70 bg-noir-radial" />
-            <div className="absolute -top-24 right-0 h-[380px] w-[380px] opacity-40 bg-noir-radial-berry" />
-            <div className="absolute -bottom-28 left-0 h-[420px] w-[420px] opacity-35 bg-noir-radial-cool" />
-            <div className="relative mx-auto flex w-11/12 max-w-[1180px] flex-col gap-14 pb-24 pt-20 lg:pb-32 lg:pt-28">
+            <div className="absolute -top-24 right-0 h-95 w-95 opacity-40 bg-noir-radial-berry" />
+            <div className="absolute -bottom-28 left-0 h-105 w-105 opacity-35 bg-noir-radial-cool" />
+            <div className="relative mx-auto flex w-11/12 max-w-295 flex-col gap-14 pb-24 pt-20 lg:pb-32 lg:pt-28">
                 <motion.div
                     className="space-y-6"
                     initial={{ opacity: 0, y: 20 }}

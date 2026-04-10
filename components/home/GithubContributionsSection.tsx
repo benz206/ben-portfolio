@@ -21,7 +21,7 @@ export default function GithubContributionsSection() {
         <section className="flex relative justify-center items-center py-24 home-section">
             <div className="absolute inset-0 bg-noir-gradient-berry" />
             <div className="absolute inset-0 opacity-90 bg-noir-radial-berry" />
-            <div className="relative z-10 flex w-11/12 max-w-[1080px] flex-col gap-10 text-white">
+            <div className="relative z-10 flex w-11/12 max-w-270 flex-col gap-10 text-white">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -48,7 +48,7 @@ export default function GithubContributionsSection() {
                         className="flex relative flex-col gap-4 p-6 w-full"
                     >
                         <div className="flex gap-4 items-start">
-                            <div className="flex flex-col gap-[8px] pt-[22px] text-[11px] text-white/35">
+                            <div className="flex flex-col gap-2 pt-5.5 text-[11px] text-white/35">
                                 <span>Mon</span>
                                 <span>Wed</span>
                                 <span>Fri</span>

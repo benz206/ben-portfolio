@@ -83,12 +83,12 @@ export default async function BlogPage() {
 
             {/* Per-post ambient splash behind the featured post area */}
             {featuredPost && (
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] opacity-[0.14]">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-130 opacity-[0.14]">
                     <AmbientGradient seed={featuredPost.slug} />
                 </div>
             )}
 
-            <div className="relative mx-auto max-w-[700px] px-6 pb-32 pt-16 lg:pt-24">
+            <div className="relative mx-auto max-w-175 px-6 pb-32 pt-16 lg:pt-24">
                 {/* Header */}
                 <div className="mb-16 space-y-3">
                     <span className="text-xs uppercase tracking-[0.4em] text-white/35">

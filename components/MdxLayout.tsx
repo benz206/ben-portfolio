@@ -28,9 +28,9 @@ export default function MdxLayout({
         <div className="relative min-h-screen bg-[#050506] text-[#ececec]">
             <ScatteredGradients seed={metadata.slug} />
 
-            <div className="relative mx-auto max-w-[1100px] px-6 pb-32 pt-16 lg:pt-20">
+            <div className="relative mx-auto max-w-275 px-6 pb-32 pt-16 lg:pt-20">
                 {/* Back navigation */}
-                <div className="mb-14 max-w-[700px]">
+                <div className="mb-14 max-w-175">
                     <Link
                         href="/blog"
                         className="inline-flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-white/70"
@@ -57,7 +57,7 @@ export default function MdxLayout({
                 {/* Article + sidebar layout */}
                 <div className="flex gap-16">
                     {/* Article column */}
-                    <div className="min-w-0 w-full max-w-[700px]">
+                    <div className="min-w-0 w-full max-w-175">
                         <header className="mb-8 space-y-4">
                             <h1 className="text-3xl font-bold leading-tight tracking-tight lg:text-[2.5rem]">
                                 {metadata.title}
@@ -105,7 +105,7 @@ export default function MdxLayout({
                         renders the mobile button into document.body, so it's
                         visible on mobile despite this aside being display:none. */}
                     {hasTOC && (
-                        <aside className="hidden lg:block w-[200px] shrink-0">
+                        <aside className="hidden lg:block w-50 shrink-0">
                             <TableOfContents headings={headings} />
                         </aside>
                     )}

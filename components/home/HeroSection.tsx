@@ -64,7 +64,7 @@ export default function HeroSection() {
         <section className="flex relative justify-center items-center pt-8 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
-            <div className="relative flex w-full max-w-[1080px] flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
+            <div className="relative flex w-full max-w-270 flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8">
                         <motion.div

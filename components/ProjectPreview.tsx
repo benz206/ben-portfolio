@@ -52,7 +52,7 @@ export default function ProjectPreview({
                         accent.border,
                     )}
                 >
-                    <div className="overflow-hidden relative w-full h-64">
+                    <div className="relative w-full h-64 overflow-hidden">
                         <Image
                             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
                             src={image.src}
@@ -62,10 +62,10 @@ export default function ProjectPreview({
                             loading={image.priority ? "eager" : "lazy"}
                             priority={image.priority}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 pointer-events-none from-black/70 via-black/20 group-hover:from-black/55" />
-                        <div className="absolute -inset-1 bg-gradient-to-br via-transparent rounded-lg opacity-0 blur-2xl transition-opacity duration-700 pointer-events-none from-white/20 to-white/10 group-hover:opacity-60" />
+                        <div className="absolute inset-0 transition-opacity duration-700 pointer-events-none bg-linear-to-t to-transparent from-black/70 via-black/20 group-hover:from-black/55" />
+                        <div className="absolute transition-opacity duration-700 rounded-lg opacity-0 pointer-events-none -inset-1 bg-linear-to-br via-transparent blur-2xl from-white/20 to-white/10 group-hover:opacity-60" />
                     </div>
-                    <div className="flex relative z-10 flex-col gap-3 px-6 pt-6">
+                    <div className="relative z-10 flex flex-col gap-3 px-6 pt-6">
                         <span className="text-[11px] uppercase tracking-[0.24em] text-white/45">
                             {sub}
                         </span>
@@ -78,14 +78,14 @@ export default function ProjectPreview({
                             </p>
                         )}
                     </div>
-                    <div className="flex relative z-10 flex-wrap gap-2 px-6 pt-5 pb-6">
+                    <div className="relative z-10 flex flex-wrap gap-2 px-6 pt-5 pb-6">
                         {languages.map((language) => (
                             <LanguageBadge key={language} language={language} />
                         ))}
                     </div>
                     <AmbientGradient
                         seed={title}
-                        className="opacity-70 mix-blend-screen transition-opacity duration-700 group-hover:opacity-95"
+                        className="transition-opacity duration-700 opacity-70 mix-blend-screen group-hover:opacity-95"
                     />
                 </div>
             </motion.button>

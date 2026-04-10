@@ -8,6 +8,7 @@ import {
     useMemo,
     useRef,
     useState,
+    useSyncExternalStore,
     ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
@@ -55,7 +56,7 @@ type CommandSection = {
 };
 
 export function CommandProvider({ children }: CommandProviderProps) {
-    const [isClient, setIsClient] = useState(false);
+    const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [sources, setSources] = useState<Map<string, CommandDescriptor[]>>(
@@ -73,10 +74,6 @@ export function CommandProvider({ children }: CommandProviderProps) {
     const listRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
     const router = useRouter();
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
 
     const registerCommands = useCallback((options: RegisterCommandsOptions) => {
         const { source, commands, replace } = options;
@@ -124,13 +121,19 @@ export function CommandProvider({ children }: CommandProviderProps) {
         return activeView?.placeholder ?? "Search actions...";
     }, [viewStack]);
 
-    useEffect(() => {
-        if (!isOpen) {
-            setSearch("");
-            setActiveIndex(0);
-            setViewStack([]);
-        }
-    }, [isOpen]);
+    const close = useCallback(() => {
+        setIsOpen(false);
+        setSearch("");
+        setActiveIndex(0);
+        setViewStack([]);
+    }, []);
+
+    const toggle = useCallback(() => {
+        setIsOpen((prev) => !prev);
+        setSearch("");
+        setActiveIndex(0);
+        setViewStack([]);
+    }, []);
 
     const filtered = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -173,7 +176,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
         (command: CommandDescriptor) => {
             const shouldClose = command.closeOnRun ?? true;
             if (shouldClose) {
-                setIsOpen(false);
+                close();
             }
             if (command.action) {
                 command.action();
@@ -183,7 +186,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 router.push(command.href);
             }
         },
-        [router],
+        [router, close],
     );
 
     const pushView = useCallback(
@@ -224,7 +227,11 @@ export function CommandProvider({ children }: CommandProviderProps) {
             if (isModifier && event.key.toLowerCase() === "k") {
                 if (isInputTarget) return;
                 event.preventDefault();
-                setIsOpen((prev) => !prev);
+                if (isOpen) {
+                    close();
+                } else {
+                    setIsOpen(true);
+                }
                 return;
             }
             if (!isOpen) return;
@@ -233,7 +240,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 if (viewStack.length > 0) {
                     popView();
                 } else {
-                    setIsOpen(false);
+                    close();
                 }
             }
             if (event.key === "ArrowDown") {
@@ -270,6 +277,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
         viewStack.length,
         popView,
         runCommand,
+        close,
     ]);
 
     useEffect(() => {
@@ -285,14 +293,14 @@ export function CommandProvider({ children }: CommandProviderProps) {
             isOpen,
             search,
             setSearch,
-            toggle: () => setIsOpen((prev) => !prev),
+            toggle,
             open: () => setIsOpen(true),
-            close: () => setIsOpen(false),
+            close,
             registerCommands,
             pushView,
             popView,
         }),
-        [isOpen, search, registerCommands, pushView, popView],
+        [isOpen, search, toggle, close, registerCommands, pushView, popView],
     );
 
     return (
@@ -301,10 +309,10 @@ export function CommandProvider({ children }: CommandProviderProps) {
             {isClient &&
                 isOpen &&
                 createPortal(
-                    <div className="fixed inset-0 z-[999] flex items-start justify-center bg-black/60 backdrop-blur-sm px-4 pt-[15vh] sm:px-6">
+                    <div className="fixed inset-0 z-999 flex items-start justify-center bg-black/60 backdrop-blur-sm px-4 pt-[15vh] sm:px-6">
                         <Card
                             variant="glass"
-                            className="overflow-hidden !p-1 w-full max-w-xl border border-white/10 bg-black/70"
+                            className="overflow-hidden p-1! w-full max-w-xl border border-white/10 bg-black/70"
                         >
                             <div className="flex items-center px-4 py-3 border-b border-white/10">
                                 <div className="flex-1">
@@ -325,7 +333,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                             </div>
                             <div
                                 ref={listRef}
-                                className="command-scroll max-h-[320px] overflow-y-auto"
+                                className="command-scroll max-h-80 overflow-y-auto"
                             >
                                 {sections.length === 0 && (
                                     <div className="px-4 py-12 text-sm text-center text-white/60">

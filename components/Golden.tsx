@@ -71,7 +71,7 @@ export default function Golden({ people }: GoldenProps) {
             timelinesRef.current.forEach((t) => t?.kill());
             timelinesRef.current = [];
         };
-    }, [rows]);
+    }, [rows, horizontalLoop]);
 
     useEffect(() => {
         timelinesRef.current.forEach((t) => {

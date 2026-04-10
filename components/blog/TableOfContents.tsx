@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 
@@ -67,7 +67,7 @@ function TOCNav({
                     return (
                         <li key={id} className="relative">
                             {isActive && (
-                                <div className="absolute left-0 top-0.5 bottom-0.5 w-[2px] rounded-full bg-white/70" />
+                                <div className="absolute left-0 top-0.5 bottom-0.5 w-0.5 rounded-full bg-white/70" />
                             )}
                             <button
                                 onClick={() => onSelect(id)}
@@ -104,11 +104,7 @@ export default function TableOfContents({
 }) {
     const [activeId, setActiveId] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
 
     useEffect(() => {
         if (headings.length === 0) return;

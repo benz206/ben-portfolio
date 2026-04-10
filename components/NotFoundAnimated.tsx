@@ -42,7 +42,7 @@ export default function NotFoundAnimated() {
         <main className="overflow-hidden relative min-h-screen text-white">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
-            <div className="relative mx-auto flex w-11/12 max-w-[1080px] flex-col items-center justify-center pb-24 pt-28 min-h-screen">
+            <div className="relative mx-auto flex w-11/12 max-w-270 flex-col items-center justify-center pb-24 pt-28 min-h-screen">
                 <motion.div
                     className="w-full"
                     initial={{ opacity: 0, y: 18 }}

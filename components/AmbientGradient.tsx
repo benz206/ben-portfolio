@@ -201,7 +201,7 @@ export function AmbientGradient({
             >
                 <div
                     className={cn(
-                        "absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent to-transparent",
+                        "absolute inset-y-0 left-0 w-px bg-linear-to-b from-transparent to-transparent",
                         stops.line,
                     )}
                 />
@@ -342,7 +342,7 @@ export function AmbientGradient({
                     }}
                 />
                 <div
-                    className="absolute rounded-full blur-3xl -translate-x-1/2"
+                    className="absolute -translate-x-1/2 rounded-full blur-3xl"
                     style={{
                         left: `${left3Pct}%`,
                         top: `${top3Pct}%`,
@@ -352,7 +352,7 @@ export function AmbientGradient({
                     }}
                 />
                 <div
-                    className="absolute rounded-full blur-3xl -translate-x-1/2"
+                    className="absolute -translate-x-1/2 rounded-full blur-3xl"
                     style={{
                         left: `${left4Pct}%`,
                         top: `${top4Pct}%`,

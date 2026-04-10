@@ -58,7 +58,7 @@ export default function AboutMe() {
             className="relative flex items-center justify-center min-h-screen py-20 text-white home-section bg-noir-gradient-cool"
         >
             <div className="absolute inset-0 opacity-80 bg-noir-radial-cool" />
-            <div className="relative grid w-11/12 max-w-[1080px] gap-16 text-white lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.05fr)] lg:items-start">
+            <div className="relative grid w-11/12 max-w-270 gap-16 text-white lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.05fr)] lg:items-start">
                 <motion.div
                     className="space-y-6"
                     initial={{ opacity: 0, y: 24 }}

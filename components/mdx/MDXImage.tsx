@@ -33,7 +33,7 @@ export default function MDXImage({
                 width={dimensions?.width || 1200}
                 height={dimensions?.height || 800}
                 sizes="(min-width: 1280px) 1000px, (min-width: 768px) 700px, 400px"
-                className="max-h-[600px] h-auto w-auto max-w-full rounded-lg shadow-lg"
+                className="max-h-150 h-auto w-auto max-w-full rounded-lg shadow-lg"
                 {...props}
             />
         </span>

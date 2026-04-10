@@ -105,7 +105,7 @@ export default function ContributionHeatmap({
                                         `placeholder-${weekIndex}-${dayIndex}`
                                     }
                                     title={label}
-                                    className={`h-4 w-4 rounded-[4px] border border-white/10${
+                                    className={`h-4 w-4 rounded-1 border border-white/10${
                                         isPlaceholder ? "" : " github-cell"
                                     }`}
                                     style={{

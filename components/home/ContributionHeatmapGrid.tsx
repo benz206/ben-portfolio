@@ -63,7 +63,7 @@ export default function ContributionHeatmapGrid({
                 })}
             </div>
             <div
-                className="grid w-full gap-[2px]"
+                className="grid w-full gap-0.5"
                 style={{
                     gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
                 }}
@@ -71,7 +71,7 @@ export default function ContributionHeatmapGrid({
                 {weeks.map((week, weekIndex) => (
                     <div
                         key={`week-${weekIndex}`}
-                        className="flex flex-col gap-[2px]"
+                        className="flex flex-col gap-0.5"
                     >
                         {week.map((day, dayIndex) => {
                             const level = resolveContributionLevel(
@@ -100,7 +100,7 @@ export default function ContributionHeatmapGrid({
                                         `placeholder-${weekIndex}-${dayIndex}`
                                     }
                                     title={label}
-                                    className="h-[10px] w-[10px] rounded-[2px]"
+                                    className="h-2.5 w-2.5 rounded-0.5"
                                     style={
                                         isPlaceholder
                                             ? {
@@ -124,7 +124,7 @@ export default function ContributionHeatmapGrid({
                     {contributionLevelGradients.map((color, idx) => (
                         <span
                             key={`legend-${idx}`}
-                            className="h-[10px] w-[10px] rounded-[2px]"
+                            className="h-2.5 w-2.5 rounded-0.5"
                             style={{
                                 backgroundColor: color,
                             }}

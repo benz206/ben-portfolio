@@ -169,7 +169,7 @@ export default function GithubPage() {
                 <div className="absolute inset-0 opacity-80 bg-noir-radial" />
                 <motion.div
                     ref={heroRef}
-                    className="relative z-10 mx-auto flex w-full max-w-[1080px] flex-col gap-12 sm:gap-16"
+                    className="relative z-10 mx-auto flex w-full max-w-270 flex-col gap-12 sm:gap-16"
                     initial="hidden"
                     animate="visible"
                     variants={{

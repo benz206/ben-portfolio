@@ -109,7 +109,7 @@ export default function GalleryClient({
             <div className="absolute inset-0 z-0 pointer-events-none bg-noir-gradient" />
             <div className="absolute inset-0 z-0 opacity-80 pointer-events-none bg-noir-radial" />
             <div className="absolute inset-0 z-0 bg-gradient-to-b via-transparent pointer-events-none from-black/45 to-black/80" />
-            <div className="relative z-10 mx-auto w-11/12 max-w-[1040px] space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
+            <div className="relative z-10 mx-auto w-11/12 max-w-260 space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div className="space-y-3">
                         <span className="text-xs uppercase tracking-[0.4em] text-white/40">
