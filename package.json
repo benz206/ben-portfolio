@@ -6,7 +6,7 @@
         "dev": "next dev --turbo",
         "build": "next build --turbo",
         "start": "next start",
-        "lint": "next lint",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "prettier --write .",
         "postbuild": "next-sitemap"
     },
@@ -41,14 +41,15 @@
         "tailwind-merge": "^3.4.0"
     },
     "devDependencies": {
+        "@eslint/eslintrc": "^3.3.5",
         "@tailwindcss/postcss": "^4.1.18",
         "@types/color-thief-node": "^1.0.4",
         "@types/node": "25.2.0",
         "@types/react": "19.2.10",
         "@types/react-dom": "^19.2.3",
         "baseline-browser-mapping": "^2.9.19",
-        "eslint": "9.39.2",
-        "eslint-config-next": "^16.1.6",
+        "eslint": "^10.2.0",
+        "eslint-config-next": "^16.2.3",
         "tailwindcss": "^4.1.18",
         "typescript": "5.9.3"
     },

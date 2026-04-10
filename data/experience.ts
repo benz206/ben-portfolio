@@ -2,9 +2,9 @@ import type { StaticImageData } from "next/image";
 import fuego from "@/public/experience/fuego.webp";
 import SAP from "@/public/experience/SAP.png";
 import Eureka from "@/public/experience/Eureka.png";
-import Averroes from "@/public/experience/averroes.png";
-import WAT from "@/public/experience/wat_ai_logo.jpeg";
-import MidnightSun from "@/public/experience/midnightsun.png";
+// import Averroes from "@/public/experience/averroes.png";
+// import WAT from "@/public/experience/wat_ai_logo.jpeg";
+// import MidnightSun from "@/public/experience/midnightsun.png";
 import GrandCharter from "@/public/experience/grandcharter.jpeg";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 
