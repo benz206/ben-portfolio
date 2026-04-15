@@ -71,7 +71,7 @@ export default function Navigation() {
     const offset = scrollY > 12;
 
     return (
-        <nav className="fixed top-0 z-40 flex justify-center w-full">
+        <nav className="fixed top-0 z-[60] flex justify-center w-full">
             <div
                 className={`flex w-full justify-center transition-all duration-300 ${
                     offset ? "backdrop-blur bg-black/50" : "bg-transparent"
@@ -108,7 +108,7 @@ export default function Navigation() {
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
                         <button
                             type="button"
-                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5"
+                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5 touch-manipulation cursor-pointer"
                             onClick={() => setIsOpen((v) => !v)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
@@ -148,21 +148,23 @@ export default function Navigation() {
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0, pointerEvents: "none" }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
                         onClick={() => setIsOpen(false)}
                     >
                         <motion.div
                             className="flex flex-col items-center w-full max-w-sm gap-6 px-6"
-                            initial={{ y: 10, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 10, opacity: 0, pointerEvents: "none" }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
                             onClick={(e) => e.stopPropagation()}
                             id="mobile-menu"
                         >
                             {links.map((link) => (
                                 <Link
                                     key={link.href}
-                                    className="text-2xl font-semibold text-white"
+                                    className="text-2xl font-semibold text-white touch-manipulation"
                                     href={link.href}
                                     onClick={() => setIsOpen(false)}
                                 >
@@ -170,7 +172,7 @@ export default function Navigation() {
                                 </Link>
                             ))}
                             <Link
-                                className="text-2xl font-semibold text-white"
+                                className="text-2xl font-semibold text-white touch-manipulation"
                                 href="/resume.pdf"
                                 target="_blank"
                                 onClick={() => setIsOpen(false)}
