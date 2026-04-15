@@ -6,11 +6,17 @@ import ResponsiveTable from "@/components/mdx/ResponsiveTable";
 import { slugify } from "@/utils/slugify";
 import React from "react";
 
+function extractText(node: React.ReactNode): string {
+    if (typeof node === "string" || typeof node === "number")
+        return String(node);
+    if (Array.isArray(node)) return node.map(extractText).join("");
+    if (React.isValidElement(node))
+        return extractText((node.props as { children?: React.ReactNode }).children);
+    return "";
+}
+
 function headingId(children: React.ReactNode): string {
-    const text = React.Children.toArray(children)
-        .map((child) => (typeof child === "string" ? child : ""))
-        .join("");
-    return slugify(text);
+    return slugify(extractText(children));
 }
 
 export function getMDXComponents(components: MDXComponents): MDXComponents {

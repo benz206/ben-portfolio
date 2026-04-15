@@ -105,7 +105,7 @@ export default function MdxLayout({
                         renders the mobile button into document.body, so it's
                         visible on mobile despite this aside being display:none. */}
                     {hasTOC && (
-                        <aside className="hidden lg:block w-50 shrink-0">
+                        <aside className="hidden lg:block w-72 shrink-0">
                             <TableOfContents headings={headings} />
                         </aside>
                     )}

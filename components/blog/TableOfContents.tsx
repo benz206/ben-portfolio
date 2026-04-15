@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useCallback, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 
@@ -87,7 +87,7 @@ function TOCNav({
                                             : "text-white/25",
                                     )}
                                 />
-                                <span>{text}</span>
+                                <span className="truncate">{text}</span>
                             </button>
                         </li>
                     );
@@ -105,35 +105,57 @@ export default function TableOfContents({
     const [activeId, setActiveId] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false);
     const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+    const manualScrollTarget = useRef<string | null>(null);
+    const scrollEndTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (headings.length === 0) return;
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries
-                    .filter((e) => e.isIntersecting)
-                    .sort(
-                        (a, b) =>
-                            a.boundingClientRect.top -
-                            b.boundingClientRect.top,
-                    );
-                if (visible.length > 0) {
-                    setActiveId(visible[0].target.id);
+        // Walk headings top-to-bottom; the last one whose top edge is at or
+        // above 25% of the viewport is the "current" section.
+        const computeActiveId = (): string => {
+            const threshold = window.innerHeight * 0.25;
+            let current = headings[0].id;
+            for (const { id } of headings) {
+                const el = document.getElementById(id);
+                if (!el) continue;
+                if (el.getBoundingClientRect().top <= threshold) {
+                    current = id;
+                } else {
+                    break;
                 }
-            },
-            { rootMargin: "-10% 0% -75% 0%", threshold: 0 },
-        );
+            }
+            return current;
+        };
 
-        headings.forEach(({ id }) => {
-            const el = document.getElementById(id);
-            if (el) observer.observe(el);
-        });
+        const handleScroll = () => {
+            if (manualScrollTarget.current !== null) {
+                // Still in a click-triggered scroll — debounce the lock release.
+                if (scrollEndTimer.current)
+                    clearTimeout(scrollEndTimer.current);
+                scrollEndTimer.current = setTimeout(() => {
+                    manualScrollTarget.current = null;
+                    setActiveId(computeActiveId());
+                }, 150);
+                return;
+            }
+            setActiveId(computeActiveId());
+        };
 
-        return () => observer.disconnect();
+        // Seed active state after the first paint so the DOM is laid out.
+        const raf = requestAnimationFrame(() => setActiveId(computeActiveId()));
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+            cancelAnimationFrame(raf);
+            window.removeEventListener("scroll", handleScroll);
+            if (scrollEndTimer.current) clearTimeout(scrollEndTimer.current);
+        };
     }, [headings]);
 
     const scrollTo = useCallback((id: string) => {
+        setActiveId(id);
+        manualScrollTarget.current = id;
         const el = document.getElementById(id);
         if (el) {
             el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -235,7 +257,7 @@ export default function TableOfContents({
 
     return (
         <>
-            <div className="sticky top-24">
+            <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
                 <TOCNav
                     headings={headings}
                     activeId={activeId}
