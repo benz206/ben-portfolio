@@ -3,12 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ImGithub } from "react-icons/im";
-import { FaLinkedin, FaDiscord, FaInstagram } from "react-icons/fa6";
+import { FaLinkedin, FaDiscord, FaInstagram, FaSpotify } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { AmbientGradient } from "@/components/AmbientGradient";
+import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
 
 const motionProps = {
     transition: {
@@ -65,6 +66,7 @@ const clubs = [
 ] as const;
 
 export default function Footer() {
+    const { track } = useCurrentlyPlaying();
     const [views, setViews] = useState<number | null>(null);
     const [dailyViews, setDailyViews] = useState<number | null>(null);
     const [viewers, setViewers] = useState<number | null>(null);
@@ -144,6 +146,20 @@ export default function Footer() {
                             </span>
                         )}
                     </div>
+                    {track && (
+                        <div className="inline-flex items-center gap-1.5 text-xs font-thin text-white/35">
+                            <FaSpotify className="shrink-0 text-green-500" />
+                            <span>
+                                {track.paused === "true"
+                                    ? "Last listened:"
+                                    : "Now playing:"}{" "}
+                                <span className="text-white/50">
+                                    {track.title}
+                                </span>{" "}
+                                — {track.artist}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <div className="flex flex-col flex-1 gap-6 items-center lg:items-end">
                     <div className="flex flex-wrap gap-4 justify-center text-white/70 lg:justify-end">
