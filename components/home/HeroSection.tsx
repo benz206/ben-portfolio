@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
 import CurrentlyPlaying from "@/components/CurrentlyPlaying";
+import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
 import FuegoLogo from "@/public/experience/fuego.webp";
 import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
 import SAPLogo from "@/public/experience/SAP.png";
@@ -59,11 +60,31 @@ export default function HeroSection() {
         roleCardBaseDelay + recentRoles.length * roleCardStep + 0.35;
 
     const handleScrollClick = useScrollToSection("home-next-section");
+    const { track, isLoading, error, currentProgress } = useCurrentlyPlaying();
+
+    const albumColor = track?.color;
 
     return (
         <section className="flex relative justify-center items-center pt-8 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
+            {albumColor && (
+                <motion.div
+                    className="absolute pointer-events-none rounded-full"
+                    style={{
+                        left: "-10%",
+                        bottom: "-5%",
+                        width: "700px",
+                        height: "700px",
+                        filter: "blur(130px)",
+                    }}
+                    animate={{
+                        backgroundColor: `rgb(${albumColor[0]}, ${albumColor[1]}, ${albumColor[2]})`,
+                        opacity: 0.14,
+                    }}
+                    transition={{ duration: 3, ease: "easeInOut" }}
+                />
+            )}
             <div className="relative flex w-full max-w-270 flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8">
@@ -97,7 +118,12 @@ export default function HeroSection() {
                                 delay: currentlyPlayingDelay,
                             }}
                         >
-                            <CurrentlyPlaying />
+                            <CurrentlyPlaying
+                                track={track}
+                                isLoading={isLoading}
+                                error={error}
+                                currentProgress={currentProgress}
+                            />
                         </motion.div>
                     </div>
                     <motion.div

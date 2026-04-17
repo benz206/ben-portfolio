@@ -63,11 +63,11 @@ export function useCurrentlyPlaying(): CurrentlyPlayingState {
 
         const progressInterval = setInterval(() => {
             setCurrentProgress((prev) => {
-                const newProgress = prev + 1;
+                const newProgress = prev + 1000;
                 const duration = parseInt(track.duration);
                 return newProgress > duration ? duration : newProgress;
             });
-        }, 5000);
+        }, 1000);
 
         return () => clearInterval(progressInterval);
     }, [track]);

@@ -4,11 +4,22 @@ import { motion, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
-import { useCurrentlyPlaying } from "./useCurrentlyPlaying";
+import type { SpotifyTrack } from "./useCurrentlyPlaying";
 
-export default function CurrentlyPlaying() {
-    const { track, isLoading, error, currentProgress } = useCurrentlyPlaying();
+type CurrentlyPlayingProps = {
+    track: SpotifyTrack | null;
+    isLoading: boolean;
+    error: string | null;
+    currentProgress: number;
+};
 
+
+export default function CurrentlyPlaying({
+    track,
+    isLoading,
+    error,
+    currentProgress,
+}: CurrentlyPlayingProps) {
     if (isLoading) {
         return (
             <Card
@@ -67,6 +78,7 @@ export default function CurrentlyPlaying() {
     const dominantColor = track.color
         ? `rgb(${track.color[0]}, ${track.color[1]}, ${track.color[2]}, 50%)`
         : "#1DB954";
+const isPlaying = track.paused !== "true";
 
     return (
         <Card
@@ -95,7 +107,7 @@ export default function CurrentlyPlaying() {
                     <div className="absolute inset-0 bg-black/50" />
                 </>
             )}
-            <div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
+<div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
                 <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl">
                     {track.albumArt && (
                         <Image
@@ -111,9 +123,7 @@ export default function CurrentlyPlaying() {
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="shrink-0 w-4 h-4 text-green-500" />
                         <span className="text-xs font-medium truncate text-slate-400">
-                            {track.paused === "true"
-                                ? "Last Listened To"
-                                : "Now Playing"}{" "}
+                            {isPlaying ? "Now Playing" : "Last Listened To"}{" "}
                             - {track.artist}
                         </span>
                     </div>
@@ -123,13 +133,12 @@ export default function CurrentlyPlaying() {
                     </h3>
 
                     <div className="w-full">
-                        <div className="w-full h-1.5 bg-gray-700 rounded-full">
-                            <div
-                                className="h-1.5 rounded-full transition-all duration-300 ease-out"
-                                style={{
-                                    width: `${progressPercentage}%`,
-                                    backgroundColor: dominantColor,
-                                }}
+                        <div className="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                            <motion.div
+                                className="h-1.5 rounded-full"
+                                animate={{ width: `${progressPercentage}%` }}
+                                transition={{ duration: 1, ease: "linear" }}
+                                style={{ backgroundColor: dominantColor }}
                             />
                         </div>
                     </div>

@@ -45,10 +45,15 @@ module.exports = {
                     "0%, 100%": { opacity: "0.45" },
                     "50%": { opacity: "1" },
                 },
+                "equalizer": {
+                    "0%, 100%": { height: "3px" },
+                    "50%": { height: "14px" },
+                },
             },
             animation: {
                 "fade-in": "fade-in 1s ease-in-out",
                 "arrow-flicker": "arrow-flicker 1.8s ease-in-out infinite",
+                "equalizer": "equalizer 0.75s ease-in-out infinite",
             },
             height: {
                 192: "48rem",
