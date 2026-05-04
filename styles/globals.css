@@ -5,6 +5,11 @@
 @import "tailwindcss";
 
 @layer base {
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
     body {
         @apply transition-all duration-150 ease-linear bg-[#050506] text-[#f5f6f7];
     }
@@ -66,6 +71,7 @@
 
 .home-section {
     min-height: 100vh;
+    min-height: 100dvh;
     width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;

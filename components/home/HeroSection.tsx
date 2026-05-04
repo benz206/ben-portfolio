@@ -65,7 +65,7 @@ export default function HeroSection() {
     const albumColor = track?.color;
 
     return (
-        <section className="flex relative justify-center items-center pt-8 pb-16 min-h-[200vh] home-section sm:pb-20 sm:pt-28 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
+        <section className="flex overflow-hidden relative justify-center items-center pt-24 pb-20 home-section sm:pb-20 sm:pt-28 lg:h-dvh lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             {albumColor && (
@@ -151,7 +151,7 @@ export default function HeroSection() {
                     </motion.div>
                 </div>
             </div>
-            <div className="flex absolute bottom-12 left-1/2 flex-col items-center -translate-x-1/2 text-white/70">
+            <div className="hidden lg:flex absolute bottom-12 left-1/2 flex-col items-center -translate-x-1/2 text-white/70">
                 <motion.button
                     type="button"
                     aria-label="Scroll to next section"

@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Providers from "./providers";
 import Layout from "@/components/Layout";
 import ViewCounter from "@/components/ViewCounter";
@@ -41,6 +41,12 @@ export const metadata: Metadata = {
     other: {
         "theme-color": "#339ccd",
     },
+};
+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
 };
 
 export default function RootLayout({

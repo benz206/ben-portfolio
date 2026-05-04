@@ -107,8 +107,8 @@ const isPlaying = track.paused !== "true";
                     <div className="absolute inset-0 bg-black/50" />
                 </>
             )}
-<div className="relative z-10 flex items-center p-0.5 m-4 space-x-6 w-full">
-                <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl">
+<div className="relative z-10 flex items-center p-0.5 m-3 space-x-4 w-full sm:m-4 sm:space-x-6">
+                <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl shrink-0">
                     {track.albumArt && (
                         <Image
                             src={track.albumArt}
