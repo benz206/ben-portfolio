@@ -11,7 +11,9 @@ function extractText(node: React.ReactNode): string {
         return String(node);
     if (Array.isArray(node)) return node.map(extractText).join("");
     if (React.isValidElement(node))
-        return extractText((node.props as { children?: React.ReactNode }).children);
+        return extractText(
+            (node.props as { children?: React.ReactNode }).children,
+        );
     return "";
 }
 
@@ -102,7 +104,9 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             <ul className="my-5 list-disc space-y-2 pl-6">{children}</ul>
         ),
         li: ({ children }) => (
-            <li className="text-base leading-[1.85] text-white/80">{children}</li>
+            <li className="text-base leading-[1.85] text-white/80">
+                {children}
+            </li>
         ),
         code: ({ children, className }) => {
             if (className?.includes("language-")) {

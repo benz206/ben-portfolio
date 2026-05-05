@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, useSyncExternalStore } from "react";
+import {
+    useEffect,
+    useRef,
+    useState,
+    useCallback,
+    useSyncExternalStore,
+} from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/utils/cn";
 
@@ -97,14 +103,14 @@ function TOCNav({
     );
 }
 
-export default function TableOfContents({
-    headings,
-}: {
-    headings: Heading[];
-}) {
+export default function TableOfContents({ headings }: { headings: Heading[] }) {
     const [activeId, setActiveId] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false);
-    const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+    const mounted = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
     const manualScrollTarget = useRef<string | null>(null);
     const scrollEndTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 

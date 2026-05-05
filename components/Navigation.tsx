@@ -114,7 +114,11 @@ export default function Navigation() {
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
                             aria-label={isOpen ? "Close menu" : "Open menu"}
-                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 20,
+                            }}
                             whileTap={{ scale: 0.95 }}
                         >
                             <span className="sr-only">

@@ -18,7 +18,10 @@ const catppuccinMochaTheme: PrismTheme = {
     styles: [
         { types: ["comment"], style: { color: "#6c7086" } },
         { types: ["string", "char", "inserted"], style: { color: "#a6e3a1" } },
-        { types: ["number", "constant", "builtin", "boolean"], style: { color: "#fab387" } },
+        {
+            types: ["number", "constant", "builtin", "boolean"],
+            style: { color: "#fab387" },
+        },
         { types: ["function", "class-name"], style: { color: "#89b4fa" } },
         { types: ["keyword", "operator"], style: { color: "#cba6f7" } },
         { types: ["punctuation"], style: { color: "#bac2de" } },

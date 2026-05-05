@@ -56,7 +56,11 @@ type CommandSection = {
 };
 
 export function CommandProvider({ children }: CommandProviderProps) {
-    const isClient = useSyncExternalStore(() => () => {}, () => true, () => false);
+    const isClient = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [sources, setSources] = useState<Map<string, CommandDescriptor[]>>(

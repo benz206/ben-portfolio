@@ -13,7 +13,6 @@ type CurrentlyPlayingProps = {
     currentProgress: number;
 };
 
-
 export default function CurrentlyPlaying({
     track,
     isLoading,
@@ -78,7 +77,7 @@ export default function CurrentlyPlaying({
     const dominantColor = track.color
         ? `rgb(${track.color[0]}, ${track.color[1]}, ${track.color[2]}, 50%)`
         : "#1DB954";
-const isPlaying = track.paused !== "true";
+    const isPlaying = track.paused !== "true";
 
     return (
         <Card
@@ -123,8 +122,8 @@ const isPlaying = track.paused !== "true";
                     <div className="flex items-center mb-2 space-x-2">
                         <FaSpotify className="shrink-0 w-4 h-4 text-green-500" />
                         <span className="text-xs font-medium truncate text-slate-400">
-                            {isPlaying ? "Now Playing" : "Last Listened To"}{" "}
-                            - {track.artist}
+                            {isPlaying ? "Now Playing" : "Last Listened To"} -{" "}
+                            {track.artist}
                         </span>
                     </div>
 

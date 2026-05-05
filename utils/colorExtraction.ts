@@ -171,14 +171,14 @@ class CMap {
     }
 
     palette() {
-        return this.vboxes.map(vb => vb.color);
+        return this.vboxes.map((vb) => vb.color);
     }
 }
 
 const getHisto = (pixels: RgbColor[]) => {
     const histosize = 1 << (3 * SIG_BITS);
     const histo = new Array<number>(histosize);
-    pixels.forEach(pixel => {
+    pixels.forEach((pixel) => {
         const r = pixel[0] >> R_SHIFT;
         const g = pixel[1] >> R_SHIFT;
         const b = pixel[2] >> R_SHIFT;
@@ -195,7 +195,7 @@ const vboxFromPixels = (pixels: RgbColor[], histo: number[]) => {
     let gmax = 0;
     let bmin = 1000000;
     let bmax = 0;
-    pixels.forEach(pixel => {
+    pixels.forEach((pixel) => {
         const r = pixel[0] >> R_SHIFT;
         const g = pixel[1] >> R_SHIFT;
         const b = pixel[2] >> R_SHIFT;
@@ -277,7 +277,8 @@ const medianCutApply = (histo: number[], vbox: VBox) => {
                 else d2 = Math.max(vbox[dim1], Math.trunc(i - 1 - left / 2));
                 while (!partialsum[d2]) d2++;
                 let count2 = lookaheadsum[d2];
-                while (!count2 && partialsum[d2 - 1]) count2 = lookaheadsum[--d2];
+                while (!count2 && partialsum[d2 - 1])
+                    count2 = lookaheadsum[--d2];
                 vbox1[dim2] = d2;
                 vbox2[dim1] = vbox1[dim2] + 1;
                 return [vbox1, vbox2];
@@ -385,7 +386,7 @@ export async function getDominantColorFromImageUrl(
             const r = data[offset] ?? 0;
             const g = data[offset + 1] ?? 0;
             const b = data[offset + 2] ?? 0;
-            const a = info.channels === 4 ? data[offset + 3] ?? 255 : 255;
+            const a = info.channels === 4 ? (data[offset + 3] ?? 255) : 255;
             if (a >= 125) {
                 if (!(r > 250 && g > 250 && b > 250)) {
                     pixelArray.push([r, g, b]);

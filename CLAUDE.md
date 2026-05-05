@@ -29,6 +29,7 @@ Blog posts are fetched from an external GitHub repo (`benz206/blog`) via the Git
 ### API Routes
 
 All under `app/api/`:
+
 - `blog/public` — blog post list
 - `getCurrent/public`, `getCurrent/[password]` — Spotify current track
 - `getTop/public` — Spotify top tracks
@@ -49,6 +50,7 @@ TailwindCSS 4 with class-based dark mode. Custom `noir-*` gradient backgrounds d
 ### Environment Variables
 
 Defined in `environment.d.ts`:
+
 - `SPOTIFY_CLIENTID`, `SPOTIFY_SECRET`, `SPOTIFY_REFRESHTOKEN`
 - `BLOG_PAT` — GitHub PAT for blog repo
 - `REDIS_URL`
