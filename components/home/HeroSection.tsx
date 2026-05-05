@@ -87,7 +87,7 @@ export default function HeroSection() {
             )}
             <div className="relative flex w-full max-w-270 flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
-                    <div className="flex flex-col gap-0 lg:gap-8">
+                    <div className="flex flex-col gap-0 lg:gap-8 min-w-0">
                         <motion.div
                             className="space-y-2 lg:space-y-6"
                             initial={{ opacity: 0, y: 24 }}
@@ -127,7 +127,7 @@ export default function HeroSection() {
                         </motion.div>
                     </div>
                     <motion.div
-                        className="flex flex-col gap-4"
+                        className="flex flex-col gap-4 min-w-0"
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, amount: 0.4 }}

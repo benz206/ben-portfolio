@@ -35,7 +35,7 @@ export default function CurrentlyPlaying({
                     transition: { duration: 1 },
                 }}
             >
-                <div className="relative z-10 flex items-center p-0.5 m-4 ml-2 space-x-6 w-full">
+                <div className="relative z-10 flex items-center space-x-6 flex-1 min-w-0">
                     <div className="overflow-hidden shrink-0 h-full rounded-xl shadow-xl max-w-36 aspect-square">
                         <div className="w-full h-full animate-pulse">
                             <div className="flex justify-center items-center w-full h-full">
@@ -107,7 +107,7 @@ const isPlaying = track.paused !== "true";
                     <div className="absolute inset-0 bg-black/50" />
                 </>
             )}
-<div className="relative z-10 flex items-center p-0.5 m-3 space-x-4 w-full sm:m-4 sm:space-x-6">
+<div className="relative z-10 flex items-center space-x-4 flex-1 min-w-0">
                 <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl shrink-0">
                     {track.albumArt && (
                         <Image
