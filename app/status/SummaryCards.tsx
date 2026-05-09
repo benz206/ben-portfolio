@@ -31,8 +31,8 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                 ambientClassName="opacity-45"
                 className="flex relative flex-col gap-4 p-5 border border-white/10"
             >
-                <div className="absolute -top-16 -right-16 w-44 h-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-berry" />
-                <div className="absolute left-6 -bottom-14 w-36 h-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
+                <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-berry" />
+                <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
                 <div className="flex justify-between items-center">
                     <span className="text-xs uppercase tracking-[0.3em] text-white/50">
                         Overall
@@ -56,8 +56,8 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                 ambientClassName="opacity-40"
                 className="flex relative flex-col gap-4 p-5 border border-white/10"
             >
-                <div className="absolute -top-16 -right-16 w-44 h-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-cool" />
-                <div className="absolute left-6 -bottom-14 w-36 h-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
+                <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-cool" />
+                <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
                 <span className="text-xs uppercase tracking-[0.3em] text-white/50">
                     Services
                 </span>
@@ -73,8 +73,8 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                 ambientClassName="opacity-40"
                 className="flex relative flex-col gap-4 p-5 border border-white/10"
             >
-                <div className="absolute -top-16 -right-16 w-44 h-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-spotify" />
-                <div className="absolute left-6 -bottom-14 w-36 h-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
+                <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-spotify" />
+                <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
                 <span className="text-xs uppercase tracking-[0.3em] text-white/50">
                     Operational
                 </span>
@@ -90,8 +90,8 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                 ambientClassName="opacity-35"
                 className="flex relative flex-col gap-4 p-5 border border-white/10"
             >
-                <div className="absolute -top-16 -right-16 w-44 h-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-warm" />
-                <div className="absolute left-6 -bottom-14 w-36 h-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
+                <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-warm" />
+                <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
                 <span className="text-xs uppercase tracking-[0.3em] text-white/50">
                     Alerts
                 </span>

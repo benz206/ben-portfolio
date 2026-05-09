@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Card from "@/components/Card";
 import { FaSpotify } from "react-icons/fa6";
 import TopItemCard from "@/components/home/TopItemCard";
@@ -17,7 +17,7 @@ export default function SpotifyTopSection() {
             <div className="absolute inset-0 opacity-90 bg-noir-radial-spotify" />
 
             <div className="relative z-10 flex w-11/12 max-w-270 flex-col gap-10">
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.4 }}
@@ -26,7 +26,7 @@ export default function SpotifyTopSection() {
                 >
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center gap-3">
-                            <FaSpotify className="w-4 h-4 text-green-500" />
+                            <FaSpotify className="size-4 text-green-500" />
                             <span className="text-xs uppercase tracking-[0.3em] text-white/45">
                                 Spotify
                             </span>
@@ -38,24 +38,24 @@ export default function SpotifyTopSection() {
                             What I&apos;ve been listening to <b>recently</b>.
                         </p>
                     </div>
-                </motion.div>
+                </m.div>
 
                 {isLoading ? (
                     <div className="grid gap-10">
                         <div className="grid gap-4">
                             <div className="w-40 h-6 rounded animate-pulse bg-white/10" />
-                            {[0, 1, 2].map((i) => (
+                            {["t-skel-0", "t-skel-1", "t-skel-2"].map((id) => (
                                 <div
-                                    key={`t-skel-${i}`}
+                                    key={id}
                                     className="border h-23 rounded-2xl bg-white/5 border-white/10 animate-pulse"
                                 />
                             ))}
                         </div>
                         <div className="grid gap-4">
                             <div className="w-40 h-6 rounded animate-pulse bg-white/10" />
-                            {[0, 1, 2].map((i) => (
+                            {["a-skel-0", "a-skel-1", "a-skel-2"].map((id) => (
                                 <div
-                                    key={`a-skel-${i}`}
+                                    key={id}
                                     className="border h-23 rounded-2xl bg-white/5 border-white/10 animate-pulse"
                                 />
                             ))}
@@ -83,7 +83,7 @@ export default function SpotifyTopSection() {
                             <div className="grid gap-8">
                                 {data.tracks.map((t, idx) => (
                                     <TopItemCard
-                                        key={`track-${t.name}-${idx}`}
+                                        key={`track-${t.name}`}
                                         item={t}
                                         rank={idx + 1}
                                         kind="track"
@@ -98,7 +98,7 @@ export default function SpotifyTopSection() {
                             <div className="grid gap-8">
                                 {data.artists.map((a, idx) => (
                                     <TopItemCard
-                                        key={`artist-${a.name}-${idx}`}
+                                        key={`artist-${a.name}`}
                                         item={a}
                                         rank={idx + 1}
                                         kind="artist"

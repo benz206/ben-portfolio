@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { motion, easeInOut } from "framer-motion";
+import { m, easeInOut } from "framer-motion";
 import Card from "@/components/Card";
 import type { GitHubRepo } from "@/types";
 import { useRepoFilterSort } from "@/components/GitHub/useRepoFilterSort";
@@ -137,7 +137,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                                         key={entry.language}
                                         className="flex gap-4 items-center"
                                     >
-                                        <div className="flex justify-center items-center w-10 h-10 text-sm font-semibold rounded-2xl border border-white/10 bg-white/5">
+                                        <div className="flex justify-center items-center size-10 text-sm font-semibold rounded-2xl border border-white/10 bg-white/5">
                                             {entry.percentage}%
                                         </div>
                                         <div className="flex flex-1 justify-between items-center">
@@ -153,7 +153,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                             </div>
                         </Card>
                     </aside>
-                    <motion.div
+                    <m.div
                         ref={timelineRef}
                         className="flex overflow-y-auto flex-col flex-1 gap-8 pr-2 w-full"
                         initial={{ opacity: 0, y: 48 }}
@@ -174,7 +174,7 @@ export default function RepoExplorer({ repos }: RepoExplorerProps) {
                         {filteredRepoData.map((repo, index) => (
                             <RepoCard key={repo.id} repo={repo} index={index} />
                         ))}
-                    </motion.div>
+                    </m.div>
                 </div>
             </div>
         </section>

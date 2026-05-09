@@ -6,10 +6,12 @@ import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram, FaSpotify } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
-import { motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { m } from "framer-motion";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
+
+const numberFormatter = new Intl.NumberFormat();
 
 const motionProps = {
     transition: {
@@ -70,6 +72,12 @@ export default function Footer() {
     const [views, setViews] = useState<number | null>(null);
     const [dailyViews, setDailyViews] = useState<number | null>(null);
     const [viewers, setViewers] = useState<number | null>(null);
+    const isClient = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
+    const year = isClient ? new Date().getFullYear() : null;
 
     useEffect(() => {
         (async () => {
@@ -100,7 +108,7 @@ export default function Footer() {
 
     const viewText = useMemo(() => {
         if (views === null) return null;
-        const count = new Intl.NumberFormat().format(views);
+        const count = numberFormatter.format(views);
         return `${count} visits tracked`;
     }, [views]);
 
@@ -125,7 +133,7 @@ export default function Footer() {
                         </Link>
                     </p>
                     <div className="text-xs font-thin text-white/40">
-                        © {new Date().getFullYear()} Ben
+                        © {year} Ben
                         {viewText && (
                             <span className="ml-3 text-white/35">
                                 {viewText}
@@ -138,9 +146,9 @@ export default function Footer() {
                         )}
                         {viewers !== null && viewers > 0 && (
                             <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
-                                <span className="relative flex h-1.5 w-1.5">
+                                <span className="relative flex size-1.5">
                                     <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
-                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
+                                    <span className="relative inline-flex size-1.5 rounded-full bg-green-500" />
                                 </span>
                                 {viewers} viewing
                             </span>
@@ -155,8 +163,9 @@ export default function Footer() {
                                     : "Now playing:"}{" "}
                                 <span className="text-white/50">
                                     {track.title}
-                                </span>{" "}
-                                — {track.artist}
+                                </span>
+                                {": "}
+                                {track.artist}
                             </span>
                         </div>
                     )}
@@ -164,10 +173,10 @@ export default function Footer() {
                 <div className="flex flex-col flex-1 gap-6 items-center lg:items-end">
                     <div className="flex flex-wrap gap-4 justify-center text-white/70 lg:justify-end">
                         {socials.map(({ href, icon: Icon, label, seed }) => (
-                            <motion.a
+                            <m.a
                                 key={href}
                                 {...motionProps}
-                                className="flex overflow-hidden relative justify-center items-center w-11 h-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
+                                className="flex overflow-hidden relative justify-center items-center size-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
                                 href={href}
                                 target="_blank"
                                 aria-label={label}
@@ -179,14 +188,14 @@ export default function Footer() {
                                 <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-90">
                                     <Icon />
                                 </span>
-                            </motion.a>
+                            </m.a>
                         ))}
                     </div>
                     <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
                         {clubs.map((club) => (
                             <span
                                 key={club.src}
-                                className="flex overflow-hidden justify-center items-center w-6 h-6 rounded-sm"
+                                className="flex overflow-hidden justify-center items-center size-6 rounded-sm"
                             >
                                 <Image
                                     src={club.src}

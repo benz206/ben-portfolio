@@ -29,7 +29,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["root", "landing"],
         meta: "Page",
-        icon: <FaHouse className="w-3.5 h-3.5" />,
+        icon: <FaHouse className="size-3.5" />,
     },
     {
         id: "nav-projects",
@@ -38,7 +38,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["portfolio", "work"],
         meta: "Page",
-        icon: <FaFolderOpen className="w-3.5 h-3.5" />,
+        icon: <FaFolderOpen className="size-3.5" />,
     },
     {
         id: "nav-gallery",
@@ -47,7 +47,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["photos", "images"],
         meta: "Page",
-        icon: <FaImages className="w-3.5 h-3.5" />,
+        icon: <FaImages className="size-3.5" />,
     },
     {
         id: "nav-status",
@@ -56,7 +56,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["services", "health", "uptime"],
         meta: "Page",
-        icon: <FiActivity className="w-3.5 h-3.5" />,
+        icon: <FiActivity className="size-3.5" />,
     },
     {
         id: "nav-resume",
@@ -65,7 +65,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["pdf", "download"],
         meta: "PDF",
-        icon: <FaFileLines className="w-3.5 h-3.5" />,
+        icon: <FaFileLines className="size-3.5" />,
         actionLabel: "Open in new tab",
     },
 ];
@@ -81,7 +81,7 @@ function buildBlogView(posts: BlogPostSummary[]) {
                 href: "/blog",
                 section: "Blog",
                 meta: "Page",
-                icon: <FiBookOpen className="w-3.5 h-3.5" />,
+                icon: <FiBookOpen className="size-3.5" />,
             },
             ...posts.map((post) => ({
                 id: `blog-post-${post.slug}`,
@@ -91,7 +91,7 @@ function buildBlogView(posts: BlogPostSummary[]) {
                 section: "Blog",
                 meta: "Post",
                 keywords: [post.slug, ...(post.tags ?? [])],
-                icon: <FaRegNewspaper className="w-3.5 h-3.5" />,
+                icon: <FaRegNewspaper className="size-3.5" />,
             })),
         ] as CommandDescriptor[],
     };
@@ -100,7 +100,7 @@ function buildBlogView(posts: BlogPostSummary[]) {
 export function useNavigationCommands() {
     const { registerCommands, pushView } = useCommandMenu();
     const pathname = usePathname();
-    const router = useRouter();
+    const { push } = useRouter();
     const blogPostsRef = useRef<BlogPostSummary[] | null>(null);
 
     // Pre-fetch blog posts immediately so they're ready when the palette opens
@@ -121,7 +121,7 @@ export function useNavigationCommands() {
             keywords: ["posts", "archive", "mdx", "articles", "writing"],
             meta: "Posts",
             closeOnRun: false,
-            icon: <FaPenNib className="w-3.5 h-3.5" />,
+            icon: <FaPenNib className="size-3.5" />,
             actionLabel: "Continue",
             action: () => {
                 if (blogPostsRef.current !== null) {
@@ -166,7 +166,7 @@ export function useNavigationCommands() {
             } else if (!action && href) {
                 action = () => {
                     if (href !== pathname) {
-                        router.push(href);
+                        push(href);
                     }
                 };
             }
@@ -182,5 +182,5 @@ export function useNavigationCommands() {
             replace: true,
         });
         return unregister;
-    }, [pathname, registerCommands, router, pushView]);
+    }, [pathname, registerCommands, push, pushView]);
 }

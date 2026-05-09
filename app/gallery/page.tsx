@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { v2 as cloudinary } from "cloudinary";
 import { getCldImageUrl } from "next-cloudinary";
 import GalleryClient from "./view";
@@ -47,7 +48,9 @@ async function generateBlurPlaceholders(
                 blur: "800",
             });
             try {
-                const res = await fetch(url);
+                const res = await fetch(url, {
+                    next: { revalidate: 86400 },
+                });
                 if (!res.ok) return [image.public_id, ""] as const;
                 const buffer = Buffer.from(await res.arrayBuffer());
                 const base64 = buffer.toString("base64");
@@ -65,6 +68,25 @@ async function generateBlurPlaceholders(
 }
 
 export const revalidate = 86400;
+
+export const metadata: Metadata = {
+    title: "Gallery - Ben's Portfolio",
+    description: "Photos I've taken over the years.",
+    alternates: {
+        canonical: "/gallery",
+    },
+    openGraph: {
+        title: "Gallery - Ben's Portfolio",
+        description: "Photos I've taken over the years.",
+        url: "/gallery",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Gallery - Ben's Portfolio",
+        description: "Photos I've taken over the years.",
+    },
+};
 
 export default async function GalleryPage() {
     const images = await fetchImages();

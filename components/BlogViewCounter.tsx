@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { FiEye } from "react-icons/fi";
 import { cn } from "@/utils/cn";
 
+const viewsFormatter = new Intl.NumberFormat();
+
 type Props = {
     slug: string;
     initialViews?: number;
@@ -15,7 +17,8 @@ export default function BlogViewCounter({
     initialViews = 0,
     className,
 }: Props) {
-    const [views, setViews] = useState<number>(initialViews);
+    const [fetchedViews, setFetchedViews] = useState<number | null>(null);
+    const views = fetchedViews ?? initialViews;
 
     useEffect(() => {
         let isMounted = true;
@@ -26,7 +29,7 @@ export default function BlogViewCounter({
                 });
                 if (!response.ok) return;
                 const { count } = await response.json();
-                if (isMounted) setViews(count);
+                if (isMounted) setFetchedViews(count);
             } catch (error) {
                 console.error("Failed to fetch post views", error);
             }
@@ -36,10 +39,10 @@ export default function BlogViewCounter({
         };
     }, [slug]);
 
-    const formatted = new Intl.NumberFormat().format(views);
+    const formatted = viewsFormatter.format(views);
     return (
         <div className={cn("flex items-center gap-1.5", className)}>
-            <FiEye className="w-4 h-4 text-white/50" />
+            <FiEye className="size-4 text-white/50" />
             <span className="text-sm text-white/50">{formatted}</span>
         </div>
     );

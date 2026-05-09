@@ -33,6 +33,7 @@ export async function GET(
         const accessToken = await getSpotifyAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/me/player`, {
             headers: { Authorization: `Bearer ${accessToken}` },
+            cache: "no-store",
         });
 
         if (!response.ok) {
@@ -53,9 +54,11 @@ export async function GET(
 
         const hash = current.item.album.images?.[0]?.url.split("/")[4];
         const dominantColor = hash
-            ? ((await fetch(`https://bzhou.ca/api/getColor/${hash}`).then((r) =>
-                  r.json(),
-              )) as { answer: [number, number, number] })
+            ? ((await fetch(`https://bzhou.ca/api/getColor/${hash}`, {
+                  cache: "no-store",
+              }).then((r) => r.json())) as {
+                  answer: [number, number, number];
+              })
             : { answer: [29, 185, 84] as [number, number, number] };
 
         return NextResponse.json(

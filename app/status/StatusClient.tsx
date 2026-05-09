@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
     buildServiceChecks,
     initialServices,
@@ -10,12 +10,14 @@ import {
 import SummaryCards from "./SummaryCards";
 import ServiceCard from "./ServiceCard";
 
+const timeFormatter = new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+});
+
 const formatTime = (value?: number) => {
     if (!value) return null;
-    return new Intl.DateTimeFormat(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-    }).format(new Date(value));
+    return timeFormatter.format(new Date(value));
 };
 
 export default function StatusClient() {
@@ -84,10 +86,10 @@ export default function StatusClient() {
         <section className="relative overflow-hidden text-white bg-[#050506]">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-70 bg-noir-radial" />
-            <div className="absolute -top-24 right-0 h-95 w-95 opacity-40 bg-noir-radial-berry" />
-            <div className="absolute -bottom-28 left-0 h-105 w-105 opacity-35 bg-noir-radial-cool" />
+            <div className="absolute -top-24 right-0 size-95 opacity-40 bg-noir-radial-berry" />
+            <div className="absolute -bottom-28 left-0 size-105 opacity-35 bg-noir-radial-cool" />
             <div className="relative mx-auto flex w-11/12 max-w-295 flex-col gap-14 pb-24 pt-20 lg:pb-32 lg:pt-28">
-                <motion.div
+                <m.div
                     className="space-y-6"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -118,9 +120,9 @@ export default function StatusClient() {
                     <p className="max-w-2xl text-sm text-white/55">
                         Live checks for site dependencies. No links, just data.
                     </p>
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                     className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -131,9 +133,9 @@ export default function StatusClient() {
                     }}
                 >
                     <SummaryCards services={services} />
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                     className="grid gap-6 md:grid-cols-2"
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -146,7 +148,7 @@ export default function StatusClient() {
                     {services.map((service) => (
                         <ServiceCard key={service.id} service={service} />
                     ))}
-                </motion.div>
+                </m.div>
             </div>
         </section>
     );

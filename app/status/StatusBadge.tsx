@@ -25,7 +25,7 @@ export default function StatusBadge({
         <span
             className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.25em] ${color}`}
         >
-            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-current" />
+            <span className="inline-flex size-1.5 rounded-full bg-current" />
             {label}
         </span>
     );

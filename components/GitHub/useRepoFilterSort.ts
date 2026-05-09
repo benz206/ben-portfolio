@@ -13,7 +13,7 @@ const sortRepositories = (
     sortBy: SortOption,
     sortOrder: "asc" | "desc",
 ) => {
-    return [...repos].sort((a, b) => {
+    return repos.toSorted((a, b) => {
         let aValue: string | number = 0;
         let bValue: string | number = 0;
         switch (sortBy) {

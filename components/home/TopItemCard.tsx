@@ -9,9 +9,13 @@ type TopItemCardProps = {
     kind: "track" | "artist";
 };
 
+const followersFormatter = new Intl.NumberFormat(undefined, {
+    notation: "compact",
+});
+
 function formatFollowers(n?: number) {
     if (typeof n !== "number" || Number.isNaN(n)) return null;
-    return Intl.NumberFormat(undefined, { notation: "compact" }).format(n);
+    return followersFormatter.format(n);
 }
 
 export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
@@ -53,7 +57,7 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
             )}
 
             <div className="flex relative z-10 gap-6 items-center w-full">
-                <div className="overflow-hidden ml-2 w-20 h-20 rounded-lg shadow-xl bg-white/5">
+                <div className="overflow-hidden ml-2 size-20 rounded-lg shadow-xl bg-white/5">
                     {item.image ? (
                         <Image
                             src={item.image}
@@ -64,18 +68,18 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
                         />
                     ) : (
                         <div className="flex justify-center items-center w-full h-full">
-                            <FaSpotify className="w-10 h-10 text-white/35" />
+                            <FaSpotify className="size-10 text-white/35" />
                         </div>
                     )}
                 </div>
                 <div className="flex flex-col flex-1 justify-center min-w-0">
-                    <div className="flex items-center mb-1 space-x-2">
-                        <span className="text-xs font-medium truncate text-slate-200">
+                    <div className="flex items-center mb-1 gap-x-2">
+                        <span className="text-xs font-medium truncate text-zinc-200">
                             {subtitle}
                         </span>
                     </div>
 
-                    <h3 className="text-lg font-bold leading-tight text-white truncate">
+                    <h3 className="text-lg font-semibold leading-tight text-white truncate">
                         {item.name}
                     </h3>
                 </div>

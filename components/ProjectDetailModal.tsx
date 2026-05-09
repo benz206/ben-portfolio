@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
+import { AnimatePresence, m } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { ProjectPreviewProps } from "@/types";
 import Card from "@/components/Card";
@@ -26,22 +26,28 @@ export default function ProjectDetailModal({
         },
         [onClose],
     );
+    const handlerRef = useRef(handleKeyDown);
 
     useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
+        handlerRef.current = handleKeyDown;
     }, [handleKeyDown]);
+
+    useEffect(() => {
+        const listener = (event: KeyboardEvent) => handlerRef.current(event);
+        document.addEventListener("keydown", listener);
+        return () => document.removeEventListener("keydown", listener);
+    }, []);
 
     return (
         <AnimatePresence>
-            <motion.div
+            <m.div
                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-12 backdrop-blur"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
             >
-                <motion.div
+                <m.div
                     className="relative w-full max-w-3xl"
                     initial={{ opacity: 0, y: 32 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -74,7 +80,7 @@ export default function ProjectDetailModal({
                                 type="button"
                                 onClick={onClose}
                                 aria-label="Close"
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/70 transition hover:border-white/40 hover:text-white"
+                                className="flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/70 transition hover:border-white/40 hover:text-white"
                             >
                                 <MdClose className="text-lg" />
                             </button>
@@ -97,8 +103,8 @@ export default function ProjectDetailModal({
                             ))}
                         </div>
                     </Card>
-                </motion.div>
-            </motion.div>
+                </m.div>
+            </m.div>
         </AnimatePresence>
     );
 }

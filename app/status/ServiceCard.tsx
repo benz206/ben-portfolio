@@ -22,7 +22,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                     splash?.glow ?? "bg-noir-radial"
                 }`}
             />
-            <div className="absolute left-8 -bottom-24 w-56 h-56 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
+            <div className="absolute left-8 -bottom-24 size-56 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
             <div className="absolute inset-0 opacity-60 pointer-events-none">
                 <div className="absolute inset-0 via-transparent to-transparent bg-linear-to-br from-white/5" />
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Experience from "@/components/Experience";
 
 export default function ExperienceSection() {
@@ -9,7 +9,7 @@ export default function ExperienceSection() {
         <section className="flex relative justify-center items-center py-20 min-h-screen text-white home-section bg-noir-gradient-warm">
             <div className="absolute inset-0 opacity-75 bg-noir-radial-warm" />
             <div className="relative flex w-11/12 max-w-270 flex-col gap-10">
-                <motion.div
+                <m.div
                     className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -25,15 +25,15 @@ export default function ExperienceSection() {
                     >
                         View all projects
                     </Link>
-                </motion.div>
-                <motion.div
+                </m.div>
+                <m.div
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <Experience />
-                </motion.div>
+                </m.div>
             </div>
         </section>
     );

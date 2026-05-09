@@ -50,8 +50,7 @@ function normalizeTags(tags: unknown): string[] {
     if (typeof tags === "string")
         return tags
             .split(",")
-            .map((t) => t.trim())
-            .filter(Boolean);
+            .flatMap((t) => (t.trim() ? [t.trim()] : []));
     return [];
 }
 
@@ -102,12 +101,11 @@ export async function fetchBlogSlugs(): Promise<string[]> {
             path: BLOG_POSTS_DIR,
         });
         const files = Array.isArray(response.data) ? response.data : [];
-        return files
-            .filter(
-                (f: any) =>
-                    typeof f?.name === "string" && f.name.endsWith(".mdx"),
-            )
-            .map((f: any) => f.name.replace(".mdx", ""));
+        return files.flatMap((f: any) =>
+            typeof f?.name === "string" && f.name.endsWith(".mdx")
+                ? [f.name.replace(".mdx", "")]
+                : [],
+        );
     } catch {
         return [];
     }
@@ -129,27 +127,30 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
     const files = Array.isArray(response.data) ? response.data : [];
 
     const posts: RawBlogMetadata[] = await Promise.all(
-        files
-            .filter(
-                (file: any) =>
-                    typeof file?.name === "string" &&
-                    file.name.endsWith(".mdx"),
-            )
-            .map(async (file: any) => {
-                const path = file.path as string;
-                const { created, updated } = await getCommitDates(path);
-                const fileContent = await getRepoFileContent(path);
-                const { data } = matter(fileContent ?? "");
+        files.flatMap((file: any) =>
+            typeof file?.name === "string" && file.name.endsWith(".mdx")
+                ? [
+                      (async () => {
+                          const path = file.path as string;
+                          const [{ created, updated }, fileContent] =
+                              await Promise.all([
+                                  getCommitDates(path),
+                                  getRepoFileContent(path),
+                              ]);
+                          const { data } = matter(fileContent ?? "");
 
-                return {
-                    title: data.title || "Untitled",
-                    description: data.description || "",
-                    tags: normalizeTags(data.tags),
-                    created: created || new Date().toISOString(),
-                    updated: updated || new Date().toISOString(),
-                    slug: (file.name as string).replace(".mdx", ""),
-                };
-            }),
+                          return {
+                              title: data.title || "Untitled",
+                              description: data.description || "",
+                              tags: normalizeTags(data.tags),
+                              created: created || new Date().toISOString(),
+                              updated: updated || new Date().toISOString(),
+                              slug: (file.name as string).replace(".mdx", ""),
+                          };
+                      })(),
+                  ]
+                : [],
+        ),
     );
 
     posts.sort(

@@ -94,7 +94,7 @@ export default async function BlogPage() {
                     <span className="text-xs uppercase tracking-[0.4em] text-white/35">
                         My thoughts and opinions
                     </span>
-                    <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">
+                    <h1 className="text-4xl font-semibold tracking-tight lg:text-5xl">
                         Blog
                     </h1>
                     <p className="text-base text-white/50">
@@ -124,7 +124,7 @@ export default async function BlogPage() {
                                     <span>Latest</span>
                                     <span className="h-px flex-1 bg-white/10" />
                                 </div>
-                                <h2 className="text-2xl font-bold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
+                                <h2 className="text-2xl font-semibold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
                                     {featuredPost.title}
                                 </h2>
                                 {featuredPost.description && (

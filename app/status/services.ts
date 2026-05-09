@@ -94,22 +94,26 @@ export const initialServices: ServiceStatus[] = [
 const formatNumber = (value: number) =>
     Intl.NumberFormat(undefined, { notation: "compact" }).format(value);
 
+const timeFormatter = new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+});
+
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "2-digit",
+});
+
 const formatTime = (value?: number) => {
     if (!value) return null;
-    return new Intl.DateTimeFormat(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-    }).format(new Date(value));
+    return timeFormatter.format(new Date(value));
 };
 
 const formatDate = (value?: string) => {
     if (!value) return null;
     const date = new Date(value);
     if (Number.isNaN(date.valueOf())) return null;
-    return new Intl.DateTimeFormat(undefined, {
-        month: "short",
-        day: "2-digit",
-    }).format(date);
+    return dateFormatter.format(date);
 };
 
 const sumRecentContributions = (

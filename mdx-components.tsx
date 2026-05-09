@@ -24,14 +24,14 @@ function headingId(children: React.ReactNode): string {
 export function getMDXComponents(components: MDXComponents): MDXComponents {
     return {
         h1: ({ children }) => (
-            <h1 className="mt-12 mb-4 text-3xl font-bold leading-tight tracking-tight lg:text-4xl">
+            <h1 className="mt-12 mb-4 text-3xl font-semibold tracking-tight leading-tight lg:text-4xl">
                 {children}
             </h1>
         ),
         h2: ({ children }) => (
             <h2
                 id={headingId(children)}
-                className="mt-12 mb-4 text-2xl font-bold leading-snug scroll-mt-24"
+                className="mt-12 mb-4 text-2xl font-semibold leading-snug scroll-mt-24"
             >
                 {children}
             </h2>
@@ -54,7 +54,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
         ),
         a: ({ children, href }) => (
             <a
-                className="text-blue-400 underline underline-offset-2 transition-colors hover:text-blue-300"
+                className="text-blue-400 underline transition-colors underline-offset-2 hover:text-blue-300"
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -98,10 +98,10 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             return <MDXImage src={props.src} alt={props.alt} />;
         },
         ol: ({ children }) => (
-            <ol className="my-5 list-decimal space-y-2 pl-6">{children}</ol>
+            <ol className="pl-6 my-5 space-y-2 list-decimal">{children}</ol>
         ),
         ul: ({ children }) => (
-            <ul className="my-5 list-disc space-y-2 pl-6">{children}</ul>
+            <ul className="pl-6 my-5 space-y-2 list-disc">{children}</ul>
         ),
         li: ({ children }) => (
             <li className="text-base leading-[1.85] text-white/80">
@@ -120,7 +120,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             }
             return (
                 <code
-                    className="rounded-md bg-white/[0.08] px-1.5 py-0.5 text-[0.875em] font-mono text-white/85"
+                    className="rounded-md bg-white/8 px-1.5 py-0.5 text-[0.875em] font-mono text-white/85"
                     style={{
                         fontFamily:
                             'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
@@ -135,7 +135,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 return (
                     <input
                         type="checkbox"
-                        className="mr-2 h-4 w-4 cursor-pointer accent-blue-500"
+                        className="mr-2 cursor-pointer size-4 accent-blue-500"
                         disabled={props.disabled}
                         checked={props.checked}
                         readOnly

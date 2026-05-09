@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { FaFolderOpen, FaHouse, FaImages, FaPenNib } from "react-icons/fa6";
 import Card from "@/components/Card";
 import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
@@ -43,7 +43,7 @@ export default function NotFoundAnimated() {
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             <div className="relative mx-auto flex w-11/12 max-w-270 flex-col items-center justify-center pb-24 pt-28 min-h-screen">
-                <motion.div
+                <m.div
                     className="w-full"
                     initial={{ opacity: 0, y: 18 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -69,7 +69,7 @@ export default function NotFoundAnimated() {
                             </div>
                         </div>
                     </Card>
-                </motion.div>
+                </m.div>
             </div>
         </main>
     );

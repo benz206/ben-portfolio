@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { IconType } from "react-icons";
 import { FiAward, FiCpu, FiTrendingUp } from "react-icons/fi";
 import {
@@ -59,7 +59,7 @@ export default function AboutMe() {
         >
             <div className="absolute inset-0 opacity-80 bg-noir-radial-cool" />
             <div className="relative grid w-11/12 max-w-270 gap-16 text-white lg:grid-cols-[minmax(320px,0.95fr)_minmax(0,1.05fr)] lg:items-start">
-                <motion.div
+                <m.div
                     className="space-y-6"
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -89,8 +89,8 @@ export default function AboutMe() {
                             className="opacity-40"
                         />
                     </div>
-                </motion.div>
-                <motion.div
+                </m.div>
+                <m.div
                     className="flex flex-col gap-4"
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -104,7 +104,7 @@ export default function AboutMe() {
                         const Icon = achievement.icon;
 
                         return (
-                            <motion.div
+                            <m.div
                                 key={achievement.title}
                                 className="relative isolate flex items-start gap-5 p-6 rounded-3xl card-glass"
                                 initial={{ opacity: 0, y: 24 }}
@@ -115,8 +115,8 @@ export default function AboutMe() {
                                     delay: cardBaseDelay + index * cardStep,
                                 }}
                             >
-                                <div className="relative z-10 flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 text-white/70">
-                                    <Icon className="w-6 h-6" />
+                                <div className="relative z-10 flex items-center justify-center size-12 rounded-xl bg-white/10 text-white/70">
+                                    <Icon className="size-6" />
                                 </div>
                                 <div className="relative z-10 flex flex-col flex-1 gap-2">
                                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -141,10 +141,10 @@ export default function AboutMe() {
                                     seed={achievement.title}
                                     className="opacity-40"
                                 />
-                            </motion.div>
+                            </m.div>
                         );
                     })}
-                </motion.div>
+                </m.div>
             </div>
         </section>
     );

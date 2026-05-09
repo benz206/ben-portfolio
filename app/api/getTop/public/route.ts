@@ -46,6 +46,7 @@ async function fetchTop<T>(
     url.searchParams.set("offset", "0");
     const res = await fetch(url.toString(), {
         headers: { Authorization: `Bearer ${accessToken}` },
+        cache: "no-store",
     });
     if (!res.ok) {
         const errorMessage = await res.text().catch(() => "");

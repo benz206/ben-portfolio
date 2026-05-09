@@ -74,6 +74,7 @@ export async function GET(_req: NextRequest) {
         const accessToken = await getSpotifyAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/me/player`, {
             headers: { Authorization: `Bearer ${accessToken}` },
+            cache: "no-store",
         });
 
         if (!response.ok) {

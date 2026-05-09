@@ -1,8 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { AnimatePresence, m, type Variants } from "framer-motion";
 import { CldImage } from "next-cloudinary";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 
 type ImageT = {
     public_id: string;
@@ -39,7 +39,7 @@ function PhotoTile({
     onSelect: (image: ImageT) => void;
 }) {
     return (
-        <motion.button
+        <m.button
             type="button"
             className="block overflow-hidden w-full rounded-xl transition duration-200 group hover:brightness-110"
             onClick={() => onSelect(image)}
@@ -66,7 +66,7 @@ function PhotoTile({
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                 />
             </div>
-        </motion.button>
+        </m.button>
     );
 }
 
@@ -87,22 +87,22 @@ export default function GalleryClient({
         setSelectedImage(null);
     }, []);
 
+    const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            handleClose();
+        }
+    });
+
     useEffect(() => {
         if (!selectedImage) return;
-        const handleKey = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                event.preventDefault();
-                handleClose();
-            }
-        };
-
         document.body.style.overflow = "hidden";
-        window.addEventListener("keydown", handleKey);
+        window.addEventListener("keydown", onKeyDown);
         return () => {
             document.body.style.overflow = "";
-            window.removeEventListener("keydown", handleKey);
+            window.removeEventListener("keydown", onKeyDown);
         };
-    }, [selectedImage, handleClose]);
+    }, [selectedImage]);
 
     return (
         <section className="relative overflow-hidden bg-[#05070f] text-white">
@@ -124,7 +124,7 @@ export default function GalleryClient({
                     </p>
                 </div>
 
-                <motion.div
+                <m.div
                     className={`grid w-full min-h-[60vh] gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 ${
                         selectedImage ? "blur-sm" : ""
                     }`}
@@ -140,12 +140,12 @@ export default function GalleryClient({
                             onSelect={handleSelect}
                         />
                     ))}
-                </motion.div>
+                </m.div>
             </div>
 
             <AnimatePresence>
                 {selectedImage && (
-                    <motion.div
+                    <m.div
                         className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md bg-neutral-950/80"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -153,7 +153,7 @@ export default function GalleryClient({
                         transition={{ duration: 0.25 }}
                         onClick={handleClose}
                     >
-                        <motion.div
+                        <m.div
                             key={selectedImage.public_id}
                             className="cursor-default"
                             initial={{ opacity: 0, scale: 0.94 }}
@@ -177,8 +177,8 @@ export default function GalleryClient({
                                 dpr="auto"
                                 format="webp"
                             />
-                        </motion.div>
-                    </motion.div>
+                        </m.div>
+                    </m.div>
                 )}
             </AnimatePresence>
         </section>

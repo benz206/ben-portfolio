@@ -20,10 +20,10 @@ type ContributionState = {
 };
 
 export function useGithubContributions(): ContributionState {
-    const [contributionWeeks, setContributionWeeks] = useState<
-        ContributionWeek[]
-    >([]);
-    const [maxContributionCount, setMaxContributionCount] = useState(0);
+    const [fetched, setFetched] = useState<{
+        weeks: ContributionWeek[];
+        maxCount: number;
+    }>({ weeks: [], maxCount: 0 });
 
     useEffect(() => {
         const fetchWithCache = async (url: string, cacheKey: string) => {
@@ -118,11 +118,9 @@ export function useGithubContributions(): ContributionState {
                 for (let i = 0; i < paddedDays.length; i += 7) {
                     weeks.push(paddedDays.slice(i, i + 7));
                 }
-                setContributionWeeks(weeks);
-                setMaxContributionCount(maxCount);
+                setFetched({ weeks, maxCount });
             } catch {
-                setContributionWeeks([]);
-                setMaxContributionCount(0);
+                setFetched({ weeks: [], maxCount: 0 });
             }
         })();
     }, []);
@@ -131,7 +129,7 @@ export function useGithubContributions(): ContributionState {
         const labels: MonthLabel[] = [];
         let lastLabel = "";
 
-        contributionWeeks.forEach((week, index) => {
+        fetched.weeks.forEach((week, index) => {
             const firstRealDay = week.find(
                 (day) =>
                     !day.date.startsWith("placeholder-start") &&
@@ -156,11 +154,11 @@ export function useGithubContributions(): ContributionState {
         }
 
         return labels;
-    }, [contributionWeeks]);
+    }, [fetched.weeks]);
 
     return {
-        weeks: contributionWeeks,
-        maxCount: maxContributionCount,
+        weeks: fetched.weeks,
+        maxCount: fetched.maxCount,
         monthLabels,
     };
 }

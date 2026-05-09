@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect, useRef } from "react";
-import { motion, easeOut } from "framer-motion";
+import { m, easeOut } from "framer-motion";
 import { useGoldenRows } from "@/components/Golden/useGoldenRows";
 import { useHorizontalLoop } from "@/components/Golden/useHorizontalLoop";
 import { useTypedText } from "@/components/Golden/useTypedText";
@@ -27,9 +27,16 @@ function getShortDescription(text: string, maxLength: number = 120): string {
 
 export default function Golden({ people }: GoldenProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [isPaused, setIsPaused] = useState(false);
     const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
     const timelinesRef = useRef<gsap.core.Timeline[]>([]);
+
+    const setTimelinesPaused = (paused: boolean) => {
+        timelinesRef.current.forEach((t) => {
+            if (!t) return;
+            if (paused) t.pause();
+            else t.resume();
+        });
+    };
 
     const { rows, rowOffsets } = useGoldenRows(people, 3);
     const horizontalLoop = useHorizontalLoop();
@@ -73,22 +80,14 @@ export default function Golden({ people }: GoldenProps) {
         };
     }, [rows, horizontalLoop]);
 
-    useEffect(() => {
-        timelinesRef.current.forEach((t) => {
-            if (!t) return;
-            if (isPaused) t.pause();
-            else t.resume();
-        });
-    }, [isPaused]);
-
     const handleMouseEnter = (index: number) => {
         setHoveredIndex(index);
-        setIsPaused(true);
+        setTimelinesPaused(true);
     };
 
     const handleMouseLeave = () => {
         setHoveredIndex(null);
-        setIsPaused(false);
+        setTimelinesPaused(false);
     };
 
     const renderPerson = (
@@ -145,14 +144,14 @@ export default function Golden({ people }: GoldenProps) {
     const typedText = useTypedText(displayText, 18);
 
     return (
-        <motion.div
+        <m.div
             className="overflow-hidden relative py-32 pb-40 w-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: easeOut }}
             viewport={{ once: true, amount: 0.4 }}
         >
-            <div className="flex flex-col justify-center items-center space-y-6 w-full">
+            <div className="flex flex-col justify-center items-center gap-y-6 w-full">
                 <div className="flex overflow-hidden relative justify-center items-center pb-2 w-full h-12 md:h-16">
                     <span
                         className="inline-block px-4 text-2xl text-center text-white whitespace-nowrap select-none md:text-4xl"
@@ -198,6 +197,6 @@ export default function Golden({ people }: GoldenProps) {
             </div>
             <div className="absolute top-0 left-0 z-20 w-24 h-full pointer-events-none" />
             <div className="absolute top-0 right-0 z-20 w-24 h-full pointer-events-none" />
-        </motion.div>
+        </m.div>
     );
 }

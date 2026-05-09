@@ -172,12 +172,12 @@ const projectPreviews: ProjectPreviewProps[] = [
                 processing we first process any image of clothing to add to your
                 wardrobe. Then using Mediapipe, our tool overlays clothing on
                 your body, live on your laptop/phone, letting you mix, match,
-                and explore global fashion trends—all from your screen. No more
+                and explore global fashion trends, all from your screen. No more
                 second-guessing your style choices! See StyleIt in action here:{" "}
                 <a
                     href="https://www.youtube.com/watch?v=gZGXC4O2ZOE"
                     target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-indigo-500"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-violet-500"
                 >
                     Watch the project in action!
                 </a>
@@ -207,7 +207,7 @@ const projectPreviews: ProjectPreviewProps[] = [
                 hard-of-hearing individuals, everyday conversations can be
                 challenging, whether it&apos;s ordering a coffee, catching an
                 announcement, or simply chatting with a friend. That’s where
-                LinkCom comes in—a wireless messaging system designed to make
+                LinkCom comes in: a wireless messaging system designed to make
                 communication easy, intuitive, and accessible. With a sleek,
                 user-friendly interface and real-time IR-based messaging,
                 LinkCom ensures that no message gets lost in translation. Check

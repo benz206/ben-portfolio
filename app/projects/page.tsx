@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import ProjectPreview from "@/components/ProjectPreview";
 import projectPreviews from "@/data/projectPreviews";
 import type { ProjectPreviewProps } from "@/types";
@@ -20,10 +20,10 @@ export default function Projects() {
     };
 
     return (
-        <section className="relative pb-24 overflow-hidden text-white bg-black pt-28">
-            <div className="absolute inset-0 bg-black" />
+        <section className="relative pb-24 overflow-hidden text-white bg-zinc-950 pt-28">
+            <div className="absolute inset-0 bg-zinc-950" />
             <div className="relative mx-auto flex w-11/12 max-w-295 flex-col gap-20">
-                <motion.div
+                <m.div
                     className="space-y-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -42,8 +42,8 @@ export default function Projects() {
                             Stuff I&apos;ve been working on.
                         </p>
                     </div>
-                </motion.div>
-                <motion.ul
+                </m.div>
+                <m.ul
                     className="grid gap-10 md:grid-cols-2"
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function Projects() {
                             onSelect={() => handleOpen(project)}
                         />
                     ))}
-                </motion.ul>
+                </m.ul>
             </div>
 
             {selectedProject && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import Card from "@/components/Card";
 import type { GitHubContributionsDay } from "@/types/externalApis";
 
@@ -29,7 +29,20 @@ const resolveContributionLevel = (
     return 0;
 };
 
-const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
+const numberFormatter = new Intl.NumberFormat();
+const formatNumber = (value: number) => numberFormatter.format(value);
+
+const dayLabelFormatter = new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+});
+
+const cellAnimationBase = {
+    animationTimingFunction: "ease-in-out",
+    animationIterationCount: "infinite",
+    animationDirection: "alternate",
+    animationName: "githubHueCycle",
+} as const;
 
 type ContributionHeatmapProps = {
     weeks: ContributionWeek[];
@@ -42,6 +55,12 @@ export default function ContributionHeatmap({
     maxCount,
     totalCommits,
 }: ContributionHeatmapProps) {
+    const mounted = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
+
     const contributionLevelGradients = useMemo(
         () => [
             "linear-gradient(135deg, rgba(148,163,184,0.12) 0%, rgba(71,85,105,0.16) 100%)",
@@ -87,13 +106,8 @@ export default function ContributionHeatmap({
                             const isPlaceholder =
                                 day.date.startsWith("placeholder");
                             const label =
-                                day.date && !isPlaceholder
-                                    ? `${day.count} contributions on ${new Date(
-                                          day.date,
-                                      ).toLocaleDateString(undefined, {
-                                          month: "short",
-                                          day: "numeric",
-                                      })}`
+                                mounted && day.date && !isPlaceholder
+                                    ? `${day.count} contributions on ${dayLabelFormatter.format(new Date(day.date))}`
                                     : "";
                             const cellIndex = weekIndex * 7 + dayIndex;
                             const animationDelay = `${(cellIndex % 18) * 0.3}s`;
@@ -111,24 +125,13 @@ export default function ContributionHeatmap({
                                     style={{
                                         background: validatedGradient,
                                         opacity: isPlaceholder ? 0.15 : 1,
-                                        animationDelay: isPlaceholder
-                                            ? undefined
-                                            : animationDelay,
-                                        animationDuration: isPlaceholder
-                                            ? undefined
-                                            : animationDuration,
-                                        animationTimingFunction: isPlaceholder
-                                            ? undefined
-                                            : "ease-in-out",
-                                        animationIterationCount: isPlaceholder
-                                            ? undefined
-                                            : "infinite",
-                                        animationDirection: isPlaceholder
-                                            ? undefined
-                                            : "alternate",
-                                        animationName: isPlaceholder
-                                            ? undefined
-                                            : "githubHueCycle",
+                                        ...(isPlaceholder
+                                            ? {}
+                                            : {
+                                                  ...cellAnimationBase,
+                                                  animationDelay,
+                                                  animationDuration,
+                                              }),
                                     }}
                                 />
                             );

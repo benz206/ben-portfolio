@@ -22,7 +22,7 @@ function hashString(input: string): number {
 export function useGoldenRows(people: GoldenPerson[], rowsCount = 3) {
     const shuffledPeople = useMemo(
         () =>
-            [...people].sort((a, b) => hashString(a.name) - hashString(b.name)),
+            people.toSorted((a, b) => hashString(a.name) - hashString(b.name)),
         [people],
     );
 

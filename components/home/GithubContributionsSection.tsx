@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Card from "@/components/Card";
 import ContributionHeatmapGrid from "@/components/home/ContributionHeatmapGrid";
 import { useGithubContributions } from "@/components/home/useGithubContributions";
@@ -22,7 +22,7 @@ export default function GithubContributionsSection() {
             <div className="absolute inset-0 bg-noir-gradient-berry" />
             <div className="absolute inset-0 opacity-90 bg-noir-radial-berry" />
             <div className="relative z-10 flex w-11/12 max-w-270 flex-col gap-10 text-white">
-                <motion.div
+                <m.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.4 }}
@@ -32,9 +32,9 @@ export default function GithubContributionsSection() {
                     <span className="text-xs uppercase tracking-[0.2em] text-white/45">
                         GitHub
                     </span>
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.3 }}
@@ -62,7 +62,7 @@ export default function GithubContributionsSection() {
                             </div>
                         </div>
                     </Card>
-                </motion.div>
+                </m.div>
             </div>
         </section>
     );

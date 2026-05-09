@@ -4,7 +4,8 @@ import { FaCodeFork, FaStar, FaGithub } from "react-icons/fa6";
 import Card from "@/components/Card";
 import type { GitHubRepo } from "@/types";
 
-const formatNumber = (value: number) => new Intl.NumberFormat().format(value);
+const numberFormatter = new Intl.NumberFormat();
+const formatNumber = (value: number) => numberFormatter.format(value);
 
 type RepoCardProps = {
     repo: GitHubRepo;
@@ -61,15 +62,15 @@ export default function RepoCard({ repo, index }: RepoCardProps) {
                     </p>
                     <div className="flex flex-wrap gap-4 items-center text-sm text-white/80">
                         <span className="inline-flex gap-2 items-center">
-                            <FaStar className="w-4 h-4 text-yellow-400" />
+                            <FaStar className="size-4 text-yellow-400" />
                             {formatNumber(repo.stargazers_count || 0)}
                         </span>
                         <span className="inline-flex gap-2 items-center">
-                            <FaCodeFork className="w-4 h-4" />
+                            <FaCodeFork className="size-4" />
                             {formatNumber(repo.forks_count || 0)}
                         </span>
                         <span className="inline-flex gap-2 items-center">
-                            <FaGithub className="w-4 h-4" />
+                            <FaGithub className="size-4" />
                             {formatNumber(repo.watchers_count || 0)}
                         </span>
                     </div>
@@ -81,7 +82,7 @@ export default function RepoCard({ repo, index }: RepoCardProps) {
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-3 text-sm font-medium tracking-[0.2em] uppercase text-white transition hover:border-white hover:bg-white hover:text-black"
                     >
-                        <ImGithub className="w-5 h-5" />
+                        <ImGithub className="size-5" />
                         View repo
                     </a>
                     <div className="text-right text-xs uppercase tracking-[0.3em] text-white/40">

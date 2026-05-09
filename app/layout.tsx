@@ -4,6 +4,7 @@ import Providers from "./providers";
 import Layout from "@/components/Layout";
 import ViewCounter from "@/components/ViewCounter";
 import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
+import { MotionProvider } from "@/components/MotionProvider";
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://bzhou.ca"),
@@ -59,9 +60,11 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <ViewCounter />
-                    <CommandProvider>
-                        <Layout>{children}</Layout>
-                    </CommandProvider>
+                    <MotionProvider>
+                        <CommandProvider>
+                            <Layout>{children}</Layout>
+                        </CommandProvider>
+                    </MotionProvider>
                 </Providers>
             </body>
         </html>

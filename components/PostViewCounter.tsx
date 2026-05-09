@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 
+const viewsFormatter = new Intl.NumberFormat();
+
 type Props = {
     slug: string;
     className?: string;
@@ -33,7 +35,7 @@ export default function PostViewCounter({ slug, className }: Props) {
 
     if (views === null) return null;
 
-    const formatted = new Intl.NumberFormat().format(views);
+    const formatted = viewsFormatter.format(views);
     return (
         <span className={cn("text-sm text-white/40", className)}>
             {formatted} views

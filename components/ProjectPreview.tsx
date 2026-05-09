@@ -2,7 +2,7 @@
 
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import LanguageBadge from "@/components/LanguageBadge";
 import { cn } from "@/utils/cn";
 import { AmbientGradient } from "@/components/AmbientGradient";
@@ -25,7 +25,7 @@ export default function ProjectPreview({
     const accent = colorVariants[color] || colorVariants.default;
 
     return (
-        <motion.li
+        <m.li
             className="list-none"
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ export default function ProjectPreview({
                 delay: index * 0.06,
             }}
         >
-            <motion.button
+            <m.button
                 type="button"
                 onClick={onSelect}
                 disabled={!onSelect}
@@ -88,8 +88,8 @@ export default function ProjectPreview({
                         className="transition-opacity duration-700 opacity-70 mix-blend-screen group-hover:opacity-95"
                     />
                 </div>
-            </motion.button>
-        </motion.li>
+            </m.button>
+        </m.li>
     );
 }
 

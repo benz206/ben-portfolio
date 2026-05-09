@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
 import CurrentlyPlaying from "@/components/CurrentlyPlaying";
 import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
@@ -69,14 +69,14 @@ export default function HeroSection() {
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             {albumColor && (
-                <motion.div
+                <m.div
                     className="absolute pointer-events-none rounded-full"
                     style={{
                         left: "-10%",
                         bottom: "-5%",
                         width: "700px",
                         height: "700px",
-                        filter: "blur(130px)",
+                        filter: "blur(40px)",
                     }}
                     animate={{
                         backgroundColor: `rgb(${albumColor[0]}, ${albumColor[1]}, ${albumColor[2]})`,
@@ -88,7 +88,7 @@ export default function HeroSection() {
             <div className="relative flex w-full max-w-270 flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8 min-w-0">
-                        <motion.div
+                        <m.div
                             className="space-y-2 lg:space-y-6"
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -107,8 +107,8 @@ export default function HeroSection() {
                                 <b>elegant</b>, <b>efficient</b>, and{" "}
                                 <b>scalable</b> software.
                             </p>
-                        </motion.div>
-                        <motion.div
+                        </m.div>
+                        <m.div
                             className="mt-6 text-white sm:mt-8 lg:mt-0"
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -124,9 +124,9 @@ export default function HeroSection() {
                                 error={error}
                                 currentProgress={currentProgress}
                             />
-                        </motion.div>
+                        </m.div>
                     </div>
-                    <motion.div
+                    <m.div
                         className="flex flex-col gap-4 min-w-0"
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -148,11 +148,11 @@ export default function HeroSection() {
                                 }
                             />
                         ))}
-                    </motion.div>
+                    </m.div>
                 </div>
             </div>
             <div className="hidden lg:flex absolute bottom-12 left-1/2 flex-col items-center -translate-x-1/2 text-white/70">
-                <motion.button
+                <m.button
                     type="button"
                     aria-label="Scroll to next section"
                     onClick={handleScrollClick}
@@ -163,14 +163,14 @@ export default function HeroSection() {
                 >
                     {[0, 1, 2].map((index) => (
                         <FiChevronDown
-                            key={index}
-                            className="-mt-4 w-6 h-6 animate-arrow-flicker text-white/30"
+                            key={`chevron-${index}`}
+                            className="-mt-4 size-6 animate-arrow-flicker text-white/30"
                             style={{
                                 animationDelay: `${index * 0.3}s`,
                             }}
                         />
                     ))}
-                </motion.button>
+                </m.button>
             </div>
         </section>
     );

@@ -1,3 +1,9 @@
+import React from "react";
+
+const BLOB_BASE_STYLE: React.CSSProperties = {
+    transform: "translate(-50%, -50%)",
+};
+
 function hashSeed(seed: string, salt: number): number {
     const s = `${seed}:${salt}`;
     let h = 2166136261;
@@ -60,11 +66,12 @@ export default function ScatteredGradients({ seed }: { seed: string }) {
             className="pointer-events-none absolute inset-x-0 top-0 bottom-0 overflow-hidden"
             aria-hidden
         >
-            {blobs.map((blob, i) => (
+            {blobs.map((blob) => (
                 <div
-                    key={i}
+                    key={`${seed}:${blob.x}:${blob.y}:${blob.hue}`}
                     className="absolute rounded-full"
                     style={{
+                        ...BLOB_BASE_STYLE,
                         left: blob.x,
                         top: blob.y,
                         width: `${blob.w}px`,
@@ -72,7 +79,6 @@ export default function ScatteredGradients({ seed }: { seed: string }) {
                         opacity: blob.opacity,
                         filter: `blur(${blob.blur}px)`,
                         background: `radial-gradient(ellipse at center, oklch(0.7 ${blob.chroma} ${blob.hue}), transparent 70%)`,
-                        transform: "translate(-50%, -50%)",
                     }}
                 />
             ))}

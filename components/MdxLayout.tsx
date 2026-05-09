@@ -6,13 +6,15 @@ import TableOfContents from "@/components/blog/TableOfContents";
 
 type Heading = { level: number; text: string; id: string };
 
+const EMPTY_HEADINGS: Heading[] = [];
+
 export default function MdxLayout({
     children,
     metadata,
     createdDate,
     updatedDate,
     viewCounter,
-    headings = [],
+    headings = EMPTY_HEADINGS,
 }: {
     children: React.ReactNode;
     metadata: RawBlogMetadata;
@@ -59,7 +61,7 @@ export default function MdxLayout({
                     {/* Article column */}
                     <div className="min-w-0 w-full max-w-175">
                         <header className="mb-8 space-y-4">
-                            <h1 className="text-3xl font-bold leading-tight tracking-tight lg:text-[2.5rem]">
+                            <h1 className="text-3xl font-semibold leading-tight tracking-tight lg:text-[2.5rem]">
                                 {metadata.title}
                             </h1>
 

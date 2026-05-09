@@ -15,6 +15,7 @@ const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 async function getPlayerData(accessToken: string) {
     const response = await fetch(`https://api.spotify.com/v1/me/player`, {
         headers: { Authorization: `Bearer ${accessToken}` },
+        cache: "no-store",
     });
     if (!response.ok) return null;
     return response.json();
@@ -106,6 +107,7 @@ export async function GET(
         await fetch(url, {
             method,
             headers: { Authorization: `Bearer ${accessToken}` },
+            cache: "no-store",
         });
         return NextResponse.json(
             { answer: "Success" },

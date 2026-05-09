@@ -15,11 +15,12 @@ async function getBlogSlugs() {
         });
 
         const files = Array.isArray(response.data) ? response.data : [];
-        return files
-            .filter(
-                (f) => typeof f?.name === "string" && f.name.endsWith(".mdx"),
-            )
-            .map((f) => f.name.replace(/\.mdx$/, ""));
+        return files.reduce((acc, f) => {
+            if (typeof f?.name === "string" && f.name.endsWith(".mdx")) {
+                acc.push(f.name.replace(/\.mdx$/, ""));
+            }
+            return acc;
+        }, []);
     } catch {
         return [];
     }

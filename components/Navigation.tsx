@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useNavigationCommands } from "@/components/CommandPalette/useNavigationCommands";
 
@@ -87,16 +87,16 @@ export default function Navigation() {
                     </Link>
                     <div className="items-center hidden gap-8 ml-auto lg:flex">
                         {links.map((link) => (
-                            <motion.div key={link.href}>
+                            <m.div key={link.href}>
                                 <Link
                                     className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                     href={link.href}
                                 >
                                     {link.label}
                                 </Link>
-                            </motion.div>
+                            </m.div>
                         ))}
-                        <motion.div>
+                        <m.div>
                             <Link
                                 className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"
@@ -104,12 +104,12 @@ export default function Navigation() {
                             >
                                 Résumé
                             </Link>
-                        </motion.div>
+                        </m.div>
                     </div>
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
-                        <motion.button
+                        <m.button
                             type="button"
-                            className="flex items-center justify-center w-11 h-11 rounded-md bg-transparent text-white/70 hover:text-white transition-colors duration-300 touch-manipulation cursor-pointer"
+                            className="flex items-center justify-center size-11 rounded-md bg-transparent text-white/70 hover:text-white transition-colors duration-300 touch-manipulation cursor-pointer"
                             onClick={() => setIsOpen((v) => !v)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
@@ -125,24 +125,25 @@ export default function Navigation() {
                                 {isOpen ? "Close menu" : "Open menu"}
                             </span>
                             {isOpen ? <FiX size={18} /> : <FiMenu size={18} />}
-                        </motion.button>
+                        </m.button>
                     </div>
                 </div>
             </div>
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <m.div
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, pointerEvents: "none" }}
                         transition={{ duration: 0.15 }}
                         style={{ touchAction: "manipulation" }}
-                        onClick={() => setIsOpen(false)}
+                        onClick={(e) => {
+                            if (e.target === e.currentTarget) setIsOpen(false);
+                        }}
                     >
                         <div
                             className="flex flex-col items-center w-full max-w-sm gap-6 px-6"
-                            onClick={(e) => e.stopPropagation()}
                             id="mobile-menu"
                         >
                             {links.map((link) => (
@@ -164,7 +165,7 @@ export default function Navigation() {
                                 Résumé
                             </Link>
                         </div>
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
         </nav>

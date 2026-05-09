@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, easeInOut } from "framer-motion";
+import { m, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
@@ -34,25 +34,25 @@ export default function CurrentlyPlaying({
                     transition: { duration: 1 },
                 }}
             >
-                <div className="relative z-10 flex items-center space-x-6 flex-1 min-w-0">
+                <div className="relative z-10 flex items-center gap-6 flex-1 min-w-0">
                     <div className="overflow-hidden shrink-0 h-full rounded-xl shadow-xl max-w-36 aspect-square">
                         <div className="w-full h-full animate-pulse">
                             <div className="flex justify-center items-center w-full h-full">
-                                <FaSpotify className="w-16 h-16 animate-pulse text-white/40" />
+                                <FaSpotify className="size-16 animate-pulse text-white/40" />
                             </div>
                         </div>
                     </div>
 
                     <div className="flex flex-col flex-1 justify-center min-w-0">
-                        <div className="flex items-center mb-2 space-x-2">
-                            <FaSpotify className="shrink-0 w-4 h-4 text-green-400 animate-pulse" />
+                        <div className="flex items-center mb-2 gap-2">
+                            <FaSpotify className="shrink-0 size-4 text-green-400 animate-pulse" />
                             <div className="w-32 h-3 rounded animate-pulse bg-white/20"></div>
                         </div>
 
                         <div className="mb-3 w-48 h-5 rounded animate-pulse bg-white/25"></div>
 
                         <div className="w-full h-1.5 bg-white/10 rounded-full">
-                            <motion.div
+                            <m.div
                                 className="h-1.5 bg-green-400 rounded-full"
                                 initial={{ width: "0%" }}
                                 animate={{ width: "60%" }}
@@ -106,8 +106,8 @@ export default function CurrentlyPlaying({
                     <div className="absolute inset-0 bg-black/50" />
                 </>
             )}
-            <div className="relative z-10 flex items-center pl-4 space-x-4 flex-1 min-w-0">
-                <div className="overflow-hidden w-20 h-20 rounded-xl shadow-xl shrink-0">
+            <div className="relative z-10 flex items-center pl-4 gap-4 flex-1 min-w-0">
+                <div className="overflow-hidden size-20 rounded-xl shadow-xl shrink-0">
                     {track.albumArt && (
                         <Image
                             src={track.albumArt}
@@ -119,21 +119,21 @@ export default function CurrentlyPlaying({
                     )}
                 </div>
                 <div className="flex flex-col flex-1 justify-center min-w-0">
-                    <div className="flex items-center mb-2 space-x-2">
-                        <FaSpotify className="shrink-0 w-4 h-4 text-green-500" />
-                        <span className="text-xs font-medium truncate text-slate-400">
+                    <div className="flex items-center mb-2 gap-2">
+                        <FaSpotify className="shrink-0 size-4 text-green-500" />
+                        <span className="text-xs font-medium truncate text-zinc-400">
                             {isPlaying ? "Now Playing" : "Last Listened To"} -{" "}
                             {track.artist}
                         </span>
                     </div>
 
-                    <h3 className="mb-3 text-lg font-bold leading-tight truncate">
+                    <h3 className="mb-3 text-lg font-semibold leading-tight truncate">
                         {track.title}
                     </h3>
 
                     <div className="w-full">
-                        <div className="w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
-                            <motion.div
+                        <div className="w-full h-1.5 bg-zinc-700 rounded-full overflow-hidden">
+                            <m.div
                                 className="h-1.5 rounded-full"
                                 animate={{ width: `${progressPercentage}%` }}
                                 transition={{ duration: 1, ease: "linear" }}

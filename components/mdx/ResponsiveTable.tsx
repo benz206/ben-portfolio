@@ -111,14 +111,14 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                                     {row.map((cell, cellIndex) => (
                                         <div
                                             key={cellIndex}
-                                            className="flex flex-col pb-2 border-b border-gray-700 last:border-b-0 last:pb-0"
+                                            className="flex flex-col pb-2 border-b border-zinc-700 last:border-b-0 last:pb-0"
                                         >
                                             {headers[cellIndex] && (
-                                                <div className="mb-1 text-xs font-bold text-gray-400 uppercase">
+                                                <div className="mb-1 text-xs font-bold text-zinc-400 uppercase">
                                                     {headers[cellIndex]}
                                                 </div>
                                             )}
-                                            <div className="text-sm font-light text-gray-200">
+                                            <div className="text-sm font-light text-zinc-200">
                                                 {cell}
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                     hasData ? "hidden lg:block" : ""
                 }`}
             >
-                <table className="min-w-full border border-gray-600 border-collapse">
+                <table className="min-w-full border border-zinc-600 border-collapse">
                     {children}
                 </table>
             </div>

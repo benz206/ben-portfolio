@@ -2,8 +2,8 @@
 
 import {
     createContext,
+    use,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useRef,
@@ -45,7 +45,7 @@ function ActionHint({
         <span className="flex items-center gap-1.5 text-[11px] text-white/55">
             <span className="flex items-center gap-0.5">
                 {keys.map((key, i) => (
-                    <Kbd key={i}>{key}</Kbd>
+                    <Kbd key={typeof key === "string" ? key : i}>{key}</Kbd>
                 ))}
             </span>
             <span className="font-medium tracking-normal normal-case">
@@ -74,7 +74,7 @@ type CommandContextValue = {
 const CommandContext = createContext<CommandContextValue | null>(null);
 
 export function useCommandMenu() {
-    const context = useContext(CommandContext);
+    const context = use(CommandContext);
     if (!context) {
         throw new Error("useCommandMenu must be used within a CommandProvider");
     }
@@ -112,7 +112,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
     const searchRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const router = useRouter();
+    const { push } = useRouter();
 
     const registerCommands = useCallback((options: RegisterCommandsOptions) => {
         const { source, commands, replace } = options;
@@ -222,10 +222,10 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 return;
             }
             if (command.href) {
-                router.push(command.href);
+                push(command.href);
             }
         },
-        [router, close],
+        [push, close],
     );
 
     const pushView = useCallback(
@@ -424,7 +424,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                         <div className="flex flex-1 items-center gap-3 min-w-0">
                                                             <span
                                                                 className={cn(
-                                                                    "flex items-center justify-center w-7 h-7 rounded-md border border-white/10 shrink-0 transition-colors",
+                                                                    "flex items-center justify-center size-7 rounded-md border border-white/10 shrink-0 transition-colors",
                                                                     isActive
                                                                         ? "bg-white/10 text-white"
                                                                         : "bg-white/[0.04] text-white/70",
@@ -467,11 +467,11 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                         keys={[
                                             <FiArrowUp
                                                 key="up"
-                                                className="w-3 h-3"
+                                                className="size-3"
                                             />,
                                             <FiArrowDown
                                                 key="down"
-                                                className="w-3 h-3"
+                                                className="size-3"
                                             />,
                                         ]}
                                         label="Navigate"
@@ -481,7 +481,7 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                             keys={[
                                                 <FiCornerDownLeft
                                                     key="enter"
-                                                    className="w-3 h-3"
+                                                    className="size-3"
                                                 />,
                                             ]}
                                             label={

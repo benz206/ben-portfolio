@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, easeInOut } from "framer-motion";
+import { m, easeInOut } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import { GitHubRepo } from "@/types";
@@ -144,14 +144,14 @@ export default function GithubPage() {
     if (isLoading && !repoData.length) {
         return (
             <main className="flex min-h-screen items-center justify-center bg-[#050506]">
-                <AiOutlineLoading className="w-16 h-16 animate-spin text-white/60" />
+                <AiOutlineLoading className="size-16 animate-spin text-white/60" />
             </main>
         );
     }
 
     return (
         <main className="overflow-hidden relative text-white">
-            <style jsx global>{`
+            <style>{`
                 @keyframes githubHueCycle {
                     0% {
                         filter: hue-rotate(0deg) saturate(100%);
@@ -167,7 +167,7 @@ export default function GithubPage() {
             <section className="relative flex min-h-[200vh] items-center px-4 pb-16 pt-24 sm:px-6 md:min-h-screen lg:h-screen lg:pb-0 lg:pt-0">
                 <div className="absolute inset-0 bg-noir-gradient" />
                 <div className="absolute inset-0 opacity-80 bg-noir-radial" />
-                <motion.div
+                <m.div
                     ref={heroRef}
                     className="relative z-10 mx-auto flex w-full max-w-270 flex-col gap-12 sm:gap-16"
                     initial="hidden"
@@ -177,7 +177,7 @@ export default function GithubPage() {
                         hidden: {},
                     }}
                 >
-                    <motion.div
+                    <m.div
                         variants={fadeIn}
                         className="space-y-8 lg:space-y-12"
                     >
@@ -191,13 +191,13 @@ export default function GithubPage() {
                                 from the past year.
                             </p>
                         </div>
-                    </motion.div>
+                    </m.div>
                     <ContributionHeatmap
                         weeks={contributionWeeks}
                         maxCount={maxContributionCount}
                         totalCommits={stats?.commits ?? 0}
                     />
-                </motion.div>
+                </m.div>
             </section>
 
             <RepoExplorer repos={repoData} />

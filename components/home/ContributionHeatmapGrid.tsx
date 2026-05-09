@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import type {
     ContributionDay,
@@ -39,6 +41,22 @@ export default function ContributionHeatmapGrid({
         () => ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
         [],
     );
+
+    const dayLabels = useMemo(() => {
+        const labels: Record<string, string> = {};
+        for (const week of weeks) {
+            for (const day of week) {
+                if (
+                    day.date &&
+                    !day.date.startsWith("placeholder-start") &&
+                    !day.date.startsWith("placeholder-end")
+                ) {
+                    labels[day.date] = `${day.count} contributions on ${new Date(day.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+                }
+            }
+        }
+        return labels;
+    }, [weeks]);
 
     return (
         <>
@@ -84,15 +102,7 @@ export default function ContributionHeatmapGrid({
                             const isPlaceholder =
                                 day.date.startsWith("placeholder-start") ||
                                 day.date.startsWith("placeholder-end");
-                            const label =
-                                day.date && !isPlaceholder
-                                    ? `${day.count} contributions on ${new Date(
-                                          day.date,
-                                      ).toLocaleDateString(undefined, {
-                                          month: "short",
-                                          day: "numeric",
-                                      })}`
-                                    : "";
+                            const label = dayLabels[day.date] ?? "";
                             return (
                                 <div
                                     key={
@@ -100,7 +110,7 @@ export default function ContributionHeatmapGrid({
                                         `placeholder-${weekIndex}-${dayIndex}`
                                     }
                                     title={label}
-                                    className="h-2.5 w-2.5 rounded-0.5"
+                                    className="size-2.5 rounded-0.5"
                                     style={
                                         isPlaceholder
                                             ? {
@@ -123,8 +133,8 @@ export default function ContributionHeatmapGrid({
                 <div className="flex items-center gap-1.5">
                     {contributionLevelGradients.map((color, idx) => (
                         <span
-                            key={`legend-${idx}`}
-                            className="h-2.5 w-2.5 rounded-0.5"
+                            key={color}
+                            className="size-2.5 rounded-0.5"
                             style={{
                                 backgroundColor: color,
                             }}

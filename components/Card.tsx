@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { AmbientGradient, AmbientVariant } from "@/components/AmbientGradient";
 
@@ -70,7 +70,7 @@ export default function Card({
 
     if (motionProps) {
         return (
-            <motion.div className={baseClasses} {...motionProps}>
+            <m.div className={baseClasses} {...motionProps}>
                 {children}
                 {ambient && (
                     <AmbientGradient
@@ -79,7 +79,7 @@ export default function Card({
                         seed={ambientSeed}
                     />
                 )}
-            </motion.div>
+            </m.div>
         );
     }
 
