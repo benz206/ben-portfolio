@@ -51,8 +51,7 @@ async function generateBlurPlaceholders(
                 if (!res.ok) return [image.public_id, ""] as const;
                 const buffer = Buffer.from(await res.arrayBuffer());
                 const base64 = buffer.toString("base64");
-                const mime =
-                    res.headers.get("content-type") || "image/webp";
+                const mime = res.headers.get("content-type") || "image/webp";
                 return [
                     image.public_id,
                     `data:${mime};base64,${base64}`,

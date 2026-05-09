@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { FiMenu, FiX } from "react-icons/fi";
 import { useNavigationCommands } from "@/components/CommandPalette/useNavigationCommands";
 
 const links = [
@@ -71,7 +72,7 @@ export default function Navigation() {
     const offset = scrollY > 12;
 
     return (
-        <nav className="fixed top-0 z-[60] flex justify-center w-full">
+        <nav className="fixed top-0 flex justify-center w-full z-60">
             <div
                 className={`flex w-full justify-center transition-all duration-300 ${
                     offset ? "backdrop-blur bg-black/50" : "bg-transparent"
@@ -106,39 +107,25 @@ export default function Navigation() {
                         </motion.div>
                     </div>
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
-                        <button
+                        <motion.button
                             type="button"
-                            className="relative flex items-center justify-center w-10 h-10 border rounded-md border-white/10 bg-white/5 touch-manipulation cursor-pointer"
+                            className="flex items-center justify-center w-11 h-11 rounded-md bg-transparent text-white/70 hover:text-white transition-colors duration-300 touch-manipulation cursor-pointer"
                             onClick={() => setIsOpen((v) => !v)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
                             aria-label={isOpen ? "Close menu" : "Open menu"}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 20,
+                            }}
+                            whileTap={{ scale: 0.95 }}
                         >
                             <span className="sr-only">
                                 {isOpen ? "Close menu" : "Open menu"}
                             </span>
-                            <div className="relative w-6 h-5">
-                                <div
-                                    className={`absolute left-0 top-0 h-0.5 w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
-                                        isOpen
-                                            ? "rotate-45 translate-y-2.25"
-                                            : ""
-                                    }`}
-                                />
-                                <div
-                                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
-                                        isOpen ? "opacity-0" : "opacity-100"
-                                    }`}
-                                />
-                                <div
-                                    className={`absolute left-0 bottom-0 h-0.5 w-full rounded-full bg-white transition-[transform,opacity] duration-200 ease-in-out origin-center transform-gpu will-change-transform ${
-                                        isOpen
-                                            ? "-rotate-45 -translate-y-2.25"
-                                            : ""
-                                    }`}
-                                />
-                            </div>
-                        </button>
+                            {isOpen ? <FiX size={18} /> : <FiMenu size={18} />}
+                        </motion.button>
                     </div>
                 </div>
             </div>
@@ -148,16 +135,13 @@ export default function Navigation() {
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 lg:hidden"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, pointerEvents: "none" }}
                         transition={{ duration: 0.15 }}
+                        style={{ touchAction: "manipulation" }}
                         onClick={() => setIsOpen(false)}
                     >
-                        <motion.div
+                        <div
                             className="flex flex-col items-center w-full max-w-sm gap-6 px-6"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.15 }}
                             onClick={(e) => e.stopPropagation()}
                             id="mobile-menu"
                         >
@@ -179,7 +163,7 @@ export default function Navigation() {
                             >
                                 Résumé
                             </Link>
-                        </motion.div>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
