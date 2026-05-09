@@ -13,12 +13,47 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
+import { FiCornerDownLeft, FiArrowUp, FiArrowDown } from "react-icons/fi";
 import Card from "@/components/Card";
 import { cn } from "@/utils/cn";
 import type {
     CommandDescriptor,
     RegisterCommandsOptions,
 } from "@/types/command";
+
+function Kbd({ children, className }: { children: ReactNode; className?: string }) {
+    return (
+        <kbd
+            className={cn(
+                "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded border border-white/15 bg-white/[0.06] text-[10px] font-medium text-white/70 shadow-[inset_0_-1px_0_rgba(0,0,0,0.4)]",
+                className,
+            )}
+        >
+            {children}
+        </kbd>
+    );
+}
+
+function ActionHint({
+    keys,
+    label,
+}: {
+    keys: ReactNode[];
+    label: string;
+}) {
+    return (
+        <span className="flex items-center gap-1.5 text-[11px] text-white/55">
+            <span className="flex items-center gap-0.5">
+                {keys.map((key, i) => (
+                    <Kbd key={i}>{key}</Kbd>
+                ))}
+            </span>
+            <span className="font-medium tracking-normal normal-case">
+                {label}
+            </span>
+        </span>
+    );
+}
 
 type CommandContextValue = {
     isOpen: boolean;
@@ -315,6 +350,11 @@ export function CommandProvider({ children }: CommandProviderProps) {
                             className="overflow-hidden p-1! w-full max-w-xl border border-white/10 bg-black/70"
                         >
                             <div className="flex items-center px-4 py-3 border-b border-white/10">
+                                {viewStack.length > 0 && (
+                                    <span className="mr-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
+                                        {viewStack[viewStack.length - 1].id.replace(/-/g, " ")}
+                                    </span>
+                                )}
                                 <div className="flex-1">
                                     <input
                                         ref={searchRef}
@@ -327,9 +367,6 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                         className="w-full text-sm text-white bg-transparent outline-none placeholder:text-white/40"
                                     />
                                 </div>
-                                <span className="hidden text-xs text-white/40 sm:inline-flex">
-                                    Esc
-                                </span>
                             </div>
                             <div
                                 ref={listRef}
@@ -374,34 +411,41 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                                             runCommand(command)
                                                         }
                                                         className={cn(
-                                                            "flex justify-between items-center px-3 py-2 w-full text-left rounded-md transition-colors",
+                                                            "flex justify-between items-center gap-3 px-2.5 py-2 w-full text-left rounded-md transition-colors",
                                                             isActive
                                                                 ? "text-white bg-white/15"
                                                                 : "text-white/80 hover:bg-white/10 hover:text-white",
                                                         )}
                                                     >
-                                                        <div className="flex flex-col gap-1">
-                                                            <span className="text-sm font-medium">
-                                                                {command.label}
+                                                        <div className="flex flex-1 items-center gap-3 min-w-0">
+                                                            <span
+                                                                className={cn(
+                                                                    "flex items-center justify-center w-7 h-7 rounded-md border border-white/10 shrink-0 transition-colors",
+                                                                    isActive
+                                                                        ? "bg-white/10 text-white"
+                                                                        : "bg-white/[0.04] text-white/70",
+                                                                )}
+                                                            >
+                                                                {command.icon}
                                                             </span>
-                                                            {command.description && (
-                                                                <span className="text-xs text-white/60">
-                                                                    {
-                                                                        command.description
-                                                                    }
+                                                            <div className="flex flex-col gap-0.5 min-w-0">
+                                                                <span className="text-sm font-medium truncate">
+                                                                    {command.label}
                                                                 </span>
-                                                            )}
+                                                                {command.description && (
+                                                                    <span className="text-xs text-white/60 truncate">
+                                                                        {
+                                                                            command.description
+                                                                        }
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                        <div className="flex gap-3 items-center">
-                                                            {command.meta && (
-                                                                <span className="text-[10px] uppercase tracking-[0.25em] text-white/50">
-                                                                    {
-                                                                        command.meta
-                                                                    }
-                                                                </span>
-                                                            )}
-                                                            {command.icon}
-                                                        </div>
+                                                        {command.meta && (
+                                                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/45 shrink-0">
+                                                                {command.meta}
+                                                            </span>
+                                                        )}
                                                     </button>
                                                 );
                                             })}
@@ -409,13 +453,48 @@ export function CommandProvider({ children }: CommandProviderProps) {
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-[11px] uppercase tracking-[0.25em] text-white/40">
-                                <span>
-                                    {viewStack.length > 0
-                                        ? "Esc Back • Esc Close"
-                                        : "Navigate • Theme • Actions"}
+                            <div className="flex items-center justify-between gap-3 border-t border-white/10 px-3 py-2.5">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 pl-1">
+                                    {totalCount}{" "}
+                                    {totalCount === 1 ? "result" : "results"}
                                 </span>
-                                <span>Ctrl K</span>
+                                <div className="flex items-center gap-3">
+                                    <ActionHint
+                                        keys={[
+                                            <FiArrowUp
+                                                key="up"
+                                                className="w-3 h-3"
+                                            />,
+                                            <FiArrowDown
+                                                key="down"
+                                                className="w-3 h-3"
+                                            />,
+                                        ]}
+                                        label="Navigate"
+                                    />
+                                    {filtered[activeIndex] && (
+                                        <ActionHint
+                                            keys={[
+                                                <FiCornerDownLeft
+                                                    key="enter"
+                                                    className="w-3 h-3"
+                                                />,
+                                            ]}
+                                            label={
+                                                filtered[activeIndex]
+                                                    ?.actionLabel ?? "Open"
+                                            }
+                                        />
+                                    )}
+                                    <ActionHint
+                                        keys={["esc"]}
+                                        label={
+                                            viewStack.length > 0
+                                                ? "Back"
+                                                : "Close"
+                                        }
+                                    />
+                                </div>
                             </div>
                         </Card>
                     </div>,

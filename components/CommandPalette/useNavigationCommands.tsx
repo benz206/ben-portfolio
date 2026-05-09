@@ -2,6 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import {
+    FaHouse,
+    FaFolderOpen,
+    FaImages,
+    FaPenNib,
+    FaFileLines,
+    FaRegNewspaper,
+} from "react-icons/fa6";
+import { FiActivity, FiBookOpen } from "react-icons/fi";
 import type { CommandDescriptor } from "@/types/command";
 import { useCommandMenu } from "./CommandProvider";
 
@@ -20,6 +29,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["root", "landing"],
         meta: "Page",
+        icon: <FaHouse className="w-3.5 h-3.5" />,
     },
     {
         id: "nav-projects",
@@ -28,6 +38,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["portfolio", "work"],
         meta: "Page",
+        icon: <FaFolderOpen className="w-3.5 h-3.5" />,
     },
     {
         id: "nav-gallery",
@@ -36,6 +47,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["photos", "images"],
         meta: "Page",
+        icon: <FaImages className="w-3.5 h-3.5" />,
     },
     {
         id: "nav-status",
@@ -44,6 +56,7 @@ const navigationCommands: CommandDescriptor[] = [
         section: "Navigation",
         keywords: ["services", "health", "uptime"],
         meta: "Page",
+        icon: <FiActivity className="w-3.5 h-3.5" />,
     },
     {
         id: "nav-resume",
@@ -51,7 +64,9 @@ const navigationCommands: CommandDescriptor[] = [
         href: "/resume.pdf",
         section: "Navigation",
         keywords: ["pdf", "download"],
-        meta: "Page",
+        meta: "PDF",
+        icon: <FaFileLines className="w-3.5 h-3.5" />,
+        actionLabel: "Open in new tab",
     },
 ];
 
@@ -66,6 +81,7 @@ function buildBlogView(posts: BlogPostSummary[]) {
                 href: "/blog",
                 section: "Blog",
                 meta: "Page",
+                icon: <FiBookOpen className="w-3.5 h-3.5" />,
             },
             ...posts.map((post) => ({
                 id: `blog-post-${post.slug}`,
@@ -75,6 +91,7 @@ function buildBlogView(posts: BlogPostSummary[]) {
                 section: "Blog",
                 meta: "Post",
                 keywords: [post.slug, ...(post.tags ?? [])],
+                icon: <FaRegNewspaper className="w-3.5 h-3.5" />,
             })),
         ] as CommandDescriptor[],
     };
@@ -97,43 +114,45 @@ export function useNavigationCommands() {
     }, []);
 
     useEffect(() => {
+        const blogCommand: CommandDescriptor = {
+            id: "nav-blog",
+            label: "Blog",
+            section: "Navigation",
+            keywords: ["posts", "archive", "mdx", "articles", "writing"],
+            meta: "Posts",
+            closeOnRun: false,
+            icon: <FaPenNib className="w-3.5 h-3.5" />,
+            actionLabel: "Continue",
+            action: () => {
+                if (blogPostsRef.current !== null) {
+                    pushView(buildBlogView(blogPostsRef.current));
+                    return;
+                }
+                void fetch("/api/blog/public")
+                    .then((res) => res.json())
+                    .then((posts: BlogPostSummary[]) => {
+                        blogPostsRef.current = posts;
+                        pushView(buildBlogView(posts));
+                    })
+                    .catch(() => {
+                        pushView({
+                            id: "blog-posts",
+                            placeholder: "Search blog posts...",
+                            commands: [
+                                {
+                                    id: "blog-posts-error",
+                                    label: "Failed to load posts",
+                                    section: "Blog",
+                                    meta: "Error",
+                                },
+                            ],
+                        });
+                    });
+            },
+        };
         const commands: CommandDescriptor[] = [
             ...navigationCommands,
-            {
-                id: "nav-blog",
-                label: "Blog",
-                section: "Navigation",
-                keywords: ["posts", "archive", "mdx", "articles", "writing"],
-                meta: "Posts",
-                closeOnRun: false,
-                action: () => {
-                    if (blogPostsRef.current !== null) {
-                        pushView(buildBlogView(blogPostsRef.current));
-                        return;
-                    }
-                    // Fallback: fetch on demand if pre-fetch hasn't completed
-                    void fetch("/api/blog/public")
-                        .then((res) => res.json())
-                        .then((posts: BlogPostSummary[]) => {
-                            blogPostsRef.current = posts;
-                            pushView(buildBlogView(posts));
-                        })
-                        .catch(() => {
-                            pushView({
-                                id: "blog-posts",
-                                placeholder: "Search blog posts...",
-                                commands: [
-                                    {
-                                        id: "blog-posts-error",
-                                        label: "Failed to load posts",
-                                        section: "Blog",
-                                        meta: "Error",
-                                    },
-                                ],
-                            });
-                        });
-                },
-            },
+            blogCommand,
         ].map((command) => {
             const href = command.href;
             const meta = href === pathname ? "Current" : command.meta;
