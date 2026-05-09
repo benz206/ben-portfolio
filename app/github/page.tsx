@@ -1,18 +1,11 @@
 "use client";
 
 import { m, easeInOut } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
-import { GitHubRepo } from "@/types";
-import type {
-    GitHubContributionsDay,
-    GitHubContributionsResponse,
-    GitHubUserResponse,
-} from "@/types/externalApis";
 import ContributionHeatmap from "@/components/GitHub/ContributionHeatmap";
 import RepoExplorer from "@/components/GitHub/RepoExplorer";
-
-type ContributionWeek = GitHubContributionsDay[];
+import { useGithubData } from "./useGithubData";
 
 const fadeIn = {
     hidden: { opacity: 0, y: 32 },
@@ -24,122 +17,14 @@ const fadeIn = {
 };
 
 export default function GithubPage() {
-    const [repoData, setRepoData] = useState<GitHubRepo[]>([]);
-    const [isLoading, setLoading] = useState(true);
     const heroRef = useRef(null);
-    const [stats, setStats] = useState<{
-        commits: number;
-        contributions: number;
-        publicRepos: number;
-    } | null>(null);
-    const [contributionWeeks, setContributionWeeks] = useState<
-        ContributionWeek[]
-    >([]);
-    const [maxContributionCount, setMaxContributionCount] = useState(0);
-
-    const fetchWithCache = async <T,>(
-        url: string,
-        cacheKey: string,
-    ): Promise<T> => {
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-            const { data, timestamp } = JSON.parse(cached) as {
-                data: T;
-                timestamp: number;
-            };
-            if (Date.now() - timestamp < 24 * 60 * 60 * 1000) return data;
-        }
-        const response = await fetch(url);
-        const data = (await response.json()) as T;
-        localStorage.setItem(
-            cacheKey,
-            JSON.stringify({ data, timestamp: Date.now() }),
-        );
-        return data;
-    };
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const [repos, profile, contributions] = await Promise.all([
-                    fetchWithCache<GitHubRepo[]>(
-                        "https://api.github.com/users/benz206/repos",
-                        "github_repos",
-                    ),
-                    fetchWithCache<GitHubUserResponse>(
-                        "https://api.github.com/users/benz206",
-                        "github_profile",
-                    ),
-                    fetchWithCache<GitHubContributionsResponse>(
-                        "https://github-contributions-api.jogruber.de/v4/benz206",
-                        "github_contributions",
-                    ),
-                ]);
-
-                const filtered = repos.filter((repo) => {
-                    const name = repo.name.toLowerCase();
-                    if (name === "benz206") return false;
-                    if (name.includes("experiments")) return false;
-                    if (name.includes("learning")) return false;
-                    return true;
-                });
-                setRepoData(filtered);
-
-                const rawDays: GitHubContributionsDay[] =
-                    contributions.contributions;
-                const sortedDays = rawDays
-                    .filter((day) => day.date)
-                    .sort(
-                        (a, b) =>
-                            new Date(a.date).valueOf() -
-                            new Date(b.date).valueOf(),
-                    );
-                const now = new Date();
-                const yearAgo = new Date(now);
-                yearAgo.setDate(yearAgo.getDate() - 364);
-                const recentDays = sortedDays.filter((day) => {
-                    const dayDate = new Date(day.date);
-                    return dayDate >= yearAgo && dayDate <= now;
-                });
-                const lastYearCommits = recentDays.reduce(
-                    (sum, day) => sum + (day.count ?? 0),
-                    0,
-                );
-                const totalCommits = Object.values(contributions.total).reduce(
-                    (sum, yearTotal) => sum + yearTotal,
-                    0,
-                );
-                setStats({
-                    commits: lastYearCommits,
-                    contributions: totalCommits,
-                    publicRepos: profile.public_repos,
-                });
-
-                const maxCount = recentDays.reduce(
-                    (max, day) => Math.max(max, day.count ?? 0),
-                    0,
-                );
-                const paddedDays: GitHubContributionsDay[] = [...recentDays];
-                while (paddedDays.length % 7 !== 0) {
-                    paddedDays.unshift({
-                        date: `placeholder-${paddedDays.length}`,
-                        count: 0,
-                        level: 0,
-                    });
-                }
-                const weeks: ContributionWeek[] = [];
-                for (let i = 0; i < paddedDays.length; i += 7) {
-                    weeks.push(paddedDays.slice(i, i + 7));
-                }
-                setContributionWeeks(weeks);
-                setMaxContributionCount(maxCount);
-            } catch (error) {
-                console.error("Error fetching repository data:", error);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
+    const {
+        isLoading,
+        repoData,
+        stats,
+        contributionWeeks,
+        maxContributionCount,
+    } = useGithubData();
 
     if (isLoading && !repoData.length) {
         return (

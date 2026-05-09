@@ -1,6 +1,6 @@
-import getSpotifyAccessToken from "@/utils/functions/getSpotify";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import { getRedisClient } from "@/utils/redis";
+import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 import type {
     SpotifyArtist,
@@ -11,7 +11,7 @@ import type {
 
 export const runtime = "nodejs";
 
-const CACHE_TTL_SECONDS = 60 * 60 * 24;
+const REVALIDATE_SECONDS = 60 * 60 * 24;
 const PUBLIC_CACHE_HEADERS = {
     "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
 };
@@ -57,95 +57,72 @@ async function fetchTop<T>(
     return (await res.json()) as SpotifyPaging<T>;
 }
 
-export async function GET(_req: NextRequest) {
-    const cacheKey = `spotify:top:${term}:v2`;
+async function buildTopResponse(): Promise<TopResponse> {
+    const accessToken = await getSpotifyAccessToken();
+    const [tracksRaw, artistsRaw] = await Promise.all([
+        fetchTop<SpotifyTrack>(accessToken, "tracks", 5),
+        fetchTop<SpotifyArtist>(accessToken, "artists", 5),
+    ]);
 
-    try {
-        const redis = await getRedisClient();
-        const cachedRaw = await redis.get(cacheKey);
-        if (cachedRaw) {
-            try {
-                const cached = JSON.parse(cachedRaw) as TopResponse;
-                return NextResponse.json(cached, {
-                    headers: PUBLIC_CACHE_HEADERS,
-                });
-            } catch {}
-        }
+    type TopItemBase = Omit<TopItem, "color">;
 
-        const accessToken = await getSpotifyAccessToken();
-        const [tracksRaw, artistsRaw] = await Promise.all([
-            fetchTop<SpotifyTrack>(accessToken, "tracks", 5),
-            fetchTop<SpotifyArtist>(accessToken, "artists", 5),
-        ]);
-
-        type TopItemBase = Omit<TopItem, "color">;
-
-        const tracksBase: TopItemBase[] = tracksRaw.items
-            .slice(0, 3)
-            .map((t) => {
-                const image = t.album.images?.[0]?.url;
-                return {
-                    name: t.name,
-                    subtitle: t.artists.map((a) => a.name).join(", "),
-                    image,
-                    href: t.external_urls?.spotify,
-                };
-            });
-
-        const artistsBase: TopItemBase[] = artistsRaw.items
-            .slice(0, 3)
-            .map((a) => {
-                const image = a.images?.[0]?.url;
-                return {
-                    name: a.name,
-                    subtitle: (a.genres ?? []).slice(0, 2).join(" • "),
-                    image,
-                    href: a.external_urls?.spotify,
-                    followers: a.followers?.total ?? undefined,
-                };
-            });
-
-        const [tracks, artists] = await Promise.all([
-            Promise.all(
-                tracksBase.map(async (t) => ({
-                    ...t,
-                    color: await getDominantColorFromImageUrl(t.image),
-                })),
-            ),
-            Promise.all(
-                artistsBase.map(async (a) => ({
-                    ...a,
-                    color: await getDominantColorFromImageUrl(a.image),
-                })),
-            ),
-        ]);
-
-        const payload: TopResponse = {
-            timeRange: term,
-            tracks,
-            artists,
-            updatedAt: Date.now(),
+    const tracksBase: TopItemBase[] = tracksRaw.items.slice(0, 3).map((t) => {
+        const image = t.album.images?.[0]?.url;
+        return {
+            name: t.name,
+            subtitle: t.artists.map((a) => a.name).join(", "),
+            image,
+            href: t.external_urls?.spotify,
         };
+    });
 
-        await redis.set(cacheKey, JSON.stringify(payload), {
-            EX: CACHE_TTL_SECONDS,
+    const artistsBase: TopItemBase[] = artistsRaw.items
+        .slice(0, 3)
+        .map((a) => {
+            const image = a.images?.[0]?.url;
+            return {
+                name: a.name,
+                subtitle: (a.genres ?? []).slice(0, 2).join(" • "),
+                image,
+                href: a.external_urls?.spotify,
+                followers: a.followers?.total ?? undefined,
+            };
         });
 
-        return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
-    } catch (error) {
-        const redis = await getRedisClient().catch(() => null);
-        if (redis) {
-            const cachedRaw = await redis.get(cacheKey);
-            if (cachedRaw) {
-                try {
-                    const cached = JSON.parse(cachedRaw) as TopResponse;
-                    return NextResponse.json(cached, {
-                        headers: PUBLIC_CACHE_HEADERS,
-                    });
-                } catch {}
-            }
-        }
+    const [tracks, artists] = await Promise.all([
+        Promise.all(
+            tracksBase.map(async (t) => ({
+                ...t,
+                color: await getDominantColorFromImageUrl(t.image),
+            })),
+        ),
+        Promise.all(
+            artistsBase.map(async (a) => ({
+                ...a,
+                color: await getDominantColorFromImageUrl(a.image),
+            })),
+        ),
+    ]);
 
+    return {
+        timeRange: term,
+        tracks,
+        artists,
+        updatedAt: Date.now(),
+    };
+}
+
+const getCachedTop = unstable_cache(
+    buildTopResponse,
+    ["spotify-top", term],
+    { revalidate: REVALIDATE_SECONDS },
+);
+
+export async function GET(_req: NextRequest) {
+    try {
+        const payload = await getCachedTop();
+        return NextResponse.json(payload, { headers: PUBLIC_CACHE_HEADERS });
+    } catch {
         return NextResponse.json(
             { error: "Failed to fetch Spotify top items" },
             { status: 500, headers: NO_STORE_HEADERS },

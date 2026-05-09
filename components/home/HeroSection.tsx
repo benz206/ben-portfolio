@@ -10,6 +10,8 @@ import SAPLogo from "@/public/experience/SAP.png";
 import RoleCard, { type RoleCardData } from "@/components/home/RoleCard";
 import { useScrollToSection } from "@/utils/hooks";
 
+const SCROLL_CHEVRONS = ["chevron-a", "chevron-b", "chevron-c"] as const;
+
 const recentRoles: RoleCardData[] = [
     {
         title: "Software Engineering Intern",
@@ -70,13 +72,15 @@ export default function HeroSection() {
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
             {albumColor && (
                 <m.div
-                    className="absolute pointer-events-none rounded-full"
+                    className="absolute pointer-events-none rounded-full origin-bottom-left"
                     style={{
                         left: "-10%",
                         bottom: "-5%",
-                        width: "700px",
-                        height: "700px",
-                        filter: "blur(40px)",
+                        width: "250px",
+                        height: "250px",
+                        filter: "blur(20px)",
+                        transform: "scale(2.8)",
+                        willChange: "background-color, opacity",
                     }}
                     animate={{
                         backgroundColor: `rgb(${albumColor[0]}, ${albumColor[1]}, ${albumColor[2]})`,
@@ -161,9 +165,9 @@ export default function HeroSection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 1.2 }}
                 >
-                    {[0, 1, 2].map((index) => (
+                    {SCROLL_CHEVRONS.map((key, index) => (
                         <FiChevronDown
-                            key={`chevron-${index}`}
+                            key={key}
                             className="-mt-4 size-6 animate-arrow-flicker text-white/30"
                             style={{
                                 animationDelay: `${index * 0.3}s`,

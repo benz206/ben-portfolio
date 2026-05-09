@@ -4,56 +4,23 @@ import {
     createContext,
     use,
     useCallback,
-    useEffect,
     useMemo,
-    useRef,
-    useState,
     useSyncExternalStore,
-    ReactNode,
+    type ReactNode,
 } from "react";
-import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { FiCornerDownLeft, FiArrowUp, FiArrowDown } from "react-icons/fi";
-import Card from "@/components/Card";
-import { cn } from "@/utils/cn";
 import type {
     CommandDescriptor,
     RegisterCommandsOptions,
 } from "@/types/command";
-
-function Kbd({ children, className }: { children: ReactNode; className?: string }) {
-    return (
-        <kbd
-            className={cn(
-                "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded border border-white/15 bg-white/[0.06] text-[10px] font-medium text-white/70 shadow-[inset_0_-1px_0_rgba(0,0,0,0.4)]",
-                className,
-            )}
-        >
-            {children}
-        </kbd>
-    );
-}
-
-function ActionHint({
-    keys,
-    label,
-}: {
-    keys: ReactNode[];
-    label: string;
-}) {
-    return (
-        <span className="flex items-center gap-1.5 text-[11px] text-white/55">
-            <span className="flex items-center gap-0.5">
-                {keys.map((key, i) => (
-                    <Kbd key={typeof key === "string" ? key : i}>{key}</Kbd>
-                ))}
-            </span>
-            <span className="font-medium tracking-normal normal-case">
-                {label}
-            </span>
-        </span>
-    );
-}
+import {
+    useCommandState,
+    type CommandView,
+} from "@/components/CommandPalette/useCommandState";
+import { useCommandKeyboard } from "@/components/CommandPalette/useCommandKeyboard";
+import CommandPaletteModal, {
+    type CommandSection,
+} from "@/components/CommandPalette/CommandPaletteModal";
 
 type CommandContextValue = {
     isOpen: boolean;
@@ -63,11 +30,7 @@ type CommandContextValue = {
     open: () => void;
     close: () => void;
     registerCommands: (options: RegisterCommandsOptions) => () => void;
-    pushView: (view: {
-        id: string;
-        commands: CommandDescriptor[];
-        placeholder?: string;
-    }) => void;
+    pushView: (view: CommandView) => void;
     popView: () => void;
 };
 
@@ -81,101 +44,32 @@ export function useCommandMenu() {
     return context;
 }
 
-type CommandProviderProps = {
-    children: ReactNode;
-};
-
-type CommandSection = {
-    name: string;
-    commands: CommandDescriptor[];
-};
-
-export function CommandProvider({ children }: CommandProviderProps) {
+export function CommandProvider({ children }: { children: ReactNode }) {
     const isClient = useSyncExternalStore(
         () => () => {},
         () => true,
         () => false,
     );
-    const [isOpen, setIsOpen] = useState(false);
-    const [search, setSearch] = useState("");
-    const [sources, setSources] = useState<Map<string, CommandDescriptor[]>>(
-        new Map(),
-    );
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [viewStack, setViewStack] = useState<
-        Array<{
-            id: string;
-            commands: CommandDescriptor[];
-            placeholder?: string;
-        }>
-    >([]);
-    const searchRef = useRef<HTMLInputElement>(null);
-    const listRef = useRef<HTMLDivElement>(null);
-    const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const { state, actions } = useCommandState();
     const { push } = useRouter();
 
-    const registerCommands = useCallback((options: RegisterCommandsOptions) => {
-        const { source, commands, replace } = options;
-        setSources((prev) => {
-            const next = new Map(prev);
-            if (!replace && next.has(source)) {
-                const existing = next.get(source) ?? [];
-                const merged = [...existing, ...commands];
-                const dedup = new Map<string, CommandDescriptor>();
-                merged.forEach((command) => {
-                    dedup.set(command.id, command);
-                });
-                next.set(source, Array.from(dedup.values()));
-            } else {
-                next.set(source, commands);
-            }
-            return next;
-        });
-        return () => {
-            setSources((prev) => {
-                const next = new Map(prev);
-                const current = next.get(source);
-                if (!current) return prev;
-                const isSameReference = current === commands;
-                if (isSameReference || replace || !replace) {
-                    next.delete(source);
-                }
-                return next;
-            });
-        };
-    }, []);
-
     const commands = useMemo(() => {
-        const activeView = viewStack[viewStack.length - 1];
+        const activeView = state.viewStack[state.viewStack.length - 1];
         if (activeView) return activeView.commands;
         const flattened: CommandDescriptor[] = [];
-        sources.forEach((list) => {
+        state.sources.forEach((list) => {
             flattened.push(...list);
         });
         return flattened;
-    }, [sources, viewStack]);
+    }, [state.sources, state.viewStack]);
 
     const placeholder = useMemo(() => {
-        const activeView = viewStack[viewStack.length - 1];
+        const activeView = state.viewStack[state.viewStack.length - 1];
         return activeView?.placeholder ?? "Search actions...";
-    }, [viewStack]);
-
-    const close = useCallback(() => {
-        setIsOpen(false);
-        setSearch("");
-        setActiveIndex(0);
-        setViewStack([]);
-    }, []);
-
-    const toggle = useCallback(() => {
-        setIsOpen((prev) => !prev);
-        setSearch("");
-        setActiveIndex(0);
-        setViewStack([]);
-    }, []);
+    }, [state.viewStack]);
 
     const filtered = useMemo(() => {
-        const query = search.trim().toLowerCase();
+        const query = state.search.trim().toLowerCase();
         if (!query) return commands;
         return commands.filter((command) => {
             const haystack = [
@@ -189,24 +83,20 @@ export function CommandProvider({ children }: CommandProviderProps) {
                 .toLowerCase();
             return haystack.includes(query);
         });
-    }, [commands, search]);
+    }, [commands, state.search]);
 
-    const sections = useMemo(() => {
+    const sections = useMemo<CommandSection[]>(() => {
         if (!filtered.length) return [];
         const map = new Map<string, CommandDescriptor[]>();
         filtered.forEach((command) => {
             const sectionName = command.section ?? "General";
-            if (!map.has(sectionName)) {
-                map.set(sectionName, []);
-            }
+            if (!map.has(sectionName)) map.set(sectionName, []);
             map.get(sectionName)?.push(command);
         });
-        return Array.from(map.entries()).map<CommandSection>(
-            ([name, list]) => ({
-                name,
-                commands: list,
-            }),
-        );
+        return Array.from(map.entries()).map(([name, list]) => ({
+            name,
+            commands: list,
+        }));
     }, [filtered]);
 
     const totalCount = filtered.length;
@@ -214,296 +104,66 @@ export function CommandProvider({ children }: CommandProviderProps) {
     const runCommand = useCallback(
         (command: CommandDescriptor) => {
             const shouldClose = command.closeOnRun ?? true;
-            if (shouldClose) {
-                close();
-            }
+            if (shouldClose) actions.close();
             if (command.action) {
                 command.action();
                 return;
             }
-            if (command.href) {
-                push(command.href);
-            }
+            if (command.href) push(command.href);
         },
-        [push, close],
+        [push, actions],
     );
 
-    const pushView = useCallback(
-        (view: {
-            id: string;
-            commands: CommandDescriptor[];
-            placeholder?: string;
-        }) => {
-            setViewStack((prev) => [...prev, view]);
-            setSearch("");
-            setActiveIndex(0);
-        },
-        [],
-    );
-
-    const popView = useCallback(() => {
-        setViewStack((prev) => prev.slice(0, -1));
-        setSearch("");
-        setActiveIndex(0);
-    }, []);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        const el = itemRefs.current[activeIndex];
-        if (!el) return;
-        el.scrollIntoView({ block: "nearest" });
-    }, [activeIndex, filtered, isOpen]);
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            const isModifier = event.metaKey || event.ctrlKey;
-            const target = event.target as HTMLElement | null;
-            const isInputTarget =
-                target &&
-                (target.tagName === "INPUT" ||
-                    target.tagName === "TEXTAREA" ||
-                    target.isContentEditable);
-            if (isModifier && event.key.toLowerCase() === "k") {
-                if (isInputTarget) return;
-                event.preventDefault();
-                if (isOpen) {
-                    close();
-                } else {
-                    setIsOpen(true);
-                }
-                return;
-            }
-            if (!isOpen) return;
-            if (event.key === "Escape") {
-                event.preventDefault();
-                if (viewStack.length > 0) {
-                    popView();
-                } else {
-                    close();
-                }
-            }
-            if (event.key === "ArrowDown") {
-                event.preventDefault();
-                setActiveIndex((prev) => {
-                    const nextIndex = prev + 1;
-                    if (nextIndex >= totalCount) return 0;
-                    return nextIndex;
-                });
-            }
-            if (event.key === "ArrowUp") {
-                event.preventDefault();
-                setActiveIndex((prev) => {
-                    const nextIndex = prev - 1;
-                    if (nextIndex < 0) return Math.max(totalCount - 1, 0);
-                    return nextIndex;
-                });
-            }
-            if (event.key === "Enter") {
-                event.preventDefault();
-                const command = filtered[activeIndex];
-                if (command) {
-                    runCommand(command);
-                }
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [
-        filtered,
-        activeIndex,
+    useCommandKeyboard({
+        isOpen: state.isOpen,
         totalCount,
-        isOpen,
-        viewStack.length,
-        popView,
+        viewStackDepth: state.viewStack.length,
+        activeCommand: filtered[state.activeIndex],
+        open: actions.open,
+        close: actions.close,
+        popView: actions.popView,
+        navUp: actions.navUp,
+        navDown: actions.navDown,
         runCommand,
-        close,
-    ]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        const focusTimeout = setTimeout(() => {
-            searchRef.current?.focus();
-        }, 10);
-        return () => clearTimeout(focusTimeout);
-    }, [isOpen]);
+    });
 
     const contextValue = useMemo<CommandContextValue>(
         () => ({
-            isOpen,
-            search,
-            setSearch,
-            toggle,
-            open: () => setIsOpen(true),
-            close,
-            registerCommands,
-            pushView,
-            popView,
+            isOpen: state.isOpen,
+            search: state.search,
+            setSearch: actions.setSearch,
+            toggle: actions.toggle,
+            open: actions.open,
+            close: actions.close,
+            registerCommands: actions.registerCommands,
+            pushView: actions.pushView,
+            popView: actions.popView,
         }),
-        [isOpen, search, toggle, close, registerCommands, pushView, popView],
+        [state.isOpen, state.search, actions],
     );
+
+    const viewStackTopId =
+        state.viewStack.length > 0
+            ? state.viewStack[state.viewStack.length - 1].id
+            : null;
 
     return (
         <CommandContext.Provider value={contextValue}>
             {children}
-            {isClient &&
-                isOpen &&
-                createPortal(
-                    <div className="fixed inset-0 z-999 flex items-start justify-center bg-black/60 backdrop-blur-sm px-4 pt-[15vh] sm:px-6">
-                        <Card
-                            variant="glass"
-                            className="overflow-hidden p-1! w-full max-w-xl border border-white/10 bg-black/70"
-                        >
-                            <div className="flex items-center px-4 py-3 border-b border-white/10">
-                                {viewStack.length > 0 && (
-                                    <span className="mr-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
-                                        {viewStack[viewStack.length - 1].id.replace(/-/g, " ")}
-                                    </span>
-                                )}
-                                <div className="flex-1">
-                                    <input
-                                        ref={searchRef}
-                                        value={search}
-                                        onChange={(event) => {
-                                            setSearch(event.target.value);
-                                            setActiveIndex(0);
-                                        }}
-                                        placeholder={placeholder}
-                                        className="w-full text-sm text-white bg-transparent outline-none placeholder:text-white/40"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                ref={listRef}
-                                className="command-scroll max-h-80 overflow-y-auto"
-                            >
-                                {sections.length === 0 && (
-                                    <div className="px-4 py-12 text-sm text-center text-white/60">
-                                        No commands found.
-                                    </div>
-                                )}
-                                {sections.map((section) => (
-                                    <div
-                                        key={section.name}
-                                        className="px-2 py-3"
-                                    >
-                                        <div className="px-2 pb-2 text-xs font-medium uppercase tracking-[0.2em] text-white/40">
-                                            {section.name}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            {section.commands.map((command) => {
-                                                const index =
-                                                    filtered.indexOf(command);
-                                                const isActive =
-                                                    index === activeIndex;
-                                                return (
-                                                    <button
-                                                        key={command.id}
-                                                        ref={(node) => {
-                                                            if (index >= 0) {
-                                                                itemRefs.current[
-                                                                    index
-                                                                ] = node;
-                                                            }
-                                                        }}
-                                                        type="button"
-                                                        onMouseEnter={() =>
-                                                            setActiveIndex(
-                                                                index,
-                                                            )
-                                                        }
-                                                        onClick={() =>
-                                                            runCommand(command)
-                                                        }
-                                                        className={cn(
-                                                            "flex justify-between items-center gap-3 px-2.5 py-2 w-full text-left rounded-md transition-colors",
-                                                            isActive
-                                                                ? "text-white bg-white/15"
-                                                                : "text-white/80 hover:bg-white/10 hover:text-white",
-                                                        )}
-                                                    >
-                                                        <div className="flex flex-1 items-center gap-3 min-w-0">
-                                                            <span
-                                                                className={cn(
-                                                                    "flex items-center justify-center size-7 rounded-md border border-white/10 shrink-0 transition-colors",
-                                                                    isActive
-                                                                        ? "bg-white/10 text-white"
-                                                                        : "bg-white/[0.04] text-white/70",
-                                                                )}
-                                                            >
-                                                                {command.icon}
-                                                            </span>
-                                                            <div className="flex flex-col gap-0.5 min-w-0">
-                                                                <span className="text-sm font-medium truncate">
-                                                                    {command.label}
-                                                                </span>
-                                                                {command.description && (
-                                                                    <span className="text-xs text-white/60 truncate">
-                                                                        {
-                                                                            command.description
-                                                                        }
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        {command.meta && (
-                                                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/45 shrink-0">
-                                                                {command.meta}
-                                                            </span>
-                                                        )}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex items-center justify-between gap-3 border-t border-white/10 px-3 py-2.5">
-                                <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 pl-1">
-                                    {totalCount}{" "}
-                                    {totalCount === 1 ? "result" : "results"}
-                                </span>
-                                <div className="flex items-center gap-3">
-                                    <ActionHint
-                                        keys={[
-                                            <FiArrowUp
-                                                key="up"
-                                                className="size-3"
-                                            />,
-                                            <FiArrowDown
-                                                key="down"
-                                                className="size-3"
-                                            />,
-                                        ]}
-                                        label="Navigate"
-                                    />
-                                    {filtered[activeIndex] && (
-                                        <ActionHint
-                                            keys={[
-                                                <FiCornerDownLeft
-                                                    key="enter"
-                                                    className="size-3"
-                                                />,
-                                            ]}
-                                            label={
-                                                filtered[activeIndex]
-                                                    ?.actionLabel ?? "Open"
-                                            }
-                                        />
-                                    )}
-                                    <ActionHint
-                                        keys={["esc"]}
-                                        label={
-                                            viewStack.length > 0
-                                                ? "Back"
-                                                : "Close"
-                                        }
-                                    />
-                                </div>
-                            </div>
-                        </Card>
-                    </div>,
-                    document.body,
-                )}
+            {isClient && state.isOpen && (
+                <CommandPaletteModal
+                    search={state.search}
+                    placeholder={placeholder}
+                    sections={sections}
+                    filtered={filtered}
+                    activeIndex={state.activeIndex}
+                    totalCount={totalCount}
+                    viewStackTopId={viewStackTopId}
+                    setSearch={actions.setSearch}
+                    setActiveIndex={actions.setActiveIndex}
+                    runCommand={runCommand}
+                />
+            )}
         </CommandContext.Provider>
     );
 }

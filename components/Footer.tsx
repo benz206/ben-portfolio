@@ -7,9 +7,19 @@ import { FaLinkedin, FaDiscord, FaInstagram, FaSpotify } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
 import { SiMonkeytype } from "react-icons/si";
 import { m } from "framer-motion";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore } from "react";
+import useSWR from "swr";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
+
+const jsonFetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+    return res.json();
+};
+
+type ViewsResponse = { count: number; daily?: number };
+type PresenceResponse = { viewers: number };
 
 const numberFormatter = new Intl.NumberFormat();
 
@@ -69,42 +79,27 @@ const clubs = [
 
 export default function Footer() {
     const { track } = useCurrentlyPlaying();
-    const [views, setViews] = useState<number | null>(null);
-    const [dailyViews, setDailyViews] = useState<number | null>(null);
-    const [viewers, setViewers] = useState<number | null>(null);
+    const { data: viewsData } = useSWR<ViewsResponse>(
+        "/api/views",
+        jsonFetcher,
+        { revalidateOnFocus: false },
+    );
+    const { data: presenceData } = useSWR<PresenceResponse>(
+        "/api/presence",
+        jsonFetcher,
+        { refreshInterval: 30_000, revalidateOnFocus: false },
+    );
+
+    const views = viewsData?.count ?? null;
+    const dailyViews = viewsData?.daily ?? null;
+    const viewers = presenceData?.viewers ?? null;
+
     const isClient = useSyncExternalStore(
         () => () => {},
         () => true,
         () => false,
     );
     const year = isClient ? new Date().getFullYear() : null;
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await fetch("/api/views");
-                if (!response.ok) return;
-                const { count, daily } = await response.json();
-                setViews(count);
-                setDailyViews(daily ?? 0);
-            } catch (error) {
-                console.error("Failed to fetch global views", error);
-            }
-        })();
-
-        const fetchPresence = async () => {
-            try {
-                const res = await fetch("/api/presence");
-                if (!res.ok) return;
-                const { viewers: v } = await res.json();
-                setViewers(v);
-            } catch {}
-        };
-
-        fetchPresence();
-        const interval = setInterval(fetchPresence, 30_000);
-        return () => clearInterval(interval);
-    }, []);
 
     const viewText = useMemo(() => {
         if (views === null) return null;

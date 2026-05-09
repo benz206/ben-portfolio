@@ -20,29 +20,6 @@ export type ProjectPreviewProps = {
     slug?: string;
 };
 
-export type AwardPreviewProps = {
-    image: {
-        src: StaticImageData;
-        alt: string;
-        width?: number;
-        height?: number;
-        priority?: boolean;
-    };
-    competition: string;
-    award: string;
-    description: ReactNode;
-    date: string;
-    icons: {
-        link: string;
-        image: string;
-        alt: string;
-        width?: number;
-        height?: number;
-    }[];
-    color: string;
-    index: number;
-};
-
 export type GitHubRepo = {
     id: number;
     node_id: string;

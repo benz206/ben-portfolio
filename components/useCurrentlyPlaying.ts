@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export type SpotifyTrack = {
     title: string;
@@ -21,42 +22,28 @@ type CurrentlyPlayingState = {
     currentProgress: number;
 };
 
+const fetcher = async (url: string): Promise<SpotifyTrack | null> => {
+    const response = await fetch(url);
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Not currently playing");
+    return (await response.json()) as SpotifyTrack;
+};
+
 export function useCurrentlyPlaying(): CurrentlyPlayingState {
-    const [track, setTrack] = useState<SpotifyTrack | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [currentProgress, setCurrentProgress] = useState(0);
+    const { data, error, isLoading } = useSWR<SpotifyTrack | null>(
+        "/api/getCurrent/public",
+        fetcher,
+        {
+            refreshInterval: 30_000,
+            revalidateOnFocus: false,
+            onSuccess: (next) => {
+                if (next) setCurrentProgress(parseInt(next.progress));
+            },
+        },
+    );
 
-    useEffect(() => {
-        let isMounted = true;
-
-        const fetchCurrentlyPlaying = async () => {
-            try {
-                const response = await fetch("/api/getCurrent/public");
-                if (!isMounted) return;
-                if (response.ok) {
-                    const data = (await response.json()) as SpotifyTrack;
-                    setTrack(data);
-                    setCurrentProgress(parseInt(data.progress));
-                    setError(null);
-                } else {
-                    setError("Not currently playing");
-                }
-            } catch {
-                if (!isMounted) return;
-                setError("Failed to fetch track");
-            } finally {
-                if (isMounted) setIsLoading(false);
-            }
-        };
-
-        fetchCurrentlyPlaying();
-        const interval = setInterval(fetchCurrentlyPlaying, 30000);
-        return () => {
-            isMounted = false;
-            clearInterval(interval);
-        };
-    }, []);
+    const track = data ?? null;
 
     useEffect(() => {
         if (!track || track.paused === "true") return;
@@ -72,5 +59,11 @@ export function useCurrentlyPlaying(): CurrentlyPlayingState {
         return () => clearInterval(progressInterval);
     }, [track]);
 
-    return { track, isLoading, error, currentProgress };
+    const errorMessage = error
+        ? error.message || "Failed to fetch track"
+        : data === null
+          ? "Not currently playing"
+          : null;
+
+    return { track, isLoading, error: errorMessage, currentProgress };
 }

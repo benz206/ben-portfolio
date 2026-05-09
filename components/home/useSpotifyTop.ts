@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import type { SpotifyTimeRange } from "@/types/externalApis";
 
 export type TopItem = {
@@ -17,31 +17,50 @@ export type TopResponse = {
     updatedAt: number;
 };
 
+type Status =
+    | { kind: "loading" }
+    | { kind: "ready"; data: TopResponse }
+    | { kind: "error" };
+
+type Action =
+    | { type: "success"; data: TopResponse }
+    | { type: "failure" };
+
+const initialStatus: Status = { kind: "loading" };
+
+function reducer(_: Status, action: Action): Status {
+    switch (action.type) {
+        case "success":
+            return { kind: "ready", data: action.data };
+        case "failure":
+            return { kind: "error" };
+    }
+}
+
 export function useSpotifyTop() {
-    const [data, setData] = useState<TopResponse | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [status, dispatch] = useReducer(reducer, initialStatus);
 
     useEffect(() => {
         let cancelled = false;
 
-        const fetchTop = async () => {
+        (async () => {
             try {
                 const response = await fetch("/api/getTop/public");
                 if (!response.ok) throw new Error("Failed");
                 const json = (await response.json()) as TopResponse;
-                if (!cancelled) setData(json);
+                if (!cancelled) dispatch({ type: "success", data: json });
             } catch {
-                if (!cancelled) setData(null);
-            } finally {
-                if (!cancelled) setIsLoading(false);
+                if (!cancelled) dispatch({ type: "failure" });
             }
-        };
+        })();
 
-        fetchTop();
         return () => {
             cancelled = true;
         };
     }, []);
 
-    return { data, isLoading };
+    return {
+        data: status.kind === "ready" ? status.data : null,
+        isLoading: status.kind === "loading",
+    };
 }
