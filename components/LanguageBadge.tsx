@@ -73,7 +73,7 @@ export default function LanguageBadge({
                 className="relative inline-flex items-center justify-center rounded-md p-[1.5px]"
                 style={{ backgroundImage: gradientBackground }}
             >
-                <span className="relative inline-flex items-center justify-center rounded-1 bg-[#050a18]/90 px-2 py-1 text-[10px] uppercase text-white/95">
+                <span className="relative inline-flex items-center justify-center rounded-[5px] bg-[#050a18]/90 px-2 py-1 text-[10px] uppercase text-white/95">
                     {label}
                 </span>
             </span>

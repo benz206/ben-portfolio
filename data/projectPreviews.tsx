@@ -17,8 +17,177 @@ import Event from "@/public/projects/event.png";
 import Hermes from "@/public/projects/hermes.png";
 import TraceMoeImage from "@/public/projects/tracemoe.png";
 import TagVaultImage from "@/public/projects/vault.png";
+import CrimexImage from "@/public/projects/crimex.png";
+import LatticeImage from "@/public/projects/lattice.png";
+import LuminodeImage from "@/public/projects/luminode.png";
+import SentimentImage from "@/public/projects/sentiment.png";
 
 const projectPreviews: ProjectPreviewProps[] = [
+    {
+        image: {
+            src: CrimexImage,
+            alt: "Crimex",
+            width: 900,
+            height: 100,
+        },
+        title: "CRIMEX",
+        sub: "INTERACTIVE HALTON CRIME MAP",
+        summary:
+            "Real-time crime map for Halton with viewport-based queries, heatmaps, clustering, and Supabase auth.",
+        description: (
+            <>
+                Crimex is an interactive map for exploring Halton Region
+                incidents, built on Next.js and MapLibre with MapTiler basemaps
+                and a public ArcGIS FeatureServer as the upstream data source.
+                Incidents refresh on every map move, a heatmap mode renders
+                density with adjustable radius and intensity, and a clustering
+                layer collapses nearby points when zoomed out. The sidebar
+                exposes filters for time range, municipality, and incident
+                type, and Supabase powers optional auth and a profile view. You
+                can try it live at{" "}
+                <a
+                    href="https://halton-crime-production.up.railway.app/"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-500"
+                >
+                    halton-crime-production.up.railway.app
+                </a>{" "}
+                or read the source on{" "}
+                <a
+                    href="https://github.com/benz206/crimex"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-500"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Next.js", "TypeScript", "Supabase", "MapLibre"],
+        projectLink: "https://halton-crime-production.up.railway.app/",
+        slug: "crimex",
+        color: "cyan-500",
+    },
+    {
+        image: {
+            src: LatticeImage,
+            alt: "Lattice",
+            width: 900,
+            height: 100,
+        },
+        title: "LATTICE",
+        sub: "EVIDENCE RETRIEVAL FOR LONG DOCS",
+        summary:
+            "Hybrid retrieval pipeline (BM25 + embeddings + RRF) that grounds small models in long technical documents.",
+        description: (
+            <>
+                Lattice is a Next.js 16 App Router project that turns long PDFs
+                into grounded, searchable evidence so smaller models can answer
+                hard questions without trying to read a thousand pages at once.
+                Documents are parsed with local <code>pdftotext</code>, split
+                into section-aware chunks, embedded, and indexed alongside a
+                BM25 lexical signal. Queries fuse both retrievers with
+                reciprocal rank fusion, rerank for diversity, and feed the
+                top-k passages to a local Qwen 2.5 1.5B model that must cite
+                each claim with an <code>[E#]</code> marker — weak retrieval
+                explicitly maps to a &quot;not enough evidence&quot; reply rather than a
+                hallucinated answer. See the project on{" "}
+                <a
+                    href="https://github.com/benz206/lattice"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-blue-400"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Next.js", "TypeScript", "BM25", "Embeddings"],
+        projectLink: "https://github.com/benz206/lattice",
+        slug: "lattice",
+        color: "blue-500",
+    },
+    {
+        image: {
+            src: LuminodeImage,
+            alt: "Luminode",
+            width: 900,
+            height: 100,
+        },
+        title: "LUMINODE",
+        sub: "RUST LED CONTROLLER FOR DORMS",
+        summary:
+            "Single-binary Rust WS2812B controller for a Raspberry Pi, auto-starting via systemd for dorm lighting.",
+        description: (
+            <>
+                Luminode is a personalized dorm illumination project built
+                around a Raspberry Pi driving WS2812B LED strips. It compiles
+                down to a single native Rust binary — no Python, no venvs, no
+                Cargo at boot — and runs as a managed systemd service so the
+                lights come back automatically after a power cycle. Under the
+                hood it leans on the Pi&apos;s PWM + DMA hardware on GPIO 18 to
+                hold the tight WS2812B timing budget while staying easy on the
+                CPU. There&apos;s a companion sync repo for coordinating animations
+                across multiple nodes. View the source on{" "}
+                <a
+                    href="https://github.com/benz206/luminode"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-pink-500"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Rust", "Raspberry Pi", "systemd", "Embedded"],
+        projectLink: "https://github.com/benz206/luminode",
+        slug: "luminode",
+        color: "pink-500",
+    },
+    {
+        image: {
+            src: SentimentImage,
+            alt: "Sentiment Analysis",
+            width: 900,
+            height: 100,
+        },
+        title: "SENTIMENT ANALYSIS",
+        sub: "VADER + SCRAPED NEWS SENTIMENT",
+        summary:
+            "Streamlit app that scrapes Google News and runs VADER sentiment across any topic the user types in.",
+        description: (
+            <>
+                A small data project that scrapes recent Google News articles
+                for any user-provided topic, runs VADER sentiment on each
+                headline and summary, and renders the results in a Streamlit
+                dashboard with bar and pie distributions plus per-article
+                drill-downs colored by sentiment. The app lets the user pick
+                how many pages to scrape and exposes the raw VADER scores
+                under expandable sections so the analysis is auditable rather
+                than a black box. Try it at{" "}
+                <a
+                    href="https://benz-sentiment-analysis.streamlit.app/"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-400"
+                >
+                    benz-sentiment-analysis.streamlit.app
+                </a>{" "}
+                or read the source on{" "}
+                <a
+                    href="https://github.com/benz206/sentiment-analysis"
+                    target="_blank"
+                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-400"
+                >
+                    GitHub
+                </a>
+                .
+            </>
+        ),
+        languages: ["Python", "Streamlit", "VADER", "BeautifulSoup"],
+        projectLink: "https://benz-sentiment-analysis.streamlit.app/",
+        slug: "sentiment-analysis",
+        color: "cyan-400",
+    },
     {
         image: {
             src: Hermes,
