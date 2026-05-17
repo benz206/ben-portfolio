@@ -6,6 +6,7 @@ import ProjectPreview from "@/components/ProjectPreview";
 import projectPreviews from "@/data/projectPreviews";
 import type { ProjectPreviewProps } from "@/types";
 import ProjectDetailModal from "@/components/ProjectDetailModal";
+import ScatteredGradients from "@/components/blog/ScatteredGradients";
 
 export default function Projects() {
     const [selectedProject, setSelectedProject] =
@@ -22,6 +23,7 @@ export default function Projects() {
     return (
         <section className="relative pb-24 overflow-hidden text-white bg-zinc-950 pt-28">
             <div className="absolute inset-0 bg-zinc-950" />
+            <ScatteredGradients seed="projects" count={28} />
             <div className="relative mx-auto flex w-11/12 max-w-295 flex-col gap-20">
                 <m.div
                     className="space-y-10"

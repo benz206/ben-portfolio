@@ -34,7 +34,11 @@ function generateBlobs(seed: string, count: number): Blob[] {
         const hue = h % 360;
 
         const xPct = 5 + ((h >>> 8) % 90);
-        const yOffset = i * 500 + ((h >>> 12) % 250) - 80;
+        // Distribute evenly across the parent's full height (0-100%)
+        // with small per-blob jitter so the distribution doesn't look gridded.
+        const yBase = count > 1 ? (i / (count - 1)) * 100 : 50;
+        const yJitter = ((h >>> 12) % 80) / 10 - 4;
+        const yPct = Math.max(-3, Math.min(103, yBase + yJitter));
 
         const size = 350 + ((h >>> 16) % 400);
         const aspect = 0.6 + ((h >>> 20) % 80) / 100;
@@ -45,7 +49,7 @@ function generateBlobs(seed: string, count: number): Blob[] {
 
         blobs.push({
             x: `${xPct}%`,
-            y: `${yOffset}px`,
+            y: `${yPct}%`,
             w: size,
             h: Math.round(size * aspect),
             hue,
@@ -58,8 +62,14 @@ function generateBlobs(seed: string, count: number): Blob[] {
     return blobs;
 }
 
-export default function ScatteredGradients({ seed }: { seed: string }) {
-    const blobs = generateBlobs(seed, 16);
+export default function ScatteredGradients({
+    seed,
+    count = 16,
+}: {
+    seed: string;
+    count?: number;
+}) {
+    const blobs = generateBlobs(seed, count);
 
     return (
         <div
