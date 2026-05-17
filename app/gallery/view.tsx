@@ -113,12 +113,16 @@ function MasonryTile({
     );
 }
 
+type RgbColor = [number, number, number];
+
 export default function GalleryClient({
     images,
     placeholders,
+    colors,
 }: {
     images: ImageT[];
     placeholders: Record<string, string>;
+    colors: Record<string, RgbColor>;
 }) {
     const [selectedImage, setSelectedImage] = useState<ImageT | null>(null);
     const columnCount = useColumnCount();
@@ -203,16 +207,45 @@ export default function GalleryClient({
             <AnimatePresence>
                 {selectedImage && (
                     <m.div
-                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md bg-neutral-950/80"
+                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25 }}
                         onClick={handleClose}
                     >
+                        {(() => {
+                            const rgb = colors[selectedImage.public_id] ?? [
+                                12, 12, 14,
+                            ];
+                            const [r, g, b] = rgb;
+                            return (
+                                <>
+                                    <div
+                                        className="pointer-events-none absolute inset-0"
+                                        style={{
+                                            background: `radial-gradient(ellipse at center, rgba(${r}, ${g}, ${b}, 0.55), rgba(${Math.round(r * 0.25)}, ${Math.round(g * 0.25)}, ${Math.round(b * 0.25)}, 0.85) 70%, rgba(5, 5, 8, 0.92) 100%)`,
+                                            transition:
+                                                "background 350ms ease",
+                                        }}
+                                        aria-hidden
+                                    />
+                                    <div
+                                        className="pointer-events-none absolute inset-0"
+                                        style={{
+                                            background: `radial-gradient(circle at 50% 50%, rgba(${r}, ${g}, ${b}, 0.35), transparent 55%)`,
+                                            filter: "blur(90px)",
+                                            transition:
+                                                "background 350ms ease",
+                                        }}
+                                        aria-hidden
+                                    />
+                                </>
+                            );
+                        })()}
                         <m.div
                             key={selectedImage.public_id}
-                            className="cursor-default"
+                            className="relative cursor-default"
                             initial={{ opacity: 0, scale: 0.94 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.94 }}

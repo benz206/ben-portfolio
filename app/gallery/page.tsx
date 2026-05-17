@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { v2 as cloudinary } from "cloudinary";
 import { getCldImageUrl } from "next-cloudinary";
 import GalleryClient from "./view";
+import {
+    getDominantColorFromImageUrl,
+    type RgbColor,
+} from "@/utils/colorExtraction";
 
 type ImageT = {
     public_id: string;
@@ -67,6 +71,26 @@ async function generateBlurPlaceholders(
     return Object.fromEntries(entries.filter(([, v]) => v));
 }
 
+async function fetchDominantColors(
+    images: ImageT[],
+): Promise<Record<string, RgbColor>> {
+    const entries = await Promise.all(
+        images.map(async (image) => {
+            const url = getCldImageUrl({
+                src: image.public_id,
+                width: 72,
+                height: 72,
+                crop: "fill",
+                quality: "auto",
+                format: "webp",
+            });
+            const color = await getDominantColorFromImageUrl(url);
+            return [image.public_id, color] as const;
+        }),
+    );
+    return Object.fromEntries(entries);
+}
+
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
@@ -90,6 +114,15 @@ export const metadata: Metadata = {
 
 export default async function GalleryPage() {
     const images = await fetchImages();
-    const placeholders = await generateBlurPlaceholders(images);
-    return <GalleryClient images={images} placeholders={placeholders} />;
+    const [placeholders, colors] = await Promise.all([
+        generateBlurPlaceholders(images),
+        fetchDominantColors(images),
+    ]);
+    return (
+        <GalleryClient
+            images={images}
+            placeholders={placeholders}
+            colors={colors}
+        />
+    );
 }
