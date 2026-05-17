@@ -2,8 +2,15 @@
 
 import { AnimatePresence, m, type Variants } from "framer-motion";
 import { CldImage } from "next-cloudinary";
-import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import {
+    useCallback,
+    useEffect,
+    useEffectEvent,
+    useMemo,
+    useState,
+} from "react";
 import ScatteredGradients from "@/components/blog/ScatteredGradients";
+import { cn } from "@/utils/cn";
 
 type ImageT = {
     public_id: string;
@@ -16,7 +23,7 @@ const boxAnim: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
-        transition: { delayChildren: 0.2, staggerChildren: 0.15 },
+        transition: { delayChildren: 0.2, staggerChildren: 0.05 },
     },
 };
 const itemAnim: Variants = {
@@ -30,7 +37,40 @@ const itemAnim: Variants = {
 
 const viewportOptions = { once: true, margin: "200px 0px 200px 0px" };
 
-function PhotoTile({
+const COLUMN_BREAKPOINTS: { minWidth: number; columns: number }[] = [
+    { minWidth: 1920, columns: 4 },
+    { minWidth: 1024, columns: 3 },
+    { minWidth: 640, columns: 2 },
+    { minWidth: 0, columns: 1 },
+];
+
+function computeColumnCount(width: number): number {
+    for (const bp of COLUMN_BREAKPOINTS) {
+        if (width >= bp.minWidth) return bp.columns;
+    }
+    return 1;
+}
+
+function useColumnCount(defaultCount = 3): number {
+    const [count, setCount] = useState(defaultCount);
+    useEffect(() => {
+        const update = () => setCount(computeColumnCount(window.innerWidth));
+        update();
+        window.addEventListener("resize", update);
+        return () => window.removeEventListener("resize", update);
+    }, []);
+    return count;
+}
+
+function distributeIntoColumns<T>(items: T[], columnCount: number): T[][] {
+    const columns: T[][] = Array.from({ length: columnCount }, () => []);
+    items.forEach((item, i) => {
+        columns[i % columnCount].push(item);
+    });
+    return columns;
+}
+
+function MasonryTile({
     image,
     placeholder,
     onSelect,
@@ -42,7 +82,7 @@ function PhotoTile({
     return (
         <m.button
             type="button"
-            className="block overflow-hidden w-full rounded-xl transition duration-200 group hover:brightness-110"
+            className="block w-full overflow-hidden rounded-xl transition duration-200 group hover:brightness-110"
             onClick={() => onSelect(image)}
             variants={itemAnim}
             initial="hidden"
@@ -51,7 +91,10 @@ function PhotoTile({
             viewport={viewportOptions}
             whileInView="visible"
         >
-            <div className="overflow-hidden relative w-full rounded-xl aspect-square">
+            <div
+                className="overflow-hidden relative w-full rounded-xl"
+                style={{ aspectRatio: `${image.width} / ${image.height}` }}
+            >
                 <CldImage
                     fill
                     src={image.public_id}
@@ -59,7 +102,6 @@ function PhotoTile({
                     placeholder="blur"
                     blurDataURL={placeholder}
                     loading="lazy"
-                    crop="fill"
                     quality="auto"
                     dpr="auto"
                     format="webp"
@@ -79,6 +121,11 @@ export default function GalleryClient({
     placeholders: Record<string, string>;
 }) {
     const [selectedImage, setSelectedImage] = useState<ImageT | null>(null);
+    const columnCount = useColumnCount();
+    const columns = useMemo(
+        () => distributeIntoColumns(images, columnCount),
+        [images, columnCount],
+    );
 
     const handleSelect = useCallback((image: ImageT) => {
         setSelectedImage(image);
@@ -127,20 +174,28 @@ export default function GalleryClient({
                 </div>
 
                 <m.div
-                    className={`grid w-full min-h-[60vh] gap-6 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 ${
-                        selectedImage ? "blur-sm" : ""
-                    }`}
+                    className={cn(
+                        "flex w-full min-h-[60vh] gap-4",
+                        selectedImage && "blur-sm",
+                    )}
                     variants={boxAnim}
                     initial="hidden"
                     animate="visible"
                 >
-                    {images.map((image) => (
-                        <PhotoTile
-                            key={image.public_id}
-                            image={image}
-                            placeholder={placeholders[image.public_id]}
-                            onSelect={handleSelect}
-                        />
+                    {columns.map((column, columnIndex) => (
+                        <div
+                            key={columnIndex}
+                            className="flex flex-1 flex-col gap-4 min-w-0"
+                        >
+                            {column.map((image) => (
+                                <MasonryTile
+                                    key={image.public_id}
+                                    image={image}
+                                    placeholder={placeholders[image.public_id]}
+                                    onSelect={handleSelect}
+                                />
+                            ))}
+                        </div>
                     ))}
                 </m.div>
             </div>
