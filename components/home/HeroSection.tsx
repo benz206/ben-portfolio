@@ -64,31 +64,11 @@ export default function HeroSection() {
     const handleScrollClick = useScrollToSection("home-next-section");
     const { track, isLoading, error, currentProgress } = useCurrentlyPlaying();
 
-    const albumColor = track?.color;
-
     return (
         <section className="flex overflow-hidden relative justify-center items-center pt-24 pb-20 home-section sm:pb-20 sm:pt-28 lg:h-dvh lg:pb-0 lg:pt-0">
             <div className="absolute inset-0 bg-noir-gradient" />
             <div className="absolute inset-0 opacity-80 bg-noir-radial" />
-            {albumColor && (
-                <m.div
-                    className="absolute pointer-events-none rounded-full origin-bottom-left"
-                    style={{
-                        left: "-10%",
-                        bottom: "-5%",
-                        width: "250px",
-                        height: "250px",
-                        filter: "blur(20px)",
-                        transform: "scale(2.8)",
-                        willChange: "background-color, opacity",
-                    }}
-                    animate={{
-                        backgroundColor: `rgb(${albumColor[0]}, ${albumColor[1]}, ${albumColor[2]})`,
-                        opacity: 0.14,
-                    }}
-                    transition={{ duration: 3, ease: "easeInOut" }}
-                />
-            )}
+
             <div className="relative flex w-full max-w-270 flex-col gap-12 px-4 text-white sm:px-6 lg:w-11/12 lg:gap-16">
                 <div className="grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
                     <div className="flex flex-col gap-0 lg:gap-8 min-w-0">

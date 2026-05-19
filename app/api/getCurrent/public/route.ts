@@ -2,11 +2,13 @@ import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
+import { getRedisClient } from "@/utils/redis";
 import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
 
 const REVALIDATE_SECONDS = 6;
+const LAST_PLAYED_KEY = "spotify:last-played";
 const PUBLIC_CACHE_HEADERS = {
     "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
 };
@@ -26,6 +28,32 @@ type SpotifyTrackInfo = {
     albumArt?: string;
 };
 
+async function readLastPlayed(): Promise<SpotifyTrackInfo | null> {
+    try {
+        const client = await getRedisClient();
+        const value = await client.get(LAST_PLAYED_KEY);
+        if (!value) return null;
+        const stored = JSON.parse(value) as SpotifyTrackInfo;
+        return {
+            ...stored,
+            progress: stored.duration,
+            paused: "true",
+        };
+    } catch (error) {
+        console.error("Failed to read last-played from Redis", error);
+        return null;
+    }
+}
+
+async function writeLastPlayed(track: SpotifyTrackInfo): Promise<void> {
+    try {
+        const client = await getRedisClient();
+        await client.set(LAST_PLAYED_KEY, JSON.stringify(track));
+    } catch (error) {
+        console.error("Failed to write last-played to Redis", error);
+    }
+}
+
 async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     const accessToken = await getSpotifyAccessToken();
     const response = await fetch(`https://api.spotify.com/v1/me/player`, {
@@ -40,15 +68,15 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     }
 
     const text = await response.text();
-    if (!text) return null;
+    if (!text) return await readLastPlayed();
 
     const current = JSON.parse(text) as SpotifyPlaybackState;
-    if (!current.item) return null;
+    if (!current.item) return await readLastPlayed();
 
     const imageUrl = current.item.album.images[0]?.url as string | undefined;
     const dominantColor = await getDominantColorFromImageUrl(imageUrl);
 
-    return {
+    const track: SpotifyTrackInfo = {
         title: current.item.name,
         artist: current.item.artists[0].name,
         album: current.item.album.name,
@@ -61,6 +89,9 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
         loop: current.repeat_state,
         albumArt: current.item.album.images[0]?.url,
     };
+
+    await writeLastPlayed(track);
+    return track;
 }
 
 const getCachedTrack = unstable_cache(
