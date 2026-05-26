@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-const VIEWED_KEY = "portfolio:viewed";
 const SESSION_KEY = "portfolio:sessionId";
 const HEARTBEAT_INTERVAL = 30_000;
 
@@ -21,13 +20,7 @@ export default function ViewCounter() {
     useEffect(() => {
         const sessionId = getSessionId();
 
-        if (!sessionStorage.getItem(VIEWED_KEY)) {
-            fetch("/api/views", { method: "POST" })
-                .then(() => {
-                    sessionStorage.setItem(VIEWED_KEY, "1");
-                })
-                .catch(() => {});
-        }
+        fetch("/api/views", { method: "POST" }).catch(() => {});
 
         const sendHeartbeat = () => {
             fetch("/api/presence", {
