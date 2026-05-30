@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ThanksPage() {
-    return <GoldenSection />;
+return <GoldenSection />;
 }

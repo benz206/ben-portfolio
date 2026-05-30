@@ -131,7 +131,7 @@ export default function CurrentlyPlaying({
                         {track.title}
                     </h3>
 
-                    <div className="w-full">
+                    <div className="w-full pr-6">
                         <div className="w-full h-1.5 bg-zinc-700 rounded-full overflow-hidden">
                             <m.div
                                 className="h-1.5 rounded-full"
