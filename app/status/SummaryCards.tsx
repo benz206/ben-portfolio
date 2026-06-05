@@ -1,4 +1,5 @@
 import Card from "@/components/Card";
+import Eyebrow from "@/components/Eyebrow";
 import StatusBadge from "./StatusBadge";
 import type { ServiceStatus } from "./services";
 
@@ -34,9 +35,9 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
                 <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-berry" />
                 <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
                 <div className="flex justify-between items-center">
-                    <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                    <Eyebrow className="tracking-[0.3em]">
                         Overall
-                    </span>
+                    </Eyebrow>
                     <StatusBadge status={overallStatus} />
                 </div>
                 <div className="text-2xl font-semibold">
@@ -58,9 +59,9 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
             >
                 <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-cool" />
                 <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
-                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                <Eyebrow className="tracking-[0.3em]">
                     Services
-                </span>
+                </Eyebrow>
                 <div className="text-3xl font-semibold">{total}</div>
                 <div className="text-xs uppercase tracking-[0.25em] text-white/35">
                     Monitored
@@ -75,9 +76,9 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
             >
                 <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-spotify" />
                 <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
-                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                <Eyebrow className="tracking-[0.3em]">
                     Operational
-                </span>
+                </Eyebrow>
                 <div className="text-3xl font-semibold">{okCount}</div>
                 <div className="text-xs uppercase tracking-[0.25em] text-white/35">
                     Operational
@@ -92,9 +93,9 @@ export default function SummaryCards({ services }: SummaryCardsProps) {
             >
                 <div className="absolute -top-16 -right-16 size-44 opacity-60 blur-2xl pointer-events-none bg-noir-radial-warm" />
                 <div className="absolute left-6 -bottom-14 size-36 opacity-40 blur-2xl pointer-events-none bg-noir-radial" />
-                <span className="text-xs uppercase tracking-[0.3em] text-white/50">
+                <Eyebrow className="tracking-[0.3em]">
                     Alerts
-                </span>
+                </Eyebrow>
                 <div className="text-3xl font-semibold">
                     {degradedCount + downCount}
                 </div>

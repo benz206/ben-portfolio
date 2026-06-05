@@ -1,20 +1,12 @@
 "use client";
 
-import { m, easeInOut } from "framer-motion";
+import { m } from "framer-motion";
 import { useRef } from "react";
 import { AiOutlineLoading } from "react-icons/ai";
 import ContributionHeatmap from "@/components/GitHub/ContributionHeatmap";
 import RepoExplorer from "@/components/GitHub/RepoExplorer";
 import { useGithubData } from "./useGithubData";
-
-const fadeIn = {
-    hidden: { opacity: 0, y: 32 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.7, ease: easeInOut },
-    },
-};
+import { fadeIn } from "@/utils/motion";
 
 export default function GithubPage() {
     const heroRef = useRef(null);

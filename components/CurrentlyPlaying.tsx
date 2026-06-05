@@ -4,10 +4,10 @@ import { m, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
-import type { SpotifyTrack } from "./useCurrentlyPlaying";
+import type { NowPlayingTrack } from "./useCurrentlyPlaying";
 
 type CurrentlyPlayingProps = {
-    track: SpotifyTrack | null;
+    track: NowPlayingTrack | null;
     isLoading: boolean;
     error: string | null;
     currentProgress: number;

@@ -4,6 +4,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { FiArrowDown, FiArrowUp, FiCornerDownLeft } from "react-icons/fi";
 import Card from "@/components/Card";
+import Eyebrow from "@/components/Eyebrow";
 import { cn } from "@/utils/cn";
 import type { CommandDescriptor } from "@/types/command";
 
@@ -96,9 +97,9 @@ export default function CommandPaletteModal({
             >
                 <div className="flex items-center px-4 py-3 border-b border-white/10">
                     {viewStackTopId && (
-                        <span className="mr-2 text-[10px] uppercase tracking-[0.2em] text-white/45">
+                        <Eyebrow className="mr-2 text-[10px] tracking-[0.2em] text-white/45">
                             {viewStackTopId.replace(/-/g, " ")}
-                        </span>
+                        </Eyebrow>
                     )}
                     <div className="flex-1">
                         <input
@@ -174,9 +175,9 @@ export default function CommandPaletteModal({
                                                 </div>
                                             </div>
                                             {command.meta && (
-                                                <span className="text-[10px] uppercase tracking-[0.2em] text-white/45 shrink-0">
+                                                <Eyebrow className="text-[10px] tracking-[0.2em] text-white/45 shrink-0">
                                                     {command.meta}
-                                                </span>
+                                                </Eyebrow>
                                             )}
                                         </button>
                                     );
@@ -186,9 +187,9 @@ export default function CommandPaletteModal({
                     ))}
                 </div>
                 <div className="flex items-center justify-between gap-3 border-t border-white/10 px-3 py-2.5">
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-white/35 pl-1">
+                    <Eyebrow className="text-[10px] tracking-[0.2em] text-white/35 pl-1">
                         {totalCount} {totalCount === 1 ? "result" : "results"}
-                    </span>
+                    </Eyebrow>
                     <div className="flex items-center gap-3">
                         <ActionHint
                             keys={[

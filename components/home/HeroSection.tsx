@@ -9,6 +9,7 @@ import GrandCharterLogo from "@/public/experience/grandcharter.jpeg";
 import SAPLogo from "@/public/experience/SAP.png";
 import RoleCard, { type RoleCardData } from "@/components/home/RoleCard";
 import { useScrollToSection } from "@/utils/hooks";
+import Eyebrow from "@/components/Eyebrow";
 
 const SCROLL_CHEVRONS = ["chevron-a", "chevron-b", "chevron-c"] as const;
 
@@ -79,9 +80,9 @@ export default function HeroSection() {
                             viewport={{ once: true, amount: 0.4 }}
                             transition={{ duration: 0.6, delay: 0.1 }}
                         >
-                            <span className="text-xs uppercase tracking-[0.2em] text-white/50">
+                            <Eyebrow className="tracking-[0.2em]">
                                 Building Software
-                            </span>
+                            </Eyebrow>
                             <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
                                 Ben Zhou
                             </h1>
@@ -120,9 +121,9 @@ export default function HeroSection() {
                             delay: rolesHeadingDelay,
                         }}
                     >
-                        <span className="text-xs uppercase tracking-[0.2em] text-white/40">
+                        <Eyebrow className="tracking-[0.2em] text-white/40">
                             Roles
-                        </span>
+                        </Eyebrow>
                         {recentRoles.map((role, index) => (
                             <RoleCard
                                 key={role.company}

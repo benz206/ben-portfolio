@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 import { m } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { AmbientGradient, AmbientVariant } from "@/components/AmbientGradient";
@@ -19,7 +19,7 @@ interface CardProps {
     ambientClassName?: string;
     ambientSeed?: number | string;
     ambientVariant?: AmbientVariant;
-    motionProps?: any;
+    motionProps?: ComponentProps<typeof m.div>;
 }
 
 const cardVariantClasses: Record<CardVariant, string> = {

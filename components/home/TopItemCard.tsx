@@ -2,6 +2,8 @@ import Image from "next/image";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
 import type { TopItem } from "./useSpotifyTop";
+import { formatCompact } from "@/utils/format";
+import { inView } from "@/utils/motion";
 
 type TopItemCardProps = {
     item: TopItem;
@@ -9,13 +11,9 @@ type TopItemCardProps = {
     kind: "track" | "artist";
 };
 
-const followersFormatter = new Intl.NumberFormat(undefined, {
-    notation: "compact",
-});
-
 function formatFollowers(n?: number) {
     if (typeof n !== "number" || Number.isNaN(n)) return null;
-    return followersFormatter.format(n);
+    return formatCompact(n);
 }
 
 export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
@@ -34,12 +32,7 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
             ambientSeed={`${kind}:${rank}:${item.name}`}
             ambientClassName="opacity-50"
             className="flex overflow-hidden relative items-center px-2 py-1 mx-auto mt-0 w-full h-28 rounded-xl border-0"
-            motionProps={{
-                initial: { opacity: 0, y: 12 },
-                whileInView: { opacity: 1, y: 0 },
-                viewport: { once: true, amount: 0.4 },
-                transition: { duration: 0.6 },
-            }}
+            motionProps={inView(12, 0.4, 0.6)}
         >
             {item.image && (
                 <>

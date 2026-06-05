@@ -5,6 +5,8 @@ import { m } from "framer-motion";
 import { FaFolderOpen, FaHouse, FaImages, FaPenNib } from "react-icons/fa6";
 import Card from "@/components/Card";
 import { useCommandMenu } from "@/components/CommandPalette/CommandProvider";
+import Eyebrow from "@/components/Eyebrow";
+import { fadeUp } from "@/utils/motion";
 
 const links = [
     {
@@ -45,9 +47,7 @@ export default function NotFoundAnimated() {
             <div className="relative mx-auto flex w-11/12 max-w-270 flex-col items-center justify-center pb-24 pt-28 min-h-screen">
                 <m.div
                     className="w-full"
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: "easeInOut" }}
+                    {...fadeUp(18, 0.7)}
                 >
                     <Card
                         variant="glass"
@@ -59,9 +59,9 @@ export default function NotFoundAnimated() {
                         <div className="flex flex-col gap-10">
                             <div className="space-y-4">
                                 <div className="flex gap-4 justify-between items-center">
-                                    <span className="text-xs uppercase tracking-[0.2em] text-white/45">
+                                    <Eyebrow className="tracking-[0.2em] text-white/45">
                                         404 - Not found
-                                    </span>
+                                    </Eyebrow>
                                 </div>
                                 <h1 className="text-4xl font-semibold tracking-tight leading-tight sm:text-5xl">
                                     Page not found

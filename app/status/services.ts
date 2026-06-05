@@ -1,3 +1,5 @@
+import { formatCompact, formatDate, formatTime } from "@/utils/format";
+
 export type ServiceStatus = {
     id: string;
     name: string;
@@ -91,31 +93,6 @@ export const initialServices: ServiceStatus[] = [
     },
 ];
 
-const formatNumber = (value: number) =>
-    Intl.NumberFormat(undefined, { notation: "compact" }).format(value);
-
-const timeFormatter = new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-});
-
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "2-digit",
-});
-
-const formatTime = (value?: number) => {
-    if (!value) return null;
-    return timeFormatter.format(new Date(value));
-};
-
-const formatDate = (value?: string) => {
-    if (!value) return null;
-    const date = new Date(value);
-    if (Number.isNaN(date.valueOf())) return null;
-    return dateFormatter.format(date);
-};
-
 const sumRecentContributions = (
     contributions: Array<{ date?: string; count?: number }>,
     days: number,
@@ -151,7 +128,7 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "Posts", value: formatNumber(posts.length) },
+                        { label: "Posts", value: formatCompact(posts.length) },
                     ],
                 };
             },
@@ -178,15 +155,15 @@ export function buildServiceChecks(): ServiceDefinition[] {
                     metrics: [
                         {
                             label: "Repos",
-                            value: formatNumber(profile.public_repos ?? 0),
+                            value: formatCompact(profile.public_repos ?? 0),
                         },
                         {
                             label: "Followers",
-                            value: formatNumber(profile.followers ?? 0),
+                            value: formatCompact(profile.followers ?? 0),
                         },
                         {
                             label: "Following",
-                            value: formatNumber(profile.following ?? 0),
+                            value: formatCompact(profile.following ?? 0),
                         },
                     ],
                 };
@@ -222,8 +199,8 @@ export function buildServiceChecks(): ServiceDefinition[] {
                 return {
                     status: "ok",
                     metrics: [
-                        { label: "30 days", value: formatNumber(recent) },
-                        { label: "Year total", value: formatNumber(yearTotal) },
+                        { label: "30 days", value: formatCompact(recent) },
+                        { label: "Year total", value: formatCompact(yearTotal) },
                     ],
                 };
             },
@@ -287,11 +264,11 @@ export function buildServiceChecks(): ServiceDefinition[] {
                     metrics: [
                         {
                             label: "Top tracks",
-                            value: formatNumber(data.tracks?.length ?? 0),
+                            value: formatCompact(data.tracks?.length ?? 0),
                         },
                         {
                             label: "Top artists",
-                            value: formatNumber(data.artists?.length ?? 0),
+                            value: formatCompact(data.artists?.length ?? 0),
                         },
                         {
                             label: "Updated",
@@ -323,11 +300,11 @@ export function buildServiceChecks(): ServiceDefinition[] {
                     metrics: [
                         {
                             label: "All time",
-                            value: formatNumber(data.count ?? 0),
+                            value: formatCompact(data.count ?? 0),
                         },
                         {
                             label: "Today",
-                            value: formatNumber(data.daily ?? 0),
+                            value: formatCompact(data.daily ?? 0),
                         },
                     ],
                 };
@@ -349,13 +326,13 @@ export function buildServiceChecks(): ServiceDefinition[] {
                     total?: number;
                     latestUploadedAt?: string;
                 };
-                const latest = formatDate(data.latestUploadedAt);
+                const latest = formatDate(data.latestUploadedAt, { month: "short", day: "2-digit" });
                 return {
                     status: "ok",
                     metrics: [
                         {
                             label: "Images",
-                            value: formatNumber(data.total ?? 0),
+                            value: formatCompact(data.total ?? 0),
                         },
                         { label: "Latest", value: latest ?? "Unknown" },
                     ],

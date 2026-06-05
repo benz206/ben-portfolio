@@ -7,6 +7,8 @@ import projectPreviews from "@/data/projectPreviews";
 import type { ProjectPreviewProps } from "@/types";
 import ProjectDetailModal from "@/components/ProjectDetailModal";
 import ScatteredGradients from "@/components/blog/ScatteredGradients";
+import Eyebrow from "@/components/Eyebrow";
+import { fadeUp } from "@/utils/motion";
 
 export default function Projects() {
     const [selectedProject, setSelectedProject] =
@@ -27,15 +29,13 @@ export default function Projects() {
             <div className="relative mx-auto flex w-11/12 max-w-295 flex-col gap-20">
                 <m.div
                     className="space-y-10"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    {...fadeUp(20, 0.6)}
                 >
                     <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                         <div className="space-y-3">
-                            <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                            <Eyebrow className="tracking-[0.4em] text-white/40">
                                 Some of my work
-                            </span>
+                            </Eyebrow>
                             <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">
                                 Projects
                             </h1>

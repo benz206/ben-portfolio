@@ -3,9 +3,7 @@ import { ImGithub } from "react-icons/im";
 import { FaCodeFork, FaStar, FaGithub } from "react-icons/fa6";
 import Card from "@/components/Card";
 import type { GitHubRepo } from "@/types";
-
-const numberFormatter = new Intl.NumberFormat();
-const formatNumber = (value: number) => numberFormatter.format(value);
+import { formatNumber, formatDate } from "@/utils/format";
 
 type RepoCardProps = {
     repo: GitHubRepo;
@@ -13,14 +11,12 @@ type RepoCardProps = {
 };
 
 export default function RepoCard({ repo, index }: RepoCardProps) {
-    const updatedLabel = new Date(repo.updated_at).toLocaleDateString(
-        undefined,
-        {
+    const updatedLabel =
+        formatDate(repo.updated_at, {
             month: "short",
             day: "numeric",
             year: "numeric",
-        },
-    );
+        }) ?? "";
 
     return (
         <Card

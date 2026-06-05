@@ -9,16 +9,7 @@ import {
 } from "./services";
 import SummaryCards from "./SummaryCards";
 import ServiceCard from "./ServiceCard";
-
-const timeFormatter = new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-});
-
-const formatTime = (value?: number) => {
-    if (!value) return null;
-    return timeFormatter.format(new Date(value));
-};
+import { formatTime } from "@/utils/format";
 
 export default function StatusClient() {
     const [services, setServices] = useState<ServiceStatus[]>(initialServices);

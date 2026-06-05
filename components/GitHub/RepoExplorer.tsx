@@ -6,15 +6,7 @@ import Card from "@/components/Card";
 import type { GitHubRepo } from "@/types";
 import { useRepoFilterSort } from "@/components/GitHub/useRepoFilterSort";
 import RepoCard from "@/components/GitHub/RepoCard";
-
-const fadeIn = {
-    hidden: { opacity: 0, y: 32 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.7, ease: easeInOut },
-    },
-};
+import { fadeIn } from "@/utils/motion";
 
 type RepoExplorerProps = {
     repos: GitHubRepo[];

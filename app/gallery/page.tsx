@@ -14,6 +14,8 @@ type ImageT = {
     height: number;
 };
 
+type CloudinaryResource = ImageT & Record<string, unknown>;
+
 cloudinary.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
     api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!,
@@ -26,7 +28,7 @@ async function fetchImages(): Promise<ImageT[]> {
             .sort_by("uploaded_at", "desc")
             .max_results(50)
             .execute();
-        return result.resources.map((r: any) => ({
+        return (result.resources as CloudinaryResource[]).map((r) => ({
             public_id: r.public_id,
             format: r.format,
             width: r.width,

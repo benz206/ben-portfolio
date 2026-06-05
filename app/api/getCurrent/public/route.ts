@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
 import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
 import { getRedisClient } from "@/utils/redis";
+import { secondsFromMs } from "@/utils/format";
 import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
@@ -81,8 +82,8 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
         artist: current.item.artists[0].name,
         album: current.item.album.name,
         color: dominantColor,
-        duration: String(Math.round(current.item.duration_ms / 1000)),
-        progress: String(Math.round((current.progress_ms ?? 0) / 1000)),
+        duration: secondsFromMs(current.item.duration_ms),
+        progress: secondsFromMs(current.progress_ms ?? 0),
         paused: String(!current.is_playing),
         volume: String(current.device?.volume_percent || 0),
         shuffle: current.shuffle_state,

@@ -11,6 +11,7 @@ import {
 } from "react";
 import ScatteredGradients from "@/components/blog/ScatteredGradients";
 import { cn } from "@/utils/cn";
+import Eyebrow from "@/components/Eyebrow";
 
 type ImageT = {
     public_id: string;
@@ -165,9 +166,9 @@ export default function GalleryClient({
             <div className="relative z-10 mx-auto w-11/12 max-w-260 space-y-16 pb-24 pt-16 lg:pb-32 lg:pt-24">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div className="space-y-3">
-                        <span className="text-xs uppercase tracking-[0.4em] text-white/40">
+                        <Eyebrow className="tracking-[0.4em] text-white/40">
                             Photos I&apos;ve Taken
-                        </span>
+                        </Eyebrow>
                         <h1 className="text-4xl font-semibold lg:text-5xl">
                             Gallery
                         </h1>

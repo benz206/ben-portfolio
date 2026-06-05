@@ -3,6 +3,7 @@
 import { useMemo, useSyncExternalStore } from "react";
 import Card from "@/components/Card";
 import type { GitHubContributionsDay } from "@/types/externalApis";
+import { formatNumber, formatDate } from "@/utils/format";
 
 type ContributionWeek = GitHubContributionsDay[];
 
@@ -28,14 +29,6 @@ const resolveContributionLevel = (
     if (ratio > 0) return 1;
     return 0;
 };
-
-const numberFormatter = new Intl.NumberFormat();
-const formatNumber = (value: number) => numberFormatter.format(value);
-
-const dayLabelFormatter = new Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-});
 
 const cellAnimationBase = {
     animationTimingFunction: "ease-in-out",
@@ -107,7 +100,7 @@ export default function ContributionHeatmap({
                                 day.date.startsWith("placeholder");
                             const label =
                                 mounted && day.date && !isPlaceholder
-                                    ? `${day.count} contributions on ${dayLabelFormatter.format(new Date(day.date))}`
+                                    ? `${day.count} contributions on ${formatDate(day.date, { month: "short", day: "numeric" }) ?? ""}`
                                     : "";
                             const cellIndex = weekIndex * 7 + dayIndex;
                             const animationDelay = `${(cellIndex % 18) * 0.3}s`;

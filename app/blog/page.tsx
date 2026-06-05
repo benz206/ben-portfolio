@@ -5,6 +5,7 @@ import BlogViewCounter from "@/components/BlogViewCounter";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import { getRedisClient } from "@/utils/redis";
 import { fetchBlogPosts } from "@/utils/blog";
+import { formatDate } from "@/utils/format";
 
 export const metadata: Metadata = {
     title: "Blog - Ben's Portfolio",
@@ -60,16 +61,8 @@ export default async function BlogPage() {
 
     const enhancedPosts = posts.map((post) => ({
         ...post,
-        createdFormatted: new Date(post.created).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        }),
-        updatedFormatted: new Date(post.updated).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        }),
+        createdFormatted: formatDate(post.created, { year: "numeric", month: "short", day: "numeric" }, "en-CA") ?? "",
+        updatedFormatted: formatDate(post.updated, { year: "numeric", month: "short", day: "numeric" }, "en-CA") ?? "",
         views: viewCounts[post.slug] || 0,
     }));
 

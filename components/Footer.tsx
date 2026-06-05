@@ -11,17 +11,11 @@ import { useMemo, useSyncExternalStore } from "react";
 import useSWR from "swr";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import { useCurrentlyPlaying } from "@/components/useCurrentlyPlaying";
-
-const jsonFetcher = async (url: string) => {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-    return res.json();
-};
+import { jsonFetcher } from "@/utils/fetcher";
+import { formatNumber } from "@/utils/format";
 
 type ViewsResponse = { count: number; daily?: number };
 type PresenceResponse = { viewers: number };
-
-const numberFormatter = new Intl.NumberFormat();
 
 const motionProps = {
     transition: {
@@ -103,7 +97,7 @@ export default function Footer() {
 
     const viewText = useMemo(() => {
         if (views === null) return null;
-        const count = numberFormatter.format(views);
+        const count = formatNumber(views);
         return `${count} visits tracked`;
     }, [views]);
 

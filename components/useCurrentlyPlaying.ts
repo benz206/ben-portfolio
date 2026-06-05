@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-export type SpotifyTrack = {
+export type NowPlayingTrack = {
     title: string;
     artist: string;
     album: string;
@@ -16,22 +16,22 @@ export type SpotifyTrack = {
 };
 
 type CurrentlyPlayingState = {
-    track: SpotifyTrack | null;
+    track: NowPlayingTrack | null;
     isLoading: boolean;
     error: string | null;
     currentProgress: number;
 };
 
-const fetcher = async (url: string): Promise<SpotifyTrack | null> => {
+const fetcher = async (url: string): Promise<NowPlayingTrack | null> => {
     const response = await fetch(url);
     if (response.status === 404) return null;
     if (!response.ok) throw new Error("Not currently playing");
-    return (await response.json()) as SpotifyTrack;
+    return (await response.json()) as NowPlayingTrack;
 };
 
 export function useCurrentlyPlaying(): CurrentlyPlayingState {
     const [currentProgress, setCurrentProgress] = useState(0);
-    const { data, error, isLoading } = useSWR<SpotifyTrack | null>(
+    const { data, error, isLoading } = useSWR<NowPlayingTrack | null>(
         "/api/getCurrent/public",
         fetcher,
         {

@@ -1,4 +1,5 @@
 import Card from "@/components/Card";
+import Eyebrow from "@/components/Eyebrow";
 import StatusBadge from "./StatusBadge";
 import { serviceSplash, type ServiceStatus } from "./services";
 
@@ -48,9 +49,9 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                             key={`${service.id}-${metric.label}`}
                             className="flex gap-4 justify-between items-center"
                         >
-                            <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                            <Eyebrow className="text-white/40">
                                 {metric.label}
-                            </span>
+                            </Eyebrow>
                             <span className="text-sm text-white/80">
                                 {metric.value}
                             </span>

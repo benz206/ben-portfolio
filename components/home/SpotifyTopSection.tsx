@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import { FaSpotify } from "react-icons/fa6";
 import TopItemCard from "@/components/home/TopItemCard";
 import { useSpotifyTop } from "@/components/home/useSpotifyTop";
+import Eyebrow from "@/components/Eyebrow";
 
 export default function SpotifyTopSection() {
     const { data, isLoading } = useSpotifyTop();
@@ -27,9 +28,9 @@ export default function SpotifyTopSection() {
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center gap-3">
                             <FaSpotify className="size-4 text-green-500" />
-                            <span className="text-xs uppercase tracking-[0.3em] text-white/45">
+                            <Eyebrow className="tracking-[0.3em] text-white/45">
                                 Spotify
-                            </span>
+                            </Eyebrow>
                         </div>
                         <h2 className="text-2xl font-semibold sm:text-3xl">
                             Top Songs & Artists
@@ -77,9 +78,9 @@ export default function SpotifyTopSection() {
                 ) : (
                     <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
                         <div className="flex flex-col gap-4">
-                            <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                            <Eyebrow className="text-white/40">
                                 Top Tracks
-                            </span>
+                            </Eyebrow>
                             <div className="grid gap-8">
                                 {data.tracks.map((t, idx) => (
                                     <TopItemCard
@@ -92,9 +93,9 @@ export default function SpotifyTopSection() {
                             </div>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                            <Eyebrow className="text-white/40">
                                 Top Artists
-                            </span>
+                            </Eyebrow>
                             <div className="grid gap-8">
                                 {data.artists.map((a, idx) => (
                                     <TopItemCard

@@ -7,6 +7,7 @@ import { ProjectPreviewProps } from "@/types";
 import Card from "@/components/Card";
 import LanguageBadge from "@/components/LanguageBadge";
 import { AmbientGradient } from "@/components/AmbientGradient";
+import Eyebrow from "@/components/Eyebrow";
 
 interface ProjectDetailModalProps {
     project: ProjectPreviewProps;
@@ -69,9 +70,9 @@ export default function ProjectDetailModal({
                         />
                         <div className="relative z-10 flex items-start justify-between gap-6">
                             <div className="space-y-3">
-                                <span className="text-xs uppercase tracking-[0.35em] text-white/45">
+                                <Eyebrow className="tracking-[0.35em] text-white/45">
                                     {project.sub}
-                                </span>
+                                </Eyebrow>
                                 <h2 className="text-3xl font-semibold text-white sm:text-4xl">
                                     {project.title}
                                 </h2>

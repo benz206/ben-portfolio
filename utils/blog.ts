@@ -1,4 +1,5 @@
 import matter from "gray-matter";
+import { formatDate } from "@/utils/format";
 
 export type RawBlogMetadata = {
     title: string;
@@ -184,19 +185,7 @@ export async function fetchBlogPost(slug: string): Promise<{
     return {
         metadata,
         content,
-        createdDate: created
-            ? new Date(created).toLocaleDateString("en-CA", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
-            : "",
-        updatedDate: updated
-            ? new Date(updated).toLocaleDateString("en-CA", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-              })
-            : "",
+        createdDate: formatDate(created, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
+        updatedDate: formatDate(updated, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
     };
 }

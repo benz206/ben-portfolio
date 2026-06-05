@@ -1,6 +1,7 @@
 import Image, { type StaticImageData } from "next/image";
 import Card from "@/components/Card";
 import type { AmbientVariant } from "@/components/AmbientGradient";
+import Eyebrow from "@/components/Eyebrow";
 
 export type RoleCardData = {
     title: string;
@@ -52,25 +53,25 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
                     <h2 className="text-base font-medium text-white">
                         {role.company}
                     </h2>
-                    <span
-                        className={`text-xs uppercase tracking-[0.2em] ${
+                    <Eyebrow
+                        className={`tracking-[0.2em] ${
                             role.locationClass ?? "text-white/55"
                         }`}
                     >
                         {role.location}
-                    </span>
+                    </Eyebrow>
                 </div>
                 <div className="flex flex-wrap gap-2 justify-between items-center text-sm">
                     <p className="font-extralight text-white/65">
                         {role.title}
                     </p>
-                    <span
-                        className={`text-xs uppercase tracking-[0.1em] ${
+                    <Eyebrow
+                        className={`tracking-[0.1em] ${
                             role.periodClass ?? "text-white/45"
                         }`}
                     >
                         {role.period}
-                    </span>
+                    </Eyebrow>
                 </div>
             </div>
         </Card>
