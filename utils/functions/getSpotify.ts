@@ -27,7 +27,9 @@ export default async function getSpotifyAccessToken() {
             memoryExpiry = Number(cachedExpiry);
             return cachedToken;
         }
-    } catch {}
+    } catch (error) {
+        console.error("Failed to read cached Spotify token", error);
+    }
 
     const authString = Buffer.from(
         `${SPOTIFY_CLIENTID}:${SPOTIFY_SECRET}`,
@@ -49,6 +51,11 @@ export default async function getSpotifyAccessToken() {
     );
 
     const tokenData = (await tokenResponse.json()) as SpotifyTokenResponse;
+    if (!tokenResponse.ok || !tokenData.access_token) {
+        throw new Error(
+            `Spotify token refresh failed (${tokenResponse.status})`,
+        );
+    }
 
     const expiry = Date.now() + tokenData.expires_in * 1000;
     memoryToken = tokenData.access_token;
@@ -63,7 +70,9 @@ export default async function getSpotifyAccessToken() {
             }),
             redis.set(REDIS_EXPIRY_KEY, String(expiry), { EX: ttlSeconds }),
         ]);
-    } catch {}
+    } catch (error) {
+        console.error("Failed to cache Spotify token", error);
+    }
 
     return tokenData.access_token;
 }

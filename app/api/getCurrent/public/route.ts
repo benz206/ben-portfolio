@@ -111,7 +111,8 @@ export async function GET(_req: NextRequest) {
             );
         }
         return NextResponse.json(track, { headers: PUBLIC_CACHE_HEADERS });
-    } catch {
+    } catch (error) {
+        console.error("Failed to fetch currently playing track", error);
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500, headers: NO_STORE_HEADERS },

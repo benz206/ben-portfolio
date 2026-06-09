@@ -1,6 +1,5 @@
 "use client";
 
-import { useCopyToClipboard } from "react-use";
 import { PrismTheme } from "prism-react-renderer";
 import { useState, useEffect } from "react";
 import { m } from "framer-motion";
@@ -32,7 +31,6 @@ const catppuccinMochaTheme: PrismTheme = {
 };
 
 export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
-    const [, copyToClipboard] = useCopyToClipboard();
     const [isCopied, setIsCopied] = useState("Copy");
     const [CodeBlock, setCodeBlock] = useState<any>(null);
 
@@ -51,7 +49,9 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
     }, []);
 
     const copyCode = () => {
-        copyToClipboard(code);
+        navigator.clipboard.writeText(code).catch((error) => {
+            console.error("Failed to copy code", error);
+        });
         setIsCopied("Copied!");
 
         setTimeout(() => {

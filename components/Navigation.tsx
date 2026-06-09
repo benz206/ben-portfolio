@@ -101,6 +101,7 @@ export default function Navigation() {
                                 className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
                                 href="/resume.pdf"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 Résumé
                             </Link>
@@ -160,6 +161,7 @@ export default function Navigation() {
                                 className="text-2xl font-semibold text-white touch-manipulation"
                                 href="/resume.pdf"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Résumé

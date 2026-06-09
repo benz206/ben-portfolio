@@ -4,10 +4,6 @@ import Image from "next/image";
 import { m } from "framer-motion";
 import GridGlow from "@/components/home/GridGlow";
 import { now, previously, type Org } from "@/data/about";
-// symbol-tracing hover feature — disabled for now:
-// import { useMemo, useState } from "react";
-// import { type GridGlowOrg } from "@/components/home/GridGlow";
-// import { symbols } from "@/data/symbols";
 
 const container = {
     hidden: {},
@@ -86,7 +82,7 @@ function OrgRow({
                 {org.role}
             </span>
             {org.href ? (
-                <a href={org.href} target="_blank" rel="noreferrer">
+                <a href={org.href} target="_blank" rel="noopener noreferrer">
                     {name}
                 </a>
             ) : (
@@ -103,20 +99,6 @@ function Arrow() {
 }
 
 export default function ExperienceSection() {
-    // symbol-tracing hover feature — disabled for now:
-    // const [activeKey, setActiveKey] = useState<string | null>(null);
-    // const logos = useMemo<GridGlowOrg[]>(
-    //     () =>
-    //         [...now, ...previously]
-    //             .filter((o) => symbols[o.name])
-    //             .map((o) => ({
-    //                 key: o.name,
-    //                 accent: o.accent,
-    //                 symbol: symbols[o.name],
-    //             })),
-    //     []
-    // );
-
     return (
         <section className="home-section relative flex min-h-screen items-center justify-center overflow-hidden bg-black py-24 text-white">
             <GridGlow />

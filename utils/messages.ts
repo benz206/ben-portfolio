@@ -1,30 +1,20 @@
 import matter from "gray-matter";
+import type { Octokit } from "@octokit/rest" with { "resolution-mode": "import" };
 import { slugify } from "@/utils/slugify";
 
 const MESSAGES_OWNER = "benz206";
 const MESSAGES_REPO = "messages";
+const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
 
-type OctokitLike = {
-    rest: {
-        repos: {
-            getContent: (args: {
-                owner: string;
-                repo: string;
-                path: string;
-            }) => Promise<{ data: unknown }>;
-        };
-    };
-};
+let octokitPromise: Promise<Octokit> | null = null;
 
-let octokitPromise: Promise<OctokitLike> | null = null;
-
-function getOctokit(): Promise<OctokitLike> {
+function getOctokit(): Promise<Octokit> {
     if (!octokitPromise) {
         octokitPromise = import("@octokit/rest").then(
             ({ Octokit }) =>
                 new Octokit({
                     auth: process.env.BLOG_PAT,
-                }) as unknown as OctokitLike,
+                }),
         );
     }
     return octokitPromise;
@@ -32,7 +22,8 @@ function getOctokit(): Promise<OctokitLike> {
 
 async function getFileContent(
     slug: string,
-): Promise<{ data: Record<string, any>; content: string } | null> {
+): Promise<ReturnType<typeof matter> | null> {
+    if (!SLUG_PATTERN.test(slug)) return null;
     const octokit = await getOctokit();
     try {
         const res = await octokit.rest.repos.getContent({
@@ -40,7 +31,8 @@ async function getFileContent(
             repo: MESSAGES_REPO,
             path: `${slug}.md`,
         });
-        const raw = (res.data as any)?.content;
+        if (Array.isArray(res.data) || !("content" in res.data)) return null;
+        const raw = res.data.content;
         if (!raw || typeof raw !== "string") return null;
         const decoded = Buffer.from(raw, "base64").toString("utf8");
         return matter(decoded);
@@ -60,7 +52,7 @@ export async function lookupMessage(
     if (!Array.isArray(questions) || questions.length === 0) return null;
 
     return {
-        questions: questions.map((q: any) => q.question),
+        questions: questions.map((q) => String(q?.question ?? "")),
     };
 }
 
@@ -77,7 +69,8 @@ export async function verifyAndGetMessage(
     if (answers.length !== questions.length) return null;
 
     const correct = questions.every(
-        (q: any, i: number) =>
+        (q, i) =>
+            typeof q?.answer === "string" &&
             q.answer.toLowerCase().trim() === answers[i]?.toLowerCase().trim(),
     );
     if (!correct) return null;

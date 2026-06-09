@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { getClientIp, isRateLimited } from "@/utils/rateLimit";
 
 export const runtime = "nodejs";
 
 const PREFIX = "views:post:";
+const SLUG_PATTERN = /^[a-zA-Z0-9-]{1,100}$/;
 const PUBLIC_CACHE_HEADERS = {
     "Cache-Control": "public, s-maxage=60, stale-while-revalidate=600",
 };
@@ -28,7 +30,7 @@ export async function GET(
     try {
         const params = await context.params;
         const slug = decodeURIComponent(params.slug);
-        if (!slug) {
+        if (!SLUG_PATTERN.test(slug)) {
             return NextResponse.json(
                 { count: 0 },
                 { headers: NO_STORE_HEADERS },
@@ -47,16 +49,23 @@ export async function GET(
 }
 
 export async function POST(
-    _request: Request,
+    request: Request,
     context: { params: Promise<Params> },
 ) {
     try {
         const params = await context.params;
         const slug = decodeURIComponent(params.slug);
-        if (!slug) {
+        if (!SLUG_PATTERN.test(slug)) {
             return NextResponse.json(
                 { count: 0 },
                 { headers: NO_STORE_HEADERS },
+            );
+        }
+        const ip = getClientIp(request);
+        if (await isRateLimited("views:post", ip, 30, 60)) {
+            return NextResponse.json(
+                { error: "Rate limited" },
+                { status: 429, headers: NO_STORE_HEADERS },
             );
         }
         const client = await getRedisClient();

@@ -400,7 +400,9 @@ export async function getDominantColorFromImageUrl(
         if (dominant) {
             return [dominant[0], dominant[1], dominant[2]];
         }
-    } catch {}
+    } catch (error) {
+        console.error("Failed to extract dominant color", error);
+    }
 
     return fallbackColor;
 }

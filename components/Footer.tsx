@@ -168,6 +168,7 @@ export default function Footer() {
                                 className="flex overflow-hidden relative justify-center items-center size-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
                                 href={href}
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 aria-label={label}
                             >
                                 <AmbientGradient

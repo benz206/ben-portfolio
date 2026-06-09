@@ -15,14 +15,16 @@ export async function GET() {
     const repo = "blog";
     const directoryPath = "posts";
 
-    let response: any;
+    let files: { name: string; path: string }[] = [];
     try {
-        response = await octokit.rest.repos.getContent({
+        const response = await octokit.rest.repos.getContent({
             owner,
             repo,
             path: directoryPath,
         });
-    } catch {
+        files = Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+        console.error("Failed to list blog posts", error);
         return NextResponse.json([], {
             headers: {
                 "Cache-Control":
@@ -31,35 +33,30 @@ export async function GET() {
         });
     }
 
-    const files = Array.isArray(response.data) ? response.data : [];
     const posts: BlogPostSummary[] = await Promise.all(
         files
-            .filter(
-                (file: any) =>
-                    typeof file?.name === "string" &&
-                    file.name.endsWith(".mdx"),
-            )
-            .map(async (file: any) => {
+            .filter((file) => file.name.endsWith(".mdx"))
+            .map(async (file) => {
                 const fileResponse = await octokit.rest.repos.getContent({
                     owner,
                     repo,
                     path: file.path,
                 });
 
-                const fileContent = Buffer.from(
-                    (fileResponse.data as any).content,
-                    "base64",
-                ).toString("utf8");
+                const rawContent =
+                    !Array.isArray(fileResponse.data) &&
+                    "content" in fileResponse.data
+                        ? fileResponse.data.content
+                        : "";
+                const fileContent = Buffer.from(rawContent, "base64").toString(
+                    "utf8",
+                );
                 const { data } = matter(fileContent);
 
                 let tags: string[] | undefined = undefined;
-                try {
-                    if (Array.isArray(data.tags)) tags = data.tags;
-                    if (typeof data.tags === "string")
-                        tags = data.tags
-                            .split(",")
-                            .map((t: string) => t.trim());
-                } catch {}
+                if (Array.isArray(data.tags)) tags = data.tags;
+                if (typeof data.tags === "string")
+                    tags = data.tags.split(",").map((t: string) => t.trim());
 
                 return {
                     slug: file.name.replace(".mdx", ""),

@@ -1,45 +1,24 @@
 import matter from "gray-matter";
+import type { Octokit } from "@octokit/rest" with { "resolution-mode": "import" };
 import { formatDate } from "@/utils/format";
+import type { RawBlogMetadata } from "@/types";
 
-export type RawBlogMetadata = {
-    title: string;
-    description: string;
-    tags: string[];
-    slug: string;
-    created: string;
-    updated: string;
-};
-
-type OctokitLike = {
-    rest: {
-        repos: {
-            getContent: (args: {
-                owner: string;
-                repo: string;
-                path: string;
-            }) => Promise<{ data: unknown }>;
-            listCommits: (args: {
-                owner: string;
-                repo: string;
-                path: string;
-            }) => Promise<{ data: any[] }>;
-        };
-    };
-};
+export type { RawBlogMetadata };
 
 const BLOG_OWNER = "benz206";
 const BLOG_REPO = "blog";
 const BLOG_POSTS_DIR = "posts";
+const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
 
-let octokitPromise: Promise<OctokitLike> | null = null;
+let octokitPromise: Promise<Octokit> | null = null;
 
-async function getOctokit(): Promise<OctokitLike> {
+async function getOctokit(): Promise<Octokit> {
     if (!octokitPromise) {
         octokitPromise = import("@octokit/rest").then(
             ({ Octokit }) =>
                 new Octokit(
                     process.env.BLOG_PAT ? { auth: process.env.BLOG_PAT } : {},
-                ) as unknown as OctokitLike,
+                ),
         );
     }
     return octokitPromise;
@@ -63,10 +42,12 @@ async function getRepoFileContent(path: string): Promise<string | null> {
             repo: BLOG_REPO,
             path,
         });
-        const content = (res.data as any)?.content;
+        if (Array.isArray(res.data) || !("content" in res.data)) return null;
+        const content = res.data.content;
         if (!content || typeof content !== "string") return null;
         return Buffer.from(content, "base64").toString("utf8");
-    } catch {
+    } catch (error) {
+        console.error(`Failed to fetch blog file ${path}`, error);
         return null;
     }
 }
@@ -88,7 +69,8 @@ async function getCommitDates(
             created: oldestCommit?.commit.committer?.date ?? null,
             updated: latestCommit?.commit.committer?.date ?? null,
         };
-    } catch {
+    } catch (error) {
+        console.error(`Failed to fetch commit dates for ${path}`, error);
         return { created: null, updated: null };
     }
 }
@@ -102,41 +84,38 @@ export async function fetchBlogSlugs(): Promise<string[]> {
             path: BLOG_POSTS_DIR,
         });
         const files = Array.isArray(response.data) ? response.data : [];
-        return files.flatMap((f: any) =>
-            typeof f?.name === "string" && f.name.endsWith(".mdx")
-                ? [f.name.replace(".mdx", "")]
-                : [],
+        return files.flatMap((f) =>
+            f.name.endsWith(".mdx") ? [f.name.replace(".mdx", "")] : [],
         );
-    } catch {
+    } catch (error) {
+        console.error("Failed to list blog posts", error);
         return [];
     }
 }
 
 export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
     const octokit = await getOctokit();
-    let response: any;
+    let files: { name: string; path: string }[] = [];
     try {
-        response = await octokit.rest.repos.getContent({
+        const response = await octokit.rest.repos.getContent({
             owner: BLOG_OWNER,
             repo: BLOG_REPO,
             path: BLOG_POSTS_DIR,
         });
-    } catch {
-        response = { data: [] } as any;
+        files = Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+        console.error("Failed to list blog posts", error);
     }
 
-    const files = Array.isArray(response.data) ? response.data : [];
-
     const posts: RawBlogMetadata[] = await Promise.all(
-        files.flatMap((file: any) =>
-            typeof file?.name === "string" && file.name.endsWith(".mdx")
+        files.flatMap((file) =>
+            file.name.endsWith(".mdx")
                 ? [
                       (async () => {
-                          const path = file.path as string;
                           const [{ created, updated }, fileContent] =
                               await Promise.all([
-                                  getCommitDates(path),
-                                  getRepoFileContent(path),
+                                  getCommitDates(file.path),
+                                  getRepoFileContent(file.path),
                               ]);
                           const { data } = matter(fileContent ?? "");
 
@@ -146,7 +125,7 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
                               tags: normalizeTags(data.tags),
                               created: created || new Date().toISOString(),
                               updated: updated || new Date().toISOString(),
-                              slug: (file.name as string).replace(".mdx", ""),
+                              slug: file.name.replace(".mdx", ""),
                           };
                       })(),
                   ]
@@ -166,6 +145,7 @@ export async function fetchBlogPost(slug: string): Promise<{
     createdDate: string;
     updatedDate: string;
 } | null> {
+    if (!SLUG_PATTERN.test(slug)) return null;
     const filePath = `${BLOG_POSTS_DIR}/${slug}.mdx`;
     const fileContent = await getRepoFileContent(filePath);
     if (!fileContent) return null;

@@ -4,7 +4,6 @@ declare global {
             SPOTIFY_CLIENTID: string;
             SPOTIFY_SECRET: string;
             SPOTIFY_REFRESHTOKEN: string;
-            PASSWORD: string;
             BLOG_PAT: string;
             REDIS_URL: string;
             NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: string;

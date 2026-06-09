@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import MdxLayout from "@/components/MdxLayout";
-import PostViewCounter from "@/components/PostViewCounter";
+import ViewCount from "@/components/ViewCount";
 import { getMDXComponents } from "@/mdx-components";
 import { notFound } from "next/navigation";
 import { fetchBlogPost, fetchBlogSlugs } from "@/utils/blog";
@@ -72,7 +72,7 @@ export default async function BlogPostPage({
             metadata={metadata}
             createdDate={createdDate}
             updatedDate={updatedDate}
-            viewCounter={<PostViewCounter slug={slug} />}
+            viewCounter={<ViewCount slug={slug} method="POST" />}
             headings={headings}
         >
             <MDX

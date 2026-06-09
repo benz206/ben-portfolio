@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { getClientIp, isRateLimited } from "@/utils/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -50,8 +51,15 @@ export async function GET() {
     }
 }
 
-export async function POST() {
+export async function POST(request: Request) {
     try {
+        const ip = getClientIp(request);
+        if (await isRateLimited("views:global", ip, 30, 60)) {
+            return NextResponse.json(
+                { error: "Rate limited" },
+                { status: 429, headers: NO_STORE_HEADERS },
+            );
+        }
         const client = await getRedisClient();
         const count = await client.incr(KEY);
 

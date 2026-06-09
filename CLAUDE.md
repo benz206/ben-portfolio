@@ -22,7 +22,7 @@ Blog posts are fetched from an external GitHub repo (`benz206/blog`) via the Git
 
 ### External Integrations
 
-- **Spotify**: Token refresh flow in `utils/functions/getSpotify.ts`. Currently playing and top tracks served via `/api/getCurrent` and `/api/getTop`. Color extracted from album art using `color-thief-node`.
+- **Spotify**: Token refresh flow in `utils/functions/getSpotify.ts`. Currently playing and top tracks served via `/api/getCurrent` and `/api/getTop`. Color extracted from album art using `sharp` + a local quantizer in `utils/colorExtraction.ts`.
 - **Cloudinary**: Image hosting via `next-cloudinary`. Remote patterns also allow `i.imgur.com`, `cdn.jsdelivr.net`, `i.scdn.co`.
 - **Redis**: View tracking via `utils/redis.ts`. Global views at `views:global`, per-post at `views:post:[slug]`. Atomic increments via Lua script.
 
@@ -31,11 +31,10 @@ Blog posts are fetched from an external GitHub repo (`benz206/blog`) via the Git
 All under `app/api/`:
 
 - `blog/public` — blog post list
-- `getCurrent/public`, `getCurrent/[password]` — Spotify current track
+- `getCurrent/public` — Spotify current track
 - `getTop/public` — Spotify top tracks
-- `views`, `views/[slug]` — view counting (GET/POST)
+- `views`, `views/[slug]` — view counting (GET/POST, rate-limited via `utils/rateLimit.ts`)
 - `getColor/[hash]` — dominant color extraction from images
-- `manageState/[password]/[change]` — password-protected state control
 - `status/cloudinary` — Cloudinary health check
 - `presence` — presence/availability status
 
@@ -54,7 +53,6 @@ Defined in `environment.d.ts`:
 - `SPOTIFY_CLIENTID`, `SPOTIFY_SECRET`, `SPOTIFY_REFRESHTOKEN`
 - `BLOG_PAT` — GitHub PAT for blog repo
 - `REDIS_URL`
-- `PASSWORD` — for protected API routes
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
 
 ### Path Aliases

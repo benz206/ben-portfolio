@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRedisClient } from "@/utils/redis";
+import { getClientIp, isRateLimited } from "@/utils/rateLimit";
 
 export const runtime = "nodejs";
 
 const KEY = "presence:viewers";
 const WINDOW_SECONDS = 2 * 60;
 const NO_STORE = { "Cache-Control": "no-store" };
+const SESSION_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
 
 export async function GET() {
     try {
@@ -26,10 +28,22 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const { sessionId, leave } = await request.json();
-        if (!sessionId || typeof sessionId !== "string") {
+        if (
+            !sessionId ||
+            typeof sessionId !== "string" ||
+            !SESSION_ID_PATTERN.test(sessionId)
+        ) {
             return NextResponse.json(
-                { error: "Missing sessionId" },
+                { error: "Invalid sessionId" },
                 { status: 400, headers: NO_STORE },
+            );
+        }
+
+        const ip = getClientIp(request);
+        if (await isRateLimited("presence", ip, 60, 60)) {
+            return NextResponse.json(
+                { error: "Rate limited" },
+                { status: 429, headers: NO_STORE },
             );
         }
 

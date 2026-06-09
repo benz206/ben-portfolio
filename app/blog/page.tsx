@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Hashtag from "@/components/Hashtag";
-import BlogViewCounter from "@/components/BlogViewCounter";
+import ViewCount from "@/components/ViewCount";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import { getRedisClient } from "@/utils/redis";
 import { fetchBlogPosts } from "@/utils/blog";
@@ -71,8 +71,8 @@ export default async function BlogPage() {
     return (
         <div className="relative min-h-screen overflow-hidden bg-[#050506] text-white">
             {/* Background noir gradient */}
-            <div className="pointer-events-none absolute inset-0 bg-noir-gradient" />
-            <div className="pointer-events-none absolute inset-0 opacity-50 bg-noir-radial" />
+            <div className="absolute inset-0 pointer-events-none bg-noir-gradient" />
+            <div className="absolute inset-0 opacity-50 pointer-events-none bg-noir-radial" />
 
             {/* Per-post ambient splash behind the featured post area */}
             {featuredPost && (
@@ -81,7 +81,7 @@ export default async function BlogPage() {
                 </div>
             )}
 
-            <div className="relative mx-auto max-w-175 px-6 pb-32 pt-16 lg:pt-24">
+            <div className="relative px-6 pt-16 pb-32 mx-auto max-w-175 lg:pt-24">
                 {/* Header */}
                 <div className="mb-16 space-y-3">
                     <span className="text-xs uppercase tracking-[0.4em] text-white/35">
@@ -110,12 +110,12 @@ export default async function BlogPage() {
                         {/* Featured post */}
                         <Link
                             href={`/blog/${featuredPost.slug}`}
-                            className="group block"
+                            className="block group"
                         >
                             <article className="space-y-3">
                                 <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/35">
                                     <span>Latest</span>
-                                    <span className="h-px flex-1 bg-white/10" />
+                                    <span className="flex-1 h-px bg-white/10" />
                                 </div>
                                 <h2 className="text-2xl font-semibold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
                                     {featuredPost.title}
@@ -125,14 +125,15 @@ export default async function BlogPage() {
                                         {featuredPost.description}
                                     </p>
                                 )}
-                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-sm text-white/40">
+                                <div className="flex flex-wrap items-center pt-1 text-sm gap-x-3 gap-y-1 text-white/40">
                                     <time dateTime={featuredPost.updated}>
                                         {featuredPost.updatedFormatted}
                                     </time>
                                     <span aria-hidden="true">·</span>
-                                    <BlogViewCounter
+                                    <ViewCount
                                         slug={featuredPost.slug}
                                         initialViews={featuredPost.views}
+                                        showIcon
                                     />
                                     {featuredPost.tags.length > 0 && (
                                         <>
@@ -158,7 +159,7 @@ export default async function BlogPage() {
                             <div>
                                 <div className="mb-8 flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-white/35">
                                     <span>Archive</span>
-                                    <span className="h-px flex-1 bg-white/10" />
+                                    <span className="flex-1 h-px bg-white/10" />
                                 </div>
 
                                 <div>
@@ -169,10 +170,10 @@ export default async function BlogPage() {
                                             )}
                                             <Link
                                                 href={`/blog/${post.slug}`}
-                                                className="group block py-8"
+                                                className="block py-8 group"
                                             >
                                                 <article className="space-y-2">
-                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/35">
+                                                    <div className="flex flex-wrap items-center text-xs gap-x-3 gap-y-1 text-white/35">
                                                         <time
                                                             dateTime={
                                                                 post.updated
@@ -185,18 +186,19 @@ export default async function BlogPage() {
                                                         <span aria-hidden="true">
                                                             ·
                                                         </span>
-                                                        <BlogViewCounter
+                                                        <ViewCount
                                                             slug={post.slug}
                                                             initialViews={
                                                                 post.views
                                                             }
+                                                            showIcon
                                                         />
                                                     </div>
                                                     <h3 className="text-lg font-semibold leading-snug transition-colors group-hover:text-white/70">
                                                         {post.title}
                                                     </h3>
                                                     {post.description && (
-                                                        <p className="line-clamp-2 text-sm leading-relaxed text-white/50">
+                                                        <p className="text-sm leading-relaxed line-clamp-2 text-white/50">
                                                             {post.description}
                                                         </p>
                                                     )}
