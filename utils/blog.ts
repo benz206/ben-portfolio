@@ -1,3 +1,4 @@
+import { cache } from "react";
 import matter from "gray-matter";
 import type { Octokit } from "@octokit/rest" with { "resolution-mode": "import" };
 import { formatDate } from "@/utils/format";
@@ -139,33 +140,39 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
     return posts;
 }
 
-export async function fetchBlogPost(slug: string): Promise<{
-    metadata: RawBlogMetadata;
-    content: string;
-    createdDate: string;
-    updatedDate: string;
-} | null> {
-    if (!SLUG_PATTERN.test(slug)) return null;
-    const filePath = `${BLOG_POSTS_DIR}/${slug}.mdx`;
-    const fileContent = await getRepoFileContent(filePath);
-    if (!fileContent) return null;
+// Wrapped in cache() so a single request render (generateMetadata + the page
+// component both call this) only hits the GitHub API once per slug.
+export const fetchBlogPost = cache(
+    async (
+        slug: string,
+    ): Promise<{
+        metadata: RawBlogMetadata;
+        content: string;
+        createdDate: string;
+        updatedDate: string;
+    } | null> => {
+        if (!SLUG_PATTERN.test(slug)) return null;
+        const filePath = `${BLOG_POSTS_DIR}/${slug}.mdx`;
+        const fileContent = await getRepoFileContent(filePath);
+        if (!fileContent) return null;
 
-    const { data, content } = matter(fileContent);
-    const { created, updated } = await getCommitDates(filePath);
+        const { data, content } = matter(fileContent);
+        const { created, updated } = await getCommitDates(filePath);
 
-    const metadata: RawBlogMetadata = {
-        title: data.title,
-        description: data.description,
-        tags: normalizeTags(data.tags),
-        slug,
-        created: created || new Date().toISOString(),
-        updated: updated || new Date().toISOString(),
-    };
+        const metadata: RawBlogMetadata = {
+            title: data.title || "Untitled",
+            description: data.description || "",
+            tags: normalizeTags(data.tags),
+            slug,
+            created: created || new Date().toISOString(),
+            updated: updated || new Date().toISOString(),
+        };
 
-    return {
-        metadata,
-        content,
-        createdDate: formatDate(created, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
-        updatedDate: formatDate(updated, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
-    };
-}
+        return {
+            metadata,
+            content,
+            createdDate: formatDate(created, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
+            updatedDate: formatDate(updated, { year: "numeric", month: "long", day: "numeric" }, "en-CA") ?? "",
+        };
+    },
+);
