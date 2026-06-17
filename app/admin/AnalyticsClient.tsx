@@ -110,7 +110,7 @@ function StatCard({
             <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/40">
                 {label}
             </p>
-            <p className="mt-3 text-3xl font-light tabular-nums text-white sm:text-4xl">
+            <p className="mt-3 text-3xl font-light text-white tabular-nums sm:text-4xl">
                 {value}
             </p>
             {hint && <p className="mt-1.5 text-xs text-white/30">{hint}</p>}
@@ -200,7 +200,7 @@ function AreaChart({ data }: { data: Analytics["timeseries"] }) {
 
     return (
         <Card className="p-5">
-            <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
                 <SectionTitle>Views over time</SectionTitle>
                 <span className="text-[11px] tabular-nums text-white/30">
                     peak {formatNumber(max)}
@@ -298,7 +298,7 @@ function AreaChart({ data }: { data: Analytics["timeseries"] }) {
 
                     {activeDatum && (
                         <div
-                            className="pointer-events-none absolute top-0 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-black/80 px-3 py-2 text-xs shadow-xl backdrop-blur"
+                            className="absolute top-0 z-10 px-3 py-2 text-xs -translate-x-1/2 border rounded-lg shadow-xl pointer-events-none whitespace-nowrap border-white/10 bg-black/80 backdrop-blur"
                             style={{ left: tipLeft }}
                         >
                             <p className="font-medium text-white/90">
@@ -363,7 +363,7 @@ function BarList({
                                 </div>
                                 <div className="ml-6 h-1 overflow-hidden rounded-full bg-white/[0.06]">
                                     <div
-                                        className="h-full rounded-full bg-white/25 transition-all duration-500 group-hover:bg-white/40"
+                                        className="h-full transition-all duration-500 rounded-full bg-white/25 group-hover:bg-white/40"
                                         style={{
                                             width: `${(b.count / max) * 100}%`,
                                         }}
@@ -410,7 +410,7 @@ function ShareBar({ title, buckets }: { title: string; buckets: Bucket[] }) {
                                 className="flex items-center gap-2 text-sm"
                             >
                                 <span
-                                    className="h-2 w-2 shrink-0 rounded-full"
+                                    className="w-2 h-2 rounded-full shrink-0"
                                     style={{
                                         backgroundColor:
                                             PALETTE[i % PALETTE.length],
@@ -541,7 +541,7 @@ export default function AnalyticsClient() {
 
     if (!authed) {
         return (
-            <main className="relative flex min-h-screen items-center justify-center px-6">
+            <main className="relative flex items-center justify-center min-h-screen px-6">
                 <Glow />
                 <form
                     onSubmit={(e) => {
@@ -551,7 +551,7 @@ export default function AnalyticsClient() {
                     className="relative z-10 w-full max-w-sm"
                 >
                     <Card className="p-7">
-                        <div className="mb-6 flex items-center gap-3">
+                        <div className="flex items-center gap-3 mb-6">
                             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white/60">
                                 <svg
                                     width="15"
@@ -611,7 +611,7 @@ export default function AnalyticsClient() {
     return (
         <main className="relative min-h-screen px-5 py-14 sm:px-6 sm:py-16">
             <Glow />
-            <div className="relative z-10 mx-auto max-w-6xl space-y-6">
+            <div className="relative z-10 max-w-6xl mx-auto space-y-6">
                 <header className="flex flex-wrap items-end justify-between gap-4">
                     <div>
                         <h1 className="text-2xl font-light tracking-tight text-white">
@@ -745,7 +745,7 @@ export default function AnalyticsClient() {
                             </div>
                         </div>
 
-                        <p className="pt-2 text-center text-xs text-white/25">
+                        <p className="pt-2 text-xs text-center text-white/25">
                             {formatCompact(data.totalViews)} events over{" "}
                             {data.rangeDays} days
                         </p>
