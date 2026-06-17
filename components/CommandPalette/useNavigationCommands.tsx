@@ -10,7 +10,7 @@ import {
     FaFileLines,
     FaRegNewspaper,
 } from "react-icons/fa6";
-import { FiActivity, FiBookOpen } from "react-icons/fi";
+import { FiBookOpen } from "react-icons/fi";
 import type { CommandDescriptor } from "@/types/command";
 import { useCommandMenu } from "./CommandProvider";
 
@@ -48,15 +48,6 @@ const navigationCommands: CommandDescriptor[] = [
         keywords: ["photos", "images"],
         meta: "Page",
         icon: <FaImages className="size-3.5" />,
-    },
-    {
-        id: "nav-status",
-        label: "Status",
-        href: "/status",
-        section: "Navigation",
-        keywords: ["services", "health", "uptime"],
-        meta: "Page",
-        icon: <FiActivity className="size-3.5" />,
     },
     {
         id: "nav-resume",
