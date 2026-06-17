@@ -12,6 +12,8 @@ export interface CommandDescriptor {
     meta?: string;
     closeOnRun?: boolean;
     actionLabel?: string;
+    /** Hidden from the default (empty-query) list; only shown once the user types a query. */
+    hideWhenEmpty?: boolean;
 }
 
 export interface RegisterCommandsOptions {

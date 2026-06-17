@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { m } from "framer-motion";
 import ProjectPreview from "@/components/ProjectPreview";
 import projectPreviews from "@/data/projectPreviews";
@@ -10,16 +11,29 @@ import ScatteredGradients from "@/components/blog/ScatteredGradients";
 import Eyebrow from "@/components/Eyebrow";
 import { fadeUp } from "@/utils/motion";
 
-export default function Projects() {
-    const [selectedProject, setSelectedProject] =
-        useState<ProjectPreviewProps | null>(null);
+function ProjectsContent() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    // The open project is derived from ?project=<slug> so it's deep-linkable
+    // (e.g. from the command palette) and the back button closes the modal.
+    const activeSlug = searchParams.get("project");
+    const selectedProject = activeSlug
+        ? (projectPreviews.find((project) => project.slug === activeSlug) ??
+          null)
+        : null;
 
     const handleOpen = (project: ProjectPreviewProps) => {
-        setSelectedProject(project);
+        if (project.slug) {
+            router.push(`${pathname}?project=${project.slug}`, {
+                scroll: false,
+            });
+        }
     };
 
     const handleClose = () => {
-        setSelectedProject(null);
+        router.replace(pathname, { scroll: false });
     };
 
     return (
@@ -73,5 +87,13 @@ export default function Projects() {
                 />
             )}
         </section>
+    );
+}
+
+export default function Projects() {
+    return (
+        <Suspense>
+            <ProjectsContent />
+        </Suspense>
     );
 }

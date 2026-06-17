@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
     FaHouse,
@@ -12,6 +12,8 @@ import {
 } from "react-icons/fa6";
 import { FiBookOpen } from "react-icons/fi";
 import type { CommandDescriptor } from "@/types/command";
+import type { ProjectPreviewProps } from "@/types";
+import projectPreviews from "@/data/projectPreviews";
 import { useCommandMenu } from "./CommandProvider";
 
 type BlogPostSummary = {
@@ -61,6 +63,40 @@ const navigationCommands: CommandDescriptor[] = [
     },
 ];
 
+// Every project, searchable from the top-level palette and deep-linked so
+// selecting one opens its detail modal on the projects page.
+const projectSearchCommands: CommandDescriptor[] = projectPreviews
+    .filter(
+        (project): project is ProjectPreviewProps & { slug: string } =>
+            Boolean(project.slug),
+    )
+    .map((project) => ({
+        id: `search-project-${project.slug}`,
+        label: project.title,
+        description: project.summary,
+        href: `/projects?project=${project.slug}`,
+        section: "Projects",
+        meta: "Project",
+        keywords: [project.slug, project.sub, ...project.languages],
+        hideWhenEmpty: true,
+        icon: <FaFolderOpen className="size-3.5" />,
+    }));
+
+// Every blog post, searchable from the top-level palette by title/tags/slug.
+function buildBlogSearchCommands(posts: BlogPostSummary[]): CommandDescriptor[] {
+    return posts.map((post) => ({
+        id: `search-blog-${post.slug}`,
+        label: post.title,
+        description: post.description,
+        href: `/blog/${post.slug}`,
+        section: "Blog",
+        meta: "Post",
+        keywords: [post.slug, ...(post.tags ?? [])],
+        hideWhenEmpty: true,
+        icon: <FaRegNewspaper className="size-3.5" />,
+    }));
+}
+
 function buildBlogView(posts: BlogPostSummary[]) {
     return {
         id: "blog-posts",
@@ -92,14 +128,15 @@ export function useNavigationCommands() {
     const { registerCommands, pushView } = useCommandMenu();
     const pathname = usePathname();
     const { push } = useRouter();
-    const blogPostsRef = useRef<BlogPostSummary[] | null>(null);
+    const [blogPosts, setBlogPosts] = useState<BlogPostSummary[]>([]);
 
-    // Pre-fetch blog posts immediately so they're ready when the palette opens
+    // Pre-fetch blog posts immediately so they're searchable as soon as the
+    // palette opens, without waiting on the Blog drill-in.
     useEffect(() => {
         void fetch("/api/blog/public")
             .then((res) => res.json())
             .then((posts: BlogPostSummary[]) => {
-                blogPostsRef.current = posts;
+                if (Array.isArray(posts)) setBlogPosts(posts);
             })
             .catch(() => {});
     }, []);
@@ -115,15 +152,16 @@ export function useNavigationCommands() {
             icon: <FaPenNib className="size-3.5" />,
             actionLabel: "Continue",
             action: () => {
-                if (blogPostsRef.current !== null) {
-                    pushView(buildBlogView(blogPostsRef.current));
+                if (blogPosts.length > 0) {
+                    pushView(buildBlogView(blogPosts));
                     return;
                 }
                 void fetch("/api/blog/public")
                     .then((res) => res.json())
                     .then((posts: BlogPostSummary[]) => {
-                        blogPostsRef.current = posts;
-                        pushView(buildBlogView(posts));
+                        const list = Array.isArray(posts) ? posts : [];
+                        setBlogPosts(list);
+                        pushView(buildBlogView(list));
                     })
                     .catch(() => {
                         pushView({
@@ -144,6 +182,8 @@ export function useNavigationCommands() {
         const commands: CommandDescriptor[] = [
             ...navigationCommands,
             blogCommand,
+            ...buildBlogSearchCommands(blogPosts),
+            ...projectSearchCommands,
         ].map((command) => {
             const href = command.href;
             const meta = href === pathname ? "Current" : command.meta;
@@ -173,5 +213,5 @@ export function useNavigationCommands() {
             replace: true,
         });
         return unregister;
-    }, [pathname, registerCommands, push, pushView]);
+    }, [pathname, registerCommands, push, pushView, blogPosts]);
 }

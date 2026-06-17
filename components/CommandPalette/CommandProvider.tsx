@@ -70,7 +70,7 @@ export function CommandProvider({ children }: { children: ReactNode }) {
 
     const filtered = useMemo(() => {
         const query = state.search.trim().toLowerCase();
-        if (!query) return commands;
+        if (!query) return commands.filter((command) => !command.hideWhenEmpty);
         return commands.filter((command) => {
             const haystack = [
                 command.label,
