@@ -38,7 +38,6 @@ All under `app/api/`:
 - `track` — POST-only ingest for detailed pageview events into MongoDB (fire-and-forget from `components/ViewCounter.tsx`, fails open)
 - `analytics` — GET aggregated stats from MongoDB, gated by the `PASSWORD` env via the `x-admin-key` header (constant-time compare). Rendered by the `/admin` dashboard page.
 - `getColor/[hash]` — dominant color extraction from images
-- `status/cloudinary` — Cloudinary health check
 - `presence` — presence/availability status
 
 ### Static Data
