@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
 export type NowPlayingTrack = {
@@ -31,14 +31,32 @@ const fetcher = async (url: string): Promise<NowPlayingTrack | null> => {
 
 export function useCurrentlyPlaying(): CurrentlyPlayingState {
     const [currentProgress, setCurrentProgress] = useState(0);
+    const trackKeyRef = useRef<string | null>(null);
+
     const { data, error, isLoading } = useSWR<NowPlayingTrack | null>(
         "/api/getCurrent/public",
         fetcher,
         {
-            refreshInterval: 30_000,
+            refreshInterval: 5_000,
             revalidateOnFocus: false,
             onSuccess: (next) => {
-                if (next) setCurrentProgress(parseInt(next.progress));
+                if (!next) return;
+                const serverProgress = parseInt(next.progress);
+                const duration = parseInt(next.duration);
+                const key = `${next.title}-${next.artist}-${next.album}`;
+                const trackChanged = trackKeyRef.current !== key;
+                trackKeyRef.current = key;
+
+                // Snap to the server value when the track changes (or on first
+                // load). Otherwise keep the locally-ticked value and only let
+                // the server pull it forward, so the bar never jumps backward
+                // when a slightly-stale cached response comes back.
+                setCurrentProgress((prev) => {
+                    const synced = trackChanged
+                        ? serverProgress
+                        : Math.max(prev, serverProgress);
+                    return Math.min(synced, duration);
+                });
             },
         },
     );
@@ -48,12 +66,10 @@ export function useCurrentlyPlaying(): CurrentlyPlayingState {
     useEffect(() => {
         if (!track || track.paused === "true") return;
 
+        const duration = parseInt(track.duration);
         const progressInterval = setInterval(() => {
-            setCurrentProgress((prev) => {
-                const newProgress = prev + 1000;
-                const duration = parseInt(track.duration);
-                return newProgress > duration ? duration : newProgress;
-            });
+            // progress/duration are in whole seconds, so advance by 1 per tick.
+            setCurrentProgress((prev) => Math.min(prev + 1, duration));
         }, 1000);
 
         return () => clearInterval(progressInterval);

@@ -8,7 +8,7 @@ import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
 
-const REVALIDATE_SECONDS = 6;
+const REVALIDATE_SECONDS = 5;
 const LAST_PLAYED_KEY = "spotify:last-played";
 const PUBLIC_CACHE_HEADERS = {
     "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
