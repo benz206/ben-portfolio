@@ -42,25 +42,23 @@ export default function SpotifyTopSection() {
                 </m.div>
 
                 {isLoading ? (
-                    <div className="grid gap-10">
-                        <div className="grid gap-4">
-                            <div className="w-40 h-6 rounded animate-pulse bg-white/10" />
-                            {["t-skel-0", "t-skel-1", "t-skel-2"].map((id) => (
-                                <div
-                                    key={id}
-                                    className="border h-23 rounded-2xl bg-white/5 border-white/10 animate-pulse"
-                                />
-                            ))}
-                        </div>
-                        <div className="grid gap-4">
-                            <div className="w-40 h-6 rounded animate-pulse bg-white/10" />
-                            {["a-skel-0", "a-skel-1", "a-skel-2"].map((id) => (
-                                <div
-                                    key={id}
-                                    className="border h-23 rounded-2xl bg-white/5 border-white/10 animate-pulse"
-                                />
-                            ))}
-                        </div>
+                    <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+                        {[
+                            { col: "t", ids: ["t-skel-0", "t-skel-1", "t-skel-2"] },
+                            { col: "a", ids: ["a-skel-0", "a-skel-1", "a-skel-2"] },
+                        ].map(({ col, ids }) => (
+                            <div key={col} className="flex flex-col gap-4">
+                                <div className="w-24 h-3 rounded animate-pulse bg-white/10" />
+                                <div className="grid gap-8">
+                                    {ids.map((id) => (
+                                        <div
+                                            key={id}
+                                            className="w-full h-28 rounded-xl bg-white/5 animate-pulse"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : !data ? (
                     <Card
