@@ -44,25 +44,7 @@ const socials = [
         icon: ImGithub,
         label: "GitHub",
         seed: "github",
-    },
-    {
-        href: "https://discord.com/users/360061101477724170",
-        icon: FaDiscord,
-        label: "Discord",
-        seed: "discord",
-    },
-    {
-        href: "https://www.instagram.com/bennyz_06/",
-        icon: FaInstagram,
-        label: "Instagram",
-        seed: "instagram",
-    },
-    {
-        href: "https://monkeytype.com/profile/_Leg3ndary",
-        icon: SiMonkeytype,
-        label: "Monkeytype",
-        seed: "monkeytype",
-    },
+    }
 ] as const;
 
 const clubs = [
@@ -103,7 +85,7 @@ export default function Footer() {
 
     return (
         <footer className="flex justify-center border-t border-white/5 bg-[#050506] py-16 snap-end snap-always">
-            <div className="flex w-11/12 max-w-270 flex-col items-center gap-12 text-center lg:mx-auto lg:flex-row lg:items-center lg:text-left">
+            <div className="flex flex-col items-center w-11/12 gap-12 text-center max-w-270 lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
                         Message me anytime @
@@ -136,7 +118,7 @@ export default function Footer() {
                         {viewers !== null && viewers > 0 && (
                             <span className="ml-3 inline-flex items-center gap-1.5 text-white/35">
                                 <span className="relative flex size-1.5">
-                                    <span className="inline-flex absolute w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
+                                    <span className="absolute inline-flex w-full h-full bg-green-400 rounded-full opacity-75 animate-ping" />
                                     <span className="relative inline-flex size-1.5 rounded-full bg-green-500" />
                                 </span>
                                 {viewers} viewing
@@ -145,7 +127,7 @@ export default function Footer() {
                     </div>
                     {track && (
                         <div className="inline-flex items-center gap-1.5 text-xs font-thin text-white/35">
-                            <FaSpotify className="shrink-0 text-green-500" />
+                            <FaSpotify className="text-green-500 shrink-0" />
                             <span>
                                 {track.paused === "true"
                                     ? "Last listened:"
@@ -159,20 +141,20 @@ export default function Footer() {
                         </div>
                     )}
                 </div>
-                <div className="flex flex-col flex-1 gap-6 items-center lg:items-end">
-                    <div className="flex flex-wrap gap-4 justify-center text-white/70 lg:justify-end">
+                <div className="flex flex-col items-center flex-1 gap-6 lg:items-end">
+                    <div className="flex flex-wrap justify-center gap-4 text-white/70 lg:justify-end">
                         {socials.map(({ href, icon: Icon, label, seed }) => (
                             <m.a
                                 key={href}
                                 {...motionProps}
-                                className="flex overflow-hidden relative justify-center items-center size-11 text-lg bg-transparent rounded-md border transition-colors duration-300 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
+                                className="relative flex items-center justify-center overflow-hidden text-lg transition-colors duration-300 bg-transparent border rounded-md size-11 group border-white/30 text-white/70 hover:border-white/60 hover:text-white"
                                 href={href}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={label}
                             >
                                 <AmbientGradient
-                                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                    className="transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                                     seed={seed}
                                 />
                                 <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-90">
@@ -181,11 +163,11 @@ export default function Footer() {
                             </m.a>
                         ))}
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
+                    <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
                         {clubs.map((club) => (
                             <span
                                 key={club.src}
-                                className="flex overflow-hidden justify-center items-center size-6 rounded-sm"
+                                className="flex items-center justify-center overflow-hidden rounded-sm size-6"
                             >
                                 <Image
                                     src={club.src}
