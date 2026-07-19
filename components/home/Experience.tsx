@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import { m } from "framer-motion";
 import GridGlow from "@/components/home/GridGlow";
@@ -55,39 +56,18 @@ function Logo({ org }: { org: Org }) {
     );
 }
 
-function OrgRow({
-    org,
-    small,
-    onHover,
-}: {
-    org: Org;
-    small?: boolean;
-    onHover?: (active: boolean) => void;
-}) {
-    const name = (
-        <span className="group inline-flex items-center gap-2">
-            <Logo org={org} />
-            <span
-                className="font-semibold text-white decoration-white/30 underline-offset-4 group-hover:underline"
-                onPointerEnter={() => onHover?.(true)}
-                onPointerLeave={() => onHover?.(false)}
-            >
-                {org.name}
-            </span>
-        </span>
-    );
+function OrgRow({ org, small }: { org: Org; small?: boolean }) {
     return (
         <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className={small ? "text-white/45" : "text-white/55"}>
                 {org.role}
             </span>
-            {org.href ? (
-                <a href={org.href} target="_blank" rel="noopener noreferrer">
-                    {name}
-                </a>
-            ) : (
-                name
-            )}
+            <span className="inline-flex items-center gap-2">
+                <Logo org={org} />
+                <span className="font-semibold text-white decoration-white/30 underline-offset-4 group-hover:underline">
+                    {org.name}
+                </span>
+            </span>
         </span>
     );
 }
@@ -95,6 +75,41 @@ function OrgRow({
 function Arrow() {
     return (
         <span className="select-none font-mono text-white/25 shrink-0">↳</span>
+    );
+}
+
+function Row({
+    org,
+    small,
+    glyph,
+}: {
+    org: Org;
+    small?: boolean;
+    glyph: ReactNode;
+}) {
+    const base = "-mx-3 flex items-center gap-3 rounded-lg px-3 py-1.5";
+    const content = (
+        <>
+            {glyph}
+            <OrgRow org={org} small={small} />
+        </>
+    );
+
+    if (!org.href) {
+        return <div className={base}>{content}</div>;
+    }
+
+    return (
+        <a
+            href={org.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${org.name} — opens in new tab`}
+            style={{ "--accent": org.accent } as CSSProperties}
+            className={`group cursor-pointer border border-transparent transition-all duration-300 hover:border-[rgba(var(--accent),0.5)] hover:bg-white/[0.03] hover:[box-shadow:0_0_22px_-6px_rgba(var(--accent),0.55)] ${base}`}
+        >
+            {content}
+        </a>
     );
 }
 
@@ -115,13 +130,8 @@ export default function ExperienceSection() {
             >
                 <div className="flex flex-col gap-3.5 text-[15px] leading-relaxed [text-shadow:0_0_16px_rgba(0,0,0,0.7)] sm:text-base">
                     {now.map((org) => (
-                        <m.div
-                            key={org.name}
-                            variants={item}
-                            className="flex items-center gap-3"
-                        >
-                            <Diamond />
-                            <OrgRow org={org} />
+                        <m.div key={org.name} variants={item}>
+                            <Row org={org} glyph={<Diamond />} />
                         </m.div>
                     ))}
 
@@ -130,13 +140,8 @@ export default function ExperienceSection() {
                         <span className="italic text-white/55">Previously:</span>
                     </m.div>
                     {previously.map((org) => (
-                        <m.div
-                            key={org.name}
-                            variants={item}
-                            className="flex items-center gap-3 pl-6"
-                        >
-                            <Arrow />
-                            <OrgRow org={org} small />
+                        <m.div key={org.name} variants={item} className="pl-6">
+                            <Row org={org} small glyph={<Arrow />} />
                         </m.div>
                     ))}
                 </div>

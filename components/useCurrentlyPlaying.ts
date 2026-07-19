@@ -13,6 +13,7 @@ export type NowPlayingTrack = {
     shuffle: boolean;
     loop: string;
     albumArt?: string;
+    songUrl?: string;
 };
 
 type CurrentlyPlayingState = {

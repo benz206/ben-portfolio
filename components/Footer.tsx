@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { ImGithub } from "react-icons/im";
 import { FaLinkedin, FaDiscord, FaInstagram, FaSpotify } from "react-icons/fa6";
 import { FaXTwitter } from "react-icons/fa6";
@@ -47,11 +47,7 @@ const socials = [
     }
 ] as const;
 
-const clubs = [
-    { src: "/clubs/uwcsa.png", alt: "UWCSA" },
-    { src: "/clubs/watai.jpeg", alt: "WAT.ai" },
-    { src: "/clubs/midnightsun.png", alt: "Midnight Sun" },
-] as const;
+// const clubs = [{ src: "/clubs/uwcsa.png", alt: "UWCSA" }] as const;
 
 export default function Footer() {
     const { track } = useCurrentlyPlaying();
@@ -88,7 +84,6 @@ export default function Footer() {
             <div className="flex flex-col items-center w-11/12 gap-12 text-center max-w-270 lg:mx-auto lg:flex-row lg:items-center lg:text-left">
                 <div className="flex-1 space-y-4 text-white/70">
                     <p className="text-sm font-thin leading-relaxed text-white/60">
-                        Message me anytime @
                         <a
                             href="mailto:ben.zhou@uwaterloo.ca"
                             className="underline underline-offset-auto"
@@ -163,22 +158,22 @@ export default function Footer() {
                             </m.a>
                         ))}
                     </div>
-                    <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
+                    {/* <div className="flex flex-wrap justify-center gap-2 lg:justify-end">
                         {clubs.map((club) => (
                             <span
                                 key={club.src}
-                                className="flex items-center justify-center overflow-hidden rounded-sm size-6"
+                                className="flex items-center justify-center overflow-hidden rounded-md size-12"
                             >
                                 <Image
                                     src={club.src}
                                     alt={club.alt}
-                                    width={32}
-                                    height={32}
-                                    className="object-cover w-full h-full"
+                                    width={48}
+                                    height={48}
+                                    className="object-cover w-full h-full opacity-70"
                                 />
                             </span>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </footer>

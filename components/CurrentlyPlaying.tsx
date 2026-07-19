@@ -79,13 +79,13 @@ export default function CurrentlyPlaying({
         : "#1DB954";
     const isPlaying = track.paused !== "true";
 
-    return (
+    const card = (
         <Card
             variant="glass"
             ambient
             ambientSeed="currently-playing"
             ambientClassName="opacity-50"
-            className="relative flex h-32 mt-3 mx-auto p-2 w-full max-w-175 overflow-hidden rounded-xl"
+            className="relative flex h-32 w-full p-2 overflow-hidden rounded-xl border border-white/10 transition-colors duration-300 group-hover:border-green-400/40"
             motionProps={{
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },
@@ -103,7 +103,7 @@ export default function CurrentlyPlaying({
                             backgroundRepeat: "no-repeat",
                         }}
                     />
-                    <div className="absolute inset-0 bg-black/50" />
+                    <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/40" />
                 </>
             )}
             <div className="relative z-10 flex items-center pl-4 gap-4 flex-1 min-w-0">
@@ -144,5 +144,21 @@ export default function CurrentlyPlaying({
                 </div>
             </div>
         </Card>
+    );
+
+    if (!track.songUrl) {
+        return <div className="mt-3 mx-auto w-full max-w-175">{card}</div>;
+    }
+
+    return (
+        <a
+            href={track.songUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open "${track.title}" by ${track.artist} on Spotify`}
+            className="group mt-3 mx-auto block w-full max-w-175 rounded-xl transition-transform duration-300 hover:scale-[1.01] focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400/60"
+        >
+            {card}
+        </a>
     );
 }

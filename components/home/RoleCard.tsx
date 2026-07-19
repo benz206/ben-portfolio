@@ -1,7 +1,9 @@
 import Image, { type StaticImageData } from "next/image";
+import type { CSSProperties } from "react";
 import Card from "@/components/Card";
 import type { AmbientVariant } from "@/components/AmbientGradient";
 import Eyebrow from "@/components/Eyebrow";
+import { cn } from "@/utils/cn";
 
 export type RoleCardData = {
     title: string;
@@ -15,6 +17,8 @@ export type RoleCardData = {
     locationClass?: string;
     periodClass?: string;
     ambientVariant: AmbientVariant;
+    href?: string;
+    accent?: string;
 };
 
 type RoleCardProps = {
@@ -23,13 +27,17 @@ type RoleCardProps = {
 };
 
 export default function RoleCard({ role, animationDelay }: RoleCardProps) {
-    return (
+    const card = (
         <Card
             variant="glass"
             ambient
             ambientVariant={role.ambientVariant}
             ambientClassName="opacity-40"
-            className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6"
+            className={cn(
+                "flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6",
+                role.href &&
+                    "transition-all duration-300 group-hover:border-[rgba(var(--accent),0.55)] group-hover:[box-shadow:0_0_28px_-8px_rgba(var(--accent),0.5)]",
+            )}
             motionProps={{
                 initial: { opacity: 0, y: 24 },
                 whileInView: { opacity: 1, y: 0 },
@@ -75,5 +83,20 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
                 </div>
             </div>
         </Card>
+    );
+
+    if (!role.href) return card;
+
+    return (
+        <a
+            href={role.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${role.company} — opens in new tab`}
+            style={{ "--accent": role.accent ?? "255,255,255" } as CSSProperties}
+            className="group block rounded-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent),0.6)]"
+        >
+            {card}
+        </a>
     );
 }

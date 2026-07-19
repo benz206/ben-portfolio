@@ -29,18 +29,21 @@ export const now: Org[] = [
         name: "Grand Charter",
         logo: GrandCharter,
         accent: "167,139,250",
+        href: "https://grandcharter.com",
     },
     {
-        role: "Fellow",
+        role: "Engineering Fellow",
         name: "8VC",
         logo: EightVC,
         accent: "212,212,216",
+        href: "https://8vc.com",
     },
     {
         role: "Engineering",
         name: "University of Waterloo",
         logo: Waterloo,
         accent: "234,179,8",
+        href: "https://uwaterloo.ca",
     },
 ];
 
@@ -75,6 +78,7 @@ export const previously: Org[] = [
         name: "Fuego",
         logo: Fuego,
         accent: "253,186,116",
+        href: "https://fuego.io",
     },
     {
         role: "Software",
@@ -82,11 +86,13 @@ export const previously: Org[] = [
         logo: SAP,
         accent: "96,165,250",
         fit: "contain",
+        href: "https://www.sap.com",
     },
     {
         role: "Software",
         name: "EurekaHacks",
         logo: Eureka,
         accent: "248,113,113",
+        href: "https://www.eurekahacks.ca",
     },
 ];

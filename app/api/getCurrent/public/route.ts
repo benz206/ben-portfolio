@@ -27,6 +27,7 @@ type SpotifyTrackInfo = {
     shuffle: boolean;
     loop: string;
     albumArt?: string;
+    songUrl?: string;
 };
 
 async function readLastPlayed(): Promise<SpotifyTrackInfo | null> {
@@ -89,6 +90,7 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
         shuffle: current.shuffle_state,
         loop: current.repeat_state,
         albumArt: current.item.album.images[0]?.url,
+        songUrl: current.item.external_urls?.spotify,
     };
 
     await writeLastPlayed(track);
