@@ -35,6 +35,18 @@ function normalizeTags(tags: unknown): string[] {
     return [];
 }
 
+function extractFirstMarkdownImage(
+    content: string,
+): RawBlogMetadata["previewImage"] {
+    const match = content.match(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/);
+    if (!match) return undefined;
+
+    return {
+        alt: match[1],
+        src: match[2],
+    };
+}
+
 async function getRepoFileContent(path: string): Promise<string | null> {
     const octokit = await getOctokit();
     try {
@@ -118,7 +130,7 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
                                   getCommitDates(file.path),
                                   getRepoFileContent(file.path),
                               ]);
-                          const { data } = matter(fileContent ?? "");
+                          const { data, content } = matter(fileContent ?? "");
 
                           return {
                               title: data.title || "Untitled",
@@ -127,6 +139,7 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
                               created: created || new Date().toISOString(),
                               updated: updated || new Date().toISOString(),
                               slug: file.name.replace(".mdx", ""),
+                              previewImage: extractFirstMarkdownImage(content),
                           };
                       })(),
                   ]

@@ -1,8 +1,10 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
 import type { TopItem } from "./useSpotifyTop";
 import { formatCompact } from "@/utils/format";
+import { glowColor } from "@/utils/glowColor";
 import { inView } from "@/utils/motion";
 
 type TopItemCardProps = {
@@ -18,6 +20,7 @@ function formatFollowers(n?: number) {
 
 export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
     const followers = formatFollowers(item.followers);
+    const glow = glowColor(item.color);
     const subtitle =
         kind === "track"
             ? item.subtitle
@@ -25,13 +28,14 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
               ? `${followers} followers`
               : item.subtitle;
 
-    return (
+    const card = (
         <Card
             variant="glass"
             ambient
             ambientSeed={`${kind}:${rank}:${item.name}`}
             ambientClassName="opacity-50"
-            className="flex overflow-hidden relative items-center px-2 py-1 mx-auto mt-0 w-full h-28 rounded-xl border-0"
+            className="flex overflow-hidden relative items-center px-2 py-1 mx-auto mt-0 w-full h-28 rounded-xl border border-transparent transition-colors duration-300 hover:border-[rgba(var(--glow),0.6)]"
+            style={{ "--glow": glow } as CSSProperties}
             motionProps={inView(12, 0.4, 0.6)}
         >
             {item.image && (
@@ -78,5 +82,20 @@ export default function TopItemCard({ item, rank, kind }: TopItemCardProps) {
                 </div>
             </div>
         </Card>
+    );
+
+    if (!item.href) return card;
+
+    return (
+        <a
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open ${item.name} on Spotify`}
+            style={{ "--glow": glow } as CSSProperties}
+            className="block w-full min-w-0 rounded-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--glow),0.6)]"
+        >
+            {card}
+        </a>
     );
 }

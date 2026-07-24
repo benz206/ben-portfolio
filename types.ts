@@ -143,4 +143,8 @@ export type RawBlogMetadata = {
     tags: string[];
     created: string;
     updated: string;
+    previewImage?: {
+        src: string;
+        alt: string;
+    };
 };

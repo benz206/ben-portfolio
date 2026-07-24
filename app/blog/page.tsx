@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import Hashtag from "@/components/Hashtag";
 import ViewCount from "@/components/ViewCount";
@@ -112,45 +113,69 @@ export default async function BlogPage() {
                             href={`/blog/${featuredPost.slug}`}
                             className="block group"
                         >
-                            <article className="space-y-3">
-                                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/35">
-                                    <span>Latest</span>
-                                    <span className="flex-1 h-px bg-white/10" />
-                                </div>
-                                <h2 className="text-2xl font-semibold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
-                                    {featuredPost.title}
-                                </h2>
-                                {featuredPost.description && (
-                                    <p className="text-base leading-relaxed text-white/55">
-                                        {featuredPost.description}
-                                    </p>
-                                )}
-                                <div className="flex flex-wrap items-center pt-1 text-sm gap-x-3 gap-y-1 text-white/40">
-                                    <time dateTime={featuredPost.updated}>
-                                        {featuredPost.updatedFormatted}
-                                    </time>
-                                    <span aria-hidden="true">·</span>
-                                    <ViewCount
-                                        slug={featuredPost.slug}
-                                        initialViews={featuredPost.views}
-                                        showIcon
-                                    />
-                                    {featuredPost.tags.length > 0 && (
-                                        <>
-                                            <span aria-hidden="true">·</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {featuredPost.tags.map(
-                                                    (tag) => (
-                                                        <Hashtag
-                                                            key={tag}
-                                                            hashtag={tag}
-                                                        />
-                                                    ),
-                                                )}
-                                            </div>
-                                        </>
+                            <article
+                                className={
+                                    featuredPost.previewImage
+                                        ? "grid items-start gap-6 sm:grid-cols-[minmax(0,1fr)_12rem]"
+                                        : ""
+                                }
+                            >
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-white/35">
+                                        <span>Latest</span>
+                                        <span className="flex-1 h-px bg-white/10" />
+                                    </div>
+                                    <h2 className="text-2xl font-semibold leading-snug tracking-tight transition-colors group-hover:text-white/75 lg:text-3xl">
+                                        {featuredPost.title}
+                                    </h2>
+                                    {featuredPost.description && (
+                                        <p className="text-base leading-relaxed text-white/55">
+                                            {featuredPost.description}
+                                        </p>
                                     )}
+                                    <div className="flex flex-wrap items-center pt-1 text-sm gap-x-3 gap-y-1 text-white/40">
+                                        <time dateTime={featuredPost.updated}>
+                                            {featuredPost.updatedFormatted}
+                                        </time>
+                                        <span aria-hidden="true">·</span>
+                                        <ViewCount
+                                            slug={featuredPost.slug}
+                                            initialViews={featuredPost.views}
+                                            showIcon
+                                        />
+                                        {featuredPost.tags.length > 0 && (
+                                            <>
+                                                <span aria-hidden="true">
+                                                    ·
+                                                </span>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {featuredPost.tags.map(
+                                                        (tag) => (
+                                                            <Hashtag
+                                                                key={tag}
+                                                                hashtag={tag}
+                                                            />
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
+                                {featuredPost.previewImage && (
+                                    <div className="relative overflow-hidden border rounded-lg aspect-[4/3] bg-white/[0.03] border-white/10">
+                                        <Image
+                                            src={featuredPost.previewImage.src}
+                                            alt={
+                                                featuredPost.previewImage.alt ||
+                                                ""
+                                            }
+                                            fill
+                                            sizes="(min-width: 640px) 192px, 100vw"
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                )}
                             </article>
                         </Link>
 
@@ -172,50 +197,81 @@ export default async function BlogPage() {
                                                 href={`/blog/${post.slug}`}
                                                 className="block py-8 group"
                                             >
-                                                <article className="space-y-2">
-                                                    <div className="flex flex-wrap items-center text-xs gap-x-3 gap-y-1 text-white/35">
-                                                        <time
-                                                            dateTime={
-                                                                post.updated
-                                                            }
-                                                        >
-                                                            {
-                                                                post.updatedFormatted
-                                                            }
-                                                        </time>
-                                                        <span aria-hidden="true">
-                                                            ·
-                                                        </span>
-                                                        <ViewCount
-                                                            slug={post.slug}
-                                                            initialViews={
-                                                                post.views
-                                                            }
-                                                            showIcon
-                                                        />
+                                                <article
+                                                    className={
+                                                        post.previewImage
+                                                            ? "grid items-start gap-5 sm:grid-cols-[minmax(0,1fr)_10rem]"
+                                                            : ""
+                                                    }
+                                                >
+                                                    <div className="space-y-2">
+                                                        <div className="flex flex-wrap items-center text-xs gap-x-3 gap-y-1 text-white/35">
+                                                            <time
+                                                                dateTime={
+                                                                    post.updated
+                                                                }
+                                                            >
+                                                                {
+                                                                    post.updatedFormatted
+                                                                }
+                                                            </time>
+                                                            <span aria-hidden="true">
+                                                                ·
+                                                            </span>
+                                                            <ViewCount
+                                                                slug={post.slug}
+                                                                initialViews={
+                                                                    post.views
+                                                                }
+                                                                showIcon
+                                                            />
+                                                        </div>
+                                                        <h3 className="text-lg font-semibold leading-snug transition-colors group-hover:text-white/70">
+                                                            {post.title}
+                                                        </h3>
+                                                        {post.description && (
+                                                            <p className="text-sm leading-relaxed line-clamp-2 text-white/50">
+                                                                {
+                                                                    post.description
+                                                                }
+                                                            </p>
+                                                        )}
+                                                        {post.tags.length >
+                                                            0 && (
+                                                            <div className="flex flex-wrap gap-1.5 pt-1">
+                                                                {post.tags.map(
+                                                                    (tag) => (
+                                                                        <Hashtag
+                                                                            key={
+                                                                                tag
+                                                                            }
+                                                                            hashtag={
+                                                                                tag
+                                                                            }
+                                                                        />
+                                                                    ),
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <h3 className="text-lg font-semibold leading-snug transition-colors group-hover:text-white/70">
-                                                        {post.title}
-                                                    </h3>
-                                                    {post.description && (
-                                                        <p className="text-sm leading-relaxed line-clamp-2 text-white/50">
-                                                            {post.description}
-                                                        </p>
-                                                    )}
-                                                    {post.tags.length > 0 && (
-                                                        <div className="flex flex-wrap gap-1.5 pt-1">
-                                                            {post.tags.map(
-                                                                (tag) => (
-                                                                    <Hashtag
-                                                                        key={
-                                                                            tag
-                                                                        }
-                                                                        hashtag={
-                                                                            tag
-                                                                        }
-                                                                    />
-                                                                ),
-                                                            )}
+                                                    {post.previewImage && (
+                                                        <div className="relative overflow-hidden border rounded-lg aspect-[4/3] bg-white/[0.03] border-white/10">
+                                                            <Image
+                                                                src={
+                                                                    post
+                                                                        .previewImage
+                                                                        .src
+                                                                }
+                                                                alt={
+                                                                    post
+                                                                        .previewImage
+                                                                        .alt ||
+                                                                    ""
+                                                                }
+                                                                fill
+                                                                sizes="(min-width: 640px) 160px, 100vw"
+                                                                className="object-cover"
+                                                            />
                                                         </div>
                                                     )}
                                                 </article>

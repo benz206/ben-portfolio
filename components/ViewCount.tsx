@@ -30,9 +30,7 @@ export default function ViewCount({
         return (
             <div className={cn("flex items-center gap-1.5", className)}>
                 <FiEye className="size-4 text-white/50" />
-                <span className="text-sm text-white/50">
-                    {formatNumber(views)}
-                </span>
+                <span className="text-white/50">{formatNumber(views)}</span>
             </div>
         );
     }

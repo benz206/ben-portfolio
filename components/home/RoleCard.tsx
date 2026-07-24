@@ -1,7 +1,10 @@
 import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties } from "react";
 import Card from "@/components/Card";
-import type { AmbientVariant } from "@/components/AmbientGradient";
+import {
+    AmbientGradient,
+    type AmbientVariant,
+} from "@/components/AmbientGradient";
 import Eyebrow from "@/components/Eyebrow";
 import { cn } from "@/utils/cn";
 
@@ -36,7 +39,7 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
             className={cn(
                 "flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6",
                 role.href &&
-                    "transition-all duration-300 group-hover:border-[rgba(var(--accent),0.55)] group-hover:[box-shadow:0_0_28px_-8px_rgba(var(--accent),0.5)]",
+                    "transition-colors duration-300 group-hover:border-[rgba(var(--accent),0.55)]",
             )}
             motionProps={{
                 initial: { opacity: 0, y: 24 },
@@ -94,8 +97,13 @@ export default function RoleCard({ role, animationDelay }: RoleCardProps) {
             rel="noopener noreferrer"
             aria-label={`${role.company} — opens in new tab`}
             style={{ "--accent": role.accent ?? "255,255,255" } as CSSProperties}
-            className="group block rounded-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent),0.6)]"
+            className="group block relative rounded-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent),0.6)]"
         >
+            {/* glow = the card's own ambient gradient, blurred out past its edges */}
+            <AmbientGradient
+                variant={role.ambientVariant}
+                className="-inset-2 rounded-xl opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-70"
+            />
             {card}
         </a>
     );

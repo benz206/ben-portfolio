@@ -2,8 +2,10 @@
 
 import { m, easeInOut } from "framer-motion";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { FaSpotify } from "react-icons/fa6";
 import Card from "@/components/Card";
+import { glowColor } from "@/utils/glowColor";
 import type { NowPlayingTrack } from "./useCurrentlyPlaying";
 
 type CurrentlyPlayingProps = {
@@ -77,6 +79,7 @@ export default function CurrentlyPlaying({
     const dominantColor = track.color
         ? `rgb(${track.color[0]}, ${track.color[1]}, ${track.color[2]}, 50%)`
         : "#1DB954";
+    const glow = track.color ? glowColor(track.color) : "29,185,84";
     const isPlaying = track.paused !== "true";
 
     const card = (
@@ -85,7 +88,8 @@ export default function CurrentlyPlaying({
             ambient
             ambientSeed="currently-playing"
             ambientClassName="opacity-50"
-            className="relative flex h-32 w-full p-2 overflow-hidden rounded-xl border border-white/10 transition-colors duration-300 group-hover:border-green-400/40"
+            className="relative flex h-32 w-full p-2 overflow-hidden rounded-xl border border-white/10 transition-colors duration-300 group-hover:border-[rgba(var(--glow),0.6)]"
+            style={{ "--glow": glow } as CSSProperties}
             motionProps={{
                 initial: { opacity: 0 },
                 animate: { opacity: 1 },

@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, CSSProperties, ReactNode } from "react";
 import { m } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { AmbientGradient, AmbientVariant } from "@/components/AmbientGradient";
@@ -14,6 +14,7 @@ interface CardProps {
     variant?: CardVariant;
     size?: CardSize;
     className?: string;
+    style?: CSSProperties;
     radius?: CardRadius;
     ambient?: boolean;
     ambientClassName?: string;
@@ -50,6 +51,7 @@ export default function Card({
     variant = "slate",
     size = "md",
     className = "",
+    style,
     radius = "xl",
     ambient = false,
     ambientClassName = "",
@@ -70,7 +72,7 @@ export default function Card({
 
     if (motionProps) {
         return (
-            <m.div className={baseClasses} {...motionProps}>
+            <m.div className={baseClasses} style={style} {...motionProps}>
                 {children}
                 {ambient && (
                     <AmbientGradient
@@ -84,7 +86,7 @@ export default function Card({
     }
 
     return (
-        <div className={baseClasses}>
+        <div className={baseClasses} style={style}>
             {children}
             {ambient && (
                 <AmbientGradient
