@@ -33,13 +33,14 @@ const fetcher = async (url: string): Promise<NowPlayingTrack | null> => {
 export function useCurrentlyPlaying(): CurrentlyPlayingState {
     const [currentProgress, setCurrentProgress] = useState(0);
     const trackKeyRef = useRef<string | null>(null);
+    const anchorRef = useRef({ progress: 0, at: 0 });
 
     const { data, error, isLoading } = useSWR<NowPlayingTrack | null>(
         "/api/getCurrent/public",
         fetcher,
         {
-            refreshInterval: 5_000,
-            revalidateOnFocus: false,
+            refreshInterval: 3_000,
+            dedupingInterval: 1_000,
             onSuccess: (next) => {
                 if (!next) return;
                 const serverProgress = parseInt(next.progress);
@@ -48,33 +49,45 @@ export function useCurrentlyPlaying(): CurrentlyPlayingState {
                 const trackChanged = trackKeyRef.current !== key;
                 trackKeyRef.current = key;
 
+                const { progress, at } = anchorRef.current;
+                const localProgress = at
+                    ? progress + (Date.now() - at) / 1000
+                    : 0;
+
                 // Snap to the server value when the track changes (or on first
                 // load). Otherwise keep the locally-ticked value and only let
                 // the server pull it forward, so the bar never jumps backward
                 // when a slightly-stale cached response comes back.
-                setCurrentProgress((prev) => {
-                    const synced = trackChanged
+                const synced =
+                    trackChanged || next.paused === "true"
                         ? serverProgress
-                        : Math.max(prev, serverProgress);
-                    return Math.min(synced, duration);
-                });
+                        : Math.max(localProgress, serverProgress);
+
+                anchorRef.current = {
+                    progress: Math.min(synced, duration),
+                    at: Date.now(),
+                };
+                setCurrentProgress(anchorRef.current.progress);
             },
         },
     );
 
     const track = data ?? null;
+    const isPlaying = track !== null && track.paused !== "true";
+    const duration = track ? parseInt(track.duration) : 0;
 
     useEffect(() => {
-        if (!track || track.paused === "true") return;
+        if (!isPlaying) return;
 
-        const duration = parseInt(track.duration);
         const progressInterval = setInterval(() => {
-            // progress/duration are in whole seconds, so advance by 1 per tick.
-            setCurrentProgress((prev) => Math.min(prev + 1, duration));
-        }, 1000);
+            const { progress, at } = anchorRef.current;
+            setCurrentProgress(
+                Math.min(progress + (Date.now() - at) / 1000, duration),
+            );
+        }, 500);
 
         return () => clearInterval(progressInterval);
-    }, [track]);
+    }, [isPlaying, duration]);
 
     const errorMessage = error
         ? error.message || "Failed to fetch track"

@@ -140,7 +140,7 @@ export default function CurrentlyPlaying({
                             <m.div
                                 className="h-1.5 rounded-full"
                                 animate={{ width: `${progressPercentage}%` }}
-                                transition={{ duration: 1, ease: "linear" }}
+                                transition={{ duration: 0.5, ease: "linear" }}
                                 style={{ backgroundColor: dominantColor }}
                             />
                         </div>

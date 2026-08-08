@@ -1,17 +1,21 @@
-import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import getSpotifyAccessToken from "@/utils/functions/getSpotify";
-import { getDominantColorFromImageUrl } from "@/utils/colorExtraction";
+import {
+    getDominantColorFromImageUrl,
+    type RgbColor,
+} from "@/utils/colorExtraction";
 import { getRedisClient } from "@/utils/redis";
 import { secondsFromMs } from "@/utils/format";
 import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-const REVALIDATE_SECONDS = 5;
+const CACHE_TTL_MS = 2_000;
+const COLOR_CACHE_LIMIT = 64;
 const LAST_PLAYED_KEY = "spotify:last-played";
 const PUBLIC_CACHE_HEADERS = {
-    "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
+    "Cache-Control": "public, s-maxage=2",
 };
 const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
 
@@ -56,6 +60,26 @@ async function writeLastPlayed(track: SpotifyTrackInfo): Promise<void> {
     }
 }
 
+let lastPlayedKey = "";
+const colorCache = new Map<string, RgbColor>();
+
+async function getAlbumColor(imageUrl?: string): Promise<RgbColor> {
+    const cached = imageUrl ? colorCache.get(imageUrl) : undefined;
+    if (cached) return cached;
+
+    const color = await getDominantColorFromImageUrl(imageUrl);
+
+    if (imageUrl) {
+        if (colorCache.size >= COLOR_CACHE_LIMIT) {
+            const oldest = colorCache.keys().next().value;
+            if (oldest) colorCache.delete(oldest);
+        }
+        colorCache.set(imageUrl, color);
+    }
+
+    return color;
+}
+
 async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     const accessToken = await getSpotifyAccessToken();
     const response = await fetch(`https://api.spotify.com/v1/me/player`, {
@@ -76,7 +100,7 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     if (!current.item) return await readLastPlayed();
 
     const imageUrl = current.item.album.images[0]?.url as string | undefined;
-    const dominantColor = await getDominantColorFromImageUrl(imageUrl);
+    const dominantColor = await getAlbumColor(imageUrl);
 
     const track: SpotifyTrackInfo = {
         title: current.item.name,
@@ -93,15 +117,37 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
         songUrl: current.item.external_urls?.spotify,
     };
 
-    await writeLastPlayed(track);
+    const trackKey = `${track.title}-${track.artist}-${track.album}`;
+    if (trackKey !== lastPlayedKey) {
+        await writeLastPlayed(track);
+        lastPlayedKey = trackKey;
+    }
+
     return track;
 }
 
-const getCachedTrack = unstable_cache(
-    fetchCurrentTrack,
-    ["spotify-currently-playing"],
-    { revalidate: REVALIDATE_SECONDS },
-);
+let trackCache: { value: SpotifyTrackInfo | null; expiresAt: number } | null =
+    null;
+let inFlight: Promise<SpotifyTrackInfo | null> | null = null;
+
+function getCachedTrack(): Promise<SpotifyTrackInfo | null> {
+    if (trackCache && Date.now() < trackCache.expiresAt) {
+        return Promise.resolve(trackCache.value);
+    }
+
+    if (!inFlight) {
+        inFlight = fetchCurrentTrack()
+            .then((value) => {
+                trackCache = { value, expiresAt: Date.now() + CACHE_TTL_MS };
+                return value;
+            })
+            .finally(() => {
+                inFlight = null;
+            });
+    }
+
+    return inFlight;
+}
 
 export async function GET(_req: NextRequest) {
     try {
