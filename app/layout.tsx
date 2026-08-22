@@ -6,30 +6,27 @@ import ViewCounter from "@/components/ViewCounter";
 import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
 import { MotionProvider } from "@/components/MotionProvider";
 
+const SITE_DESCRIPTION =
+    "Software engineer who likes building elegant, efficient, and scalable software. Projects, writing, and photos from Ben Zhou.";
+
 export const metadata: Metadata = {
     metadataBase: new URL("https://bzhou.ca"),
-    title: "Ben's Portfolio",
-    description: "Ben's Portfolio.",
+    title: "Ben Zhou",
+    description: SITE_DESCRIPTION,
     alternates: {
         canonical: "/",
     },
     openGraph: {
-        title: "Ben's Portfolio",
-        description: "Ben's Portfolio.",
-        siteName: "Ben's Portfolio",
-        images: [
-            {
-                url: "https://i.imgur.com/6KdqAaf.png",
-            },
-        ],
+        title: "Ben Zhou",
+        description: SITE_DESCRIPTION,
+        siteName: "Ben Zhou",
         type: "website",
         url: "https://bzhou.ca",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Ben's Portfolio",
-        description: "Ben's Portfolio.",
-        images: ["https://i.imgur.com/6KdqAaf.png"],
+        title: "Ben Zhou",
+        description: SITE_DESCRIPTION,
     },
     robots: {
         index: true,
