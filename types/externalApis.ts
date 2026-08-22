@@ -57,18 +57,3 @@ export type SpotifyPlaybackState = {
     shuffle_state: boolean;
     repeat_state: string;
 };
-
-export type GitHubUserResponse = {
-    public_repos: number;
-};
-
-export type GitHubContributionsDay = {
-    date: string;
-    count: number;
-    level: number;
-};
-
-export type GitHubContributionsResponse = {
-    total: Record<string, number>;
-    contributions: GitHubContributionsDay[];
-};
