@@ -29,7 +29,13 @@ async function getBlogSlugs() {
 module.exports = {
     siteUrl: "https://bzhou.ca",
     generateRobotsTxt: false,
-    exclude: ["/admin"],
+    exclude: [
+        "/admin",
+        "/robots.txt",
+        "/blog/feed.xml",
+        "/opengraph-image",
+        "**/opengraph-image",
+    ],
     additionalPaths: async (config) => {
         const slugs = await getBlogSlugs();
         const paths = await Promise.all(

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://bzhou.ca</loc><lastmod>2026-06-25T18:36:57.117Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog</loc><lastmod>2026-06-25T18:36:57.118Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/ECE1A</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/ECE1B</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/ECE2A</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/SpotifyMacroboard</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/TagscriptGuide</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/blog/UnofficialUSACoopGuide</loc><lastmod>2026-06-25T18:36:57.294Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/gallery</loc><lastmod>2026-06-25T18:36:57.118Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/messages</loc><lastmod>2026-06-25T18:36:57.118Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/projects</loc><lastmod>2026-06-25T18:36:57.118Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://bzhou.ca/thanks</loc><lastmod>2026-06-25T18:36:57.118Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/ECE1A</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/ECE1B</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/ECE2A</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/SpotifyMacroboard</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/TagscriptGuide</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/blog/UnofficialUSACoopGuide</loc><lastmod>2026-08-22T18:39:18.213Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/gallery</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/messages</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/projects</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://bzhou.ca/thanks</loc><lastmod>2026-08-22T18:39:18.007Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>
