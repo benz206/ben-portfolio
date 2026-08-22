@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description: "Blog posts about my projects and experiences.",
     alternates: {
         canonical: "/blog",
+        types: {
+            "application/rss+xml": "/blog/feed.xml",
+        },
     },
     openGraph: {
         title: "Blog - Ben's Portfolio",
