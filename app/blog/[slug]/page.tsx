@@ -5,6 +5,7 @@ import { getMDXComponents } from "@/mdx-components";
 import { notFound } from "next/navigation";
 import { fetchBlogPost, fetchBlogSlugs } from "@/utils/blog";
 import { extractHeadings } from "@/utils/slugify";
+import JsonLd from "@/components/JsonLd";
 
 export async function generateStaticParams() {
     const slugs = await fetchBlogSlugs();
@@ -67,6 +68,24 @@ export default async function BlogPostPage({
     const { MDXRemote } = await import("next-mdx-remote/rsc");
     const remarkGfm = (await import("remark-gfm")).default;
     const MDX = MDXRemote as any;
+    const url = `https://bzhou.ca/blog/${slug}`;
+    const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: metadata.title,
+        description: metadata.description,
+        url,
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        datePublished: metadata.created,
+        dateModified: metadata.updated,
+        keywords: metadata.tags.join(", "),
+        image: `${url}/opengraph-image`,
+        author: {
+            "@type": "Person",
+            name: "Ben Zhou",
+            url: "https://bzhou.ca",
+        },
+    };
     return (
         <MdxLayout
             metadata={metadata}
@@ -75,6 +94,7 @@ export default async function BlogPostPage({
             viewCounter={<ViewCount slug={slug} method="POST" />}
             headings={headings}
         >
+            <JsonLd data={articleSchema} />
             <MDX
                 source={content}
                 components={components as any}
