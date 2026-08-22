@@ -18,6 +18,7 @@ export type ProjectPreviewProps = {
     index?: number;
     projectLink?: string;
     slug?: string;
+    featured?: boolean;
 };
 
 export type BlogMetadata = {

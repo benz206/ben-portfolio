@@ -30,6 +30,7 @@ const projectPreviews: ProjectPreviewProps[] = [
             width: 900,
             height: 100,
         },
+        featured: true,
         title: "CRIMEX",
         sub: "INTERACTIVE HALTON CRIME MAP",
         summary:
@@ -75,6 +76,7 @@ const projectPreviews: ProjectPreviewProps[] = [
             width: 900,
             height: 100,
         },
+        featured: true,
         title: "LATTICE",
         sub: "EVIDENCE RETRIEVAL FOR LONG DOCS",
         summary:
@@ -114,6 +116,7 @@ const projectPreviews: ProjectPreviewProps[] = [
             width: 900,
             height: 100,
         },
+        featured: true,
         title: "LUMINODE",
         sub: "RUST LED CONTROLLER FOR DORMS",
         summary:
