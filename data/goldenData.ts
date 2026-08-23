@@ -6,91 +6,87 @@ export interface GoldenPerson {
 export const goldenPeople: GoldenPerson[] = [
     {
         name: "Donna Carson",
-        description: "Culture and tradition.",
+        description: "Culture and tradition",
     },
     {
         name: "Karl Svab",
-        description: "Self preservation and personal identity.",
+        description: "Personal identity",
     },
     {
         name: "Kaitlyn Harshaw",
-        description: "What kindness looks like.",
+        description: "Kindness",
     },
     {
         name: "Sarah DeCloet",
-        description: "Critical thinking.",
+        description: "Critical thinking",
     },
     {
         name: "Sharon Edmond",
-        description: "The beauty of music.",
+        description: "The beauty of music",
     },
     {
         name: "TheRagingPotato",
-        description: "The worser one.",
+        description: "The worse one",
     },
     {
         name: "Lily Akemi",
-        description: "A true friend!",
+        description: "A friend",
     },
     {
         name: "CookieMonster",
-        description: "The most inspirational.",
+        description: "Inspirational",
     },
     {
         name: "YiFanEr",
-        description: "For being with me for all these years.",
+        description: "For being with me for all these years",
     },
     {
         name: "Tofuu",
-        description: "#1 Ahri Main",
+        description: "The best humour",
     },
     {
         name: "Foodie+SouffleSoleil",
-        description: "To be happy and understanding.",
+        description: "To be happy and understanding",
     },
     {
         name: "Kratz",
-        description: "To put others first.",
+        description: "Putting others first",
     },
     {
         name: "YamFries",
-        description: "To always work hard.",
+        description: "Always working hard",
     },
     {
-        name: "#1DariusMain",
-        description: "To always work hard",
+        name: "Darius Main",
+        description: "To be honest",
     },
     {
         name: "BobbyPhillip",
-        description: "To understand the big picture.",
+        description: "To understand the big picture",
     },
     {
         name: "CherryDucky",
-        description: "To try new things.",
+        description: "To try new things",
     },
     {
         name: "Rafi & Rubab",
-        description: "Taking a chance on me.",
+        description: "Taking a chance on me",
     },
     {
         name: "Ms. Gigg",
-        description: "To be ambitious.",
+        description: "To be ambitious",
     },
     {
         name: "HariCo",
-        description: "To be happy.",
+        description: "Always be positive",
     },
     {
-        name: "Mr. Gray",
-        description: "To be happy.",
-    },
-    {
-        name: "StealthHeart+Ambee",
-        description: "To be happy and kind.",
+        name: "StealthHeart & Ambee",
+        description: "Always understanding and happy",
     },
     {
         name: "Markouyang",
-        description: "Should've came to Waterloo.",
+        description: "Should've came to Waterloo",
     },
     {
         name: "Mr. Meng",
@@ -102,7 +98,7 @@ export const goldenPeople: GoldenPerson[] = [
     },
     {
         name: "Head of People",
-        description: "SJFZ SJFZ SJFZ",
+        description: "5$",
     },
     {
         name: "Ishaan",
@@ -120,4 +116,8 @@ export const goldenPeople: GoldenPerson[] = [
         name: "Izzy Fleming",
         description: "#1 Ops",
     },
+    {
+        name: "raymond",
+        description: "to be confident"
+    }
 ];
