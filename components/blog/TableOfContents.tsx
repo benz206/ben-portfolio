@@ -174,7 +174,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
             <button
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open table of contents"
-                className="fixed bottom-6 right-6 z-40 flex size-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/70 backdrop-blur transition-colors hover:bg-white/15 lg:hidden"
+                className="fixed bottom-[calc(1.5rem+var(--soundtrack-offset,0px))] right-6 z-40 flex size-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/70 backdrop-blur transition-colors hover:bg-white/15 lg:hidden"
             >
                 <svg
                     width="16"

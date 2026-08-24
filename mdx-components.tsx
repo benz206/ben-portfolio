@@ -1,9 +1,11 @@
 import type { MDXComponents } from "mdx/types";
 import YouTubeEmbed from "./components/mdx/YoutubeEmbed";
+import SoundtrackSong from "@/components/blog/soundtrack/Song";
 import GenericCodeBlock from "./components/CodeBlocks/GenericCodeBlock";
 import MDXImage from "@/components/mdx/MDXImage";
 import ResponsiveTable from "@/components/mdx/ResponsiveTable";
 import { slugify } from "@/utils/slugify";
+import { getRemoteImageSize } from "@/utils/imageSize";
 import React from "react";
 
 function extractText(node: React.ReactNode): string {
@@ -93,10 +95,18 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </td>
         ),
-        img: (props) => {
+        img: (async (props: { src?: string; alt?: string }) => {
             if (!props.src || typeof props.src !== "string") return null;
-            return <MDXImage src={props.src} alt={props.alt} />;
-        },
+            const size = await getRemoteImageSize(props.src);
+            return (
+                <MDXImage
+                    src={props.src}
+                    alt={props.alt}
+                    width={size?.width}
+                    height={size?.height}
+                />
+            );
+        }) as unknown as MDXComponents["img"],
         ol: ({ children }) => (
             <ol className="pl-6 my-5 space-y-2 list-decimal">{children}</ol>
         ),
@@ -146,6 +156,9 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
         },
         hr: () => <div className="my-10 h-px bg-white/10" />,
         Youtube: ({ src }: { src: string }) => <YouTubeEmbed src={src} />,
+        Song: ({ src, start }: { src: string; start?: string | number }) => (
+            <SoundtrackSong src={src} start={start} />
+        ),
         ...components,
     };
 }

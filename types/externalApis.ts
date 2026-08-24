@@ -57,3 +57,12 @@ export type SpotifyPlaybackState = {
     shuffle_state: boolean;
     repeat_state: string;
 };
+
+export type SoundtrackTrackMeta = {
+    id: string;
+    name: string;
+    artist: string;
+    image?: string;
+    href?: string;
+    color: [number, number, number];
+};

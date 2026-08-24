@@ -7,14 +7,18 @@ import { useEffect, useState } from "react";
 export default function MDXImage({
     src,
     alt,
+    width,
+    height,
     ...props
 }: { src: string; alt?: string } & Omit<ImageProps, "src" | "alt">) {
+    const hasSize = typeof width === "number" && typeof height === "number";
     const [dimensions, setDimensions] = useState<{
         width: number;
         height: number;
-    } | null>(null);
+    } | null>(hasSize ? { width, height } : null);
 
     useEffect(() => {
+        if (hasSize) return;
         getImageDimensions(src)
             .then((dims) => {
                 setDimensions({
@@ -23,7 +27,7 @@ export default function MDXImage({
                 });
             })
             .catch(() => {});
-    }, [src]);
+    }, [src, hasSize]);
 
     return (
         <span className="inline-flex justify-center my-4 w-full">

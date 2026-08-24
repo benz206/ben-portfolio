@@ -3,6 +3,7 @@ import { RawBlogMetadata } from "@/types";
 import Hashtag from "@/components/Hashtag";
 import ScatteredGradients from "@/components/blog/ScatteredGradients";
 import TableOfContents from "@/components/blog/TableOfContents";
+import SoundtrackProvider from "@/components/blog/soundtrack/SoundtrackProvider";
 
 type Heading = { level: number; text: string; id: string };
 
@@ -100,7 +101,9 @@ export default function MdxLayout({
 
                         <div className="mb-10 h-px bg-white/10" />
 
-                        <article>{children}</article>
+                        <SoundtrackProvider>
+                            <article>{children}</article>
+                        </SoundtrackProvider>
                     </div>
 
                     {/* TOC sidebar — visible lg+. createPortal in TableOfContents
