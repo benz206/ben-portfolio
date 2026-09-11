@@ -7,7 +7,6 @@ import {
     FaFolderOpen,
     FaImages,
     FaPenNib,
-    FaFileLines,
     FaRegNewspaper,
 } from "react-icons/fa6";
 import { FiBookOpen } from "react-icons/fi";
@@ -50,16 +49,6 @@ const navigationCommands: CommandDescriptor[] = [
         keywords: ["photos", "images"],
         meta: "Page",
         icon: <FaImages className="size-3.5" />,
-    },
-    {
-        id: "nav-resume",
-        label: "Resume",
-        href: "/resume.pdf",
-        section: "Navigation",
-        keywords: ["pdf", "download"],
-        meta: "PDF",
-        icon: <FaFileLines className="size-3.5" />,
-        actionLabel: "Open in new tab",
     },
 ];
 
@@ -188,13 +177,7 @@ export function useNavigationCommands() {
             const href = command.href;
             const meta = href === pathname ? "Current" : command.meta;
             let action = command.action;
-            if (command.id === "nav-resume" && href) {
-                action = () => {
-                    if (typeof window !== "undefined") {
-                        window.open(href, "_blank", "noopener,noreferrer");
-                    }
-                };
-            } else if (!action && href) {
+            if (!action && href) {
                 action = () => {
                     if (href !== pathname) {
                         push(href);

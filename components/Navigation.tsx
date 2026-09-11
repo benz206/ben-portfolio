@@ -96,16 +96,6 @@ export default function Navigation() {
                                 </Link>
                             </m.div>
                         ))}
-                        <m.div>
-                            <Link
-                                className="text-sm font-medium transition-colors duration-200 text-white/70 hover:text-white"
-                                href="/resume.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Résumé
-                            </Link>
-                        </m.div>
                     </div>
                     <div className="flex items-center gap-4 ml-auto lg:hidden">
                         <m.button
@@ -157,15 +147,6 @@ export default function Navigation() {
                                     {link.label}
                                 </Link>
                             ))}
-                            <Link
-                                className="text-2xl font-semibold text-white touch-manipulation"
-                                href="/resume.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Résumé
-                            </Link>
                         </div>
                     </m.div>
                 )}
