@@ -32,13 +32,6 @@ export const now: Org[] = [
         href: "https://grandcharter.com",
     },
     {
-        role: "Engineering Fellow",
-        name: "8VC",
-        logo: EightVC,
-        accent: "212,212,216",
-        href: "https://8vc.com",
-    },
-    {
         role: "Engineering",
         name: "University of Waterloo",
         logo: Waterloo,
@@ -73,6 +66,13 @@ export const building: BuildLine[] = [
 
 // previously
 export const previously: Org[] = [
+    {
+        role: "Engineering Fellow",
+        name: "8VC",
+        logo: EightVC,
+        accent: "212,212,216",
+        href: "https://8vc.com",
+    },
     {
         role: "Engineering",
         name: "Fuego",

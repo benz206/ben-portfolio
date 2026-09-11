@@ -33,7 +33,7 @@ const recentRoles: RoleCardData[] = [
         title: "Engineering Fellow",
         company: "8VC",
         location: "San Francisco",
-        period: "May 2026 - Present",
+        period: "May 2026 - Aug 2026",
         image: {
             src: EightVCLogo,
             alt: "8VC logo",
