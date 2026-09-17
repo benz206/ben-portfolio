@@ -41,7 +41,7 @@ const recentRoles: RoleCardData[] = [
         locationClass: "text-white/60",
         periodClass: "text-white/45",
         ambientVariant: "slate",
-        href: "https://8vc.com",
+        href: "https://8vc.com/fellows/ben-zhou",
         accent: "212,212,216",
     },
     {

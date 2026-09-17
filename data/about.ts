@@ -71,7 +71,7 @@ export const previously: Org[] = [
         name: "8VC",
         logo: EightVC,
         accent: "212,212,216",
-        href: "https://8vc.com",
+        href: "https://8vc.com/fellows/ben-zhou",
     },
     {
         role: "Engineering",
