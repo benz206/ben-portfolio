@@ -31,48 +31,46 @@ export default function MdxLayout({
         <div className="relative min-h-screen bg-[#050506] text-[#ececec]">
             <ScatteredGradients seed={metadata.slug} />
 
-            <div className="relative mx-auto max-w-275 px-6 pb-32 pt-16 lg:pt-20">
-                {/* Back navigation */}
-                <div className="mb-14 max-w-175">
-                    <Link
-                        href="/blog"
-                        className="inline-flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-white/70"
-                    >
-                        <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 14 14"
-                            fill="none"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M9 2L4 7l5 5"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                        All posts
-                    </Link>
-                </div>
+            <div className="relative mx-auto w-11/12 max-w-270 pb-32 pt-16 lg:pt-20">
+                <header className="mb-10 grid grid-cols-1 gap-6 lg:mb-16 lg:grid-cols-12 lg:gap-[30px]">
+                    <div className="flex flex-col gap-y-8 lg:col-span-7">
+                        {/* Back navigation */}
+                        <nav aria-label="Breadcrumb">
+                            <ol className="flex list-none flex-wrap items-center gap-x-2 gap-y-1 ml-0 text-sm text-white/40">
+                                <li>
+                                    <Link
+                                        href="/blog"
+                                        className="transition-colors hover:text-white/70"
+                                    >
+                                        Blog
+                                    </Link>
+                                </li>
+                                {metadata.tags[0] && (
+                                    <>
+                                        <li aria-hidden="true">
+                                            <svg
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 14 14"
+                                                fill="none"
+                                            >
+                                                <path
+                                                    d="M5 2l5 5-5 5"
+                                                    stroke="currentColor"
+                                                    strokeWidth="1.5"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                            </svg>
+                                        </li>
+                                        <li>#{metadata.tags[0]}</li>
+                                    </>
+                                )}
+                            </ol>
+                        </nav>
 
-                {/* Article + sidebar layout */}
-                <div className="flex gap-16">
-                    {/* Article column */}
-                    <div className="min-w-0 w-full max-w-175">
-                        <header className="mb-8 space-y-4">
-                            <h1 className="text-3xl font-semibold leading-tight tracking-tight lg:text-[2.5rem]">
-                                {metadata.title}
-                            </h1>
-
-                            {metadata.description && (
-                                <p className="text-lg leading-relaxed text-white/55">
-                                    {metadata.description}
-                                </p>
-                            )}
-
-                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 text-sm text-white/40">
+                        <div>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/40">
                                 <time dateTime={metadata.created}>
                                     {createdDate}
                                 </time>
@@ -89,31 +87,47 @@ export default function MdxLayout({
                                     </>
                                 )}
                             </div>
-
-                            {metadata.tags.length > 0 && (
-                                <div className="flex flex-wrap gap-2 pt-1">
-                                    {metadata.tags.map((tag) => (
-                                        <Hashtag key={tag} hashtag={tag} />
-                                    ))}
-                                </div>
-                            )}
-                        </header>
-
-                        <div className="mb-10 h-px bg-white/10" />
-
-                        <SoundtrackProvider>
-                            <article>{children}</article>
-                        </SoundtrackProvider>
+                            <h1 className="mt-4 text-balance text-[28px] leading-[32px] md:text-[32px] md:leading-[35px] lg:text-[40px] lg:leading-[42px]">
+                                {metadata.title}
+                            </h1>
+                        </div>
                     </div>
 
+                    <div className="flex flex-col justify-end gap-4 lg:col-span-4 lg:col-start-9">
+                        {metadata.description && (
+                            <p className="text-lg leading-[26px] text-white/55">
+                                {metadata.description}
+                            </p>
+                        )}
+                        {metadata.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {metadata.tags.map((tag) => (
+                                    <Hashtag key={tag} hashtag={tag} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </header>
+
+                <div className="mb-10 h-px bg-white/10 lg:mb-20" />
+
+                {/* Article + sidebar layout */}
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-[30px]">
                     {/* TOC sidebar — visible lg+. createPortal in TableOfContents
                         renders the mobile button into document.body, so it's
                         visible on mobile despite this aside being display:none. */}
                     {hasTOC && (
-                        <aside className="hidden lg:block w-72 shrink-0">
+                        <aside className="hidden lg:col-span-3 lg:block">
                             <TableOfContents headings={headings} />
                         </aside>
                     )}
+
+                    {/* Article column */}
+                    <div className="min-w-0 lg:col-span-8 lg:col-start-5">
+                        <SoundtrackProvider>
+                            <article>{children}</article>
+                        </SoundtrackProvider>
+                    </div>
                 </div>
             </div>
         </div>

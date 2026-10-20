@@ -80,18 +80,15 @@ export default async function BlogPage() {
                 </div>
             )}
 
-            <div className="relative px-6 pt-16 pb-32 mx-auto max-w-175 lg:pt-24">
+            <div className="relative w-11/12 pt-16 pb-32 mx-auto max-w-270 lg:pt-24">
                 {/* Header */}
-                <div className="mb-16 space-y-3">
-                    <span className="text-xs uppercase tracking-[0.4em] text-white/35">
-                        My thoughts and opinions
-                    </span>
-                    <h1 className="text-4xl font-semibold tracking-tight lg:text-5xl">
+                <div className="flex flex-col gap-6 mb-10 lg:flex-row lg:items-end lg:justify-between">
+                    <h1 className="text-[44px] leading-[46px] md:text-[56px] md:leading-[58px] lg:text-[72px] lg:leading-[72px]">
                         Blog
                     </h1>
-                    <p className="text-base text-white/50">
-                        Writing about projects, ideas, and things I find
-                        interesting.
+                    <p className="max-w-sm text-base text-white/50 lg:text-right">
+                        My thoughts and opinions. Writing about projects, ideas,
+                        and things I find interesting.
                     </p>
                 </div>
 
