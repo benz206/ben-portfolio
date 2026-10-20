@@ -26,14 +26,14 @@ function headingId(children: React.ReactNode): string {
 export function getMDXComponents(components: MDXComponents): MDXComponents {
     return {
         h1: ({ children }) => (
-            <h1 className="mt-12 mb-4 text-3xl font-semibold tracking-tight leading-tight lg:text-4xl">
+            <h1 className="mt-10 mb-4 text-[22px] leading-[26px] font-semibold md:mt-12 md:mb-6 md:text-[25px] md:leading-[30px] lg:mt-16 lg:text-[28px] lg:leading-[32px]">
                 {children}
             </h1>
         ),
         h2: ({ children }) => (
             <h2
                 id={headingId(children)}
-                className="mt-12 mb-4 text-2xl font-semibold leading-snug scroll-mt-24"
+                className="mt-10 mb-4 text-xl leading-6 font-semibold scroll-mt-24 md:mt-12 md:mb-6 md:text-[22px] md:leading-[26px] lg:mt-16 lg:text-2xl lg:leading-7"
             >
                 {children}
             </h2>
@@ -41,7 +41,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
         h3: ({ children }) => (
             <h3
                 id={headingId(children)}
-                className="mt-10 mb-3 text-xl font-semibold leading-snug scroll-mt-24"
+                className="mt-8 mb-3 text-lg leading-[22px] font-semibold scroll-mt-24 md:mb-4 md:text-[19px] md:leading-6 lg:mt-12 lg:text-xl lg:leading-[26px]"
             >
                 {children}
             </h3>
@@ -50,7 +50,7 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             <h4 className="mt-8 mb-2 text-lg font-semibold">{children}</h4>
         ),
         p: ({ children }) => (
-            <p className="my-5 text-base leading-[1.85] text-white/80">
+            <p className="mb-4 text-[17px] leading-[30px] text-white/80 md:mb-6 md:text-lg">
                 {children}
             </p>
         ),
@@ -108,13 +108,13 @@ export function getMDXComponents(components: MDXComponents): MDXComponents {
             );
         }) as unknown as MDXComponents["img"],
         ol: ({ children }) => (
-            <ol className="pl-6 my-5 space-y-2 list-decimal">{children}</ol>
+            <ol className="pl-6 mb-4 list-decimal list-outside md:mb-6">{children}</ol>
         ),
         ul: ({ children }) => (
-            <ul className="pl-6 my-5 space-y-2 list-disc">{children}</ul>
+            <ul className="pl-6 mb-4 list-disc list-outside md:mb-6">{children}</ul>
         ),
         li: ({ children }) => (
-            <li className="text-base leading-[1.85] text-white/80">
+            <li className="mb-2 text-[17px] leading-[30px] text-white/80 md:text-lg">
                 {children}
             </li>
         ),
