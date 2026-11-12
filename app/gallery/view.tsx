@@ -78,10 +78,14 @@ function MasonryTile({
     image,
     placeholder,
     onSelect,
+    eager,
+    highPriority,
 }: {
     image: ImageT;
     placeholder?: string;
     onSelect: (image: ImageT) => void;
+    eager: boolean;
+    highPriority: boolean;
 }) {
     return (
         <m.button
@@ -106,7 +110,8 @@ function MasonryTile({
                     alt={image.alt}
                     placeholder="blur"
                     blurDataURL={placeholder}
-                    loading="lazy"
+                    loading={eager ? "eager" : "lazy"}
+                    fetchPriority={highPriority ? "high" : undefined}
                     quality="auto"
                     dpr="auto"
                     format="webp"
@@ -196,12 +201,16 @@ export default function GalleryClient({
                             key={columnIndex}
                             className="flex flex-1 flex-col gap-4 min-w-0"
                         >
-                            {column.map((image) => (
+                            {column.map((image, rowIndex) => (
                                 <MasonryTile
                                     key={image.public_id}
                                     image={image}
                                     placeholder={placeholders[image.public_id]}
                                     onSelect={handleSelect}
+                                    eager={rowIndex === 0}
+                                    highPriority={
+                                        rowIndex === 0 && columnIndex === 0
+                                    }
                                 />
                             ))}
                         </div>
