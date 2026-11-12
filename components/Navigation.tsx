@@ -62,7 +62,7 @@ export default function Navigation() {
     }, [isOpen]);
 
     return (
-        <nav className="fixed top-0 flex justify-center w-full z-60">
+        <nav className="site-nav fixed top-0 flex justify-center w-full z-60">
             <div
                 className={`flex w-full justify-center transition-all duration-300 ${
                     scrolled ? "backdrop-blur bg-black/50" : "bg-transparent"
