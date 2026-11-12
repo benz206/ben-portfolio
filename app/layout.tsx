@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
-import Providers from "./providers";
+import Providers, { roboto } from "./providers";
 import Layout from "@/components/Layout";
 import ViewCounter from "@/components/ViewCounter";
 import { CommandProvider } from "@/components/CommandPalette/CommandProvider";
@@ -53,7 +53,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" className={roboto.className} suppressHydrationWarning>
             <body>
                 <Providers>
                     <ViewCounter />
