@@ -14,7 +14,7 @@ const links = [
 ];
 
 export default function Navigation() {
-    const [scrollY, setScrollY] = useState(0);
+    const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     const [prevPathname, setPrevPathname] = useState(pathname);
@@ -33,7 +33,7 @@ export default function Navigation() {
             const containerScroll =
                 container instanceof HTMLElement ? container.scrollTop : 0;
             const windowScroll = window.scrollY;
-            setScrollY(Math.max(containerScroll, windowScroll));
+            setScrolled(Math.max(containerScroll, windowScroll) > 12);
         }
 
         updateScroll();
@@ -61,13 +61,11 @@ export default function Navigation() {
         if (!isOpen && dialog.open) dialog.close();
     }, [isOpen]);
 
-    const offset = scrollY > 12;
-
     return (
         <nav className="fixed top-0 flex justify-center w-full z-60">
             <div
                 className={`flex w-full justify-center transition-all duration-300 ${
-                    offset ? "backdrop-blur bg-black/50" : "bg-transparent"
+                    scrolled ? "backdrop-blur bg-black/50" : "bg-transparent"
                 }`}
             >
                 <div className="flex items-center w-11/12 h-16 max-w-270">
