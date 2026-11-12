@@ -11,7 +11,7 @@
     }
 
     body {
-        @apply transition-all duration-150 ease-linear bg-[#050506] text-[#f5f6f7];
+        @apply bg-[#050506] text-[#f5f6f7];
     }
 
     ol,
