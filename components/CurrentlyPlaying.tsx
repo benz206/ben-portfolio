@@ -1,6 +1,6 @@
 "use client";
 
-import { m, easeInOut } from "framer-motion";
+import { m, easeInOut, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { FaSpotify } from "react-icons/fa6";
@@ -21,6 +21,8 @@ export default function CurrentlyPlaying({
     error,
     currentProgress,
 }: CurrentlyPlayingProps) {
+    const reduceMotion = useReducedMotion();
+
     if (isLoading) {
         return (
             <Card
@@ -60,7 +62,7 @@ export default function CurrentlyPlaying({
                                 animate={{ width: "60%" }}
                                 transition={{
                                     duration: 2,
-                                    repeat: Infinity,
+                                    repeat: reduceMotion ? 0 : Infinity,
                                     ease: easeInOut,
                                 }}
                             />
