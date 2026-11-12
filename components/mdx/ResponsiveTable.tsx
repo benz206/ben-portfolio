@@ -1,5 +1,6 @@
 import { ReactNode, Children, isValidElement } from "react";
 import Card from "@/components/Card";
+import styles from "./ResponsiveTable.module.css";
 
 interface ResponsiveTableProps {
     children: ReactNode;
@@ -130,8 +131,11 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                 </div>
             )}
             <div
-                className={`my-6 overflow-x-auto ${
-                    hasData ? "hidden lg:block" : ""
+                tabIndex={0}
+                role="region"
+                aria-label="Scrollable table"
+                className={`my-6 overflow-x-auto ${styles.scroller} ${
+                    hasData ? "hidden lg:flex" : "flex"
                 }`}
             >
                 <table className="min-w-full border border-zinc-600 border-collapse">

@@ -1,0 +1,70 @@
+.scroller {
+    container-type: scroll-state;
+}
+
+.scroller::before,
+.scroller::after {
+    content: "";
+    position: sticky;
+    flex: none;
+    inline-size: 1rem;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.scroller::before {
+    inset-inline-start: 0;
+    margin-inline-end: -1rem;
+    background: radial-gradient(
+        farthest-side at 0 50%,
+        rgb(255 255 255 / 0.14),
+        transparent
+    );
+}
+
+.scroller::after {
+    inset-inline-end: 0;
+    margin-inline-start: -1rem;
+    background: radial-gradient(
+        farthest-side at 100% 50%,
+        rgb(255 255 255 / 0.14),
+        transparent
+    );
+}
+
+@container scroll-state(scrollable: inline-start) {
+    .scroller::before {
+        opacity: 1;
+    }
+}
+
+@container scroll-state(scrollable: inline-end) {
+    .scroller::after {
+        opacity: 1;
+    }
+}
+
+@supports not (container-type: scroll-state) {
+    .scroller::before,
+    .scroller::after {
+        animation: show-shadow linear both;
+        animation-timeline: scroll(inline);
+    }
+
+    .scroller::before {
+        animation-range: 0 2rem;
+    }
+
+    .scroller::after {
+        animation-direction: reverse;
+        animation-range: calc(100% - 2rem) 100%;
+    }
+}
+
+@keyframes show-shadow {
+    to {
+        opacity: 1;
+    }
+}
