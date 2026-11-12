@@ -20,6 +20,7 @@ type ImageT = {
     format: string;
     width: number;
     height: number;
+    alt: string;
 };
 
 const boxAnim: Variants = {
@@ -84,6 +85,7 @@ function MasonryTile({
 }) {
     return (
         <m.button
+            aria-haspopup="dialog"
             type="button"
             className="block w-full overflow-hidden rounded-xl transition duration-200 group hover:brightness-110"
             onClick={() => onSelect(image)}
@@ -101,7 +103,7 @@ function MasonryTile({
                 <CldImage
                     fill
                     src={image.public_id}
-                    alt={image.public_id}
+                    alt={image.alt}
                     placeholder="blur"
                     blurDataURL={placeholder}
                     loading="lazy"
@@ -260,7 +262,7 @@ export default function GalleryClient({
                                         width={selectedImage.width}
                                         height={selectedImage.height}
                                         src={selectedImage.public_id}
-                                        alt={selectedImage.public_id}
+                                        alt={selectedImage.alt}
                                         placeholder="blur"
                                         blurDataURL={
                                             placeholders[
