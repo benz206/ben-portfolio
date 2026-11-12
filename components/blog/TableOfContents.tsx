@@ -59,7 +59,7 @@ function TOCNav({
 }: {
     headings: Heading[];
     activeId: string;
-    onSelect: (id: string) => void;
+    onSelect: (e: React.MouseEvent<HTMLAnchorElement>, id: string) => void;
 }) {
     return (
         <nav aria-label="Table of contents">
@@ -75,8 +75,10 @@ function TOCNav({
                             {isActive && (
                                 <div className="absolute left-0 top-0.5 bottom-0.5 w-0.5 rounded-full bg-white/70" />
                             )}
-                            <button
-                                onClick={() => onSelect(id)}
+                            <a
+                                href={`#${id}`}
+                                onClick={(e) => onSelect(e, id)}
+                                aria-current={isActive ? "location" : undefined}
                                 className={cn(
                                     "flex w-full items-center gap-1.5 text-left text-[13px] leading-snug transition-colors duration-150",
                                     level === 3 ? "pl-4" : "pl-2.5",
@@ -94,7 +96,7 @@ function TOCNav({
                                     )}
                                 />
                                 <span className="truncate">{text}</span>
-                            </button>
+                            </a>
                         </li>
                     );
                 })}
@@ -167,15 +169,27 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
         };
     }, [headings]);
 
-    const scrollTo = useCallback((id: string) => {
-        setActiveId(id);
-        manualScrollTarget.current = id;
-        const el = document.getElementById(id);
-        if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-        dialogRef.current?.close();
-    }, []);
+    const scrollTo = useCallback(
+        (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            dialogRef.current?.close();
+            setActiveId(id);
+            manualScrollTarget.current = id;
+            const el = document.getElementById(id);
+            if (el) {
+                const reduceMotion = window.matchMedia(
+                    "(prefers-reduced-motion: reduce)",
+                ).matches;
+                el.scrollIntoView({
+                    behavior: reduceMotion ? "auto" : "smooth",
+                    block: "start",
+                });
+            }
+            history.pushState(null, "", `#${id}`);
+        },
+        [],
+    );
 
     const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
         if ("closedBy" in HTMLDialogElement.prototype) return;
@@ -256,8 +270,14 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                                 const Icon = level === 3 ? H3Icon : H2Icon;
                                 return (
                                     <li key={id}>
-                                        <button
-                                            onClick={() => scrollTo(id)}
+                                        <a
+                                            href={`#${id}`}
+                                            onClick={(e) => scrollTo(e, id)}
+                                            aria-current={
+                                                activeId === id
+                                                    ? "location"
+                                                    : undefined
+                                            }
                                             className={cn(
                                                 "flex w-full items-center gap-2 text-left text-sm",
                                                 level === 3
@@ -267,7 +287,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                                         >
                                             <Icon className="shrink-0 text-white/40" />
                                             <span>{text}</span>
-                                        </button>
+                                        </a>
                                     </li>
                                 );
                             })}
