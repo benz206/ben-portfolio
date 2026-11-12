@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent, type ReactNode } from "react";
+import {
+    useEffect,
+    useId,
+    useRef,
+    type PointerEvent,
+    type ReactNode,
+} from "react";
 import { FiArrowDown, FiArrowUp, FiCornerDownLeft } from "react-icons/fi";
 import Card from "@/components/Card";
 import Eyebrow from "@/components/Eyebrow";
@@ -89,6 +95,9 @@ export default function CommandPaletteModal({
     const pressedOutside = useRef(false);
     const listRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const id = useId();
+    const listboxId = `${id}-listbox`;
+    const optionId = (index: number) => `${id}-option-${index}`;
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -131,6 +140,16 @@ export default function CommandPaletteModal({
                     <div className="flex-1">
                         <input
                             autoFocus
+                            role="combobox"
+                            aria-label="Search commands"
+                            aria-expanded={sections.length > 0}
+                            aria-controls={listboxId}
+                            aria-activedescendant={
+                                filtered[activeIndex]
+                                    ? optionId(activeIndex)
+                                    : undefined
+                            }
+                            aria-autocomplete="list"
                             value={search}
                             onChange={(event) => {
                                 setSearch(event.target.value);
@@ -140,18 +159,29 @@ export default function CommandPaletteModal({
                         />
                     </div>
                 </div>
+                {sections.length === 0 && (
+                    <div className="px-4 py-12 text-sm text-center text-white/60">
+                        No commands found.
+                    </div>
+                )}
                 <div
                     ref={listRef}
+                    id={listboxId}
+                    role="listbox"
+                    aria-label="Commands"
                     className="command-scroll max-h-80 overflow-y-auto"
                 >
-                    {sections.length === 0 && (
-                        <div className="px-4 py-12 text-sm text-center text-white/60">
-                            No commands found.
-                        </div>
-                    )}
-                    {sections.map((section) => (
-                        <div key={section.name} className="px-2 py-3">
-                            <div className="px-2 pb-2 text-xs font-medium uppercase tracking-[0.2em] text-white/40">
+                    {sections.map((section, sectionIndex) => (
+                        <div
+                            key={section.name}
+                            role="group"
+                            aria-labelledby={`${id}-section-${sectionIndex}`}
+                            className="px-2 py-3"
+                        >
+                            <div
+                                id={`${id}-section-${sectionIndex}`}
+                                className="px-2 pb-2 text-xs font-medium uppercase tracking-[0.2em] text-white/40"
+                            >
                                 {section.name}
                             </div>
                             <div className="flex flex-col">
@@ -168,6 +198,10 @@ export default function CommandPaletteModal({
                                                 }
                                             }}
                                             type="button"
+                                            role="option"
+                                            id={optionId(index)}
+                                            aria-selected={isActive}
+                                            tabIndex={-1}
                                             onMouseEnter={() =>
                                                 setActiveIndex(index)
                                             }
