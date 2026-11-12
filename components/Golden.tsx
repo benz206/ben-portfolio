@@ -3,8 +3,9 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { m, easeOut } from "framer-motion";
 import { useGoldenRows } from "@/components/Golden/useGoldenRows";
-import { useHorizontalLoop } from "@/components/Golden/useHorizontalLoop";
 import { useTypedText } from "@/components/Golden/useTypedText";
+
+const PIXELS_PER_SECOND = 20;
 
 interface GoldenPerson {
     name: string;
@@ -28,29 +29,26 @@ function getShortDescription(text: string, maxLength: number = 120): string {
 export default function Golden({ people }: GoldenProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const rowRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const timelinesRef = useRef<gsap.core.Timeline[]>([]);
-
-    const setTimelinesPaused = (paused: boolean) => {
-        timelinesRef.current.forEach((t) => {
-            if (!t) return;
-            if (paused) t.pause();
-            else t.resume();
-        });
-    };
 
     const { rows, rowOffsets } = useGoldenRows(people, 3);
-    const horizontalLoop = useHorizontalLoop();
 
     useEffect(() => {
         const style = document.createElement("style");
         style.textContent = `
-            .fade-mask {
-                -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
-                mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
-                -webkit-mask-repeat: no-repeat;
-                mask-repeat: no-repeat;
-                -webkit-mask-size: 100% 100%;
-                mask-size: 100% 100%;
+            @media (prefers-reduced-motion: no-preference) {
+                .fade-mask {
+                    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
+                    mask-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 7%, rgba(0,0,0,1) 93%, rgba(0,0,0,0));
+                    -webkit-mask-repeat: no-repeat;
+                    mask-repeat: no-repeat;
+                    -webkit-mask-size: 100% 100%;
+                    mask-size: 100% 100%;
+                }
+            }
+            @keyframes golden-marquee {
+                to {
+                    transform: translateX(-50%);
+                }
             }
         `;
         document.head.appendChild(style);
@@ -61,33 +59,26 @@ export default function Golden({ people }: GoldenProps) {
     }, []);
 
     useEffect(() => {
-        timelinesRef.current.forEach((t) => t?.kill());
-        timelinesRef.current = [];
-        rowRefs.current.forEach((rowEl, rowIndex) => {
-            if (!rowEl) return;
-            const items = rowEl.querySelectorAll('[data-person-item="true"]');
-            if (items.length === 0) return;
-            const tl = horizontalLoop(items, {
-                speed: 0.2,
-                paused: false,
-                reversed: rowIndex % 2 === 1,
+        const observer = new ResizeObserver((entries) => {
+            entries.forEach(({ target, contentRect }) => {
+                (target as HTMLElement).style.setProperty(
+                    "--marquee-duration",
+                    `${contentRect.width / 2 / PIXELS_PER_SECOND}s`,
+                );
             });
-            timelinesRef.current[rowIndex] = tl;
         });
-        return () => {
-            timelinesRef.current.forEach((t) => t?.kill());
-            timelinesRef.current = [];
-        };
-    }, [rows, horizontalLoop]);
+        rowRefs.current.forEach((rowEl) => {
+            if (rowEl) observer.observe(rowEl);
+        });
+        return () => observer.disconnect();
+    }, [rows]);
 
     const handleMouseEnter = (index: number) => {
         setHoveredIndex(index);
-        setTimelinesPaused(true);
     };
 
     const handleMouseLeave = () => {
         setHoveredIndex(null);
-        setTimelinesPaused(false);
     };
 
     const renderPerson = (
@@ -101,7 +92,6 @@ export default function Golden({ people }: GoldenProps) {
         return (
             <div
                 key={`${person.name}-${actualIndex}`}
-                data-person-item="true"
                 className="relative shrink-0 whitespace-nowrap cursor-pointer group"
                 onMouseEnter={() => handleMouseEnter(actualIndex)}
                 onMouseLeave={handleMouseLeave}
@@ -174,13 +164,26 @@ export default function Golden({ people }: GoldenProps) {
                             ref={(el: HTMLDivElement | null) => {
                                 rowRefs.current[rowIndex] = el;
                             }}
-                            className="flex flex-nowrap items-center"
-                            style={{ gap: "0px" }}
+                            className="flex flex-nowrap items-center w-max motion-safe:animate-[golden-marquee_var(--marquee-duration)_linear_infinite] motion-reduce:w-auto"
+                            style={{
+                                gap: "0px",
+                                animationDirection:
+                                    rowIndex % 2 === 1 ? "reverse" : "normal",
+                                animationPlayState:
+                                    hoveredIndex === null
+                                        ? "running"
+                                        : "paused",
+                            }}
                         >
                             {[...Array(2)].map((_, loopIndex) => (
                                 <div
                                     key={`row-${rowIndex}-loop-${loopIndex}`}
-                                    className="flex flex-nowrap items-center"
+                                    aria-hidden={loopIndex === 1 || undefined}
+                                    className={
+                                        loopIndex === 1
+                                            ? "flex flex-nowrap items-center motion-reduce:hidden"
+                                            : "flex flex-nowrap items-center motion-reduce:flex-wrap motion-reduce:justify-center"
+                                    }
                                 >
                                     {row.map((person, index) =>
                                         renderPerson(
