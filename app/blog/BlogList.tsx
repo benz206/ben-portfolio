@@ -128,6 +128,8 @@ function FeaturedPost({ post }: { post: BlogListPost }) {
                                 alt={post.previewImage.alt || ""}
                                 fill
                                 sizes="(min-width: 1024px) 640px, 100vw"
+                                loading="eager"
+                                fetchPriority="high"
                                 className="object-cover"
                             />
                         ) : (
