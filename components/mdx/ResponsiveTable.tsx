@@ -130,6 +130,9 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                 </div>
             )}
             <div
+                tabIndex={0}
+                role="region"
+                aria-label="Scrollable table"
                 className={`my-6 overflow-x-auto ${
                     hasData ? "hidden lg:block" : ""
                 }`}
