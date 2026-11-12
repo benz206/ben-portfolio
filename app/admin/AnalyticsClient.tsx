@@ -577,18 +577,25 @@ export default function AnalyticsClient() {
                                 <h1 className="text-base font-medium text-white">
                                     Analytics
                                 </h1>
-                                <p className="text-xs text-white/40">
+                                <label
+                                    htmlFor="admin-password"
+                                    className="block text-xs text-white/40"
+                                >
                                     Enter password to continue
-                                </p>
+                                </label>
                             </div>
                         </div>
                         <input
+                            id="admin-password"
+                            name="password"
                             type="password"
+                            autoComplete="current-password"
+                            required
                             autoFocus
                             value={key}
                             onChange={(e) => setKey(e.target.value)}
                             placeholder="Password"
-                            className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-white/30"
+                            className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-white/30 focus-visible:ring-2 focus-visible:ring-white/60"
                         />
                         {error && (
                             <p className="mt-3 text-sm text-red-400/80">
