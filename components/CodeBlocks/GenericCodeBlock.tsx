@@ -1,8 +1,9 @@
 "use client";
 
 import { PrismTheme } from "prism-react-renderer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { m } from "framer-motion";
+import { cn } from "@/utils/cn";
 
 type CodeBlockProps = {
     code: string;
@@ -31,7 +32,9 @@ const catppuccinMochaTheme: PrismTheme = {
 };
 
 export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
-    const [isCopied, setIsCopied] = useState("Copy");
+    const [copyStatus, setCopyStatus] = useState("");
+    const copyTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+    const lastCopyStatus = useRef("");
     const [CodeBlock, setCodeBlock] = useState<any>(null);
 
     useEffect(() => {
@@ -48,14 +51,23 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
         loadCodeBlock();
     }, []);
 
-    const copyCode = () => {
-        navigator.clipboard.writeText(code).catch((error) => {
+    const copyCode = async () => {
+        let message = "Copied!";
+        try {
+            await navigator.clipboard.writeText(code);
+        } catch (error) {
             console.error("Failed to copy code", error);
-        });
-        setIsCopied("Copied!");
+            message = "Copy failed";
+        }
+        if (message === lastCopyStatus.current) message += "\u00A0";
+        lastCopyStatus.current = message;
 
-        setTimeout(() => {
-            setIsCopied("Copy");
+        clearTimeout(copyTimeout.current);
+        setCopyStatus("");
+        requestAnimationFrame(() => setCopyStatus(message));
+
+        copyTimeout.current = setTimeout(() => {
+            setCopyStatus("");
         }, 1500);
     };
 
@@ -81,12 +93,23 @@ export default function GenericCodeBlock({ code, language }: CodeBlockProps) {
                     </div>
                 </CodeBlock.Code>
 
-                <m.button
-                    className="bg-[#333333] text-white hover:text-[#9cdcfe] rounded-full px-3.5 py-1.5 absolute top-2 right-2 text-sm font-semibold duration-500 ease-in-out transition-all"
-                    onClick={copyCode}
-                >
-                    {isCopied}
-                </m.button>
+                <div className="absolute top-2 right-2 flex">
+                    <m.button
+                        className="bg-[#333333] text-white hover:text-[#9cdcfe] rounded-full px-3.5 py-1.5 text-sm font-semibold duration-500 ease-in-out transition-all"
+                        onClick={copyCode}
+                    >
+                        Copy
+                    </m.button>
+                    <span
+                        role="status"
+                        className={cn(
+                            "pointer-events-none absolute top-0 right-0 bg-[#333333] text-white rounded-full px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap opacity-0",
+                            copyStatus && "opacity-100",
+                        )}
+                    >
+                        {copyStatus}
+                    </span>
+                </div>
             </m.div>
         </CodeBlock>
     );
