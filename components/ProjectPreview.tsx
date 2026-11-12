@@ -9,6 +9,7 @@ import { AmbientGradient } from "@/components/AmbientGradient";
 
 type PreviewProps = ProjectPreviewProps & {
     index?: number;
+    priority?: boolean;
     onSelect?: () => void;
 };
 
@@ -20,6 +21,7 @@ export default function ProjectPreview({
     languages,
     color,
     index = 0,
+    priority = false,
     onSelect,
 }: PreviewProps) {
     const accent = colorVariants[color] || colorVariants.default;
@@ -59,8 +61,8 @@ export default function ProjectPreview({
                             width={image.width || 1200}
                             height={image.height || 800}
                             alt={image.alt}
-                            loading={image.priority ? "eager" : "lazy"}
-                            priority={image.priority}
+                            loading={priority ? "eager" : "lazy"}
+                            fetchPriority={priority ? "high" : undefined}
                         />
                         <div className="absolute inset-0 transition-opacity duration-700 pointer-events-none bg-linear-to-t to-transparent from-black/70 via-black/20 group-hover:from-black/55" />
                         <div className="absolute transition-opacity duration-700 rounded-lg opacity-0 pointer-events-none -inset-1 bg-linear-to-br via-transparent blur-2xl from-white/20 to-white/10 group-hover:opacity-60" />

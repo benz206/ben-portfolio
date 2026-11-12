@@ -7,7 +7,6 @@ export type ProjectPreviewProps = {
         alt: string;
         width?: number;
         height?: number;
-        priority?: boolean;
     };
     title: string;
     sub: string;
