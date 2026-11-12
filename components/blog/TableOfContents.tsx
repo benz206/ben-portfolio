@@ -113,6 +113,14 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
     );
     const manualScrollTarget = useRef<string | null>(null);
     const scrollEndTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const dialogRef = useRef<HTMLDialogElement>(null);
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+        if (mobileOpen && !dialog.open) dialog.showModal();
+        else if (!mobileOpen && dialog.open) dialog.close();
+    }, [mobileOpen]);
 
     useEffect(() => {
         if (headings.length === 0) return;
@@ -166,8 +174,21 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
         if (el) {
             el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-        setMobileOpen(false);
+        dialogRef.current?.close();
     }, []);
+
+    const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+        if ("closedBy" in HTMLDialogElement.prototype) return;
+        const dialog = e.currentTarget;
+        if (e.target !== dialog) return;
+        const rect = dialog.getBoundingClientRect();
+        const inside =
+            rect.top <= e.clientY &&
+            e.clientY <= rect.bottom &&
+            rect.left <= e.clientX &&
+            e.clientX <= rect.right;
+        if (!inside) dialog.close();
+    };
 
     const mobileUI = (
         <>
@@ -192,27 +213,23 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                 </svg>
             </button>
 
-            {mobileOpen && (
-                <div
-                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
-                    onClick={() => setMobileOpen(false)}
-                    aria-hidden="true"
-                />
-            )}
-
-            <div
-                className={cn(
-                    "fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-t border-white/10 bg-[#0d0f16] px-6 pb-8 pt-5 transition-transform duration-300 lg:hidden",
-                    mobileOpen ? "translate-y-0" : "translate-y-full",
-                )}
-                aria-hidden={!mobileOpen}
+            <dialog
+                ref={dialogRef}
+                aria-labelledby="toc-dialog-title"
+                onClose={() => setMobileOpen(false)}
+                onClick={handleDialogClick}
+                {...({ closedby: "any" } as Record<string, string>)}
+                className="inset-x-0 top-auto bottom-0 m-0 w-full max-w-none overscroll-contain rounded-t-2xl border-t border-white/10 bg-[#0d0f16] px-6 pb-8 pt-5 transition-[translate,display,overlay] transition-discrete duration-300 backdrop:overflow-hidden backdrop:overscroll-contain backdrop:bg-black/60 backdrop:backdrop-blur-sm motion-safe:translate-y-full motion-safe:open:translate-y-0 motion-safe:starting:open:translate-y-full"
             >
                 <div className="mb-5 flex items-center justify-between">
-                    <span className="text-sm font-medium text-white/80">
+                    <span
+                        id="toc-dialog-title"
+                        className="text-sm font-medium text-white/80"
+                    >
                         On this page
                     </span>
                     <button
-                        onClick={() => setMobileOpen(false)}
+                        onClick={() => dialogRef.current?.close()}
                         aria-label="Close table of contents"
                         className="text-white/40 transition-colors hover:text-white/70"
                     >
@@ -257,7 +274,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                         </ul>
                     </nav>
                 </div>
-            </div>
+            </dialog>
         </>
     );
 
