@@ -46,10 +46,9 @@ export function useCommandKeyboard({
 
             if (!isOpen) return;
 
-            if (event.key === "Escape") {
+            if (event.key === "Escape" && viewStackDepth > 0) {
                 event.preventDefault();
-                if (viewStackDepth > 0) popView();
-                else close();
+                popView();
             }
             if (event.key === "ArrowDown") {
                 event.preventDefault();
