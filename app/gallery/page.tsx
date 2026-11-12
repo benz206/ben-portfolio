@@ -12,9 +12,14 @@ type ImageT = {
     format: string;
     width: number;
     height: number;
+    alt: string;
 };
 
-type CloudinaryResource = ImageT & Record<string, unknown>;
+type ContextFields = { alt?: string; caption?: string };
+
+type CloudinaryResource = Omit<ImageT, "alt"> & {
+    context?: ContextFields & { custom?: ContextFields };
+} & Record<string, unknown>;
 
 cloudinary.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
@@ -26,14 +31,23 @@ async function fetchImages(): Promise<ImageT[]> {
     try {
         const result = await cloudinary.search
             .sort_by("uploaded_at", "desc")
+            .with_field("context")
             .max_results(50)
             .execute();
-        return (result.resources as CloudinaryResource[]).map((r) => ({
-            public_id: r.public_id,
-            format: r.format,
-            width: r.width,
-            height: r.height,
-        }));
+        const resources = result.resources as CloudinaryResource[];
+        return resources.map((r, i) => {
+            const context = { ...r.context, ...r.context?.custom };
+            return {
+                public_id: r.public_id,
+                format: r.format,
+                width: r.width,
+                height: r.height,
+                alt:
+                    context.alt ||
+                    context.caption ||
+                    `Photo ${i + 1} of ${resources.length}`,
+            };
+        });
     } catch {
         return [];
     }
