@@ -33,10 +33,12 @@ function ProjectGrid({
     projects,
     onSelect,
     animationKey,
+    prioritizeFirst = false,
 }: {
     projects: ProjectPreviewProps[];
     onSelect: (project: ProjectPreviewProps) => void;
     animationKey: string;
+    prioritizeFirst?: boolean;
 }) {
     return (
         <m.ul
@@ -51,6 +53,7 @@ function ProjectGrid({
                     key={project.title}
                     {...project}
                     index={index}
+                    priority={prioritizeFirst && index === 0}
                     onSelect={() => onSelect(project)}
                 />
             ))}
@@ -158,6 +161,7 @@ function ProjectsContent() {
                                 projects={featuredProjects}
                                 onSelect={handleOpen}
                                 animationKey="featured"
+                                prioritizeFirst
                             />
                         </div>
                         <div className="flex flex-col gap-8">
