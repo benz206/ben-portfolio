@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { m, AnimatePresence } from "framer-motion";
 
 type Stage = "name" | "questions" | "success" | "failed" | "rate-limited";
@@ -15,6 +15,7 @@ export default function MessagesClient() {
     const [retryAfter, setRetryAfter] = useState(0);
     const [loading, setLoading] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
+    const fieldId = useId();
 
     useEffect(() => {
         nameInputRef.current?.focus();
@@ -127,14 +128,22 @@ export default function MessagesClient() {
                                 }}
                                 className="w-full flex flex-col gap-4"
                             >
+                                <label
+                                    htmlFor={`${fieldId}-name`}
+                                    className="sr-only"
+                                >
+                                    Full name
+                                </label>
                                 <input
                                     ref={nameInputRef}
+                                    id={`${fieldId}-name`}
+                                    name="name"
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Full name"
-                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/25 outline-none transition-colors focus:border-white/25 focus:bg-white/[0.07]"
-                                    autoComplete="off"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/25 outline-none transition-colors focus:border-white/25 focus:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-white/60"
+                                    autoComplete="name"
                                 />
                                 <button
                                     type="submit"
@@ -188,10 +197,15 @@ export default function MessagesClient() {
                                         }}
                                         className="space-y-2"
                                     >
-                                        <label className="block text-sm text-white/60">
+                                        <label
+                                            htmlFor={`${fieldId}-answer-${i}`}
+                                            className="block text-sm text-white/60"
+                                        >
                                             {q}
                                         </label>
                                         <input
+                                            id={`${fieldId}-answer-${i}`}
+                                            name={`answer-${i}`}
                                             type="text"
                                             value={answers[i]}
                                             onChange={(e) => {
@@ -199,7 +213,7 @@ export default function MessagesClient() {
                                                 next[i] = e.target.value;
                                                 setAnswers(next);
                                             }}
-                                            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/25 outline-none transition-colors focus:border-white/25 focus:bg-white/[0.07]"
+                                            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/25 outline-none transition-colors focus:border-white/25 focus:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-white/60"
                                             autoComplete="off"
                                             autoFocus={i === 0}
                                         />
