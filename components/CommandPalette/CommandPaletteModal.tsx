@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, type PointerEvent, type ReactNode } from "react";
 import { FiArrowDown, FiArrowUp, FiCornerDownLeft } from "react-icons/fi";
 import Card from "@/components/Card";
 import Eyebrow from "@/components/Eyebrow";
@@ -24,7 +23,19 @@ type Props = {
     setSearch: (value: string) => void;
     setActiveIndex: (index: number) => void;
     runCommand: (command: CommandDescriptor) => void;
+    close: () => void;
+    popView: () => void;
 };
+
+function isOutside(event: PointerEvent<HTMLDialogElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    return (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+    );
+}
 
 function Kbd({
     children,
@@ -71,16 +82,17 @@ export default function CommandPaletteModal({
     setSearch,
     setActiveIndex,
     runCommand,
+    close,
+    popView,
 }: Props) {
-    const searchRef = useRef<HTMLInputElement>(null);
+    const dialogRef = useRef<HTMLDialogElement>(null);
+    const pressedOutside = useRef(false);
     const listRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
     useEffect(() => {
-        const focusTimeout = setTimeout(() => {
-            searchRef.current?.focus();
-        }, 10);
-        return () => clearTimeout(focusTimeout);
+        const dialog = dialogRef.current;
+        if (dialog && !dialog.open) dialog.showModal();
     }, []);
 
     useEffect(() => {
@@ -89,8 +101,23 @@ export default function CommandPaletteModal({
         el.scrollIntoView({ block: "nearest" });
     }, [activeIndex, filtered]);
 
-    return createPortal(
-        <div className="fixed inset-0 z-999 flex items-start justify-center bg-black/60 backdrop-blur-sm px-4 pt-[15vh] sm:px-6">
+    return (
+        <dialog
+            ref={dialogRef}
+            aria-label="Command palette"
+            closedby="any"
+            onClose={close}
+            onPointerDown={(event) => {
+                pressedOutside.current = isOutside(event);
+            }}
+            onPointerUp={(event) => {
+                if ("closedBy" in HTMLDialogElement.prototype) return;
+                if (pressedOutside.current && isOutside(event)) {
+                    event.currentTarget.close();
+                }
+            }}
+            className="mx-auto mt-[15vh] w-[calc(100%-2rem)] max-w-xl bg-transparent overscroll-contain transition-[opacity,scale] duration-150 starting:opacity-0 motion-safe:starting:scale-95 sm:w-[calc(100%-3rem)] backdrop:overflow-hidden backdrop:overscroll-contain backdrop:bg-black/60 backdrop:backdrop-blur-sm backdrop:transition-opacity backdrop:duration-150 starting:backdrop:opacity-0"
+        >
             <Card
                 variant="glass"
                 className="overflow-hidden p-1! w-full max-w-xl border border-white/10 bg-black/70"
@@ -103,7 +130,7 @@ export default function CommandPaletteModal({
                     )}
                     <div className="flex-1">
                         <input
-                            ref={searchRef}
+                            autoFocus
                             value={search}
                             onChange={(event) => {
                                 setSearch(event.target.value);
@@ -211,14 +238,22 @@ export default function CommandPaletteModal({
                                 }
                             />
                         )}
-                        <ActionHint
-                            keys={["esc"]}
-                            label={viewStackTopId ? "Back" : "Close"}
-                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (viewStackTopId) popView();
+                                else dialogRef.current?.close();
+                            }}
+                            className="cursor-pointer rounded"
+                        >
+                            <ActionHint
+                                keys={["esc"]}
+                                label={viewStackTopId ? "Back" : "Close"}
+                            />
+                        </button>
                     </div>
                 </div>
             </Card>
-        </div>,
-        document.body,
+        </dialog>
     );
 }

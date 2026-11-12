@@ -162,6 +162,8 @@ export function CommandProvider({ children }: { children: ReactNode }) {
                     setSearch={actions.setSearch}
                     setActiveIndex={actions.setActiveIndex}
                     runCommand={runCommand}
+                    close={actions.close}
+                    popView={actions.popView}
                 />
             )}
         </CommandContext.Provider>
