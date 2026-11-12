@@ -1,0 +1,23 @@
+::view-transition-group(.page-fade) {
+    animation-duration: 200ms;
+    animation-timing-function: ease-out;
+}
+
+html:active-view-transition .site-nav {
+    view-transition-name: site-nav;
+}
+
+::view-transition-group(site-nav),
+::view-transition-new(site-nav) {
+    animation: none;
+}
+
+::view-transition-old(site-nav) {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(.page-fade) {
+        animation-duration: 0s;
+    }
+}
