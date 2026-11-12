@@ -13,7 +13,7 @@ export default function SpotifyTopSection() {
     return (
         <section
             id="home-next-section"
-            className="relative flex items-center justify-center min-h-screen py-24 text-white home-section bg-noir-gradient-spotify"
+            className="relative flex items-center justify-center min-h-screen py-24 text-white home-section bg-noir-gradient-spotify [content-visibility:auto] [contain-intrinsic-size:auto_none_auto_100dvh]"
         >
             <div className="absolute inset-0 opacity-90 bg-noir-radial-spotify" />
 
