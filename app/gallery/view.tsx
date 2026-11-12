@@ -1,14 +1,16 @@
 "use client";
 
-import { AnimatePresence, m, type Variants } from "framer-motion";
+import { m, type Variants } from "framer-motion";
 import { CldImage } from "next-cloudinary";
 import {
     useCallback,
     useEffect,
-    useEffectEvent,
     useMemo,
+    useRef,
     useState,
+    type MouseEvent,
 } from "react";
+import { FiX } from "react-icons/fi";
 import ScatteredGradients from "@/components/blog/ScatteredGradients";
 import { cn } from "@/utils/cn";
 import Eyebrow from "@/components/Eyebrow";
@@ -126,6 +128,9 @@ export default function GalleryClient({
     colors: Record<string, RgbColor>;
 }) {
     const [selectedImage, setSelectedImage] = useState<ImageT | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const dialogRef = useRef<HTMLDialogElement>(null);
+    const imageRef = useRef<HTMLDivElement>(null);
     const columnCount = useColumnCount();
     const columns = useMemo(
         () => distributeIntoColumns(images, columnCount),
@@ -134,28 +139,25 @@ export default function GalleryClient({
 
     const handleSelect = useCallback((image: ImageT) => {
         setSelectedImage(image);
+        setIsOpen(true);
     }, []);
 
     const handleClose = useCallback(() => {
-        setSelectedImage(null);
+        setIsOpen(false);
     }, []);
 
-    const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
-        if (event.key === "Escape") {
-            event.preventDefault();
-            handleClose();
+    const handleDialogClick = (event: MouseEvent<HTMLDialogElement>) => {
+        if (!imageRef.current?.contains(event.target as Node)) {
+            dialogRef.current?.close();
         }
-    });
+    };
 
     useEffect(() => {
-        if (!selectedImage) return;
-        document.body.style.overflow = "hidden";
-        window.addEventListener("keydown", onKeyDown);
-        return () => {
-            document.body.style.overflow = "";
-            window.removeEventListener("keydown", onKeyDown);
-        };
-    }, [selectedImage]);
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+        if (isOpen && !dialog.open) dialog.showModal();
+        if (!isOpen && dialog.open) dialog.close();
+    }, [isOpen]);
 
     return (
         <section className="relative overflow-hidden bg-[#05070f] text-white">
@@ -181,7 +183,7 @@ export default function GalleryClient({
                 <m.div
                     className={cn(
                         "flex w-full min-h-[60vh] gap-4",
-                        selectedImage && "blur-sm",
+                        isOpen && "blur-sm",
                     )}
                     variants={boxAnim}
                     initial="hidden"
@@ -205,73 +207,76 @@ export default function GalleryClient({
                 </m.div>
             </div>
 
-            <AnimatePresence>
-                {selectedImage && (
-                    <m.div
-                        className="fixed inset-0 z-50 flex cursor-pointer items-center justify-center backdrop-blur-md"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        onClick={handleClose}
-                    >
-                        {(() => {
-                            const rgb = colors[selectedImage.public_id] ?? [
-                                12, 12, 14,
-                            ];
-                            const [r, g, b] = rgb;
-                            return (
-                                <>
-                                    <div
-                                        className="pointer-events-none absolute inset-0"
-                                        style={{
-                                            background: `radial-gradient(ellipse at center, rgba(${r}, ${g}, ${b}, 0.55), rgba(${Math.round(r * 0.25)}, ${Math.round(g * 0.25)}, ${Math.round(b * 0.25)}, 0.85) 70%, rgba(5, 5, 8, 0.92) 100%)`,
-                                            transition:
-                                                "background 350ms ease",
-                                        }}
-                                        aria-hidden
+            <dialog
+                ref={dialogRef}
+                {...({ closedby: "any" } as Record<string, string>)}
+                aria-label="Photo viewer"
+                onClose={handleClose}
+                onClick={handleDialogClick}
+                className="group fixed inset-0 m-0 h-full max-h-none w-full max-w-none cursor-pointer items-center justify-center overscroll-contain bg-transparent text-white opacity-0 backdrop-blur-md transition-[opacity,display,overlay] duration-250 transition-discrete open:flex open:opacity-100 starting:open:opacity-0 motion-reduce:duration-100 backdrop:overflow-hidden backdrop:overscroll-contain backdrop:bg-transparent"
+            >
+                {selectedImage &&
+                    (() => {
+                        const rgb = colors[selectedImage.public_id] ?? [
+                            12, 12, 14,
+                        ];
+                        const [r, g, b] = rgb;
+                        return (
+                            <>
+                                <div
+                                    className="pointer-events-none absolute inset-0"
+                                    style={{
+                                        background: `radial-gradient(ellipse at center, rgba(${r}, ${g}, ${b}, 0.55), rgba(${Math.round(r * 0.25)}, ${Math.round(g * 0.25)}, ${Math.round(b * 0.25)}, 0.85) 70%, rgba(5, 5, 8, 0.92) 100%)`,
+                                        transition: "background 350ms ease",
+                                    }}
+                                    aria-hidden
+                                />
+                                <div
+                                    className="pointer-events-none absolute inset-0"
+                                    style={{
+                                        background: `radial-gradient(circle at 50% 50%, rgba(${r}, ${g}, ${b}, 0.35), transparent 55%)`,
+                                        filter: "blur(90px)",
+                                        transition: "background 350ms ease",
+                                    }}
+                                    aria-hidden
+                                />
+                                <form
+                                    method="dialog"
+                                    className="absolute right-4 top-4 z-10"
+                                >
+                                    <button
+                                        aria-label="Close"
+                                        className="flex size-10 items-center justify-center rounded-full bg-black/40 text-white/80 backdrop-blur transition hover:bg-black/60 hover:text-white"
+                                    >
+                                        <FiX size={20} aria-hidden />
+                                    </button>
+                                </form>
+                                <div
+                                    ref={imageRef}
+                                    className="relative cursor-default opacity-0 transition-[opacity,scale] duration-300 ease-out group-open:opacity-100 starting:group-open:opacity-0 motion-safe:scale-94 motion-safe:group-open:scale-100 motion-safe:starting:group-open:scale-94 motion-reduce:duration-100"
+                                >
+                                    <CldImage
+                                        className="max-h-[80vh] w-auto max-w-[90vw] rounded-xl object-contain shadow-2xl shadow-black/30"
+                                        width={selectedImage.width}
+                                        height={selectedImage.height}
+                                        src={selectedImage.public_id}
+                                        alt={selectedImage.public_id}
+                                        placeholder="blur"
+                                        blurDataURL={
+                                            placeholders[
+                                                selectedImage.public_id
+                                            ]
+                                        }
+                                        crop="fill"
+                                        quality="auto"
+                                        dpr="auto"
+                                        format="webp"
                                     />
-                                    <div
-                                        className="pointer-events-none absolute inset-0"
-                                        style={{
-                                            background: `radial-gradient(circle at 50% 50%, rgba(${r}, ${g}, ${b}, 0.35), transparent 55%)`,
-                                            filter: "blur(90px)",
-                                            transition:
-                                                "background 350ms ease",
-                                        }}
-                                        aria-hidden
-                                    />
-                                </>
-                            );
-                        })()}
-                        <m.div
-                            key={selectedImage.public_id}
-                            className="relative cursor-default"
-                            initial={{ opacity: 0, scale: 0.94 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.94 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <CldImage
-                                className="max-h-[80vh] w-auto max-w-[90vw] rounded-xl object-contain shadow-2xl shadow-black/30"
-                                width={selectedImage.width}
-                                height={selectedImage.height}
-                                src={selectedImage.public_id}
-                                alt={selectedImage.public_id}
-                                placeholder="blur"
-                                blurDataURL={
-                                    placeholders[selectedImage.public_id]
-                                }
-                                crop="fill"
-                                quality="auto"
-                                dpr="auto"
-                                format="webp"
-                            />
-                        </m.div>
-                    </m.div>
-                )}
-            </AnimatePresence>
+                                </div>
+                            </>
+                        );
+                    })()}
+            </dialog>
         </section>
     );
 }
