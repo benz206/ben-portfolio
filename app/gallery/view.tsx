@@ -59,9 +59,13 @@ function useColumnCount(defaultCount = 3): number {
     const [count, setCount] = useState(defaultCount);
     useEffect(() => {
         const update = () => setCount(computeColumnCount(window.innerWidth));
+        const queries = COLUMN_BREAKPOINTS.map((bp) =>
+            window.matchMedia(`(min-width: ${bp.minWidth}px)`),
+        );
         update();
-        window.addEventListener("resize", update);
-        return () => window.removeEventListener("resize", update);
+        queries.forEach((mq) => mq.addEventListener("change", update));
+        return () =>
+            queries.forEach((mq) => mq.removeEventListener("change", update));
     }, []);
     return count;
 }
