@@ -16,8 +16,11 @@ export type ProjectPreviewProps = {
     color: string;
     index?: number;
     projectLink?: string;
+    sourceLink?: string;
     slug?: string;
-    featured?: boolean;
+    tier?: "featured" | "archive";
+    highlights?: string[];
+    metric?: { value: string; label: string };
 };
 
 export type BlogMetadata = {

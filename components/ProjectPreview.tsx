@@ -3,14 +3,10 @@
 import { ProjectPreviewProps } from "@/types";
 import Image from "next/image";
 import { m } from "framer-motion";
-import LanguageBadge from "@/components/LanguageBadge";
-import { cn } from "@/utils/cn";
-import { AmbientGradient } from "@/components/AmbientGradient";
+import { inView } from "@/utils/motion";
 
 type PreviewProps = ProjectPreviewProps & {
-    index?: number;
-    priority?: boolean;
-    onSelect?: () => void;
+    onSelect: () => void;
 };
 
 export default function ProjectPreview({
@@ -20,99 +16,49 @@ export default function ProjectPreview({
     summary,
     languages,
     color,
-    index = 0,
-    priority = false,
     onSelect,
 }: PreviewProps) {
-    const accent = colorVariants[color] || colorVariants.default;
-
     return (
-        <m.li
-            className="list-none"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-                duration: 0.55,
-                ease: "easeOut",
-                delay: index * 0.06,
-            }}
-        >
-            <m.button
+        <m.li className="list-none" {...inView(24, 0.2, 0.6)}>
+            <button
                 type="button"
                 onClick={onSelect}
-                disabled={!onSelect}
-                whileHover={onSelect ? { y: -8 } : undefined}
-                whileTap={onSelect ? { scale: 0.97 } : undefined}
-                className={cn(
-                    "group relative flex h-full w-full overflow-hidden rounded-lg px-0 pb-0 text-left transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
-                    !onSelect && "cursor-default",
-                )}
+                className="group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white/[0.03] text-left ring-1 ring-white/10 transition-[background-color,box-shadow,translate] duration-500 hover:-translate-y-1 hover:bg-white/[0.05] hover:ring-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             >
-                <div
-                    className={cn(
-                        "relative isolate flex h-full w-full flex-col overflow-hidden rounded-lg bg-[#05070f]/80 backdrop-blur-xl shadow-[0_35px_120px_-50px_rgba(6,12,24,0.9)] ring-1 ring-white/10",
-                        accent.border,
-                    )}
-                >
-                    <div className="relative w-full h-64 overflow-hidden">
-                        <Image
-                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-                            src={image.src}
-                            width={image.width || 1200}
-                            height={image.height || 800}
-                            alt={image.alt}
-                            loading={priority ? "eager" : "lazy"}
-                            fetchPriority={priority ? "high" : undefined}
-                        />
-                        <div className="absolute inset-0 transition-opacity duration-700 pointer-events-none bg-linear-to-t to-transparent from-black/70 via-black/20 group-hover:from-black/55" />
-                        <div className="absolute transition-opacity duration-700 rounded-lg opacity-0 pointer-events-none -inset-1 bg-linear-to-br via-transparent blur-2xl from-white/20 to-white/10 group-hover:opacity-60" />
-                    </div>
-                    <div className="relative z-10 flex flex-col gap-3 px-6 pt-6">
-                        <span className="text-[11px] uppercase tracking-[0.24em] text-white/45">
-                            {sub}
-                        </span>
-                        <h2 className="text-2xl font-semibold text-white">
-                            {title}
-                        </h2>
-                        {summary && (
-                            <p className="text-sm font-light leading-relaxed text-white/70">
-                                {summary}
-                            </p>
-                        )}
-                    </div>
-                    <div className="relative z-10 flex flex-wrap gap-2 px-6 pt-5 pb-6">
-                        {languages.map((language) => (
-                            <LanguageBadge key={language} language={language} />
-                        ))}
-                    </div>
-                    <AmbientGradient
-                        seed={title}
-                        className="transition-opacity duration-700 opacity-70 mix-blend-screen group-hover:opacity-95"
+                <span
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 z-10 h-px opacity-60 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{
+                        background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+                    }}
+                />
+                <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        sizes="(min-width: 1024px) 380px, (min-width: 768px) 46vw, 92vw"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                        placeholder="blur"
                     />
                 </div>
-            </m.button>
+                <div className="flex flex-1 flex-col gap-2 p-6">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                        {sub}
+                    </span>
+                    <h3 className="text-xl font-semibold tracking-tight text-white">
+                        {title}
+                    </h3>
+                    {summary && (
+                        <p className="text-sm leading-relaxed text-white/60 text-pretty">
+                            {summary}
+                        </p>
+                    )}
+                    <p className="mt-auto pt-4 font-mono text-[11px] uppercase tracking-[0.18em] text-white/35">
+                        {languages.join(" · ")}
+                    </p>
+                </div>
+            </button>
         </m.li>
     );
 }
-
-const colorVariants: Record<string, { border: string }> = {
-    ember: { border: "border-[#ffb199]/25" },
-    lilac: { border: "border-[#b8a4ff]/25" },
-    teal: { border: "border-[#7ce8c5]/25" },
-    slate: { border: "border-[#8ea6ff]/25" },
-    "orange-500": { border: "border-[#ffb35c]/25" },
-    "amber-500": { border: "border-[#ffcb5c]/25" },
-    "amber-400": { border: "border-[#ffd47a]/25" },
-    "indigo-500": { border: "border-[#9ba6ff]/25" },
-    "teal-500": { border: "border-[#74e2c7]/25" },
-    "rose-500": { border: "border-[#ff94b3]/25" },
-    "emerald-600": { border: "border-[#73f5c6]/25" },
-    "fuchsia-400": { border: "border-[#f4a3ff]/25" },
-    "purple-400": { border: "border-[#c0a3ff]/25" },
-    "red-500": { border: "border-[#ff8b8b]/25" },
-    "yellow-400": { border: "border-[#ffe27a]/25" },
-    "sky-600": { border: "border-[#7fc5ff]/25" },
-    "green-400": { border: "border-[#81f29d]/25" },
-    "cyan-300": { border: "border-[#84f2ff]/25" },
-    default: { border: "border-white/20" },
-};
