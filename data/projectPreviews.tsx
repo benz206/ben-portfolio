@@ -15,6 +15,7 @@ import GooseOnTheLoose from "@/public/projects/gooseontheloose.jpg";
 import FlashNotes from "@/public/projects/FlashNotes.png";
 import Eureka from "@/public/projects/Eureka2024.png";
 import LinkCom from "@/public/projects/LinkCom.jpeg";
+import WidgetBoxImage from "@/public/projects/widgetbox.webp";
 
 const linkClass =
     "font-semibold text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white";
@@ -142,6 +143,28 @@ const projectPreviews: ProjectPreviewProps[] = [
         slug: "luminode",
         writeup: "Luminode",
         color: "#ec4899",
+    },
+    {
+        image: { src: WidgetBoxImage, alt: "Widget Box new tab page with weather, markets, calendar and focus widgets" },
+        tier: "featured",
+        title: "Widget Box",
+        sub: "Chrome new tab of widgets",
+        summary:
+            "A Chrome new tab page with an Unsplash photo, a big clock, a search box and a grid of small widgets you arrange yourself.",
+        highlights: [
+            "Drag widgets anywhere on a six-column grid in small, medium or large, with as many copies as you like",
+            "Each widget declares its own settings fields, and the settings forms are generated from them",
+            "No account, analytics or server: layout, notes and keys stay in the browser",
+        ],
+        metric: { value: "27", label: "widgets to pick from" },
+        description:
+            "Widget Box replaces Chrome's new tab with a photo from Unsplash, a clock, search and a grid of glanceable widgets: weather, air quality and moon phase for any city, market quotes, a focus timer, world clocks, notes, CPU and memory for this computer, Spotify now playing and more. It's a React and Vite Manifest V3 extension. Widgets fetch straight from the page and cache responses in localStorage, so a new tab doesn't refetch anything still fresh, and the saved layout is versioned and migrated on read. It's published on the Chrome Web Store.",
+        languages: ["React", "TypeScript", "Vite", "Chrome Extension"],
+        projectLink:
+            "https://chromewebstore.google.com/detail/widget-box/ppokcfoigaijomaclaemoomjoeleaoak",
+        sourceLink: "https://github.com/benz206/widget-box",
+        slug: "widget-box",
+        color: "#38bdf8",
     },
     {
         image: { src: BennyImage, alt: "Benny dashboard landing page" },

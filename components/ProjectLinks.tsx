@@ -24,7 +24,9 @@ export default function ProjectLinks({
         ? "Devpost"
         : projectLink?.includes("crates.io")
           ? "crates.io"
-          : "Live site";
+          : projectLink?.includes("chromewebstore.google.com")
+            ? "Chrome Web Store"
+            : "Live site";
 
     return (
         <div className={cn("flex flex-wrap gap-2", className)}>
