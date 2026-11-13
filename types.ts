@@ -18,6 +18,7 @@ export type ProjectPreviewProps = {
     projectLink?: string;
     sourceLink?: string;
     slug?: string;
+    writeup?: string;
     tier?: "featured" | "archive";
     highlights?: string[];
     metric?: { value: string; label: string };

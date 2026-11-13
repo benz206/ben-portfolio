@@ -88,13 +88,15 @@ async function getCommitDates(
     }
 }
 
-export async function fetchBlogSlugs(): Promise<string[]> {
+export async function fetchBlogSlugs(
+    dir: string = BLOG_POSTS_DIR,
+): Promise<string[]> {
     const octokit = await getOctokit();
     try {
         const response = await octokit.rest.repos.getContent({
             owner: BLOG_OWNER,
             repo: BLOG_REPO,
-            path: BLOG_POSTS_DIR,
+            path: dir,
         });
         const files = Array.isArray(response.data) ? response.data : [];
         return files.flatMap((f) =>
@@ -158,6 +160,7 @@ export async function fetchBlogPosts(): Promise<RawBlogMetadata[]> {
 export const fetchBlogPost = cache(
     async (
         slug: string,
+        dir: string = BLOG_POSTS_DIR,
     ): Promise<{
         metadata: RawBlogMetadata;
         content: string;
@@ -165,7 +168,7 @@ export const fetchBlogPost = cache(
         updatedDate: string;
     } | null> => {
         if (!SLUG_PATTERN.test(slug)) return null;
-        const filePath = `${BLOG_POSTS_DIR}/${slug}.mdx`;
+        const filePath = `${dir}/${slug}.mdx`;
         const fileContent = await getRepoFileContent(filePath);
         if (!fileContent) return null;
 

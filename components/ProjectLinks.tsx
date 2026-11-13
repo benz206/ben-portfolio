@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaArrowRight, FaGithub } from "react-icons/fa";
 import type { ProjectPreviewProps } from "@/types";
 import { cn } from "@/utils/cn";
@@ -8,11 +9,16 @@ const base =
 export default function ProjectLinks({
     projectLink,
     sourceLink,
+    writeupHref,
+    writeupComingSoon,
     className,
 }: Pick<ProjectPreviewProps, "projectLink" | "sourceLink"> & {
+    writeupHref?: string;
+    writeupComingSoon?: boolean;
     className?: string;
 }) {
-    if (!projectLink && !sourceLink) return null;
+    if (!projectLink && !sourceLink && !writeupHref && !writeupComingSoon)
+        return null;
 
     const liveLabel = projectLink?.includes("devpost.com")
         ? "Devpost"
@@ -46,6 +52,29 @@ export default function ProjectLinks({
                     <FaGithub className="size-4" />
                     Source
                 </a>
+            )}
+            {writeupHref && (
+                <Link
+                    href={writeupHref}
+                    className={cn(
+                        base,
+                        "border border-white/15 bg-white/5 text-white/80 hover:border-white/30 hover:text-white",
+                    )}
+                >
+                    Read the write-up
+                    <FaArrowRight className="size-3" />
+                </Link>
+            )}
+            {!writeupHref && writeupComingSoon && (
+                <span
+                    aria-disabled="true"
+                    className={cn(
+                        base,
+                        "cursor-default border border-dashed border-white/15 text-white/40",
+                    )}
+                >
+                    Write-up coming soon
+                </span>
             )}
         </div>
     );

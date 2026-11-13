@@ -16,6 +16,7 @@ export default function MdxLayout({
     updatedDate,
     viewCounter,
     headings = EMPTY_HEADINGS,
+    section = { href: "/blog", label: "Blog" },
 }: {
     children: React.ReactNode;
     metadata: RawBlogMetadata;
@@ -23,6 +24,7 @@ export default function MdxLayout({
     updatedDate: string;
     viewCounter?: React.ReactNode;
     headings?: Heading[];
+    section?: { href: string; label: string };
 }) {
     const showUpdated = updatedDate && updatedDate !== createdDate;
     const hasTOC = headings.length > 0;
@@ -39,10 +41,10 @@ export default function MdxLayout({
                             <ol className="flex list-none flex-wrap items-center gap-x-2 gap-y-1 ml-0 text-sm text-white/40">
                                 <li>
                                     <Link
-                                        href="/blog"
+                                        href={section.href}
                                         className="transition-colors hover:text-white/70"
                                     >
-                                        Blog
+                                        {section.label}
                                     </Link>
                                 </li>
                                 {metadata.tags[0] && (

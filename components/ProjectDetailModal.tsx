@@ -12,11 +12,15 @@ import ProjectLinks from "@/components/ProjectLinks";
 
 interface ProjectDetailModalProps {
     project: ProjectPreviewProps;
+    writeupHref?: string;
+    writeupComingSoon?: boolean;
     onClose: () => void;
 }
 
 export default function ProjectDetailModal({
     project,
+    writeupHref,
+    writeupComingSoon,
     onClose,
 }: ProjectDetailModalProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
@@ -108,6 +112,8 @@ export default function ProjectDetailModal({
                 <ProjectLinks
                     projectLink={project.projectLink}
                     sourceLink={project.sourceLink}
+                    writeupHref={writeupHref}
+                    writeupComingSoon={writeupComingSoon}
                     className="relative z-10"
                 />
             </Card>

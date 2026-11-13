@@ -38,6 +38,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://crimexx.vercel.app/",
         sourceLink: "https://github.com/benz206/crimex",
         slug: "crimex",
+        writeup: "Crimex",
         color: "#22d3ee",
     },
     {
@@ -59,6 +60,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://uwpac.vercel.app",
         sourceLink: "https://github.com/benz206/uwpac",
         slug: "uwpac",
+        writeup: "UWPAC",
         color: "#a78bfa",
     },
     {
@@ -95,6 +97,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://tagvault.netlify.app",
         sourceLink: "https://github.com/benz206/tag-vault",
         slug: "tag-vault",
+        writeup: "TagVault",
         color: "#f472b6",
     },
     {
@@ -116,6 +119,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://uwprofs.vercel.app",
         sourceLink: "https://github.com/benz206/uwprofs",
         slug: "uwprofs",
+        writeup: "uwprofs",
         color: "#f59e0b",
     },
     {
@@ -136,6 +140,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         languages: ["Rust", "Raspberry Pi", "Embedded", "systemd"],
         sourceLink: "https://github.com/benz206/luminode-sync",
         slug: "luminode",
+        writeup: "Luminode",
         color: "#ec4899",
     },
     {
@@ -150,6 +155,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://benny-dashboard.vercel.app",
         sourceLink: "https://github.com/benz206/benny-rs",
         slug: "benny-bot",
+        writeup: "Benny",
         color: "#fb7185",
     },
     {
@@ -163,6 +169,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         languages: ["Next.js", "TypeScript", "BM25", "Embeddings"],
         sourceLink: "https://github.com/benz206/lattice",
         slug: "lattice",
+        writeup: "Lattice",
         color: "#34d399",
     },
     {
@@ -177,6 +184,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://benz206.github.io/bTagScriptPlayground/",
         sourceLink: "https://github.com/benz206/bTagScriptPlayground",
         slug: "btagscript-playground",
+        writeup: "bTagScriptPlayground",
         color: "#818cf8",
     },
     {
@@ -191,6 +199,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         projectLink: "https://crates.io/crates/trace-moe",
         sourceLink: "https://github.com/benz206/trace-moe",
         slug: "trace-moe",
+        writeup: "trace-moe",
         color: "#a78bfa",
     },
     {
@@ -204,6 +213,7 @@ const projectPreviews: ProjectPreviewProps[] = [
         languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
         sourceLink: "https://github.com/benz206/hophacks2025",
         slug: "hermes-ai-voice-platform",
+        writeup: "Hermes",
         color: "#fb923c",
     },
     {
