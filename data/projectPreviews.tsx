@@ -1,790 +1,303 @@
 import { ProjectPreviewProps } from "@/types";
 
-import bTagScript from "@/public/projects/bTagScript.png";
-import PortfolioImage from "@/public/projects/Leg3ndaryPortfolio.png";
-import APMC from "@/public/projects/APMC.png";
-import Announcements from "@/public/projects/Announcements.png";
+import CrimexImage from "@/public/projects/crimex.webp";
+import UwpacImage from "@/public/projects/uwpac.webp";
+import TagVaultImage from "@/public/projects/tagvault.webp";
+import UwprofsImage from "@/public/projects/uwprofs.webp";
+import LuminodeImage from "@/public/projects/luminode.webp";
+import BennyImage from "@/public/projects/benny.webp";
+import LatticeImage from "@/public/projects/lattice.webp";
+import BTagScriptImage from "@/public/projects/btagscript.webp";
+import TraceMoeImage from "@/public/projects/tracemoe.webp";
+import HermesImage from "@/public/projects/hermes.webp";
+import MacroboardImage from "@/public/projects/macroboard.webp";
+import GooseOnTheLoose from "@/public/projects/gooseontheloose.jpg";
 import FlashNotes from "@/public/projects/FlashNotes.png";
 import Eureka from "@/public/projects/Eureka2024.png";
-import Macroboard from "@/public/projects/Macroboard.png";
-import BennyBot from "@/public/projects/bennybot.png";
-import bTagScriptSphinx from "@/public/projects/btagscriptsphinx.png";
-import RapidRx from "@/public/projects/RapidRx.png";
-import GooseOnTheLoose from "@/public/projects/gooseontheloose.jpg";
 import LinkCom from "@/public/projects/LinkCom.jpeg";
-import StyleIt from "@/public/projects/styleit.jpg";
-import Event from "@/public/projects/event.png";
-import Hermes from "@/public/projects/hermes.png";
-import TraceMoeImage from "@/public/projects/tracemoe.png";
-import TagVaultImage from "@/public/projects/vault.png";
-import CrimexImage from "@/public/projects/crimex.png";
-import LatticeImage from "@/public/projects/lattice.png";
-import LuminodeImage from "@/public/projects/luminode.png";
-import SentimentImage from "@/public/projects/sentiment.png";
+
+const linkClass =
+    "font-semibold text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white";
 
 const projectPreviews: ProjectPreviewProps[] = [
     {
-        image: {
-            src: CrimexImage,
-            alt: "Crimex",
-            width: 900,
-            height: 100,
-        },
-        featured: true,
-        title: "CRIMEX",
-        sub: "INTERACTIVE HALTON CRIME MAP",
+        image: { src: CrimexImage, alt: "Crimex crime map of Halton Region" },
+        tier: "featured",
+        title: "Crimex",
+        sub: "Halton crime map + prediction markets",
         summary:
-            "Real-time crime map for Halton with viewport-based queries, heatmaps, clustering, and Supabase auth.",
-        description: (
-            <>
-                Crimex is an interactive map for exploring Halton Region
-                incidents, built on Next.js and MapLibre with MapTiler basemaps
-                and a public ArcGIS FeatureServer as the upstream data source.
-                Incidents refresh on every map move, a heatmap mode renders
-                density with adjustable radius and intensity, and a clustering
-                layer collapses nearby points when zoomed out. The sidebar
-                exposes filters for time range, municipality, and incident
-                type, and Supabase powers optional auth and a profile view. You
-                can try it live at{" "}
-                <a
-                    href="https://halton-crime-production.up.railway.app/"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-500"
-                >
-                    halton-crime-production.up.railway.app
-                </a>{" "}
-                or read the source on{" "}
-                <a
-                    href="https://github.com/benz206/crimex"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-500"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
+            "A live map of every reported incident in Halton Region, plus a fake-money market for betting on what happens next.",
+        highlights: [
+            "Re-queries the police ArcGIS feed for whatever is in view, with heatmap and cluster modes",
+            "Parimutuel prediction markets with daily cron settlement",
+            "Filters by time range, municipality and incident type, plus address search",
+        ],
+        description:
+            "Crimex is an interactive map for Halton Region incidents, built on Next.js and MapLibre with MapTiler basemaps. Incidents come from a public ArcGIS FeatureServer and refresh on every map move. A heatmap mode shows density with adjustable radius and intensity, and a clustering layer groups nearby points when zoomed out. The Markets and Predictions tabs let signed-in users bet fake money on incident outcomes through a parimutuel pool that settles on a daily cron, with Supabase handling auth and storage.",
         languages: ["Next.js", "TypeScript", "Supabase", "MapLibre"],
-        projectLink: "https://halton-crime-production.up.railway.app/",
+        projectLink: "https://crimexx.vercel.app/",
+        sourceLink: "https://github.com/benz206/crimex",
         slug: "crimex",
-        color: "cyan-500",
+        color: "#22d3ee",
     },
     {
-        image: {
-            src: LatticeImage,
-            alt: "Lattice",
-            width: 900,
-            height: 100,
-        },
-        featured: true,
-        title: "LATTICE",
-        sub: "EVIDENCE RETRIEVAL FOR LONG DOCS",
+        image: { src: UwpacImage, alt: "UW PAC day view with actual vs predicted occupancy" },
+        tier: "featured",
+        title: "UW PAC",
+        sub: "Live gym occupancy for Waterloo",
         summary:
-            "Hybrid retrieval pipeline (BM25 + embeddings + RRF) that grounds small models in long technical documents.",
-        description: (
-            <>
-                Lattice is a Next.js 16 App Router project that turns long PDFs
-                into grounded, searchable evidence so smaller models can answer
-                hard questions without trying to read a thousand pages at once.
-                Documents are parsed with local <code>pdftotext</code>, split
-                into section-aware chunks, embedded, and indexed alongside a
-                BM25 lexical signal. Queries fuse both retrievers with
-                reciprocal rank fusion, rerank for diversity, and feed the
-                top-k passages to a local Qwen 2.5 1.5B model that must cite
-                each claim with an <code>[E#]</code> marker — weak retrieval
-                explicitly maps to a &quot;not enough evidence&quot; reply rather than a
-                hallucinated answer. See the project on{" "}
-                <a
-                    href="https://github.com/benz206/lattice"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-blue-400"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "BM25", "Embeddings"],
-        projectLink: "https://github.com/benz206/lattice",
-        slug: "lattice",
-        color: "blue-500",
+            "How busy are the PAC and CIF gyms right now, and how busy will they be later? Live headcounts next to a forecast for the rest of the day.",
+        highlights: [
+            "A Vercel cron scrapes Warrior occupancy every 30 minutes into Postgres",
+            "Each day's crowd is plotted against the typical curve for that weekday, which doubles as the forecast",
+            "Weekly heatmaps over the last 28 days or all time, cached with Next.js Cache Components",
+        ],
+        metric: { value: "6", label: "gym areas tracked every 30 minutes" },
+        description:
+            "UW PAC answers the question every Waterloo student asks before leaving for the gym. It scrapes the university's facility occupancy page every 30 minutes, stores each reading in Postgres, and rebuilds per-facility 7×24 averages in SQL. The live view compares each area to how it usually looks at this hour, the day view plots actual against predicted crowds, and the heatmap shows the busiest hours of the week. Cached data revalidates by tag right after each scrape, so pages stay fast without going stale.",
+        languages: ["Next.js", "TypeScript", "Postgres", "Vercel"],
+        projectLink: "https://uwpac.vercel.app",
+        sourceLink: "https://github.com/benz206/uwpac",
+        slug: "uwpac",
+        color: "#a78bfa",
     },
     {
-        image: {
-            src: LuminodeImage,
-            alt: "Luminode",
-            width: 900,
-            height: 100,
-        },
-        featured: true,
-        title: "LUMINODE",
-        sub: "RUST LED CONTROLLER FOR DORMS",
+        image: { src: TagVaultImage, alt: "Tag Vault home page" },
+        tier: "featured",
+        title: "Tag Vault",
+        sub: "Searchable archive of Carl-bot tags",
         summary:
-            "Single-binary Rust WS2812B controller for a Raspberry Pi, auto-starting via systemd for dorm lighting.",
+            "A searchable archive of community TagScript tags for Carl-bot, so you can find one that already works and copy it into your own server.",
+        highlights: [
+            "A companion scraper keeps a MongoDB mirror of public tags in sync",
+            "Search plus featured, most-used and newest feeds, in list or grid view",
+            "Discord sign-in for sharing your own tags publicly",
+        ],
+        metric: { value: "41,731", label: "tags archived" },
         description: (
             <>
-                Luminode is a personalized dorm illumination project built
-                around a Raspberry Pi driving WS2812B LED strips. It compiles
-                down to a single native Rust binary — no Python, no venvs, no
-                Cargo at boot — and runs as a managed systemd service so the
-                lights come back automatically after a power cycle. Under the
-                hood it leans on the Pi&apos;s PWM + DMA hardware on GPIO 18 to
-                hold the tight WS2812B timing budget while staying easy on the
-                CPU. There&apos;s a companion sync repo for coordinating animations
-                across multiple nodes. View the source on{" "}
+                Tag Vault lets anyone browse, search and copy community-made
+                Carl-bot tags. A separate scraper keeps a MongoDB mirror of
+                public tags in sync, and the site serves it with fast search,
+                curated feeds and Discord sign-in for sharing your own. Watch
+                the{" "}
                 <a
-                    href="https://github.com/benz206/luminode"
+                    href="https://youtu.be/P9jHRgsxCpU"
                     target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-pink-500"
+                    className={linkClass}
                 >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Rust", "Raspberry Pi", "systemd", "Embedded"],
-        projectLink: "https://github.com/benz206/luminode",
-        slug: "luminode",
-        color: "pink-500",
-    },
-    {
-        image: {
-            src: SentimentImage,
-            alt: "Sentiment Analysis",
-            width: 900,
-            height: 100,
-        },
-        title: "SENTIMENT ANALYSIS",
-        sub: "VADER + SCRAPED NEWS SENTIMENT",
-        summary:
-            "Streamlit app that scrapes Google News and runs VADER sentiment across any topic the user types in.",
-        description: (
-            <>
-                A small data project that scrapes recent Google News articles
-                for any user-provided topic, runs VADER sentiment on each
-                headline and summary, and renders the results in a Streamlit
-                dashboard with bar and pie distributions plus per-article
-                drill-downs colored by sentiment. The app lets the user pick
-                how many pages to scrape and exposes the raw VADER scores
-                under expandable sections so the analysis is auditable rather
-                than a black box. Try it at{" "}
-                <a
-                    href="https://benz-sentiment-analysis.streamlit.app/"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-400"
-                >
-                    benz-sentiment-analysis.streamlit.app
-                </a>{" "}
-                or read the source on{" "}
-                <a
-                    href="https://github.com/benz206/sentiment-analysis"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-cyan-400"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Python", "Streamlit", "VADER", "BeautifulSoup"],
-        projectLink: "https://benz-sentiment-analysis.streamlit.app/",
-        slug: "sentiment-analysis",
-        color: "cyan-400",
-    },
-    {
-        image: {
-            src: Hermes,
-            alt: "Hermes",
-            width: 900,
-            height: 100,
-        },
-        title: "HERMES",
-        sub: "AI VOICE AGENT PLATFORM",
-        summary:
-            "HopHacks platform for building, managing, and calling AI voice agents with Supabase + Next.js.",
-        description: (
-            <>
-                Hermes is a modern platform for creating, managing, and calling
-                AI voice agents. Built during HopHacks 2025, it leverages
-                Next.js, Supabase for auth/data, and integrates
-                telephony/runtime services alongside Google models. View the
-                source on{" "}
-                <a
-                    href="https://github.com/benz206/hophacks2025"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-orange-500"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
-        projectLink: "https://github.com/benz206/hophacks2025",
-        slug: "hermes-ai-voice-platform",
-        color: "orange-500",
-    },
-    {
-        image: {
-            src: TraceMoeImage,
-            alt: "trace-moe",
-            width: 900,
-            height: 100,
-        },
-        title: "TRACE-MOE",
-        sub: "ASYNC ANIME SCENE SEARCH CLIENT",
-        summary:
-            "Rust async wrapper around the trace.moe API with search, upload, and quota helpers.",
-        description: (
-            <>
-                trace-moe is a Rust client for the trace.moe anime scene search
-                API. It lets you search by image URL or upload bytes, optionally
-                fetch AniList data, and check account quotas, all powered by
-                Reqwest and Tokio. Explore the crate on{" "}
-                <a
-                    href="https://github.com/benz206/trace-moe"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-violet-500"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Rust", "Reqwest", "Tokio"],
-        projectLink: "https://github.com/benz206/trace-moe",
-        slug: "trace-moe",
-        color: "violet-500",
-    },
-    {
-        image: {
-            src: TagVaultImage,
-            alt: "Tag Vault",
-            width: 900,
-            height: 100,
-        },
-        title: "TAG VAULT",
-        sub: "35K+ CUSTOM SCRIPT EXPLORER",
-        summary:
-            "Realtime catalog for Carl-bot custom scripts with search, filters, and live usage stats.",
-        description: (
-            <>
-                Tag Vault lets users browse, search, and favorite more than
-                35,000 community-created Carl-bot scripts. Built with Next.js
-                and MongoDB, it streams live metadata, tracks featured tags, and
-                powers tagvault.netlify.app with fast filters and cached API
-                responses. See the code on{" "}
-                <a
-                    href="https://github.com/benz206/tag-vault"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-emerald-500"
-                >
-                    GitHub
+                    demo on YouTube
                 </a>
                 .
             </>
         ),
         languages: ["Next.js", "TypeScript", "MongoDB", "Tailwind"],
-        projectLink: "https://github.com/benz206/tag-vault",
+        projectLink: "https://tagvault.netlify.app",
+        sourceLink: "https://github.com/benz206/tag-vault",
         slug: "tag-vault",
-        color: "emerald-500",
+        color: "#f472b6",
     },
     {
-        image: {
-            src: Event,
-            alt: "Event Viewer",
-            width: 900,
-            height: 100,
-        },
-        title: "EVENT VIEWER",
-        sub: "MULTI-FUNCTIONAL EVENT VIEWER",
+        image: { src: UwprofsImage, alt: "uwprofs insights scatter plot" },
+        tier: "featured",
+        title: "uwprofs",
+        sub: "Waterloo professor stats",
         summary:
-            "Hack the North challenge app for browsing, filtering, and sharing events with friends.",
-        description: (
-            <>
-                For my Hack the North 2025 Frontend Application I was tasked
-                with creating an event viewing app with a multitude of features
-                and a clean UI. I used NextJS and TailwindCSS to create a
-                responsive and fast website that would allow users to view
-                events, sort them, and even share them with friends. To view
-                private events you can use the hardcoded username and password,
-                user: hacker, password: htn2025. You can check out the source
-                code on{" "}
-                <a
-                    href="https://github.com/benz206/htn2025-challenge"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-amber-500"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Tailwind", "GraphQL"],
-        projectLink: "https://ben-htn.netlify.app",
-        slug: "event-viewer",
-        color: "amber-500",
+            "Salary history, student ratings and research impact for University of Waterloo professors, together on one profile.",
+        highlights: [
+            "Salary trajectories from 14 years of Ontario Sunshine List disclosures",
+            "Student ratings and research metrics matched in by name",
+            "An insights view that tests whether research output tracks with student ratings",
+        ],
+        metric: { value: "2011–2024", label: "of salary disclosures" },
+        description:
+            "uwprofs consolidates public records into a single profile per professor: their salary trajectory from Ontario's Public Sector Salary Disclosure, rank-by-rank pay expectations, RateMyProfessors ratings and research metrics. The insights page plots research impact against student rating across hundreds of professors to look for a correlation, and is upfront that name-matched rows can be wrong.",
+        languages: ["Next.js", "TypeScript", "Tailwind"],
+        projectLink: "https://uwprofs.vercel.app",
+        sourceLink: "https://github.com/benz206/uwprofs",
+        slug: "uwprofs",
+        color: "#f59e0b",
     },
     {
-        image: {
-            src: StyleIt,
-            alt: "StyleIT",
-            width: 900,
-            height: 100,
-        },
-        title: "STYLEIT",
-        sub: "REALTIME DRESSING ROOM",
+        image: { src: LuminodeImage, alt: "Dorm room lit by Luminode LED strips" },
+        tier: "featured",
+        title: "Luminode",
+        sub: "Spotify-synced LEDs on a Raspberry Pi",
         summary:
-            "Realtime virtual dressing room that overlays outfits onto photos using Mediapipe.",
-        description: (
-            <>
-                Shopping for clothes online shouldn’t be a gamble. With StyleIt,
-                you can instantly try on outfits from anywhere on the web,
-                giving you a real-time preview before you buy. Using smart image
-                processing we first process any image of clothing to add to your
-                wardrobe. Then using Mediapipe, our tool overlays clothing on
-                your body, live on your laptop/phone, letting you mix, match,
-                and explore global fashion trends, all from your screen. No more
-                second-guessing your style choices! See StyleIt in action here:{" "}
-                <a
-                    href="https://www.youtube.com/watch?v=gZGXC4O2ZOE"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-violet-500"
-                >
-                    Watch the project in action!
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Tailwind", "MongoDB"],
-        projectLink: "https://github.com/benz206/StyleIt",
-        slug: "styleit",
-        color: "indigo-500",
+            "Rust on a Raspberry Pi that lights my dorm room and locks 259 LEDs to the beat of whatever is playing on Spotify.",
+        highlights: [
+            "One native binary drives WS2812B strips through PWM + DMA and starts on boot with systemd",
+            "An offline CLI decodes audio into compact beatmaps of beats, sections and cues",
+            "A daemon keeps a monotonic clock in sync with Spotify and renders effects at 60 fps",
+        ],
+        metric: { value: "60 fps", label: "beat-locked lighting" },
+        description:
+            "Luminode started as a single Rust binary that drives WS2812B LED strips from a Raspberry Pi, using the Pi's PWM + DMA hardware on GPIO 18 to hold the strips' tight timing. Luminode Sync builds on it: a beatmap CLI analyses songs offline, and a daemon on the Pi polls Spotify, keeps a monotonic sync clock between polls, and fires effects on the beat across 259 LEDs.",
+        languages: ["Rust", "Raspberry Pi", "Embedded", "systemd"],
+        sourceLink: "https://github.com/benz206/luminode-sync",
+        slug: "luminode",
+        color: "#ec4899",
     },
     {
-        image: {
-            src: LinkCom,
-            alt: "LinkCom",
-            width: 900,
-            height: 100,
-        },
-        title: "LINKCOM",
-        sub: "BIDIRECTIONAL COMMUICATION DEVICE",
+        image: { src: BennyImage, alt: "Benny dashboard landing page" },
+        title: "Benny",
+        sub: "Discord bot + dashboard",
         summary:
-            "Wireless IR communicator that keeps conversations accessible for hard-of-hearing users.",
-        description: (
-            <>
-                In a world where staying connected is more important than ever,
-                communication barriers shouldn’t hold anyone back. For
-                hard-of-hearing individuals, everyday conversations can be
-                challenging, whether it&apos;s ordering a coffee, catching an
-                announcement, or simply chatting with a friend. That’s where
-                LinkCom comes in: a wireless messaging system designed to make
-                communication easy, intuitive, and accessible. With a sleek,
-                user-friendly interface and real-time IR-based messaging,
-                LinkCom ensures that no message gets lost in translation. Check
-                out the project on{" "}
-                <a
-                    href="https://github.com/benz206/LinkCom"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-teal-500"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["C", "Git", "Embedded"],
-        projectLink: "https://github.com/benz206/LinkCom",
-        slug: "linkcom",
-        color: "teal-500",
+            "A Discord bot rewritten in Rust, with a Next.js dashboard for configuring it per server.",
+        description:
+            "Benny began as a Python bot and is now a Rust rewrite on poise and serenity, with SQLite through SeaORM and an axum HTTP API. The dashboard covers moderation, automod, the Sentinel toxicity filter, leveling, starboard, giveaways and welcome messages, and previews messages exactly as Discord will render them. The bot token never reaches the browser: the dashboard calls the bot's API server-side.",
+        languages: ["Rust", "Next.js", "TypeScript", "Discord API"],
+        projectLink: "https://benny-dashboard.vercel.app",
+        sourceLink: "https://github.com/benz206/benny-rs",
+        slug: "benny-bot",
+        color: "#fb7185",
     },
     {
-        image: {
-            src: GooseOnTheLoose,
-            alt: "Goose on the Loose",
-            width: 900,
-            height: 100,
-        },
-        title: "GOOSE ON THE LOOSE",
-        sub: "HACK THE NORTH 2024 WINNER",
+        image: { src: LatticeImage, alt: "Lattice hybrid evidence search results" },
+        title: "Lattice",
+        sub: "Evidence retrieval for long documents",
         summary:
-            "Hack the North app turning Waterloo goose sightings into collectible study buddies.",
-        description: (
-            <>
-                Amid the fast-paced rhythm of university life at Waterloo, one
-                universal experience ties us all together: the geese. Whether
-                you&apos;ve encountered them on your way to class, been woken up
-                by honking at 7 am, or spent your days trying to bypass flocks
-                of geese during nesting season, the geese have established
-                themselves as a central fixture of the Waterloo campus. How can
-                we turn the staple bird of the university into a asset? Inspired
-                by the quintessential role the geese play in campus life, we
-                built an app to integrate our feather friends into our academic
-                lives. Our app, Goose on the Loose allows you to take pictures
-                of geese around the campus and turn them into your study
-                buddies! Instead of being intimidated by the foul fowl, we can
-                now all be friends!
-            </>
-        ),
+            "Hybrid search over long PDFs that hands small models cited evidence instead of a thousand-page context.",
+        description:
+            "Lattice parses PDFs with pdftotext, keeping physical page numbers, and splits them into section-aware chunks. Every query runs BM25 and embedding search, fuses them with reciprocal rank fusion, and shows the hybrid, vector and lexical score behind each hit. The answer step sends only the top passages to an OpenRouter model that has to cite every claim, and weak retrieval returns “not enough evidence” instead of a guess.",
+        languages: ["Next.js", "TypeScript", "BM25", "Embeddings"],
+        sourceLink: "https://github.com/benz206/lattice",
+        slug: "lattice",
+        color: "#34d399",
+    },
+    {
+        image: { src: BTagScriptImage, alt: "bTagScript Playground editor" },
+        title: "bTagScript Playground",
+        sub: "Browser IDE for TagScript",
+        summary:
+            "A web IDE for writing and debugging TagScript, running on my zero-dependency TypeScript engine.",
+        description:
+            "TagScript is the templating language behind Carl-bot's custom commands. The playground has an editor, a Discord-style output preview, an actions log, a variable debugger and seed values for the user, channel and target. It runs entirely in the browser on btagscript, my zero-dependency TypeScript port of the engine published on npm, and exports as static HTML for GitHub Pages.",
+        languages: ["Next.js", "TypeScript", "Tailwind"],
+        projectLink: "https://benz206.github.io/bTagScriptPlayground/",
+        sourceLink: "https://github.com/benz206/bTagScriptPlayground",
+        slug: "btagscript-playground",
+        color: "#818cf8",
+    },
+    {
+        image: { src: TraceMoeImage, alt: "trace-moe Rust code sample" },
+        title: "trace-moe",
+        sub: "Rust client for trace.moe",
+        summary:
+            "An async Rust client for the trace.moe anime scene search API, with 1,000+ downloads on crates.io.",
+        description:
+            "trace-moe wraps the trace.moe API: search by image URL or uploaded bytes, optionally pull AniList metadata, and check your quota, all on reqwest and tokio. Version 3.0 fixed image uploads that were returning HTTP 500.",
+        languages: ["Rust", "Reqwest", "Tokio"],
+        projectLink: "https://crates.io/crates/trace-moe",
+        sourceLink: "https://github.com/benz206/trace-moe",
+        slug: "trace-moe",
+        color: "#a78bfa",
+    },
+    {
+        image: { src: HermesImage, alt: "Hermes landing page" },
+        title: "Hermes",
+        sub: "AI voice agents · HopHacks 2025",
+        summary:
+            "A platform for building, managing and calling AI voice agents, built at HopHacks 2025.",
+        description:
+            "Hermes is a platform for creating, managing and calling AI voice agents. We built it at HopHacks 2025 with Next.js and Supabase for auth and data, wired to telephony services and Google models.",
+        languages: ["Next.js", "TypeScript", "Tailwind", "Supabase"],
+        sourceLink: "https://github.com/benz206/hophacks2025",
+        slug: "hermes-ai-voice-platform",
+        color: "#fb923c",
+    },
+    {
+        image: { src: MacroboardImage, alt: "Spotify Macroboard hardware" },
+        title: "Spotify Macroboard",
+        sub: "Wireless macro pad, custom PCB",
+        summary:
+            "A wireless RGB macro pad for Spotify with a custom PCB, OLED display and custom case.",
+        description:
+            "A wireless macro pad for controlling Spotify: seven programmable keys, a 128×64 OLED and RGB lighting in a translucent case. I designed the PCB in EasyEDA, soldered it, programmed it in C++, and designed the case and keycaps. A small API feeds it the dominant colour of the current album art so the lighting matches what's playing.",
+        languages: ["C++", "Arduino", "TypeScript", "Next.js"],
+        sourceLink: "https://github.com/benz206/SpotifyMacroboard",
+        slug: "SpotifyMacroboard",
+        color: "#fbbf24",
+    },
+    {
+        image: { src: GooseOnTheLoose, alt: "Goose on the Loose" },
+        tier: "archive",
+        title: "Goose on the Loose",
+        sub: "Hack the North 2024 winner",
+        summary:
+            "Photograph the geese around Waterloo's campus and turn them into collectible study buddies.",
+        description:
+            "Everyone at Waterloo has a goose story: the honking at 7 am, the detours around nesting season. Goose on the Loose turns that into something useful. Take a photo of a goose on campus and it becomes a study buddy you can collect, so the campus's most intimidating residents end up on your side.",
         languages: ["Next.js", "TypeScript", "MongoDB", "Google Cloud"],
         projectLink: "https://devpost.com/software/goosehunt",
         slug: "goose-on-the-loose",
-        color: "rose-500",
+        color: "#fb7185",
     },
     {
-        image: {
-            src: RapidRx,
-            alt: "RapidRx App",
-            width: 900,
-            height: 100,
-        },
-        title: "RAPIDRX",
-        sub: "RAPID DIAGNOSIS TOOL FOR SYMPTOMS",
+        image: { src: FlashNotes, alt: "FlashNotes" },
+        tier: "archive",
+        title: "FlashNotes",
+        sub: "Hackathon winner",
         summary:
-            "Rapid diagnosis assistant that triages symptoms and recommends next steps in seconds.",
+            "Reads handwritten notes with a vision model and turns them into flashcards.",
         description: (
             <>
-                RapidRx is a tool for rapid diagnosis based on user-inputted
-                symptoms. The app suggests further questions, over-the-counter
-                medications, homeopathic remedies, and common treatments, also
-                providing a likely diagnosis. Users can track different symptom
-                sets over time through multiple sessions. RapidRx reduces the
-                time needed to find and book a doctor and mitigates risks from
-                unreliable online searches, crucial for the 6 million Canadians
-                without a family doctor. The app offers an efficient way to
-                manage health concerns, saving time and providing peace of mind.
-                You can view the project on{" "}
-                <a
-                    href="https://github.com/benz206/RapidRx"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-fuchsia-400"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Firebase", "Cloudflare Workers"],
-        projectLink: "https://github.com/benz206/RapidRx",
-        slug: "rapid-rx",
-        color: "emerald-600",
-    },
-    {
-        image: {
-            src: Macroboard,
-            alt: "Spotify Macroboard",
-            width: 900,
-            height: 100,
-        },
-        title: "SPOTIFY MACROBOARD",
-        sub: "FULLY CUSTOM MACROBOARD FOR SPOTIFY",
-        summary:
-            "Wireless RGB macroboard with a custom PCB, OLED status panel, and Next.js companion UI.",
-        description: (
-            <>
-                I designed and built and fully custom macroboard for Spotify, it
-                has a translucent case, fully wireless capabilities, as well as
-                smooth RGB lighting. Using EasyEDA I designed a PCB and had it
-                printed out, I then soldered all of the components and
-                programmed the board using C++. I also designed a custom case
-                for the project as well as keycaps. The final project includes 7
-                fully programmable keys, a 128x64 OLED screen. I also created an
-                API to help port over information that I needed. This includes
-                matching album covers with their respective overall colours to
-                make an aesthetically pleasing experience. You can view the
-                project on{" "}
-                <a
-                    href="https://github.com/benz206/SpotifyMacroboard"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-fuchsia-400"
-                >
-                    GitHub
-                </a>
-                .
-            </>
-        ),
-        languages: ["C++", "TypeScript", "Next.js", "Arduino"],
-        projectLink: "https://github.com/benz206/SpotifyMacroboard",
-        slug: "SpotifyMacroboard",
-        color: "amber-400",
-    },
-    {
-        image: {
-            src: Eureka,
-            alt: "EUREKAHACKS 2024",
-            width: 900,
-            height: 100,
-        },
-        title: "EUREKAHACKS 2024",
-        sub: "RESPONSIVE MODERN HACKATHON WEBSITE",
-        summary:
-            "Responsive hackathon marketing site with animated storytelling built in Next.js.",
-        description: (
-            <>
-                As the lead director of web development for EurekaHACKS 2024, I
-                was tasked with creating a modern and responsive website to
-                attract attendees and sponsors. To make sure our department
-                could collaborate effectively we used standard JavaScript along
-                with Next.js to speed up some of our processes. Working with our
-                Design team, I replicated and created layouts, while also
-                creating animations and transitions to make the website more
-                appealing. I also helped transfer domains and manage DNS records
-                while also managing the production site using Netlify. You can
-                view the site at{" "}
-                <a
-                    href="https://2024.eurekahacks.ca"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-fuchsia-400"
-                >
-                    eurekahacks.ca
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "JavaScript", "Figma"],
-        projectLink: "https://2024.eurekahacks.ca",
-        slug: "eurekahacks-2024",
-        color: "fuchsia-400",
-    },
-    {
-        image: {
-            src: FlashNotes,
-            alt: "FlashNotes",
-            width: 900,
-            height: 100,
-        },
-        title: "FLASHNOTES",
-        sub: "PROFESSIONAL AI VISION BASED NOTE SUMMARIZATION",
-        summary:
-            "AI vision tool that turns handwritten notes into organized flashcards with a polished Next.js UI.",
-        description: (
-            <>
-                For a hackathon I led my team to create FlashNotes, a
-                professional AI based note summarization/organization tool that
-                would read handwritten notes and create flash cards based on
-                their main concepts. Though I primarily focused on making a
-                reactive and primarily aesthetic frontend, I also linked our API
-                to our frontend code while also troubleshooting various issues
-                we had when working with OpenAI&apos;s vision model. You can
-                watch our project in action on{" "}
+                I led the team that built FlashNotes, which reads handwritten
+                notes with OpenAI&apos;s vision model and turns their main
+                concepts into flashcards. I built the frontend, connected it
+                to our API, and worked through the vision model&apos;s quirks.
+                Watch it on{" "}
                 <a
                     href="https://youtu.be/iBQgLgNp7AE"
                     target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-orange-500"
+                    className={linkClass}
                 >
-                    Youtube
-                </a>
-                . You can also view our winning project&apos;s submission on{" "}
+                    YouTube
+                </a>{" "}
+                or see the{" "}
                 <a
                     href="https://devpost.com/software/flashnotes-i0cymh"
                     target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-orange-500"
+                    className={linkClass}
                 >
-                    DevPost
+                    Devpost
                 </a>
                 .
             </>
         ),
         languages: ["Next.js", "TypeScript", "Tailwind", "OpenAI"],
-        projectLink: "https://github.com/benz206/flashnotes",
+        projectLink: "https://devpost.com/software/flashnotes-i0cymh",
+        sourceLink: "https://github.com/benz206/flashnotes",
         slug: "flashnotes",
-        color: "orange-500",
+        color: "#fb923c",
     },
     {
-        image: {
-            src: APMC,
-            alt: "APHS Makers Competition",
-            width: 900,
-            height: 100,
-        },
-        title: "APHS MAKERS COMPETITION",
-        sub: "CLUB WEBSITE USING NEXT.JS & TAILWIND",
+        image: { src: Eureka, alt: "EurekaHACKS 2024 website" },
+        tier: "archive",
+        title: "EurekaHACKS 2024",
+        sub: "Hackathon website, web lead",
         summary:
-            "Club site with schedules, FAQs, and sponsor info built in Next.js and Tailwind.",
-        description: (
-            <>
-                To continue practicing using Tailwind and Next.js, I made a
-                static website containing lots of information about an upcoming
-                competition we hosted. Though there are obviously better choices
-                in terms of frameworks hosting static content, I wanted to
-                continue using Next.js to improve my proficiency with the
-                framework. I plan to add more features and submission functions
-                to the website later on. You can view the site hosted by vercel
-                at{" "}
-                <a
-                    href="https://apmc.vercel.app/"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors duration-1000 hover:text-purple-400"
-                >
-                    apmc.vercel.app
-                </a>
-                .
-            </>
-        ),
-        languages: ["Next.js", "TypeScript", "Tailwind", "React"],
-        projectLink: "https://apmc.vercel.app/",
-        slug: "aphs-makers-competition",
-        color: "purple-400",
+            "Led web development for the EurekaHACKS 2024 site, from layouts and animation to DNS.",
+        description:
+            "As director of web development for EurekaHACKS 2024, I built the site that attracted attendees and sponsors. I worked with our design team to turn their layouts into Next.js pages with animations and transitions, moved the domain, managed DNS, and ran the production site on Netlify.",
+        languages: ["Next.js", "JavaScript", "Figma"],
+        projectLink: "https://2024.eurekahacks.ca",
+        slug: "eurekahacks-2024",
+        color: "#f0abfc",
     },
     {
-        image: {
-            src: bTagScript,
-            alt: "BTAGSCRIPT PLAYGROUND",
-            width: 900,
-            height: 100,
-        },
-        title: "BTAGSCRIPT PLAYGROUND",
-        sub: "DYNAMICALLY TYPED INTERPRETER AND DEBUGGER",
+        image: { src: LinkCom, alt: "LinkCom hardware" },
+        tier: "archive",
+        title: "LinkCom",
+        sub: "IR messaging for hard-of-hearing users",
         summary:
-            "Interpreter and web playground for the bTagScript templating language.",
-        description: (
-            <>
-                I made an{" "}
-                <a
-                    className="font-bold text-blue-500 transition-colors hover:text-red-500"
-                    href="https://github.com/benz206/bTagScript"
-                    target="_blank"
-                >
-                    interpreter
-                </a>{" "}
-                and{" "}
-                <a
-                    className="font-bold text-blue-500 transition-colors hover:text-red-500"
-                    href="https://benz206.github.io/bTagScriptPlayground/"
-                    target="_blank"
-                >
-                    website
-                </a>{" "}
-                that allows you to run and debug a small improved string
-                templating language that I made called bTagScript. Intrigued by
-                the static language primarily made popular in the discord bot{" "}
-                <a
-                    className="font-bold text-blue-500 transition-colors hover:text-red-500"
-                    href="https://carl.gg"
-                    target="_blank"
-                >
-                    Carl-bot
-                </a>
-                , I thought I could not only make it better, but also enhance
-                the development experience for this niche language. This
-                language focuses on simplicity and quick programming for
-                functions that may be tedious to program but simple in practice.
-            </>
-        ),
-        languages: ["Python", "JavaScript", "HTML", "CSS"],
-        projectLink: "https://benz206.github.io/bTagScriptPlayground/",
-        slug: "btagscript-playground",
-        color: "red-500",
-    },
-    {
-        image: {
-            src: bTagScriptSphinx,
-            alt: "Sphinx Documentation",
-            width: 500,
-            height: 100,
-        },
-        title: "SPHINX EXTENSION",
-        sub: "Custom extension for Sphinx",
-        summary:
-            "Custom Sphinx extension that adds syntax highlighting for bTagScript docs.",
-        description: (
-            <>
-                After creating my own modified version of an interpreter with
-                many new blocks and features, I wanted to create some
-                documentation for the project. I ended up looking at using
-                Sphinx, a documentation generator, to create a custom extension
-                for my language. I then spent some time learning and figuring
-                out how to add custom highlighting for my language and ended up
-                creating a fun{" "}
-                <a
-                    href="https://github.com/benz206/tagscript-ansi"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors hover:text-yellow-400"
-                >
-                    extension
-                </a>{" "}
-                to use. You can view some of the documentation at{" "}
-                <a
-                    href="https://btagscript.readthedocs.io/en/latest/index.html"
-                    target="_blank"
-                    className="font-bold text-blue-500 transition-colors hover:text-yellow-400"
-                >
-                    bTagScript Documentation
-                </a>
-                .
-            </>
-        ),
-        languages: ["Python", "HTML", "CSS", "Sphinx"],
-        projectLink: "https://btagscript.readthedocs.io/en/latest/index.html",
-        slug: "sphinx-extension",
-        color: "yellow-400",
-    },
-    {
-        image: {
-            src: BennyBot,
-            alt: "Benny Bot",
-            width: 500,
-            height: 100,
-        },
-        title: "BENNY BOT",
-        sub: "Custom Discord Bot",
-        summary:
-            "Full-stack Discord bot with music playback, OCR, moderation, and custom commands.",
-        description: (
-            <>
-                After learning more about Python and technologies overall I
-                started integrating many different API&apos;s and libraries I
-                found online into a discord bot. The final product was a bot
-                able to play music from any Spotify Link, near instant image to
-                text, as well as an AI based hurtful message detection system.
-                The bot also implemented a custom command maker based on an
-                interpreter I modified for my own custom language called
-                bTagScript. Hosting the bot 24/7 also taught me a lot about
-                Virtual Private Servers and Linux.
-            </>
-        ),
-        languages: ["Python", "Discord API", "Linux"],
-        projectLink: "https://github.com/benz206/Benny",
-        slug: "benny-bot",
-        color: "sky-600",
-    },
-    {
-        image: {
-            src: Announcements,
-            alt: "School Announcements",
-            width: 400,
-            height: 100,
-        },
-        title: "SCHOOL ANNOUNCEMENTS",
-        sub: "Automated School Announcement Forwarder",
-        summary:
-            "Discord bot that scrapes school announcements and pushes updates with subscriptions.",
-        description: (
-            <>
-                Since our School Announcements are crudely added to a 96 page
-                Google Document every day, I took it upon myself to make a
-                better way of checking and viewing announcements through my
-                phone. Using{" "}
-                <a
-                    className="font-bold text-blue-500 transition-colors hover:text-green-400"
-                    href="https://discordpy.readthedocs.io/en/stable/"
-                    target="_blank"
-                >
-                    Discord.py
-                </a>{" "}
-                as a UI, I made a bot that would scrape the entire document at
-                regular intervals throughout the day. I then used regex to parse
-                the document and send the announcements to a Discord channel. I
-                also added a feature that would allow users to subscribe to the
-                announcements list and therefore get notified whenever a new
-                announcement is posted.
-            </>
-        ),
-        languages: ["Python", "Google Cloud", "Discord API"],
-        projectLink: "https://github.com/benz206/SchoolAnnouncements",
-        slug: "school-announcements",
-        color: "green-400",
+            "A wireless IR messaging device that makes everyday conversations accessible for hard-of-hearing people.",
+        description:
+            "Ordering a coffee or catching an announcement can be hard for hard-of-hearing people. LinkCom is a wireless messaging system that sends text over IR in real time, with a simple interface built for those everyday moments.",
+        languages: ["C", "Embedded"],
+        sourceLink: "https://github.com/benz206/LinkCom",
+        slug: "linkcom",
+        color: "#2dd4bf",
     },
 ];
 

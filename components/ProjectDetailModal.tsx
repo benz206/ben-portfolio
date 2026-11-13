@@ -1,12 +1,14 @@
 "use client";
 
 import { type MouseEvent, useEffect, useId, useRef } from "react";
+import Image from "next/image";
 import { MdClose } from "react-icons/md";
 import { ProjectPreviewProps } from "@/types";
 import Card from "@/components/Card";
 import LanguageBadge from "@/components/LanguageBadge";
 import { AmbientGradient } from "@/components/AmbientGradient";
 import Eyebrow from "@/components/Eyebrow";
+import ProjectLinks from "@/components/ProjectLinks";
 
 interface ProjectDetailModalProps {
     project: ProjectPreviewProps;
@@ -81,6 +83,14 @@ export default function ProjectDetailModal({
                     </button>
                 </div>
 
+                <Image
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    sizes="(min-width: 768px) 700px, 92vw"
+                    placeholder="blur"
+                    className="relative z-10 h-auto w-full rounded-xl ring-1 ring-white/10"
+                />
+
                 <div className="relative z-10 space-y-4 text-sm leading-relaxed text-white/75">
                     {typeof project.description === "string" ? (
                         <p>{project.description}</p>
@@ -94,6 +104,12 @@ export default function ProjectDetailModal({
                         <LanguageBadge key={language} language={language} />
                     ))}
                 </div>
+
+                <ProjectLinks
+                    projectLink={project.projectLink}
+                    sourceLink={project.sourceLink}
+                    className="relative z-10"
+                />
             </Card>
         </dialog>
     );
