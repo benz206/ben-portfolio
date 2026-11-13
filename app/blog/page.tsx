@@ -63,7 +63,6 @@ export default async function BlogPage() {
     const enhancedPosts: BlogListPost[] = posts.map((post) => ({
         ...post,
         createdFormatted: formatDate(post.created, { year: "numeric", month: "short", day: "numeric" }, "en-CA") ?? "",
-        updatedFormatted: formatDate(post.updated, { year: "numeric", month: "short", day: "numeric" }, "en-CA") ?? "",
         views: viewCounts[post.slug] || 0,
     }));
 

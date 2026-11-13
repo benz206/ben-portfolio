@@ -12,46 +12,6 @@ import { cn } from "@/utils/cn";
 
 type Heading = { level: number; text: string; id: string };
 
-function H2Icon({ className }: { className?: string }) {
-    return (
-        <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            className={className}
-            aria-hidden="true"
-        >
-            <path
-                d="M2 3h10M2 7h7M2 11h9"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-            />
-        </svg>
-    );
-}
-
-function H3Icon({ className }: { className?: string }) {
-    return (
-        <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            className={className}
-            aria-hidden="true"
-        >
-            <path
-                d="M4 5h6M4 9h5"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-            />
-        </svg>
-    );
-}
-
 function TOCNav({
     headings,
     activeId,
@@ -63,39 +23,24 @@ function TOCNav({
 }) {
     return (
         <nav aria-label="Table of contents">
-            <p className="mb-4 text-[11px] uppercase tracking-[0.15em] text-white/30">
-                On this page
-            </p>
-            <ul className="relative list-none space-y-1">
+            <ul className="ml-0 list-none border-l border-white/10">
                 {headings.map(({ id, text, level }) => {
                     const isActive = activeId === id;
-                    const Icon = level === 3 ? H3Icon : H2Icon;
                     return (
-                        <li key={id} className="relative">
-                            {isActive && (
-                                <div className="absolute left-0 top-0.5 bottom-0.5 w-0.5 rounded-full bg-white/70" />
-                            )}
+                        <li key={id} className="py-1">
                             <a
                                 href={`#${id}`}
                                 onClick={(e) => onSelect(e, id)}
                                 aria-current={isActive ? "location" : undefined}
                                 className={cn(
-                                    "flex w-full items-center gap-1.5 text-left text-[13px] leading-snug transition-colors duration-150",
-                                    level === 3 ? "pl-4" : "pl-2.5",
+                                    "-ml-px border-l text-[13px] leading-[18px] transition-colors duration-150 line-clamp-2 [overflow-wrap:anywhere]",
+                                    level === 3 ? "pl-6" : "pl-3",
                                     isActive
-                                        ? "text-white"
-                                        : "text-white/38 hover:text-white/65",
+                                        ? "border-white/80 text-white"
+                                        : "border-transparent text-white/40 hover:text-white/75",
                                 )}
                             >
-                                <Icon
-                                    className={cn(
-                                        "shrink-0 transition-colors duration-150",
-                                        isActive
-                                            ? "text-white/70"
-                                            : "text-white/25",
-                                    )}
-                                />
-                                <span className="truncate">{text}</span>
+                                {text}
                             </a>
                         </li>
                     );
@@ -116,6 +61,21 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
     const manualScrollTarget = useRef<string | null>(null);
     const scrollEndTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const dialogRef = useRef<HTMLDialogElement>(null);
+    const sidebarRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const container = sidebarRef.current;
+        const link = container?.querySelector<HTMLElement>(
+            '[aria-current="location"]',
+        );
+        if (!container || !link) return;
+        const top =
+            link.offsetTop - container.clientHeight / 2 + link.offsetHeight / 2;
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+        ).matches;
+        container.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
+    }, [activeId]);
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -263,36 +223,12 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                         </svg>
                     </button>
                 </div>
-                <div className="max-h-72 overflow-y-auto">
-                    <nav aria-label="Table of contents">
-                        <ul className="list-none space-y-3">
-                            {headings.map(({ id, text, level }) => {
-                                const Icon = level === 3 ? H3Icon : H2Icon;
-                                return (
-                                    <li key={id}>
-                                        <a
-                                            href={`#${id}`}
-                                            onClick={(e) => scrollTo(e, id)}
-                                            aria-current={
-                                                activeId === id
-                                                    ? "location"
-                                                    : undefined
-                                            }
-                                            className={cn(
-                                                "flex w-full items-center gap-2 text-left text-sm",
-                                                level === 3
-                                                    ? "pl-4 text-white/50"
-                                                    : "text-white/70",
-                                            )}
-                                        >
-                                            <Icon className="shrink-0 text-white/40" />
-                                            <span>{text}</span>
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </nav>
+                <div className="max-h-[60vh] overflow-y-auto overscroll-contain">
+                    <TOCNav
+                        headings={headings}
+                        activeId={activeId}
+                        onSelect={scrollTo}
+                    />
                 </div>
             </dialog>
         </>
@@ -300,12 +236,20 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
 
     return (
         <>
-            <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
-                <TOCNav
-                    headings={headings}
-                    activeId={activeId}
-                    onSelect={scrollTo}
-                />
+            <div className="sticky top-24 flex max-h-[calc(100vh-8rem)] flex-col">
+                <p className="mb-3 text-[11px] uppercase tracking-[0.15em] text-white/35">
+                    On this page
+                </p>
+                <div
+                    ref={sidebarRef}
+                    className="relative min-h-0 overflow-y-auto overscroll-contain pt-2 pb-10 pr-3 [scrollbar-width:none] [mask-image:linear-gradient(to_bottom,transparent,black_12px,black_calc(100%-40px),transparent)]"
+                >
+                    <TOCNav
+                        headings={headings}
+                        activeId={activeId}
+                        onSelect={scrollTo}
+                    />
+                </div>
             </div>
 
             {mounted && createPortal(mobileUI, document.body)}

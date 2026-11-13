@@ -11,7 +11,6 @@ import type { RawBlogMetadata } from "@/types";
 
 export type BlogListPost = RawBlogMetadata & {
     createdFormatted: string;
-    updatedFormatted: string;
     views: number;
 };
 
@@ -32,7 +31,14 @@ function PostRow({ post }: { post: BlogListPost }) {
                             className="object-cover"
                         />
                     ) : (
-                        <AmbientGradient seed={post.slug} />
+                        <>
+                            <AmbientGradient seed={post.slug} />
+                            {post.tags[0] && (
+                                <span className="absolute bottom-3 left-3 font-mono text-xs text-white/70">
+                                    #{post.tags[0]}
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className="min-w-0">
@@ -47,8 +53,8 @@ function PostRow({ post }: { post: BlogListPost }) {
                 </div>
                 <div className="relative flex text-sm md:justify-end text-white/40">
                     <div className="flex items-center gap-x-3 transition-opacity lg:group-hover:opacity-0">
-                        <time dateTime={post.updated}>
-                            {post.updatedFormatted}
+                        <time dateTime={post.created}>
+                            {post.createdFormatted}
                         </time>
                         <span aria-hidden="true">·</span>
                         <ViewCount
@@ -97,8 +103,8 @@ function FeaturedPost({ post }: { post: BlogListPost }) {
                     <div className="flex items-center text-sm uppercase gap-x-2 text-white/40">
                         <span>Latest</span>
                         <span aria-hidden="true">·</span>
-                        <time dateTime={post.updated}>
-                            {post.updatedFormatted}
+                        <time dateTime={post.created}>
+                            {post.createdFormatted}
                         </time>
                     </div>
                     <h2 className="mt-4 text-[22px] leading-[26px] text-balance md:mt-6 md:text-[25px] md:leading-[30px] lg:text-[28px] lg:leading-[32px]">
