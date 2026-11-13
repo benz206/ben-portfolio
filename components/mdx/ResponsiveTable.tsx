@@ -112,14 +112,14 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                                     {row.map((cell, cellIndex) => (
                                         <div
                                             key={cellIndex}
-                                            className="flex flex-col pb-2 border-b border-zinc-700 last:border-b-0 last:pb-0"
+                                            className="flex flex-col pb-2 border-b border-white/[0.06] last:border-b-0 last:pb-0"
                                         >
                                             {headers[cellIndex] && (
-                                                <div className="mb-1 text-xs font-bold text-zinc-400 uppercase">
+                                                <div className="mb-1 text-xs font-medium tracking-wide text-white/45 uppercase">
                                                     {headers[cellIndex]}
                                                 </div>
                                             )}
-                                            <div className="text-sm font-light text-zinc-200">
+                                            <div className="text-sm leading-6 text-white/80">
                                                 {cell}
                                             </div>
                                         </div>
@@ -134,11 +134,11 @@ export default function ResponsiveTable({ children }: ResponsiveTableProps) {
                 tabIndex={0}
                 role="region"
                 aria-label="Scrollable table"
-                className={`my-6 overflow-x-auto ${styles.scroller} ${
+                className={`my-6 overflow-x-auto rounded-lg border border-white/10 ${styles.scroller} ${
                     hasData ? "hidden lg:flex" : "flex"
                 }`}
             >
-                <table className="min-w-full border border-zinc-600 border-collapse">
+                <table className="min-w-full border-collapse">
                     {children}
                 </table>
             </div>
