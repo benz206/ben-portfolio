@@ -2,10 +2,13 @@
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import { m, easeOut } from "framer-motion";
+import { Dancing_Script } from "next/font/google";
 import { useGoldenRows } from "@/components/Golden/useGoldenRows";
 import { useTypedText } from "@/components/Golden/useTypedText";
 
 const PIXELS_PER_SECOND = 20;
+
+const dancingScript = Dancing_Script({ subsets: ["latin"] });
 
 interface GoldenPerson {
     name: string;
@@ -99,8 +102,7 @@ export default function Golden({ people }: GoldenProps) {
                 <span
                     className="inline-block px-4 text-xl text-white whitespace-nowrap transition-all duration-300 transform select-none md:text-2xl hover:scale-105"
                     style={{
-                        fontFamily:
-                            "'Dancing Script', 'Brush Script MT', cursive",
+                        fontFamily: dancingScript.style.fontFamily,
                         filter: isHovered ? "none" : "blur(0.5px)",
                         opacity: isHovered ? 1 : 0.8,
                         textShadow: isHovered
@@ -146,8 +148,7 @@ export default function Golden({ people }: GoldenProps) {
                     <span
                         className="inline-block px-4 text-2xl text-center text-white whitespace-nowrap select-none md:text-4xl"
                         style={{
-                            fontFamily:
-                                "'Dancing Script', 'Brush Script MT', cursive",
+                            fontFamily: dancingScript.style.fontFamily,
                             textShadow:
                                 "0 0 8px rgba(184, 134, 11, 0.35), 0 0 16px rgba(184, 134, 11, 0.25)",
                         }}
