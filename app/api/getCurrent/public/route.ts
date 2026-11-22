@@ -6,6 +6,7 @@ import {
 } from "@/utils/colorExtraction";
 import { getRedisClient } from "@/utils/redis";
 import { secondsFromMs } from "@/utils/format";
+import { nowPlayingFallbacks } from "@/data/nowPlayingFallbacks";
 import type { SpotifyPlaybackState } from "@/types/externalApis";
 
 export const runtime = "nodejs";
@@ -80,6 +81,12 @@ async function getAlbumColor(imageUrl?: string): Promise<RgbColor> {
     return color;
 }
 
+function pickFallbackArt(key: string) {
+    let hash = 0;
+    for (const char of key) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+    return nowPlayingFallbacks[hash % nowPlayingFallbacks.length];
+}
+
 async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     const accessToken = await getSpotifyAccessToken();
     const response = await fetch(`https://api.spotify.com/v1/me/player`, {
@@ -100,7 +107,10 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
     if (!current.item) return await readLastPlayed();
 
     const imageUrl = current.item.album.images[0]?.url as string | undefined;
-    const dominantColor = await getAlbumColor(imageUrl);
+    const fallbackArt = imageUrl
+        ? undefined
+        : pickFallbackArt(`${current.item.name}-${current.item.album.name}`);
+    const dominantColor = fallbackArt?.color ?? (await getAlbumColor(imageUrl));
 
     const track: SpotifyTrackInfo = {
         title: current.item.name,
@@ -113,7 +123,7 @@ async function fetchCurrentTrack(): Promise<SpotifyTrackInfo | null> {
         volume: String(current.device?.volume_percent || 0),
         shuffle: current.shuffle_state,
         loop: current.repeat_state,
-        albumArt: current.item.album.images[0]?.url,
+        albumArt: imageUrl ?? fallbackArt?.src,
         songUrl: current.item.external_urls?.spotify,
     };
 
